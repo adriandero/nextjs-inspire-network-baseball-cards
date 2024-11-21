@@ -8,10 +8,12 @@
     "css": "src/app/globals.css",
     "baseColor": "neutral",
     "cssVariables": true,
-    "prefix": ""
+    "prefix": "tw-",
+    "rsc": true,
+    "tsx": true
   },
   "aliases": {
-    "gi": "@/components",
+    "components": "@/components",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",

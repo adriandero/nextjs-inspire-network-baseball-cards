@@ -20,6 +20,7 @@ export default async function ProfilePage({
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
   console.log(profile);
+  console.log(profile.profileImage);
   return (
     <div className="w-full h-screen max-w-screen-lg justify-self-center">
       <NavBar />

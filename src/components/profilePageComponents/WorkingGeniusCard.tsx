@@ -25,7 +25,11 @@ export default function WorkingGeniusCard({ profile }: any): React.JSX.Element {
       <div className="h-px w-full bg-light3 my-6"></div>
 
       <div className="flex justify-center">
-        <Image src={widgetimage} alt="Picture of the author" width={390} />
+        <Image
+          src={widgetimage}
+          alt="Illustration of the WIDGET gears"
+          width={390}
+        />
       </div>
     </div>
   );

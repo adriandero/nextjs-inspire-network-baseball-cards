@@ -7,7 +7,7 @@ import { GoLightBulb, GoStar } from "react-icons/go"; // Importing some icons fo
 
 import { PiDiamondsFour } from "react-icons/pi";
 
-import widgetimage from "@/../public/principleYouIllustraions/coach.png";
+import principleYouIllustration from "@/../public/principleYouIllustraions/coach.png";
 import { ButtonGroup, ButtonGroupItem } from "@/components/ui/ButtonGroup";
 import React from "react";
 
@@ -44,7 +44,10 @@ export default function PrinciplesYouCard({ profile }: any): React.JSX.Element {
             {profile.principleYouArchetype.map(
               (principle: principle, index: number) => (
                 <RadioGroupItem key={index} value={JSON.stringify(principle)}>
-                  <Image src={widgetimage} alt={principle.title} />
+                  <Image
+                    src={principleYouIllustration}
+                    alt={`${principle.title} illustration`}
+                  />
                 </RadioGroupItem>
               )
             )}
