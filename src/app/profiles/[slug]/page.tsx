@@ -1,6 +1,9 @@
 import Image from "next/image";
 
-import { getProfileBySlug } from "@/api/profileRequests";
+import {
+  getProfileBySlug,
+  getProfilesByTeamWithoutSpecifiedProfile,
+} from "@/api/profileRequests";
 
 import logo from "@/../public/logo.png";
 
@@ -19,11 +22,14 @@ export default async function ProfilePage({
 }): Promise<JSX.Element> {
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
-  console.log(profile);
-  console.log(profile.profileImage);
+  const moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
+    profile._id,
+    profile.team?.slug.current
+  );
+
   return (
-    <div className="w-full h-screen max-w-screen-lg justify-self-center">
-      <NavBar />
+    <div className="w-full h-x^screen max-w-screen-lg justify-self-center">
+      <NavBar profile={profile} />
       <Banner profile={profile} />
       <main className="flex flex-wrap mt-4 gap-8">
         <div className="flex flex-col grow shrink-0 basis-1/2 min-w-96">
@@ -32,7 +38,7 @@ export default async function ProfilePage({
           <PrinciplesYouCard profile={profile} />
           <KolbeStrengthsCard profile={profile} />
         </div>
-        <MoreProfilesCard profile={profile} />
+        <MoreProfilesCard moreProfiles={moreProfiles} />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

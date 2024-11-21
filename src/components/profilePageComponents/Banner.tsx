@@ -6,15 +6,17 @@ import Image from "next/image";
 import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 
 export default function Banner({ profile }: any): React.JSX.Element {
-  console.log(profile.team.company.companyLogo.asset.url);
-  console.log(urlFor(profile.team.company.companyLogo).toString());
   return (
-    <div className="w-full max-h-48 h-full bg-secondary rounded-2xl flex items-center px-20">
+    <div className="w-full h-48 bg-secondary rounded-2xl flex items-center px-20">
       {profile.profileImage ? (
         <div className="w-32 h-32 rounded-full mr-12 flex justify-center">
           <Avatar className="">
             <AvatarImage
-              src={urlFor(profile.profileImage).toString()}
+              src={
+                profile.profileImage
+                  ? urlFor(profile.profileImage).toString()
+                  : "/defaultAvatar.png"
+              }
               className="rounded-full"
             />
             <AvatarFallback></AvatarFallback>
@@ -33,14 +35,17 @@ export default function Banner({ profile }: any): React.JSX.Element {
         <h1 className="text-2xl font-bold text-primary">{profile.jobRole}</h1>
       </div>
 
-      <Image
-        src={profile.team.company.companyLogo.asset.url}
-        layout="intrinsic"
-        width={220}
-        height={220}
-        alt="Company Logo"
-        className="ml-auto"
-      />
+      {profile?.team?.company?.companyLogo?.asset.url ? (
+        <Image
+          src={profile?.team?.company?.companyLogo?.asset.url}
+          width={220}
+          height={220}
+          alt="Company Logo"
+          className="ml-auto"
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

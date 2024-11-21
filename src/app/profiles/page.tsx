@@ -10,10 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/Table";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import Link from "next/link";
 
 export default async function ProfilePage(): Promise<JSX.Element> {
   const profiles = await getAllProfilesDashboardRowData();
-  console.log(profiles);
 
   return (
     <div className="w-full h-screen max-w-screen-lg justify-self-center">
@@ -29,26 +29,44 @@ export default async function ProfilePage(): Promise<JSX.Element> {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">
-                <div className="flex flex-row items-center gap-4">
-                  <Avatar className="block">
-                    <AvatarImage
-                      src={profiles[1].profileImage.asset.url}
-                      width={40}
-                      className="rounded-full"
-                    />
-                    <AvatarFallback></AvatarFallback>
-                  </Avatar>
-                  <p className="font-bold text-base">{profiles[1].name}</p>
-                </div>
-              </TableCell>
-              <TableCell>{profiles[1].jobRole}</TableCell>
-              <TableCell>{profiles[1].team.name}</TableCell>
-              <TableCell className="text-right">
-                {profiles[1].team.company.name}
-              </TableCell>
-            </TableRow>
+            {profiles.map((profile: any, index: number) => (
+              <TableRow>
+                <TableCell className="font-medium">
+                  <Link href={`/profiles/${profile.slug}`}>
+                    <div className="flex flex-row items-center gap-4">
+                      <Avatar className="block">
+                        <AvatarImage
+                          src={
+                            profile.profileImage?.asset.url
+                              ? profile.profileImage?.asset.url
+                              : "/defaultAvatar.png"
+                          }
+                          width={40}
+                          className="rounded-full"
+                        />
+                        <AvatarFallback></AvatarFallback>
+                      </Avatar>
+                      <p className="font-bold text-base">{profile.name}</p>
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell>{profile.jobRole}</TableCell>
+                <TableCell>
+                  {profile.team?.name ? (
+                    profile.team?.name
+                  ) : (
+                    <p className="text-red-400">null</p>
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  {profile.team?.company.name ? (
+                    profile.team?.company.name
+                  ) : (
+                    <p className="text-red-400">null</p>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </main>

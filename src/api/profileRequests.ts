@@ -7,6 +7,7 @@ import { client } from "@/sanity/client";
 export async function getAllProfilesDashboardRowData():Promise<SanityDocument[]> {
   const query = `*[ _type == "profile"] {
     name,
+    "slug":slug.current,
     jobRole,
     profileImage {
       asset->{url}
@@ -56,4 +57,26 @@ export async function getProfileBySlug(slug: string):Promise<SanityDocument> {
   const profile = await client.fetch<SanityDocument>(query, { slug }, options);
 
   return profile;
+}
+
+export async function getProfilesByTeamWithoutSpecifiedProfile(profileId: string, teamSlug: any):Promise<SanityDocument[]> {
+  const query = `*[_type == "profile" && Team->slug.current == $teamSlug && _id != $profileId] {
+      name,
+      slug,
+      jobRole,
+      profileImage {
+        asset->{url}
+      },
+      "team": Team->{
+        _id,
+        name,
+        slug
+      },
+    }
+    `;
+    const options = { next: { revalidate: 30 } };
+    
+    const profiles = await client.fetch<SanityDocument[]>(query, { profileId, teamSlug }, options);
+  
+    return profiles;
 }
