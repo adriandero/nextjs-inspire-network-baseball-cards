@@ -1,22 +1,14 @@
 import Link from "next/link";
-
-import { getAllProfiles } from "@/api/profileRequests";
+import { GoArrowRight } from "react-icons/go";
 
 export default async function Home() {
-  const posts = await getAllProfiles();
   return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8">
-      <h1 className="text-4xl font-bold mb-8">Posts</h1>
-      <ul className="flex flex-col gap-y-4">
-        {posts.map((post) => (
-          <li className="hover:underline" key={post._id}>
-            <Link href={`/${post.slug.current}`}>
-              <h2 className="text-xl font-semibold">{post.title}</h2>
-              <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <main className="container h-screen my-auto mx-auto w-fit p-8 flex items-center ">
+      <div className="flex h-fit justify-center bg-secondary hover:bg-tertiary text-light1 font-bold py-2 px-4 rounded-lg ">
+        <Link href="/profiles/" className="flex flex-row items-center gap-3">
+          Try out the Profile Dashboard <GoArrowRight size={24} />
+        </Link>
+      </div>
     </main>
   );
 }

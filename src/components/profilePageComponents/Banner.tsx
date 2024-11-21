@@ -3,7 +3,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { GoPerson } from "react-icons/go";
 import Image from "next/image";
 
-import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
+//import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 
 export default function Banner({ profile }: any): React.JSX.Element {
   return (

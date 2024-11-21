@@ -3,12 +3,9 @@ import Image from "next/image";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 
-import { GoLightBulb, GoStar } from "react-icons/go"; // Importing some icons for the radio items
-
 import { PiDiamondsFour } from "react-icons/pi";
 
 import principleYouIllustration from "@/../public/principleYouIllustraions/coach.png";
-import { ButtonGroup, ButtonGroupItem } from "@/components/ui/ButtonGroup";
 import React from "react";
 
 type principle = {
@@ -31,7 +28,7 @@ export default function PrinciplesYouCard({ profile }: any): React.JSX.Element {
             className="flex self-start"
           />{" "}
           <h1 className="text-xl font-bold flex-grow w-fit ml-6">
-            PrinciplesYou Archetype's
+            PrinciplesYou Archetype&apos;s
           </h1>
         </div>
       </div>

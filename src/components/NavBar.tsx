@@ -1,10 +1,9 @@
-import { urlFor } from "@/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { profile } from "console";
+
 import Link from "next/link";
 import { GoArrowLeft } from "react-icons/go";
 
-export default function NavBar({ profile }: any): React.JSX.Element {
+export default function NavBar(): React.JSX.Element {
   return (
     <div className="w-full h-16 flex justify-between items-center justify-self-center px-6">
       <Link href={`/profiles/`}>

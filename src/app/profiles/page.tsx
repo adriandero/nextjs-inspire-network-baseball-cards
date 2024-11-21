@@ -29,7 +29,7 @@ export default async function ProfilePage(): Promise<JSX.Element> {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {profiles.map((profile: any, index: number) => (
+            {profiles.map((profile: any) => (
               <TableRow>
                 <TableCell className="font-medium">
                   <Link href={`/profiles/${profile.slug}`}>

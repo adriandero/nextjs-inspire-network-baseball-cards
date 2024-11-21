@@ -1,5 +1,3 @@
-import { GoPerson } from "react-icons/go";
-import CardHeader from "./CardHeader";
 import { GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
@@ -16,7 +14,7 @@ export default function MoreProfilesCard({
           More Profiles
         </h1>
       </div>
-      {moreProfiles.map((profile: any, index: number) => (
+      {moreProfiles.map((profile: any) => (
         <div className="pt-6">
           <Link href={`/profiles/${profile.slug.current}`}>
             <div className="flex flex-row items-center gap-4">

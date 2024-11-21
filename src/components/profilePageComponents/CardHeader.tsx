@@ -1,5 +1,4 @@
 import { IconType } from "react-icons";
-import { GoPerson } from "react-icons/go";
 
 export default function CardHeader({
   title,

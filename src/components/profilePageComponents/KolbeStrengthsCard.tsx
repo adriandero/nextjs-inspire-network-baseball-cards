@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-
 import { Progress } from "@/components/ui/Progress";
 import {
   Accordion,
@@ -17,14 +15,12 @@ import {
 
 import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // Importing some icons for the radio items
 
-import widgetimage from "@/../public/principleYouIllustraions/coach.png";
-
 import React from "react";
 
-type principle = {
-  title: string;
-  description: string;
-};
+// type principle = {
+//   title: string;
+//   description: string;
+// };
 
 export default function KolbeStrengthsCard({
   profile,

@@ -1,11 +1,7 @@
-import Image from "next/image";
-
 import {
   getProfileBySlug,
   getProfilesByTeamWithoutSpecifiedProfile,
 } from "@/api/profileRequests";
-
-import logo from "@/../public/logo.png";
 
 import NavBar from "@/components/NavBar";
 import Banner from "@/components/profilePageComponents/Banner";
@@ -29,7 +25,7 @@ export default async function ProfilePage({
 
   return (
     <div className="w-full h-x^screen max-w-screen-lg justify-self-center">
-      <NavBar profile={profile} />
+      <NavBar />
       <Banner profile={profile} />
       <main className="flex flex-wrap mt-4 gap-8">
         <div className="flex flex-col grow shrink-0 basis-1/2 min-w-96">
