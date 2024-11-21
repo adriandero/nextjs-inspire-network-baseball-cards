@@ -1,10 +1,11 @@
 import { GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
+import { SanityDocument } from "next-sanity";
 
 export default function MoreProfilesCard({
   moreProfiles,
-}: any): React.JSX.Element {
+}: SanityDocument): React.JSX.Element {
   console.log(moreProfiles);
   return (
     <div className="rounded-2xl w-full max-w-80 h-fit border border-light3 p-8">
@@ -14,8 +15,8 @@ export default function MoreProfilesCard({
           More Profiles
         </h1>
       </div>
-      {moreProfiles.map((profile: any) => (
-        <div className="pt-6">
+      {moreProfiles.map((profile: SanityDocument, index: number) => (
+        <div className="pt-6" key={index}>
           <Link href={`/profiles/${profile.slug.current}`}>
             <div className="flex flex-row items-center gap-4">
               <Avatar className="block">

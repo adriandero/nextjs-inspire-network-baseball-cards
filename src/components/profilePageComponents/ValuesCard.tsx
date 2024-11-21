@@ -1,8 +1,11 @@
+import { SanityDocument } from "next-sanity";
 import CardHeader from "./CardHeader";
 import { GoNorthStar } from "react-icons/go";
 import { GoDash } from "react-icons/go";
 
-export default function ValuesCard({ profile }: any): React.JSX.Element {
+export default function ValuesCard({
+  profile,
+}: SanityDocument): React.JSX.Element {
   return (
     <div className="max-w-2xl w-full h-fit border border-light3 rounded-2xl p-8 flex flex-row">
       <CardHeader title="Values:" icon={GoNorthStar} iconStrokeWidth={0.5} />

@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/Table";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { SanityDocument } from "next-sanity";
 import Link from "next/link";
 
 export default async function ProfilePage(): Promise<JSX.Element> {
@@ -29,8 +30,8 @@ export default async function ProfilePage(): Promise<JSX.Element> {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {profiles.map((profile: any) => (
-              <TableRow>
+            {profiles.map((profile: SanityDocument, index: number) => (
+              <TableRow key={index}>
                 <TableCell className="font-medium">
                   <Link href={`/profiles/${profile.slug}`}>
                     <div className="flex flex-row items-center gap-4">

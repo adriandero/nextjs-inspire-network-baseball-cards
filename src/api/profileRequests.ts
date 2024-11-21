@@ -59,7 +59,7 @@ export async function getProfileBySlug(slug: string):Promise<SanityDocument> {
   return profile;
 }
 
-export async function getProfilesByTeamWithoutSpecifiedProfile(profileId: string, teamSlug: any):Promise<SanityDocument[]> {
+export async function getProfilesByTeamWithoutSpecifiedProfile(profileId: string, teamSlug:string):Promise<SanityDocument[]> {
   const query = `*[_type == "profile" && Team->slug.current == $teamSlug && _id != $profileId] {
       name,
       slug,

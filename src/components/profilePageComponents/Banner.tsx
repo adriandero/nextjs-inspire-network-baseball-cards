@@ -2,10 +2,11 @@ import { urlFor } from "@/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { GoPerson } from "react-icons/go";
 import Image from "next/image";
+import { SanityDocument } from "next-sanity";
 
 //import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 
-export default function Banner({ profile }: any): React.JSX.Element {
+export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   return (
     <div className="w-full h-48 bg-secondary rounded-2xl flex items-center px-20">
       {profile.profileImage ? (

@@ -7,13 +7,16 @@ import { PiDiamondsFour } from "react-icons/pi";
 
 import principleYouIllustration from "@/../public/principleYouIllustraions/coach.png";
 import React from "react";
+import { SanityDocument } from "next-sanity";
 
 type principle = {
   title: string;
   description: string;
 };
 
-export default function PrinciplesYouCard({ profile }: any): React.JSX.Element {
+export default function PrinciplesYouCard({
+  profile,
+}: SanityDocument): React.JSX.Element {
   const [value, setValue] = React.useState<principle>(
     profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {}
   );
