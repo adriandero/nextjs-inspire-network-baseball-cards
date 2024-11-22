@@ -28,7 +28,7 @@ export default async function ProfilePage({
   //TODO propper sanitydocument typing
 
   return (
-    <div className="w-full h-x^screen max-w-screen-lg justify-self-center">
+    <div className="w-full h-screen max-w-screen-lg ">
       <NavBar />
       <Banner
         profile={profile}

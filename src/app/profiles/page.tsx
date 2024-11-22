@@ -17,7 +17,7 @@ export default async function ProfilePage(): Promise<JSX.Element> {
   const profiles = await getAllProfilesDashboardRowData();
 
   return (
-    <div className="w-full h-screen max-w-screen-lg justify-self-center">
+    <div className="w-full h-screen max-w-screen-lg ">
       <main className="flex flex-wrap mt-4 gap-8">
         <Table>
           <TableCaption>A list of your available profiles</TableCaption>
