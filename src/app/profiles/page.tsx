@@ -38,9 +38,8 @@ export default async function ProfilePage(): Promise<JSX.Element> {
                       <Avatar className="block">
                         <AvatarImage
                           src={
-                            profile.profileImage?.asset.url
-                              ? profile.profileImage?.asset.url
-                              : "/defaultAvatar.png"
+                            profile.profileImage?.asset.url ??
+                            "/defaultAvatar.png"
                           }
                           width={40}
                           className="rounded-full"
@@ -53,16 +52,10 @@ export default async function ProfilePage(): Promise<JSX.Element> {
                 </TableCell>
                 <TableCell>{profile.jobRole}</TableCell>
                 <TableCell>
-                  {profile.team?.name ? (
-                    profile.team?.name
-                  ) : (
-                    <p className="text-red-400">null</p>
-                  )}
+                  {profile.team?.name ?? <p className="text-red-400">null</p>}
                 </TableCell>
                 <TableCell className="text-right">
-                  {profile.team?.company.name ? (
-                    profile.team?.company.name
-                  ) : (
+                  {profile.team?.company.name ?? (
                     <p className="text-red-400">null</p>
                   )}
                 </TableCell>

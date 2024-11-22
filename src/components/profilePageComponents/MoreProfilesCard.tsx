@@ -21,7 +21,7 @@ export default function MoreProfilesCard({
             <div className="flex flex-row items-center gap-4">
               <Avatar className="block">
                 <AvatarImage
-                  src={profile.profileImage.asset.url ?? "/defaultAvatar.png"}
+                  src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
                   width={50}
                   className="rounded-full"
                 />
