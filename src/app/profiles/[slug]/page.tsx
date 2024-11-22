@@ -62,7 +62,14 @@ export default async function ProfilePage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <KolbeStrengthsCard profile={profile} />
+          <KolbeStrengthsCard
+            profile={profile}
+            _id={""}
+            _rev={""}
+            _type={""}
+            _createdAt={""}
+            _updatedAt={""}
+          />
         </div>
         <MoreProfilesCard
           moreProfiles={moreProfiles}
