@@ -16,7 +16,6 @@ import {
 import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // Importing some icons for the radio items
 
 import React from "react";
-import { SanityDocument } from "next-sanity";
 
 // type principle = {
 //   title: string;
@@ -25,7 +24,7 @@ import { SanityDocument } from "next-sanity";
 
 export default function KolbeStrengthsCard({
   profile,
-}: SanityDocument): React.JSX.Element {
+}: any): React.JSX.Element {
   const kolbeObj = profile.kolbeStrengths;
   const kolbeObjKeysArr = Object.keys(kolbeObj);
 

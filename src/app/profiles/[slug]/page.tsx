@@ -23,18 +23,55 @@ export default async function ProfilePage({
     profile.team?.slug.current
   );
 
+  //TODO propper sanitydocument typing
+
   return (
     <div className="w-full h-x^screen max-w-screen-lg justify-self-center">
       <NavBar />
-      <Banner profile={profile} />
+      <Banner
+        profile={profile}
+        _id={""}
+        _rev={""}
+        _type={""}
+        _createdAt={""}
+        _updatedAt={""}
+      />
       <main className="flex flex-wrap mt-4 gap-8">
         <div className="flex flex-col grow shrink-0 basis-1/2 min-w-96">
-          <ValuesCard profile={profile} />
-          <WorkingGeniusCard profile={profile} />
-          <PrinciplesYouCard profile={profile} />
+          <ValuesCard
+            profile={profile}
+            _id={""}
+            _rev={""}
+            _type={""}
+            _createdAt={""}
+            _updatedAt={""}
+          />
+          <WorkingGeniusCard
+            profile={profile}
+            _id={""}
+            _rev={""}
+            _type={""}
+            _createdAt={""}
+            _updatedAt={""}
+          />
+          <PrinciplesYouCard
+            profile={profile}
+            _id={""}
+            _rev={""}
+            _type={""}
+            _createdAt={""}
+            _updatedAt={""}
+          />
           <KolbeStrengthsCard profile={profile} />
         </div>
-        <MoreProfilesCard moreProfiles={moreProfiles} />
+        <MoreProfilesCard
+          moreProfiles={moreProfiles}
+          _id={""}
+          _rev={""}
+          _type={""}
+          _createdAt={""}
+          _updatedAt={""}
+        />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>
