@@ -50,7 +50,14 @@ export default async function ProfilePage(): Promise<JSX.Element> {
                     </div>
                   </Link>
                 </TableCell>
-                <TableCell>{profile.jobRole}</TableCell>
+                <TableCell>
+                  {profile.jobRole.map((role: string, index: number) => (
+                    <span key={index}>
+                      {role}
+                      {index < profile.jobRole.length - 1 && ", "}
+                    </span>
+                  ))}
+                </TableCell>
                 <TableCell>
                   {profile.team?.name ?? <p className="text-red-400">null</p>}
                 </TableCell>
