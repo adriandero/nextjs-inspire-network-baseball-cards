@@ -11,10 +11,12 @@ import WorkingGeniusCard from "@/components/profilePageComponents/WorkingGeniusC
 import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouCard";
 import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
 
+type tParams = Promise<{ slug: string }>;
+
 export default async function ProfilePage({
   params,
 }: {
-  params: { slug: string };
+  params: tParams;
 }): Promise<JSX.Element> {
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
