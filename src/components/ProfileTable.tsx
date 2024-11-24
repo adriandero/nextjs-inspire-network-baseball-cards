@@ -9,7 +9,7 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "../ui/Table";
+} from "./ui/Table";
 
 //import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 

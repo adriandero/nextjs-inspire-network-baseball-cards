@@ -1,5 +1,5 @@
 import { getAllProfilesDashboardRowData } from "@/api/profileRequests";
-import ProfileTable from "@/components/dashboardPageComponents/ProfileTable";
+import ProfileTable from "@/components/ProfileTable";
 
 export default async function ProfilePage(): Promise<JSX.Element> {
   const profiles = await getAllProfilesDashboardRowData();
