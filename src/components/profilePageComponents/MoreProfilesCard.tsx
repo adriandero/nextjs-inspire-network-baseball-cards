@@ -16,6 +16,7 @@ export default function MoreProfilesCard({
           More Profiles
         </h1>
       </div>
+
       {moreProfiles.map((profile: SanityDocument, index: number) => (
         <div className="pt-6" key={index}>
           <Link href={`/profiles/${profile.slug.current}`}>
