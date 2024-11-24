@@ -5,7 +5,7 @@ import { GoArrowLeft } from "react-icons/go";
 
 export default function NavBar(): React.JSX.Element {
   return (
-    <div className="w-full h-16 flex justify-between items-center justify-self-center px-6">
+    <div className="w-full h-16 hidden md:flex justify-between items-center justify-self-center px-6">
       <Link href={`/profiles/`}>
         <GoArrowLeft size={32} strokeWidth="0" />
       </Link>

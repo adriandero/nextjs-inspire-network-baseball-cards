@@ -26,6 +26,7 @@ export default {
 			inspireBlue: '#3377C4',
 			inspireGreen: '#499F55',
 			inspireYellow: '#F7CD47',
+			mainbackground: '#FBFBFB',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -62,6 +63,9 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		borderWidth: {
+		'6': '6px',
+		},
 		keyframes: {
 		"accordion-down": {
 			from: { height: "0" },
@@ -76,6 +80,9 @@ export default {
 			"accordion-down": "accordion-down 0.2s ease-out",
 			"accordion-up": "accordion-up 0.2s ease-out",
 		},
+		screens: {
+			'xs': '440px',
+		  },
   	}
   },
   plugins: [require("tailwindcss-animate")],

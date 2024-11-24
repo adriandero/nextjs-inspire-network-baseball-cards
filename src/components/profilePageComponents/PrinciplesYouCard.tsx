@@ -8,6 +8,7 @@ import { PiDiamondsFour } from "react-icons/pi";
 import principleYouIllustration from "@/../public/principleYouIllustraions/coach.png";
 import React from "react";
 import { SanityDocument } from "next-sanity";
+import ComponentShell from "./ComponentShell";
 
 type principle = {
   title: string;
@@ -22,7 +23,7 @@ export default function PrinciplesYouCard({
   );
 
   return (
-    <div className="max-w-2xl w-full h-fit border border-light3 rounded-2xl flex flex-col p-8 mt-6">
+    <ComponentShell>
       <div className="flex flex-row w-full">
         <div className="flex flex-row items-center w-fit h-fit">
           <PiDiamondsFour
@@ -61,6 +62,6 @@ export default function PrinciplesYouCard({
           <p className="font-normal"> {value.description}</p>
         </div>
       </div>
-    </div>
+    </ComponentShell>
   );
 }

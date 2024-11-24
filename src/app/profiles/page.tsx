@@ -23,10 +23,16 @@ export default async function ProfilePage(): Promise<JSX.Element> {
           <TableCaption>A list of your available profiles</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="">Name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Team</TableHead>
-              <TableHead className="text-right">Company</TableHead>
+              <TableHead className="flex flex-row items-center">
+                Name <div className="table-cell md:hidden">, Role</div>
+              </TableHead>
+              <TableHead className="hidden md:table-cell">Role</TableHead>
+              <TableHead className="flex flex-row items-center hidden xs:table-cell">
+                Team <div className="block sm:hidden ">, Company</div>
+              </TableHead>
+              <TableHead className="text-right hidden sm:table-cell">
+                Company
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -46,11 +52,16 @@ export default async function ProfilePage(): Promise<JSX.Element> {
                         />
                         <AvatarFallback></AvatarFallback>
                       </Avatar>
-                      <p className="font-bold text-base">{profile.name}</p>
+                      <div>
+                        <p className="font-bold text-base">{profile.name}</p>
+                        <div className="table-cell md:hidden">
+                          {profile.jobRole}
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 </TableCell>
-                <TableCell>
+                <TableCell className="hidden md:table-cell">
                   {profile.jobRole.map((role: string, index: number) => (
                     <span key={index}>
                       {role}
@@ -58,10 +69,15 @@ export default async function ProfilePage(): Promise<JSX.Element> {
                     </span>
                   ))}
                 </TableCell>
-                <TableCell>
+                <TableCell className="hidden xs:table-cell">
                   {profile.team?.name ?? <p className="text-red-400">null</p>}
+                  <div className="table-cell sm:hidden">
+                    {profile.team?.company.name ?? (
+                      <p className="text-red-400">null</p>
+                    )}
+                  </div>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right hidden sm:table-cell">
                   {profile.team?.company.name ?? (
                     <p className="text-red-400">null</p>
                   )}

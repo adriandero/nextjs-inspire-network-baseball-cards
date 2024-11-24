@@ -10,6 +10,7 @@ import MoreProfilesCard from "@/components/profilePageComponents/MoreProfilesCar
 import WorkingGeniusCard from "@/components/profilePageComponents/WorkingGeniusCard";
 import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouCard";
 import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
+import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
 
 type tParams = Promise<{ slug: string }>;
 
@@ -29,6 +30,14 @@ export default async function ProfilePage({
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">
+      <MobileNavBanner
+        profile={profile}
+        _id={""}
+        _rev={""}
+        _type={""}
+        _createdAt={""}
+        _updatedAt={""}
+      />
       <NavBar />
       <Banner
         profile={profile}

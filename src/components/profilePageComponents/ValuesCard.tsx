@@ -2,12 +2,13 @@ import { SanityDocument } from "next-sanity";
 import CardHeader from "./CardHeader";
 import { GoNorthStar } from "react-icons/go";
 import { GoDash } from "react-icons/go";
+import ComponentShell from "./ComponentShell";
 
 export default function ValuesCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
-    <div className="max-w-2xl w-full h-fit border border-light3 rounded-2xl p-8 flex flex-row">
+    <ComponentShell className="flex flex-row mt-0">
       <CardHeader title="Values:" icon={GoNorthStar} iconStrokeWidth={0.5} />
       <div className="flex flex-wrap pl-8 ">
         {profile.values.map((value: string, index: number) => (
@@ -22,6 +23,6 @@ export default function ValuesCard({
           </div>
         ))}
       </div>
-    </div>
+    </ComponentShell>
   );
 }

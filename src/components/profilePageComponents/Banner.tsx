@@ -8,7 +8,7 @@ import { SanityDocument } from "next-sanity";
 
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   return (
-    <div className="w-full h-48 bg-secondary rounded-2xl flex items-center px-20">
+    <div className="w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center px-20">
       {profile.profileImage ? (
         <div className="w-32 h-32 rounded-full mr-12 flex justify-center">
           <Avatar className="">
@@ -33,7 +33,14 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
         <h1 className="text-3xl font-bold text-light1">
           {profile.name.toUpperCase()}
         </h1>
-        <h1 className="text-2xl font-bold text-primary">{profile.jobRole}</h1>
+        <h1 className="text-2xl font-bold text-primary">
+          {profile.jobRole.map((role: string, index: number) => (
+            <span key={index}>
+              {role}
+              {index < profile.jobRole.length - 1 && ", "}
+            </span>
+          ))}
+        </h1>
       </div>
 
       {profile?.team?.company?.companyLogo?.asset.url ? (

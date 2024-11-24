@@ -17,6 +17,7 @@ import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // I
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
+import ComponentShell from "./ComponentShell";
 
 // type principle = {
 //   title: string;
@@ -30,7 +31,7 @@ export default function KolbeStrengthsCard({
   const kolbeObjKeysArr = Object.keys(kolbeObj);
 
   return (
-    <div className="max-w-2xl w-full h-fit border border-light3 rounded-2xl p-8 flex-col mt-6">
+    <ComponentShell>
       <div className="flex flex-row">
         <div className="h-full mr-6">
           <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />
@@ -150,6 +151,6 @@ export default function KolbeStrengthsCard({
           </Accordion>
         </div>
       </div>
-    </div>
+    </ComponentShell>
   );
 }

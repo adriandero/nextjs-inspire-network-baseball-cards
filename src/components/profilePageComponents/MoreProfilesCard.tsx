@@ -2,13 +2,14 @@ import { GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { SanityDocument } from "next-sanity";
+import ComponentShell from "./ComponentShell";
 
 export default function MoreProfilesCard({
   moreProfiles,
 }: SanityDocument): React.JSX.Element {
   console.log(moreProfiles);
   return (
-    <div className="rounded-2xl w-full max-w-80 h-fit border border-light3 p-8">
+    <ComponentShell className="md:max-w-80 mt-0">
       <div className="flex flex-row items-center w-fit h-fit">
         <GoPeople strokeWidth={1} size={24} />
         <h1 className="text-xl font-bold flex-grow w-fit ml-6">
@@ -35,6 +36,6 @@ export default function MoreProfilesCard({
           </Link>
         </div>
       ))}
-    </div>
+    </ComponentShell>
   );
 }

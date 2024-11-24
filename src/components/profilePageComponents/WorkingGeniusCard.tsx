@@ -4,12 +4,14 @@ import { GoLightBulb } from "react-icons/go";
 
 import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 import { SanityDocument } from "next-sanity";
+import ComponentShell from "./ComponentShell";
 
 export default function WorkingGeniusCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
-    <div className="max-w-2xl w-full h-fit border border-light3 rounded-2xl p-8 flex-col mt-6">
+    <ComponentShell>
+      {" "}
       <div className="flex flex-row">
         <div className="h-full mr-6">
           <GoLightBulb
@@ -24,9 +26,7 @@ export default function WorkingGeniusCard({
           <p className="">{profile.workingGenius.description}</p>
         </div>
       </div>
-
       <div className="h-px w-full bg-light3 my-6"></div>
-
       <div className="flex justify-center">
         <Image
           src={widgetimage}
@@ -34,6 +34,6 @@ export default function WorkingGeniusCard({
           width={390}
         />
       </div>
-    </div>
+    </ComponentShell>
   );
 }

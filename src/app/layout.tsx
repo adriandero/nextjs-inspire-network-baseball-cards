@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="font-sans ">
+    <html lang="en" className="font-sans bg-[#fbfbfb]">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center `}
+        className={`${geistSans.variable} ${geistMono.variable} bg-mainbackground antialiased flex justify-center `}
       >
         {children}
       </body>
