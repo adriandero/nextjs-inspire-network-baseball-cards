@@ -1,6 +1,6 @@
 import { urlFor } from "@/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { GoArrowLeft, GoPerson } from "react-icons/go";
+import { GoArrowLeft } from "react-icons/go";
 
 import { SanityDocument } from "next-sanity";
 import Link from "next/link";
