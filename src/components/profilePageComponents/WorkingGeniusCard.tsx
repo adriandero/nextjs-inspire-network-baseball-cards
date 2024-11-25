@@ -11,7 +11,6 @@ export default function WorkingGeniusCard({
 }: SanityDocument): React.JSX.Element {
   return (
     <ComponentShell>
-      {" "}
       <div className="flex flex-row">
         <div className="h-full mr-6">
           <GoLightBulb

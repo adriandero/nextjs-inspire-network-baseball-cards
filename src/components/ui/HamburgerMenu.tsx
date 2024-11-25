@@ -1,5 +1,4 @@
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FiMenu } from "react-icons/fi";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
@@ -12,12 +11,8 @@ export default function HamburgerMenu({ className }: props): React.JSX.Element {
   return (
     <div className={className}>
       <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="lg:hidden">
-            <FiMenu size={30} strokeWidth="1.5" className="text-white mr-4" />
-
-            <span className="sr-only">Toggle navigation menu</span>
-          </Button>
+        <SheetTrigger>
+          <FiMenu size={30} strokeWidth="1.5" className="text-white w-fit" />
         </SheetTrigger>
         <SheetContent side="right">
           <div className="grid gap-2 py-6">

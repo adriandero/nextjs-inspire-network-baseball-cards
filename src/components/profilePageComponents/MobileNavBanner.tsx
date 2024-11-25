@@ -20,12 +20,12 @@ export default function MobileNavBanner({
               className="text-white mr-4"
             />
           </Link>
-          <h1 className="text-3xl font-bold text-light1 text-center ">
+          <h1 className="text-2xl xs:text-3xl font-bold text-light1 text-center ">
             {profile.name.toUpperCase()}
           </h1>
           <HamburgerMenu className="ml-4" />
         </div>
-        <h1 className="text-2xl font-bold text-primary text-center ">
+        <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
           {profile.jobRole.map((role: string, index: number) => (
             <span key={index}>
               {role}
