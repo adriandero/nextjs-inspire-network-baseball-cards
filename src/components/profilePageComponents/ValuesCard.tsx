@@ -41,7 +41,7 @@ export default function ValuesCard({
             {profile.values.map((value: string, index: number) => (
               <div
                 key={index}
-                className="text-base font-bold text-lg flex flex-row items-center"
+                className="text-base font-bold text-base flex flex-row items-center"
               >
                 {value}
                 {index < profile.values.length - 1 && (

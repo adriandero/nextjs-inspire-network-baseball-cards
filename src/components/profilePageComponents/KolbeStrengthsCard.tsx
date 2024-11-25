@@ -36,7 +36,7 @@ export default function KolbeStrengthsCard({
         <div className="hidden xs:flex flex-row items-center w-fit h-fit">
           <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />{" "}
         </div>
-        <div className="flex flex-col w-full h-fit items-start pl-6">
+        <div className="flex flex-col w-full h-fit items-start xs:pl-6">
           <div className="flex xs:hidden flex-row">
             <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />{" "}
             <h2 className="text-xl font-bold ml-6">Kolbe Strengths</h2>

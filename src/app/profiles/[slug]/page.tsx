@@ -48,7 +48,7 @@ export default async function ProfilePage({
         _updatedAt={""}
       />
       <main className="flex flex-wrap mt-4 gap-8">
-        <div className="flex flex-col grow shrink-0 basis-1/2 min-w-96">
+        <div className="flex flex-col grow shrink-0 basis-1/2">
           <ValuesCard
             profile={profile}
             _id={""}

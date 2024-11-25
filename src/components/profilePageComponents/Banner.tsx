@@ -1,6 +1,5 @@
 import { urlFor } from "@/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { GoPerson } from "react-icons/go";
 import Image from "next/image";
 import { SanityDocument } from "next-sanity";
 
@@ -9,25 +8,19 @@ import { SanityDocument } from "next-sanity";
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   return (
     <div className="w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center px-20">
-      {profile.profileImage ? (
-        <div className="w-32 h-32 rounded-full mr-12 flex justify-center">
-          <Avatar className="">
-            <AvatarImage
-              src={
-                profile.profileImage
-                  ? urlFor(profile.profileImage).toString()
-                  : "/defaultAvatar.png"
-              }
-              className="rounded-full"
-            />
-            <AvatarFallback></AvatarFallback>
-          </Avatar>
-        </div>
-      ) : (
-        <div className="w-32 h-32 rounded-full bg-light3 mr-12 flex justify-center items-center">
-          <GoPerson className="text-6xl text-dark3" />
-        </div>
-      )}
+      <div className="w-32 h-32 min-w-32 rounded-full mr-12 flex justify-center">
+        <Avatar className="">
+          <AvatarImage
+            src={
+              profile.profileImage
+                ? urlFor(profile.profileImage).toString()
+                : "/defaultAvatar.png"
+            }
+            className="rounded-full"
+          />
+          <AvatarFallback></AvatarFallback>
+        </Avatar>
+      </div>
 
       <div>
         <h1 className="text-3xl font-bold text-light1">
