@@ -1,5 +1,5 @@
 import { SanityDocument } from "next-sanity";
-import CardHeader from "./CardHeader";
+
 import { GoNorthStar } from "react-icons/go";
 import { GoDash } from "react-icons/go";
 import ComponentShell from "./ComponentShell";
