@@ -5,7 +5,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 
 import { PiDiamondsFour } from "react-icons/pi";
 
-
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./ComponentShell";
@@ -50,7 +49,7 @@ export default function PrinciplesYouCard({
               (principle: principle, index: number) => (
                 <RadioGroupItem key={index} value={JSON.stringify(principle)}>
                   <Image
-                    src={`/archetypeImages/${principle.title}.png`}
+                    src={getImage(principle.title)}
                     alt={`${principle.title} illustration`}
                     width={100}
                     height={100}
