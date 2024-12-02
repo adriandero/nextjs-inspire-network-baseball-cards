@@ -42,7 +42,7 @@ export default function KolbeStrengthsCard({
             <h2 className="text-xl font-bold ml-6">Kolbe Strengths</h2>
           </div>
           <h2 className="hidden xs:block text-xl font-bold">Kolbe Strengths</h2>
-          <Accordion type="single" collapsible className="w-full pt-4">
+          <Accordion type="multiple" className="w-full pt-4">
             <AccordionItem value="item-1">
               <AccordionTrigger>
                 <div className="w-full flex flex-row items-center gap-6">
