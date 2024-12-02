@@ -11,7 +11,7 @@ const RadioGroup = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
-      className={cn("grid gap-2", className)}
+      className={cn(" flex flex-col gap-5", className)}
       {...props}
       ref={ref}
     />
@@ -27,8 +27,8 @@ const RadioGroupItem = React.forwardRef<
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "flex items-center justify-center grayscale-[85%] h-fit w-12 cursor-pointer",
-        " data-[state=checked]:filter-none data-[state=checked]:w-14",
+        "flex items-center justify-center grayscale-[85%] h-fit w-12 xs:w-16 cursor-pointer",
+        " data-[state=checked]:filter-none xs:data-[state=checked]:w-[4.5rem] data-[state=checked]:w-14",
         className
       )}
       {...props}

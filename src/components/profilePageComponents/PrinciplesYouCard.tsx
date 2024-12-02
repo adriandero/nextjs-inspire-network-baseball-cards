@@ -5,7 +5,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 
 import { PiDiamondsFour } from "react-icons/pi";
 
-import principleYouIllustration from "@/../public/principleYouIllustraions/coach.png";
+import principleYouIllustration from "@/../public/archetypeImages/Campaigner.png";
+
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./ComponentShell";
@@ -14,6 +15,10 @@ type principle = {
   title: string;
   description: string;
 };
+
+function getImage(archetype: string): string {
+  return `/archetypeImages/${archetype}.png`;
+}
 
 export default function PrinciplesYouCard({
   profile,
@@ -37,7 +42,7 @@ export default function PrinciplesYouCard({
         </div>
       </div>
       <div className="flex flex-row mt-4 gap-6">
-        <div className="flex flex-row mt-4 gap-6">
+        <div className="flex flex-row mt-4 gap">
           <RadioGroup
             value={JSON.stringify(value)}
             onValueChange={(val) => setValue(JSON.parse(val))}
@@ -46,8 +51,10 @@ export default function PrinciplesYouCard({
               (principle: principle, index: number) => (
                 <RadioGroupItem key={index} value={JSON.stringify(principle)}>
                   <Image
-                    src={principleYouIllustration}
+                    src={`/archetypeImages/${principle.title}.png`}
                     alt={`${principle.title} illustration`}
+                    width={100}
+                    height={100}
                   />
                 </RadioGroupItem>
               )
