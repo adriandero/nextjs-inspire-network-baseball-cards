@@ -5,7 +5,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 
 import { PiDiamondsFour } from "react-icons/pi";
 
-import principleYouIllustration from "@/../public/archetypeImages/Campaigner.png";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
