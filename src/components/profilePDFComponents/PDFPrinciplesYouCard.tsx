@@ -19,7 +19,7 @@ export default function PDFPrinciplesYouCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {
-  const makeFirstWordBold = (text) => {
+  const makeFirstWordBold = (text: string) => {
     const words = text.split(" ");
     return (
       <span>
@@ -47,10 +47,10 @@ export default function PDFPrinciplesYouCard({
         {profile.principleYouArchetype.map(
           (principle: principle, index: number) => (
             <div
-              className="flex flex-row justify-center items-center h-fit gap-3"
+              className="flex flex-row justify-center items-start h-fit gap-3"
               key={index}
             >
-              <div className="h-fit min-w-16">
+              <div className="w-16 min-w-16">
                 <Image
                   src={getImage(principle.title)}
                   alt="Illustration of the WIDGET gears"
