@@ -1,4 +1,4 @@
-import { getAllProfilesDashboardRowData } from "@/api/profileRequests";
+import { getAllProfilesDashboardRowData } from "@/sanityApi/profileRequests";
 import ProfileTable from "@/components/ProfileTable";
 
 export default async function ProfilePage(): Promise<JSX.Element> {
