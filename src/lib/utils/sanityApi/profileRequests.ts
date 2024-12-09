@@ -1,10 +1,10 @@
-
 import { type SanityDocument } from "next-sanity";
 
-import { client } from "@/sanity/client";
+import { client } from "@/lib/sanity/client";
 
-
-export async function getAllProfilesDashboardRowData():Promise<SanityDocument[]> {
+export async function getAllProfilesDashboardRowData(): Promise<
+  SanityDocument[]
+> {
   const query = `*[ _type == "profile"] {
     name,
     "slug":slug.current,
@@ -21,15 +21,14 @@ export async function getAllProfilesDashboardRowData():Promise<SanityDocument[]>
       }
     }
   }`;
-  
-  
+
   const options = { next: { revalidate: 30 } };
   const posts = await client.fetch<SanityDocument[]>(query, {}, options);
 
   return posts;
 }
 
-export async function getProfileBySlug(slug: string):Promise<SanityDocument> {
+export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   const query = `*[ _type == "profile" && slug.current == $slug ][0]{
   ...,
   "team": Team->{
@@ -53,13 +52,16 @@ export async function getProfileBySlug(slug: string):Promise<SanityDocument> {
   }
   `;
   const options = { next: { revalidate: 30 } };
-  
+
   const profile = await client.fetch<SanityDocument>(query, { slug }, options);
 
   return profile;
 }
 
-export async function getProfilesByTeamWithoutSpecifiedProfile(profileId: string, teamSlug:string):Promise<SanityDocument[]> {
+export async function getProfilesByTeamWithoutSpecifiedProfile(
+  profileId: string,
+  teamSlug: string
+): Promise<SanityDocument[]> {
   const query = `*[_type == "profile" && Team->slug.current == $teamSlug && _id != $profileId] {
       name,
       slug,
@@ -74,9 +76,13 @@ export async function getProfilesByTeamWithoutSpecifiedProfile(profileId: string
       },
     }
     `;
-    const options = { next: { revalidate: 30 } };
-    
-    const profiles = await client.fetch<SanityDocument[]>(query, { profileId, teamSlug }, options);
-  
-    return profiles;
+  const options = { next: { revalidate: 30 } };
+
+  const profiles = await client.fetch<SanityDocument[]>(
+    query,
+    { profileId, teamSlug },
+    options
+  );
+
+  return profiles;
 }

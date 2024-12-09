@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { SanityDocument } from "next-sanity";
 import {
   Table,
@@ -10,9 +8,7 @@ import {
   TableRow,
   TableHead,
   TableBody,
-
 } from "./ui/Table";
-
 
 import ProfileTableRow from "./ui/ProfileTableRow";
 
@@ -21,11 +17,10 @@ import ProfileTableRow from "./ui/ProfileTableRow";
 export default function ProfileTable({
   profileArray,
 }: SanityDocument): React.JSX.Element {
-
   return (
     <Table>
       <TableCaption>A list of your available profiles</TableCaption>
-      <TableHeader>
+      <TableHeader className="hidden sm:table-row-group">
         <TableRow>
           <TableHead className="flex flex-row items-center">
             Name <div className="table-cell md:hidden">, Role</div>

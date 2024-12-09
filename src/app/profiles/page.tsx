@@ -1,7 +1,10 @@
-import { getAllProfilesDashboardRowData } from "@/sanityApi/profileRequests";
+import { getAllProfilesDashboardRowData } from "@/lib/utils/sanityApi/profileRequests";
 import ProfileTable from "@/components/ProfileTable";
+import { checkIfSession } from "@/lib/utils/sessionCheck";
 
 export default async function ProfilePage(): Promise<JSX.Element> {
+  await checkIfSession();
+
   const profiles = await getAllProfilesDashboardRowData();
 
   return (

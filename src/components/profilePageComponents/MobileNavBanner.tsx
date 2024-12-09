@@ -1,4 +1,4 @@
-import { urlFor } from "@/sanity/client";
+import { urlFor } from "@/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { GoArrowLeft } from "react-icons/go";
 

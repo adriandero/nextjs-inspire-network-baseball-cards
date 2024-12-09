@@ -9,7 +9,7 @@ export default function MoreProfilesCard({
 }: SanityDocument): React.JSX.Element {
   console.log(moreProfiles);
   return (
-    <ComponentShell className="md:max-w-80 mt-0">
+    <ComponentShell className="w-full mt-0">
       <div className="flex flex-row items-center w-fit h-fit">
         <GoPeople strokeWidth={1} size={24} />
         <h1 className="text-xl font-bold flex-grow w-fit ml-6">

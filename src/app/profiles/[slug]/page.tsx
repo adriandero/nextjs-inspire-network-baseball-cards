@@ -1,7 +1,7 @@
 import {
   getProfileBySlug,
   getProfilesByTeamWithoutSpecifiedProfile,
-} from "@/sanityApi/profileRequests";
+} from "@/lib/utils/sanityApi/profileRequests";
 
 import NavBar from "@/components/NavBar";
 import Banner from "@/components/profilePageComponents/Banner";
@@ -12,7 +12,10 @@ import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouC
 import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
 import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
 
-import { GoDownload } from "react-icons/go";
+
+import { checkIfSession } from "@/lib/utils/sessionCheck";
+
+import DownloadButton from "@/components/profilePageComponents/DownloadPDFButton";
 
 type tParams = Promise<{ slug: string }>;
 
@@ -21,6 +24,8 @@ export default async function ProfilePage({
 }: {
   params: tParams;
 }): Promise<JSX.Element> {
+  await checkIfSession();
+
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
   const moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
@@ -84,7 +89,7 @@ export default async function ProfilePage({
             _updatedAt={""}
           />
         </div>
-        <div className="w-full max-w-80">
+        <div className="w-full md:max-w-80 flex flex-col items-center md:items-start">
           <MoreProfilesCard
             moreProfiles={moreProfiles}
             _id={""}
@@ -94,13 +99,7 @@ export default async function ProfilePage({
             _updatedAt={""}
           />
 
-          <a
-            className="max-w-2xl w-fit h-fit border border-light3 justify-center bg-background sm:rounded-2xl p-4 px-6 mt-6 flex flex-row gap-3 bg-white z-10 transition-colors duration-150 hover:bg-tertiary hover:text-white hover:border-mainbackground"
-            href={`http://localhost:3000/api/profiles/${slug}/pdf`}
-            download={`${slug}.pdf`}
-          >
-            <GoDownload size={24} /> <span>Download Profile</span>
-          </a>
+          <DownloadButton slug={slug} />
         </div>
       </main>
       <footer className="flex item-center p-8"></footer>
