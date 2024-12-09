@@ -8,7 +8,7 @@ export type SignUpPayload = {
 } & Record<string, unknown>;
 
 export const signUp = async (payload: SignUpPayload): Promise<User> => {
-  const res = await fetch(process.env.BASE_URL + "/api/auth/signUp", {
+  const res = await fetch("/api/auth/signUp", {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
