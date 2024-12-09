@@ -14,7 +14,7 @@ export default function DownloadButton({ slug }: { slug: string }) {
 
     try {
       const pdfBlob = await fetch(
-        `http://localhost:3000/api/profiles/${slug}/pdf`
+        process.env.BASE_URL + `/api/profiles/${slug}/pdf`
       ).then((res) => res.blob());
       saveAs(pdfBlob, `${slug}.pdf`);
     } catch (error) {

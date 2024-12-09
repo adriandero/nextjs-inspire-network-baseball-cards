@@ -34,23 +34,27 @@ import puppeteer from "puppeteer";
 // export async function GET(request: Request, {params}: {params: {slug: string;}}) {
 
 //     const stream = await renderToStream(<MyDocument />);
-    
+
 //     return new NextResponse(stream as unknown as ReadableStream)
 // }
-export async function GET(req: Request, context: {params: Promise<{ slug: string }>}) {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-    const slug = (await context.params).slug;
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ slug: string }> }
+) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  const slug = (await context.params).slug;
 
+  await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
+    waitUntil: "networkidle2",
+  });
+  await page.emulateMediaType("screen");
 
-    await page.goto(`http://localhost:3000/profiles/${slug}/pdf`, { waitUntil: 'networkidle2' })
-    await page.emulateMediaType('screen')
+  const pdfBuffer = await page.pdf({
+    format: "A4",
+    printBackground: true,
+    landscape: true,
+  });
 
-    const pdfBuffer = await page.pdf({ 
-        format: 'A4',
-        printBackground: true,
-        landscape: true
-     })
-
-    return new Response(pdfBuffer)
+  return new Response(pdfBuffer);
 }
