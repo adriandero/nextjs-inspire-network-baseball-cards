@@ -28,7 +28,7 @@ export default function DownloadButton({ slug }: { slug: string }) {
   return (
     <Button
       variant="outline"
-      className="mt-6 rounded-xl"
+      className="mt-6 h-fit rounded-xl text-base p-3"
       onClick={handlePDFDownloadCall}
     >
       {loading ? (
@@ -37,8 +37,8 @@ export default function DownloadButton({ slug }: { slug: string }) {
         </>
       ) : (
         <>
-          {" "}
-          <GoDownload size={24} /> <span>Download Profile</span>
+          <GoDownload size={30} strokeWidth="0.5" className="!w-5 !h-5" />{" "}
+          <span>Download Profile</span>
         </>
       )}
     </Button>

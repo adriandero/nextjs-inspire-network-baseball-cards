@@ -4,26 +4,27 @@ import { GoArrowLeft } from "react-icons/go";
 
 import { SanityDocument } from "next-sanity";
 import Link from "next/link";
-import HamburgerMenu from "../ui/HamburgerMenu";
+import MobileNavMenu from "../MobileNavMenu";
 
 export default function MobileNavBanner({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
     <div className="w-full h-64 flex md:hidden ">
-      <div className="w-full h-56 bg-secondary flex flex-col md:hidden  items-center p-6">
+      <div className="w-full h-56 bg-secondary flex flex-col md:hidden items-center p-6">
         <div className="flex flex-row items-center justify-between w-full">
           <Link href="/profiles">
             <GoArrowLeft
               size={32}
               strokeWidth="0"
-              className="text-white mr-4"
+              className="text-white hover:text-primary duration-200 mr-4"
             />
           </Link>
           <h1 className="text-2xl xs:text-3xl font-bold text-light1 text-center ">
             {profile.name.toUpperCase()}
           </h1>
-          <HamburgerMenu className="ml-4" />
+
+          <MobileNavMenu />
         </div>
         <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
           {profile.jobRole.map((role: string, index: number) => (
