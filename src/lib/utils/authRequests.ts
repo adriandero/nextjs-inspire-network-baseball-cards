@@ -5,7 +5,7 @@ export type SignUpPayload = {
   password: string;
   name?: string;
   image?: string;
-} & Record<string, T>;
+} & Record<string, unknown>;
 
 export const signUp = async (payload: SignUpPayload): Promise<User> => {
   const res = await fetch("http://localhost:3000/api/auth/signUp", {

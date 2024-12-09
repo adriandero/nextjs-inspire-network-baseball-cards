@@ -29,7 +29,7 @@ export default function SignInPage() {
 
     try {
       await signIn("sanity-login", {
-        redirect: false,
+        redirect: true,
         email: formData.email,
         password: formData.password,
       });
