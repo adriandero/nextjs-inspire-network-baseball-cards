@@ -1,25 +1,33 @@
-import { urlFor } from "@/lib/sanity/client";
+"use client";
+
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Image from "next/image";
 import { SanityDocument } from "next-sanity";
+import { Skeleton } from "../ui/skeleton";
+import { useState } from "react";
 
 //import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
+  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
   return (
-    <div className="w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center px-20">
+    <div className="w-full min-w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center px-20">
       <div className="w-32 h-32 min-w-32 rounded-full mr-12 flex justify-center">
         <Avatar className="">
           <AvatarImage
-            src={
-              profile.profileImage
-                ? urlFor(profile.profileImage).toString()
-                : "/defaultAvatar.png"
-            }
+            src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
+            onLoadingStatusChange={(status) => {
+              if (status === "loaded") {
+                setIsAvatarLoaded(true);
+              }
+            }}
             className="rounded-full"
           />
           <AvatarFallback></AvatarFallback>
         </Avatar>
+        {!isAvatarLoaded ? (
+          <Skeleton className={`min-h-32 min-w-32 rounded-full bg-light3`} />
+        ) : null}
       </div>
 
       <div>

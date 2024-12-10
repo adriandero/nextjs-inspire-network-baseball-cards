@@ -1,14 +1,17 @@
-import Image from "next/image";
+"use client";
 
 import { GoLightBulb } from "react-icons/go";
 
-import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
+import WidgetCogsSVG from "@/components/profilePageComponents/WidgetCogsSVG";
+
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./ComponentShell";
 
 export default function WorkingGeniusCard({
   profile,
 }: SanityDocument): React.JSX.Element {
+
+  console.log(profile.workingGenius.widget);
   return (
     <ComponentShell>
       <div className="flex flex-row">
@@ -27,10 +30,13 @@ export default function WorkingGeniusCard({
       </div>
       <div className="h-px w-full bg-light3 my-6"></div>
       <div className="flex justify-center">
-        <Image
-          src={widgetimage}
-          alt="Illustration of the WIDGET gears"
-          width={390}
+        <WidgetCogsSVG
+          widget={profile.workingGenius.widget}
+          _id={""}
+          _rev={""}
+          _type={""}
+          _createdAt={""}
+          _updatedAt={""}
         />
       </div>
     </ComponentShell>

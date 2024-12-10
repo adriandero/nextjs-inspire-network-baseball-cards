@@ -1,3 +1,4 @@
+"use client";
 import {
   Collapsible,
   CollapsibleTrigger,
@@ -5,6 +6,7 @@ import {
 } from "@radix-ui/react-collapsible";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
 import { FiMenu } from "react-icons/fi";
@@ -52,6 +54,7 @@ export default function MobileNavMenu(): React.JSX.Element {
                     href="#"
                     className="group grid h-auto w-full text-inspireRed items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent focus:bg-accent "
                     prefetch={false}
+                    onClick={() => signOut()}
                   >
                     Sign Out
                   </Link>

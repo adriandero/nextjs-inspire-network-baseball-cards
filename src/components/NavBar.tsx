@@ -1,7 +1,10 @@
+"use client";
+
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 //import { useSession } from "next-auth/react";
 
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import { GoArrowLeft } from "react-icons/go";
 
 import {
@@ -45,7 +48,10 @@ export default function NavBar(): React.JSX.Element {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem className="text-inspireRed hover:!text-inspireRed">
+            <DropdownMenuItem
+              className="text-inspireRed hover:!text-inspireRed"
+              onClick={() => signOut()}
+            >
               Sign Out
             </DropdownMenuItem>
           </DropdownMenuContent>

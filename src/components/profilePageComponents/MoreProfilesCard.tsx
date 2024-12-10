@@ -1,12 +1,16 @@
+"use client";
 import { GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./ComponentShell";
+import { useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export default function MoreProfilesCard({
   moreProfiles,
 }: SanityDocument): React.JSX.Element {
+  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
   console.log(moreProfiles);
   return (
     <ComponentShell className="w-full mt-0">
@@ -25,10 +29,21 @@ export default function MoreProfilesCard({
                 <AvatarImage
                   src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
                   width={50}
+                  height={50}
+                  onLoadingStatusChange={(status) => {
+                    if (status === "loaded") {
+                      setIsAvatarLoaded(true);
+                    }
+                  }}
                   className="rounded-full"
                 />
                 <AvatarFallback></AvatarFallback>
               </Avatar>
+              {!isAvatarLoaded ? (
+                <Skeleton
+                  className={`min-h-[50px] min-w-[50px] rounded-full bg-light3`}
+                />
+              ) : null}
               <div>
                 <p className="font-bold ">{profile.name}</p>
                 <p className=" ">{profile.jobRole}</p>
