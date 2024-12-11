@@ -31,6 +31,9 @@ export async function getAllProfilesDashboardRowData(): Promise<
 export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   const query = `*[ _type == "profile" && slug.current == $slug ][0]{
   ...,
+  profileImage {
+    asset->{url}
+  },
   "team": Team->{
       name,
       slug,

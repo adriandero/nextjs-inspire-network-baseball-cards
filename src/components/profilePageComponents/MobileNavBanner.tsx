@@ -13,7 +13,7 @@ export default function MobileNavBanner({
     <div className="w-full h-64 flex md:hidden ">
       <div className="w-full h-56 bg-secondary flex flex-col md:hidden items-center p-6">
         <div className="flex flex-row items-center justify-between w-full">
-          <Link href="/profiles">
+          <Link href="/dashboard">
             <GoArrowLeft
               size={32}
               strokeWidth="0"

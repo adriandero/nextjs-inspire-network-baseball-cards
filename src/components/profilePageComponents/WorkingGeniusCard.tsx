@@ -10,8 +10,6 @@ import ComponentShell from "./ComponentShell";
 export default function WorkingGeniusCard({
   profile,
 }: SanityDocument): React.JSX.Element {
-
-  console.log(profile.workingGenius.widget);
   return (
     <ComponentShell>
       <div className="flex flex-row">

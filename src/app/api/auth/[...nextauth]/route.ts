@@ -1,17 +1,6 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import { SanityAdapter, SanityCredentials } from "next-auth-sanity";
-import { client } from "@/lib/sanity/client";
+import NextAuth from "next-auth";
 
-const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
-  providers: [SanityCredentials(client)],
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
-  },
-  adapter: SanityAdapter(client),
-};
+import { authOptions } from "./authOptions";
 
 const handler = NextAuth(authOptions);
 

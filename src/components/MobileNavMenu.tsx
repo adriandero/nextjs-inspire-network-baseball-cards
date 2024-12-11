@@ -43,13 +43,13 @@ export default function MobileNavMenu(): React.JSX.Element {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="border-l ml-4">
-                  <Link
+                  {/* {<Link
                     href="#"
                     className="group grid h-auto w-full items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent  focus:text-accent-foreground"
                     prefetch={false}
                   >
                     Profile
-                  </Link>
+                  </Link>} */}
                   <Link
                     href="#"
                     className="group grid h-auto w-full text-inspireRed items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent focus:bg-accent "
@@ -69,21 +69,7 @@ export default function MobileNavMenu(): React.JSX.Element {
                 className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 prefetch={false}
               >
-                Home
-              </Link>
-              <Link
-                href="#"
-                className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                prefetch={false}
-              >
-                Teams
-              </Link>
-              <Link
-                href="#"
-                className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                prefetch={false}
-              >
-                Assessment
+                Dashboard
               </Link>
             </nav>
           </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { saveAs } from "file-saver";
 import { GoDownload } from "react-icons/go";
 import { Button } from "../ui/button";
 import { useState } from "react";
@@ -10,16 +9,25 @@ export default function DownloadButton({ slug }: { slug: string }) {
   const [loading, setLoading] = useState(false);
 
   const handlePDFDownloadCall = async () => {
-    setLoading(true);
-
     try {
-      const pdfBlob = await fetch(
-        process.env.BASE_URL + `/api/profiles/${slug}/pdf`
-      ).then((res) => res.blob());
-      saveAs(pdfBlob, `${slug}.pdf`);
+      setLoading(true);
+      const pdfBlob = await fetch(`/api/profiles/${slug}/pdf`).then((res) =>
+        res.blob()
+      );
+
+      const blobUrl = URL.createObjectURL(pdfBlob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `${slug}.pdf`;
+
+      document.body.appendChild(link);
+      link.click();
+
+      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(link);
     } catch (error) {
-      console.error("Error downloading PDF:", error);
-      alert("Failed to download the PDF. Please try again later.");
+      console.error("Failed to download PDF:", error);
     } finally {
       setLoading(false);
     }

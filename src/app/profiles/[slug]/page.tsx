@@ -3,7 +3,7 @@ import {
   getProfilesByTeamWithoutSpecifiedProfile,
 } from "@/lib/utils/sanityApi/profileRequests";
 
-import NavBar from "@/components/NavBar";
+import ProfileNavBar from "@/components/ProfileNavBar";
 import Banner from "@/components/profilePageComponents/Banner";
 import ValuesCard from "@/components/profilePageComponents/ValuesCard";
 import MoreProfilesCard from "@/components/profilePageComponents/MoreProfilesCard";
@@ -11,7 +11,6 @@ import WorkingGeniusCard from "@/components/profilePageComponents/WorkingGeniusC
 import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouCard";
 import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
 import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
-
 
 import { checkIfSession } from "@/lib/utils/sessionCheck";
 
@@ -45,7 +44,7 @@ export default async function ProfilePage({
         _createdAt={""}
         _updatedAt={""}
       />
-      <NavBar />
+      <ProfileNavBar />
       <Banner
         profile={profile}
         _id={""}

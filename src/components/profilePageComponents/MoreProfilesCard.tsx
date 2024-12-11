@@ -16,9 +16,7 @@ export default function MoreProfilesCard({
     <ComponentShell className="w-full mt-0">
       <div className="flex flex-row items-center w-fit h-fit">
         <GoPeople strokeWidth={1} size={24} />
-        <h1 className="text-xl font-bold flex-grow w-fit ml-6">
-          More Profiles
-        </h1>
+        <h1 className="text-xl font-bold flex-grow w-fit ml-6">The Team</h1>
       </div>
 
       {moreProfiles.map((profile: SanityDocument, index: number) => (

@@ -21,9 +21,16 @@ export default function ProfileNavBar(): React.JSX.Element {
   const userProfilePic = "/defaultAvatar.png";
 
   return (
-    <div className="w-full h-16 hidden md:flex justify-end items-center justify-self-center px-6">
+    <div className="w-full h-16 hidden md:flex justify-between items-center justify-self-center px-6">
+      <Link href={`/dashboard/`}>
+        <GoArrowLeft
+          size={28}
+          strokeWidth="0.5"
+          className="text-dark1 hover:text-primary hover:scale-110 duration-200"
+        />
+      </Link>
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
-        <Link href={`/profiles`} className="hover:text-primary duration-200">
+        <Link href={`/dashboard`} className="hover:text-primary duration-200">
           Dashboard
         </Link>
         {/* {<h1 className="hover:text-primary duration-200">Teams</h1>

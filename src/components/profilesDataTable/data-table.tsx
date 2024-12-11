@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
     },
   });
   return (
-    <div className="min-w-96 p-8">
+    <div className="min-w-96 m-4 w-full max-w-screen-lg">
       <div className="flex items-center py-4 gap-2">
         <Input
           placeholder="Search names..."

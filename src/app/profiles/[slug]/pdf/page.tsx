@@ -4,8 +4,6 @@ import PDFKolbeStrengthsCard from "@/components/profilePDFComponents/PDFKolbeStr
 import PDFPrinciplesYouCard from "@/components/profilePDFComponents/PDFPrinciplesYouCard";
 import PDFValuesCard from "@/components/profilePDFComponents/PDFValuesCard";
 import PDFWorkingGeniusCard from "@/components/profilePDFComponents/PDFWorkingGeniusCard";
-import { checkIfSession } from "@/lib/utils/sessionCheck";
-
 
 type tParams = Promise<{ slug: string }>;
 
@@ -14,11 +12,8 @@ export default async function ProfilePDF({
 }: {
   params: tParams;
 }): Promise<JSX.Element> {
-  await checkIfSession();
-
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
-
 
   // const A4DimensionsInPx = {
   //   h: "762px",
