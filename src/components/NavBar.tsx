@@ -1,11 +1,9 @@
 "use client";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-//import { useSession } from "next-auth/react";
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { GoArrowLeft } from "react-icons/go";
 
 import {
   DropdownMenu,
@@ -17,7 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ProfileNavBar(): React.JSX.Element {
-  // const { data: session, status } = useSession();
   const userProfilePic = "/defaultAvatar.png";
 
   return (
