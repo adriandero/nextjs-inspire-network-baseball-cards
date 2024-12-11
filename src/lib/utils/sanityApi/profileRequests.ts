@@ -89,3 +89,43 @@ export async function getProfilesByTeamWithoutSpecifiedProfile(
 
   return profiles;
 }
+
+export interface ProfilesFromUserTeams {
+  teamProfiles: SanityDocument[];
+}
+
+export async function getProfilesFromUserTeams(
+  userEmail: string,
+  userTeams: unknown
+): Promise<ProfilesFromUserTeams> {
+  const query = `
+  *[_type == "user" && email == $userEmail][0] {
+    "teamProfiles": *[_type == "profile" && Team->name in $userTeams] {
+      name,
+      "slug":slug.current,
+      jobRole,
+      profileImage {
+        asset->{url}
+      },
+      "team": Team->{
+        name,
+        slug,
+        "company": Company->{
+          name,
+          slug
+        }
+      }
+    }
+  }
+`;
+
+  const options = { next: { revalidate: 30 } };
+
+  const profiles = await client.fetch<ProfilesFromUserTeams>(
+    query,
+    { userEmail, userTeams },
+    options
+  );
+
+  return profiles;
+}

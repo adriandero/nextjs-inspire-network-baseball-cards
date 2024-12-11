@@ -1,10 +1,17 @@
-import { checkIfSession } from "@/lib/utils/sessionCheck";
+import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { GoArrowRight } from "react-icons/go";
 
 export default async function Home() {
   await checkIfSession();
+
+  const userData = await getUserData();
+
+  if (userData.profile) {
+    redirect("/profiles/" + userData.profile.slug);
+  } else (redirect("/dashboard"))
 
   return (
     <main className="container h-screen my-auto mx-auto w-fit p-8 flex items-center ">
