@@ -38,7 +38,7 @@ export default function NavBar({
   return (
     <div className="w-full h-16 hidden md:flex justify-end items-center justify-self-center px-6">
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
-        <Link href={`/profiles`} className="hover:text-primary duration-200">
+        <Link href={`/dasboard`} className="hover:text-primary duration-200">
           Dashboard
         </Link>
         {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
