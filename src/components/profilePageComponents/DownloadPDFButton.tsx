@@ -11,9 +11,9 @@ export default function DownloadButton({ slug }: { slug: string }) {
   const handlePDFDownloadCall = async () => {
     try {
       setLoading(true);
-      const pdfBlob = await fetch(`/api/profiles/${slug}/pdf`).then((res) =>
-        res.blob()
-      );
+      const pdfBlob = await fetch(
+        `https://nextjs-inspire-network-baseball-cards-m94abrzpk.vercel.app/api/profiles/alison-orr/pdf`
+      ).then((res) => res.blob());
 
       const blobUrl = URL.createObjectURL(pdfBlob);
 
