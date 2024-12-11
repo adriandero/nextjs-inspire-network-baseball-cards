@@ -1,6 +1,7 @@
 import {
   getProfileBySlug,
-  getProfilesByTeamWithoutSpecifiedProfile,
+  getProfilesFromUserTeams,
+  ProfilesFromUserTeams,
 } from "@/lib/utils/sanityApi/profileRequests";
 
 import ProfileNavBar from "@/components/ProfileNavBar";
@@ -12,9 +13,11 @@ import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouC
 import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
 import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
 
-import { checkIfSession } from "@/lib/utils/sessionCheck";
+import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
 
 import DownloadButton from "@/components/profilePageComponents/DownloadPDFButton";
+import { SanityDocument } from "next-sanity";
+import { Team } from "@/app/dashboard/page";
 
 type tParams = Promise<{ slug: string }>;
 
@@ -25,12 +28,27 @@ export default async function ProfilePage({
 }): Promise<JSX.Element> {
   await checkIfSession();
 
+  const userData = await getUserData();
+
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
-  const moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
-    profile._id,
-    profile.team?.slug.current
-  );
+  // const moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
+  //   profile._id,
+  //   profile.team?.slug.current
+  // );
+
+  const emptyData: SanityDocument[] = [];
+  let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
+
+  if (userData?.team) {
+    profilesFromUserTeams = await getProfilesFromUserTeams(
+      userData.email,
+      userData.team.map((team: Team) => team.name)
+    );
+  }
+
+  const data = userData?.team ? profilesFromUserTeams.teamProfiles : emptyData;
+  console.log(userData);
 
   //TODO propper sanitydocument typing
 
@@ -44,7 +62,14 @@ export default async function ProfilePage({
         _createdAt={""}
         _updatedAt={""}
       />
-      <ProfileNavBar />
+      <ProfileNavBar
+        userDataProfile={userData.profile}
+        _id={""}
+        _rev={""}
+        _type={""}
+        _createdAt={""}
+        _updatedAt={""}
+      />
       <Banner
         profile={profile}
         _id={""}
@@ -90,7 +115,8 @@ export default async function ProfilePage({
         </div>
         <div className="w-full md:max-w-80 flex flex-col items-center md:items-start">
           <MoreProfilesCard
-            moreProfiles={moreProfiles}
+            moreProfiles={data}
+            currentProfile={profile}
             _id={""}
             _rev={""}
             _type={""}

@@ -8,7 +8,7 @@ import { DataTable } from "@/components/profilesDataTable/data-table";
 import NavBar from "@/components/NavBar";
 import { SanityDocument } from "next-sanity";
 
-interface Team {
+export interface Team {
   name: string;
   slug: string;
 }
@@ -33,7 +33,14 @@ export default async function DashboardPage(): Promise<JSX.Element> {
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">
-      <NavBar />
+      <NavBar
+        userDataProfile={userData.profile}
+        _id={""}
+        _rev={""}
+        _type={""}
+        _createdAt={""}
+        _updatedAt={""}
+      />
 
       <main className="flex flex-wrap mt-4 gap-8 justify-center">
         <DataTable columns={columns} data={data} />

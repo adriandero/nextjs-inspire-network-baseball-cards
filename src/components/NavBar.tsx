@@ -13,9 +13,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "./ui/skeleton";
+import { useState } from "react";
+import { SanityDocument } from "next-sanity";
+import { redirect } from "next/navigation";
 
-export default function ProfileNavBar(): React.JSX.Element {
+export default function NavBar({
+  userDataProfile,
+}: SanityDocument): React.JSX.Element {
+  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
+
   const userProfilePic = "/defaultAvatar.png";
+
+  console.log(userDataProfile);
+
+  function handleProfileRedirect() {
+    if (userDataProfile) redirect("/profiles/" + userDataProfile.slug);
+    else
+      alert(
+        "You don't have a Baseball Card assigned - Ask an administrator for access"
+      );
+  }
 
   return (
     <div className="w-full h-16 hidden md:flex justify-end items-center justify-self-center px-6">
@@ -27,17 +45,29 @@ export default function ProfileNavBar(): React.JSX.Element {
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex flex-row items-center gap-2 hover:scale-110 duration-200">
-            {" "}
+          <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200">
             <Avatar className="h-full">
-              <AvatarImage src={userProfilePic} className="rounded-full h-7" />
+              <AvatarImage
+                src={userProfilePic}
+                className="rounded-full h-7"
+                onLoadingStatusChange={(status) => {
+                  if (status === "loaded") {
+                    setIsAvatarLoaded(true);
+                  }
+                }}
+              />
               <AvatarFallback></AvatarFallback>
-            </Avatar>
+            </Avatar>{" "}
+            {!isAvatarLoaded ? (
+              <Skeleton className={`min-h-7 min-w-7 rounded-full bg-light3`} />
+            ) : null}
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {/* {<DropdownMenuItem>Profile</DropdownMenuItem>} */}
+            <DropdownMenuItem onClick={() => handleProfileRedirect()}>
+              Profile
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="text-inspireRed hover:!text-inspireRed"
               onClick={() => signOut()}
