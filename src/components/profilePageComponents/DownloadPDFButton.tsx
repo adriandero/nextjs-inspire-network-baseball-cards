@@ -13,7 +13,7 @@ export default function DownloadButton({ slug }: { slug: string }) {
       setLoading(true);
 
       const pdfBlob = await fetch(
-        `http://localhost:3000/api/profiles/${slug}/pdf`
+        `${process.env.APP_BASE_URL}/api/profiles/${slug}/pdf`
       ).then((res) => res.blob());
 
       const blobUrl = URL.createObjectURL(pdfBlob);
