@@ -1,7 +1,7 @@
 // import { auth0 } from "@/lib/auth0";
 
 import chromium from "@sparticuz/chromium";
-import puppeteerCore from "puppeteer-core";
+import puppeteer from "puppeteer-core";
 
 export async function GET(
   req: Request,
@@ -10,7 +10,7 @@ export async function GET(
   // const session = await auth0.getSession();
   const slug = (await context.params).slug;
 
-  const browser = await puppeteerCore.launch({
+  const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath(),
@@ -18,7 +18,6 @@ export async function GET(
   });
 
   const page = await browser.newPage();
-  browser.setCookie();
   // await page.setExtraHTTPHeaders({
   //   Authorization: `Bearer ${session?.tokenSet.accessToken}`,
   // });
