@@ -3,7 +3,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 import Link from "next/link";
-import { signOut } from "next-auth/react";
 
 import {
   DropdownMenu,
@@ -19,16 +18,15 @@ import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
 
 export default function NavBar({
-  userDataProfile,
+  userProfileData,
 }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const userProfilePic = "/defaultAvatar.png";
 
-  console.log(userDataProfile);
-
   function handleProfileRedirect() {
-    if (userDataProfile) redirect("/profiles/" + userDataProfile.slug);
+    if (userProfileData.profile)
+      redirect("/profiles/" + userProfileData.profile.slug);
     else
       alert(
         "You don't have a Baseball Card assigned - Ask an administrator for access"
@@ -70,7 +68,7 @@ export default function NavBar({
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-inspireRed hover:!text-inspireRed"
-              onClick={() => signOut()}
+              onClick={() => redirect("auth/logout")}
             >
               Sign Out
             </DropdownMenuItem>

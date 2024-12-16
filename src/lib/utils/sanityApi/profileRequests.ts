@@ -95,7 +95,7 @@ export interface ProfilesFromUserTeams {
 }
 
 export async function getProfilesFromUserTeams(
-  userEmail: string,
+  userEmail: string | undefined,
   userTeams: unknown
 ): Promise<ProfilesFromUserTeams> {
   const query = `

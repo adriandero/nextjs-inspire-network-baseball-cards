@@ -1,23 +1,35 @@
+// import { auth0 } from "@/lib/auth0";
+
 import puppeteer from "puppeteer";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 export async function GET(
   req: Request,
   context: { params: Promise<{ slug: string }> }
 ) {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  // const session = await auth0.getSession();
+  const slug = (await context.params).slug;
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  const slug = (await context.params).slug;
+  browser.setCookie();
+  // await page.setExtraHTTPHeaders({
+  //   Authorization: `Bearer ${session?.tokenSet.accessToken}`,
+  // });
 
   await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
     waitUntil: "networkidle2",
+  });
+  await page.evaluate(() => {
+    return Promise.all(
+      Array.from(document.images).map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise<void>((resolve, reject) => {
+          img.onload = () => resolve();
+          img.onerror = () =>
+            reject(new Error(`Failed to load image: ${img.src}`));
+        });
+      })
+    );
   });
   await page.emulateMediaType("screen");
 
@@ -35,3 +47,5 @@ export async function GET(
     },
   });
 }
+
+// create a new browser where i need to log in...

@@ -1,7 +1,6 @@
 import {
   getProfileBySlug,
-  getProfilesFromUserTeams,
-  ProfilesFromUserTeams,
+  getProfilesByTeamWithoutSpecifiedProfile,
 } from "@/lib/utils/sanityApi/profileRequests";
 
 import ProfileNavBar from "@/components/ProfileNavBar";
@@ -13,42 +12,52 @@ import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouC
 import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
 import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
 
-import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
-
 import DownloadButton from "@/components/profilePageComponents/DownloadPDFButton";
 import { SanityDocument } from "next-sanity";
-import { Team } from "@/app/dashboard/page";
+import { auth0 } from "@/lib/auth0";
+import { getUserData } from "@/lib/utils/sessionCheck";
+import { redirect } from "next/navigation";
 
 type tParams = Promise<{ slug: string }>;
+
+type Team = {
+  name: string;
+  slug: { current: string; _type: string };
+};
 
 export default async function ProfilePage({
   params,
 }: {
   params: tParams;
 }): Promise<JSX.Element> {
-  await checkIfSession();
-
-  const userData = await getUserData();
-
   const { slug } = await params;
   const profile = await getProfileBySlug(slug);
-  // const moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
-  //   profile._id,
-  //   profile.team?.slug.current
-  // );
 
-  const emptyData: SanityDocument[] = [];
-  let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
+  const session = await auth0.getSession();
 
-  if (userData?.team) {
-    profilesFromUserTeams = await getProfilesFromUserTeams(
-      userData.email,
-      userData.team.map((team: Team) => team.name)
+  if (!session) {
+    redirect("/auth/login");
+  }
+  const userData = await getUserData(session?.user);
+
+  let moreProfiles: SanityDocument[] = [];
+
+  const isTeamPresent = userData.team
+    ? userData.team.some(
+        (team: Team) => team.slug.current === profile.team?.slug.current
+      )
+    : false;
+
+  if (isTeamPresent) {
+    moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
+      profile._id,
+      profile.team?.slug.current
     );
   }
 
-  const data = userData?.team ? profilesFromUserTeams.teamProfiles : emptyData;
-  console.log(userData);
+  // async function handleShare() {}
+
+  // let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
 
   //TODO propper sanitydocument typing
 
@@ -115,7 +124,7 @@ export default async function ProfilePage({
         </div>
         <div className="w-full md:max-w-80 flex flex-col items-center md:items-start">
           <MoreProfilesCard
-            moreProfiles={data}
+            moreProfiles={moreProfiles}
             currentProfile={profile}
             _id={""}
             _rev={""}
@@ -123,8 +132,17 @@ export default async function ProfilePage({
             _createdAt={""}
             _updatedAt={""}
           />
-
           <DownloadButton slug={slug} />
+          {/* {  <Button
+            variant="outline"
+            className="mt-6 h-fit rounded-xl text-base p-3"
+            onClick={handleShare}
+          >
+            <>
+              <GoDownload size={30} strokeWidth="0.5" className="!w-5 !h-5" />{" "}
+              <span>Download Profile</span>
+            </>
+          </Button>{" "}} */}
         </div>
       </main>
       <footer className="flex item-center p-8"></footer>
