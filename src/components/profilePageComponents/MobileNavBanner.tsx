@@ -7,8 +7,9 @@ import Link from "next/link";
 import MobileNavMenu from "../MobileNavMenu";
 
 export default function MobileNavBanner({
-  profile,
+  profile, userDataProfile
 }: SanityDocument): React.JSX.Element {
+
   return (
     <div className="w-full h-64 flex md:hidden ">
       <div className="w-full h-56 bg-secondary flex flex-col md:hidden items-center p-6">
@@ -24,7 +25,7 @@ export default function MobileNavBanner({
             {profile.name.toUpperCase()}
           </h1>
 
-          <MobileNavMenu />
+          <MobileNavMenu userDataProfile={userDataProfile} _id={""} _rev={""} _type={""} _createdAt={""} _updatedAt={""}/>
         </div>
         <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
           {profile.jobRole.map((role: string, index: number) => (

@@ -16,6 +16,7 @@ import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
+import MobileNavMenu from "./MobileNavMenu";
 
 export default function NavBar({
   userProfileData,
@@ -34,47 +35,60 @@ export default function NavBar({
   }
 
   return (
-    <div className="w-full h-16 hidden md:flex justify-end items-center justify-self-center px-6">
-      <div className="flex space-x-12 text-lg h-full items-center font-medium">
-        <Link href={`/dasboard`} className="hover:text-primary duration-200">
-          Dashboard
-        </Link>
-        {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
+    <>
+      <div className="w-full h-16 flex justify-end items-center justify-self-center px-6">
+        <MobileNavMenu
+          userDataProfile={userProfileData}
+          className="sm:hidden text-black"
+          _id={""}
+          _rev={""}
+          _type={""}
+          _createdAt={""}
+          _updatedAt={""}
+        />
+        <div className=" hidden sm:flex space-x-12 text-lg h-full items-center font-medium">
+          <Link href={`/dasboard`} className="hover:text-primary duration-200">
+            Dashboard
+          </Link>
+          {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200">
-            <Avatar className="h-full">
-              <AvatarImage
-                src={userProfilePic}
-                className="rounded-full h-7"
-                onLoadingStatusChange={(status) => {
-                  if (status === "loaded") {
-                    setIsAvatarLoaded(true);
-                  }
-                }}
-              />
-              <AvatarFallback></AvatarFallback>
-            </Avatar>{" "}
-            {!isAvatarLoaded ? (
-              <Skeleton className={`min-h-7 min-w-7 rounded-full bg-light3`} />
-            ) : null}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleProfileRedirect()}>
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-inspireRed hover:!text-inspireRed"
-              onClick={() => redirect("auth/logout")}
-            >
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200">
+              <Avatar className="h-full">
+                <AvatarImage
+                  src={userProfilePic}
+                  className="rounded-full h-7"
+                  onLoadingStatusChange={(status) => {
+                    if (status === "loaded") {
+                      setIsAvatarLoaded(true);
+                    }
+                  }}
+                />
+                <AvatarFallback></AvatarFallback>
+              </Avatar>{" "}
+              {!isAvatarLoaded ? (
+                <Skeleton
+                  className={`min-h-7 min-w-7 rounded-full bg-light3`}
+                />
+              ) : null}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleProfileRedirect()}>
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-inspireRed hover:!text-inspireRed"
+                onClick={() => redirect("auth/logout")}
+              >
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

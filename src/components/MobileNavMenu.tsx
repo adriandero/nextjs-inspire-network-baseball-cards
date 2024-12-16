@@ -11,17 +11,29 @@ import { signOut } from "next-auth/react";
 import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
 import { FiMenu } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { SanityDocument } from "next-sanity";
+import { redirect } from "next/navigation";
 
-export default function MobileNavMenu(): React.JSX.Element {
+export default function MobileNavMenu({
+  userDataProfile,
+  className,
+}: SanityDocument): React.JSX.Element {
   const userProfilePic = "/defaultAvatar.png";
 
+  function handleProfileRedirect() {
+    if (userDataProfile) redirect("/profiles/" + userDataProfile.slug);
+    else
+      alert(
+        "You don't have a Baseball Card assigned - Ask an administrator for access"
+      );
+  }
   return (
     <Sheet>
       <SheetTrigger asChild>
         <FiMenu
           size={30}
           strokeWidth="1.5"
-          className="text-white w-fit hover:text-primary duration-200 cursor-pointer"
+          className={`text-white w-fit hover:text-primary duration-200 cursor-pointer ${className}`}
         />
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px]">
@@ -43,13 +55,17 @@ export default function MobileNavMenu(): React.JSX.Element {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="border-l ml-4">
-                  {/* {<Link
-                    href="#"
-                    className="group grid h-auto w-full items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent  focus:text-accent-foreground"
-                    prefetch={false}
-                  >
-                    Profile
-                  </Link>} */}
+                  {
+                    <Link
+                      href="#"
+                      className="group grid h-auto w-full items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent  focus:text-accent-foreground"
+                      prefetch={false}
+                      onClick={() => handleProfileRedirect()}
+                    >
+                      Profile
+                    </Link>
+                  }
+
                   <Link
                     href="#"
                     className="group grid h-auto w-full text-inspireRed items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent focus:bg-accent "

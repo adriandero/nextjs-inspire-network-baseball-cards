@@ -65,6 +65,7 @@ export default async function ProfilePage({
     <div className="w-full h-screen max-w-screen-lg ">
       <MobileNavBanner
         profile={profile}
+        userDataProfile={userData.profile}
         _id={""}
         _rev={""}
         _type={""}
