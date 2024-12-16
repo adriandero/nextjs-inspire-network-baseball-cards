@@ -1,7 +1,7 @@
 // import { auth0 } from "@/lib/auth0";
 
 import chrome from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer";
 
 export async function GET(
   req: Request,
