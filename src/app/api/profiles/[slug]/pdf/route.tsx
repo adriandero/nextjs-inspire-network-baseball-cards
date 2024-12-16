@@ -1,27 +1,30 @@
 // import { auth0 } from "@/lib/auth0";
 
-import { chromium } from "playwright";
+import chrome from "@sparticuz/chromium";
+import puppeteer from "puppeteer";
 
 export async function GET(
   req: Request,
   context: { params: Promise<{ slug: string }> }
 ) {
+  // const session = await auth0.getSession();
   const slug = (await context.params).slug;
 
-  // Launch a Chromium browser instance
-  const browser = await chromium.launch({
+  const browser = await puppeteer.launch({
+    args: chrome.args,
+    defaultViewport: chrome.defaultViewport,
+    executablePath: await chrome.executablePath(),
     headless: true,
   });
 
-  const contextInstance = await browser.newContext();
-  const page = await contextInstance.newPage();
+  const page = await browser.newPage();
+  // await page.setExtraHTTPHeaders({
+  //   Authorization: `Bearer ${session?.tokenSet.accessToken}`,
+  // });
 
-  // Navigate to the target URL
-  await page.goto(`${process.env.BASE_URL}/profiles/${slug}/pdf`, {
-    waitUntil: "networkidle",
+  await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
+    waitUntil: "networkidle2",
   });
-
-  // Ensure all images are fully loaded
   await page.evaluate(() => {
     return Promise.all(
       Array.from(document.images).map((img) => {
@@ -34,21 +37,16 @@ export async function GET(
       })
     );
   });
+  await page.emulateMediaType("screen");
 
-  // Emulate screen media type for rendering
-  await page.emulateMedia({ media: "screen" });
-
-  // Generate the PDF
   const pdfBuffer = await page.pdf({
     format: "A4",
     printBackground: true,
     landscape: true,
   });
 
-  // Close the browser
   await browser.close();
 
-  // Return the PDF buffer as a response
   return new Response(pdfBuffer, {
     headers: {
       "Content-Type": "application/pdf",
