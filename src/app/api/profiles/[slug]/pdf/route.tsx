@@ -1,6 +1,6 @@
 // import { auth0 } from "@/lib/auth0";
-
-import puppeteer from "puppeteer";
+import chromium from "chrome-aws-lambda";
+import puppeteer from "puppeteer-core";
 
 export async function GET(
   req: Request,
@@ -9,8 +9,12 @@ export async function GET(
   // const session = await auth0.getSession();
   const slug = (await context.params).slug;
 
-  const browser = await puppeteer.launch();
-
+  const executablePath = await chromium.executablePath;
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: executablePath,
+    headless: true,
+  });
   const page = await browser.newPage();
   // await page.setExtraHTTPHeaders({
   //   Authorization: `Bearer ${session?.tokenSet.accessToken}`,
@@ -34,7 +38,7 @@ export async function GET(
   await page.emulateMediaType("screen");
 
   const pdfBuffer = await page.pdf({
-    format: "A4",
+    format: "a4",
     printBackground: true,
     landscape: true,
   });
