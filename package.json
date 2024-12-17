@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "node node_modules/puppeteer/install.js"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.0.0-beta.10",
