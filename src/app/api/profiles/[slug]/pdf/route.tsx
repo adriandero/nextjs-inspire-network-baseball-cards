@@ -8,6 +8,7 @@ export async function GET(
 ) {
   // const session = await auth0.getSession();
   const slug = (await context.params).slug;
+  console.log("Chromium executable path:", await puppeteer.executablePath());
 
   const browser = await puppeteer.launch({
     headless: true, // Make sure it's headless
