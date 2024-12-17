@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
 };
 module.exports = {
   webpack: (config: { module: { rules: { test: RegExp; use: string }[] } }) => {
-    // Exclude .map files from being processed by Webpack
+
     config.module.rules.push({
       test: /\.map$/,
       use: "ignore-loader",
