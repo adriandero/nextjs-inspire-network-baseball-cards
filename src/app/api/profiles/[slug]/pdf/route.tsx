@@ -1,5 +1,5 @@
 // import { auth0 } from "@/lib/auth0";
-import chromium from "chrome-aws-lambda";
+import puppeteer from "puppeteer";
 //import puppeteer from "puppeteer-core";
 
 export async function GET(
@@ -9,14 +9,14 @@ export async function GET(
   // const session = await auth0.getSession();
   const slug = (await context.params).slug;
 
-  const executablePath = await chromium.executablePath;
-  console.log("Chromium executable path:", executablePath);
-
-  const browser = await chromium.puppeteer.launch({
-    args: chromium.args,
-    executablePath: executablePath,
-    headless: chromium.headless,
+  const browser = await puppeteer.launch({
+    headless: true, // Make sure it's headless
+    args: [
+      "--no-sandbox", // Prevent sandbox errors (needed for cloud environments like Vercel)
+      "--disable-setuid-sandbox", // Disable sandboxing (another requirement for cloud environments)
+    ],
   });
+
   const page = await browser.newPage();
   // await page.setExtraHTTPHeaders({
   //   Authorization: `Bearer ${session?.tokenSet.accessToken}`,
