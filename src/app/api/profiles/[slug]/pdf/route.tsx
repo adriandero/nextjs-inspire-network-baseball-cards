@@ -8,6 +8,7 @@ export async function GET(
 ) {
   // const session = await auth0.getSession();
   const slug = (await context.params).slug;
+  const executablePath = puppeteer.executablePath();
 
   const browser = await puppeteer.launch({
     headless: true, // Make sure it's headless
@@ -15,6 +16,7 @@ export async function GET(
       "--no-sandbox", // Prevent sandbox errors (needed for cloud environments like Vercel)
       "--disable-setuid-sandbox", // Disable sandboxing (another requirement for cloud environments)
     ],
+    executablePath: executablePath,
   });
 
   const page = await browser.newPage();
