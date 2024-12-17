@@ -2,6 +2,9 @@
 import puppeteer from "puppeteer";
 //import puppeteer from "puppeteer-core";
 
+import fs from "fs";
+import path from "path";
+
 export async function GET(
   req: Request,
   context: { params: Promise<{ slug: string }> }
@@ -10,8 +13,22 @@ export async function GET(
   const slug = (await context.params).slug;
   console.log("Chromium executable path:", await puppeteer.executablePath());
 
+  const chromiumPath = path.join(
+    __dirname,
+    "../../../node_modules/puppeteer-core/.local-chromium/linux-1045629/chrome-linux/chrome"
+  );
+  const tmpPath = "/tmp/chrome-linux"; // Temporary location for Chromium binary
+  const tmpChromePath = path.join(tmpPath, "chrome");
+
+  if (!fs.existsSync(tmpChromePath)) {
+    // Ensure /tmp directory exists and copy Chromium binary
+    fs.mkdirSync(tmpPath, { recursive: true });
+    fs.copyFileSync(chromiumPath, tmpChromePath);
+  }
   const browser = await puppeteer.launch({
     headless: true, // Make sure it's headless
+    executablePath: tmpChromePath,
+
     args: [
       "--no-sandbox", // Prevent sandbox errors (needed for cloud environments like Vercel)
       "--disable-setuid-sandbox", // Disable sandboxing (another requirement for cloud environments)
