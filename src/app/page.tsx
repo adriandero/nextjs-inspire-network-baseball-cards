@@ -7,13 +7,13 @@ import { redirect } from "next/navigation";
 import { GoArrowRight } from "react-icons/go";
 
 export default async function Home() {
-  const session = await auth0.getSession();
+  const session = await auth0?.getSession();
 
   if (!session) {
     redirect("/auth/login/");
   }
   const userData = await getUserData(session?.user);
-  if (userData.profile) {
+  if (userData?.profile) {
     redirect("/profiles/" + userData.profile.slug);
   } else redirect("/dashboard");
 
