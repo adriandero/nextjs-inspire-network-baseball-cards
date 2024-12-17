@@ -1,6 +1,6 @@
 // import { auth0 } from "@/lib/auth0";
 import chromium from "chrome-aws-lambda";
-import puppeteer from "puppeteer-core";
+//import puppeteer from "puppeteer-core";
 
 export async function GET(
   req: Request,
@@ -10,10 +10,12 @@ export async function GET(
   const slug = (await context.params).slug;
 
   const executablePath = await chromium.executablePath;
-  const browser = await puppeteer.launch({
+  console.log("Chromium executable path:", executablePath);
+
+  const browser = await chromium.puppeteer.launch({
     args: chromium.args,
     executablePath: executablePath,
-    headless: true,
+    headless: chromium.headless,
   });
   const page = await browser.newPage();
   // await page.setExtraHTTPHeaders({
