@@ -1,14 +1,16 @@
 import { GoLightBulb } from "react-icons/go";
-
-import Image from "next/image";
-
-import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
 import { SanityDocument } from "next-sanity";
+import WidgetCogsSVG from "../profilePageComponents/WidgetCogsSVG";
+import workingGeniusJson from "../../../public/workingGenius.json";
 
 export default function PDFWorkingGeniusCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {
+  type workingGeniusKey = keyof typeof workingGeniusJson;
+
+  const workingGenius: workingGeniusKey = profile.workingGenius?.title;
+
   return (
     <div className={`${className} flex items-center gap-4`}>
       <div className="flex flex-row w-full h-full">
@@ -21,16 +23,21 @@ export default function PDFWorkingGeniusCard({
         </div>
         <div className="flex flex-col min-w-32 min-h-full items-start">
           <h2 className="text-lg font-bold">Working Genius</h2>
-          <h3 className="font-bold mt-2">{profile.workingGenius.title}</h3>
-          <p className="">{profile.workingGenius.description}</p>
+          <h3 className="font-bold mt-2">
+            {workingGeniusJson[workingGenius].title}
+          </h3>
+          <p className="">{workingGeniusJson[workingGenius].description}</p>
         </div>
       </div>
 
       <div className="flex justify-center">
-        <Image
-          src={widgetimage}
-          alt="Illustration of the WIDGET gears"
-          width={600}
+        <WidgetCogsSVG
+          widget={profile.workingGenius?.widget}
+          _id={""}
+          _rev={""}
+          _type={""}
+          _createdAt={""}
+          _updatedAt={""}
         />
       </div>
     </div>

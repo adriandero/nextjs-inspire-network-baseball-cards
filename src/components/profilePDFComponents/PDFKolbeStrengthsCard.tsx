@@ -5,7 +5,7 @@ import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // I
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
-
+import { getKolbeMethod } from "@/lib/utils";
 
 // type principle = {
 //   title: string;
@@ -17,6 +17,23 @@ export default function PDFKolbeStrengthsCard({
   className,
 }: SanityDocument): React.JSX.Element {
   const kolbeObj = profile.kolbeStrengths;
+
+  const factFinderMethod = getKolbeMethod(
+    kolbeObj.factFinder,
+    "factFinder"
+  );
+  const followThruMethod = getKolbeMethod(
+    kolbeObj.followThru,
+    "followThru"
+  );
+  const quickStartMethod = getKolbeMethod(
+    kolbeObj.quickStart,
+    "quickStart"
+  );
+  const implementorMethod = getKolbeMethod(
+    kolbeObj.implementor,
+    "implementor"
+  );
 
   return (
     <div className={`${className}flex`}>
@@ -34,38 +51,28 @@ export default function PDFKolbeStrengthsCard({
           <div className="w-full flex flex-row items-center gap-6">
             <GoSearch strokeWidth={0.5} size={28} />
 
-            <Progress
-              value={kolbeObj.factFinder.strengthLevel * 10}
-              color="bg-inspireRed"
-            />
-            <div className="font-bold text-lg">
-              {kolbeObj.factFinder.strengthLevel}
-            </div>
+            <Progress value={kolbeObj.factFinder * 10} color="bg-inspireRed" />
+            <div className="font-bold text-lg">{kolbeObj.factFinder}</div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {kolbeObj.factFinder.methodOfOperation}
+            {factFinderMethod?.method}
           </h3>
-          <p className="text-base ml-12">{kolbeObj.factFinder.meaning}</p>
+          <p className="text-base ml-12">{factFinderMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
           <h3 className="text-xs font-bold ml-12">Follow Through</h3>
           <div className="w-full flex flex-row items-center gap-6">
             <GoTab strokeWidth={0.5} size={28} />
 
-            <Progress
-              value={kolbeObj.followThru.strengthLevel * 10}
-              color="bg-inspireBlue"
-            />
-            <div className="font-bold text-lg">
-              {kolbeObj.followThru.strengthLevel}
-            </div>
+            <Progress value={kolbeObj.followThru * 10} color="bg-inspireBlue" />
+            <div className="font-bold text-lg">{kolbeObj.followThru}</div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {kolbeObj.followThru.methodOfOperation}
+            {followThruMethod?.method}
           </h3>
-          <p className="text-base ml-12">{kolbeObj.followThru.meaning}</p>
+          <p className="text-base ml-12">{followThruMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
           <h3 className="text-xs font-bold ml-12">Quick Start</h3>
@@ -73,37 +80,33 @@ export default function PDFKolbeStrengthsCard({
             <GoRocket strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.quickStart.strengthLevel * 10}
+              value={kolbeObj.quickStart * 10}
               color="bg-inspireGreen"
             />
-            <div className="font-bold text-lg">
-              {kolbeObj.quickStart.strengthLevel}
-            </div>
+            <div className="font-bold text-lg">{kolbeObj.quickStart}</div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {kolbeObj.quickStart.methodOfOperation}
+            {quickStartMethod?.method}
           </h3>
-          <p className="text-base ml-12">{kolbeObj.quickStart.meaning}</p>
+          <p className="text-base ml-12">{quickStartMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
-          <h3 className="text-xs font-bold ml-12">Implmenter</h3>
+          <h3 className="text-xs font-bold ml-12">Implmentor</h3>
           <div className="w-full flex flex-row items-center gap-6">
             <GoTools strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.implementer.strengthLevel * 10}
+              value={kolbeObj.implementor * 10}
               color="bg-inspireYellow"
             />
-            <div className="font-bold text-lg">
-              {kolbeObj.implementer.strengthLevel}
-            </div>
+            <div className="font-bold text-lg">{kolbeObj.implementor}</div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {kolbeObj.implementer.methodOfOperation}
+            {implementorMethod?.method}
           </h3>
-          <p className="text-base ml-12">{kolbeObj.implementer.meaning}</p>
+          <p className="text-base ml-12">{implementorMethod?.description}</p>
         </div>
       </div>
     </div>

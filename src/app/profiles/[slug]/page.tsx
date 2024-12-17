@@ -55,6 +55,8 @@ export default async function ProfilePage({
     );
   }
 
+  console.log(profile);
+
   // async function handleShare() {}
 
   // let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };

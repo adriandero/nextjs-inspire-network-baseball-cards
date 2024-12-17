@@ -4,15 +4,11 @@ import Image from "next/image";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 
 import { PiDiamondsFour } from "react-icons/pi";
+import principlesYouJson from "../../../public/principlesYou.json";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./ComponentShell";
-
-type principle = {
-  title: string;
-  description: string;
-};
 
 function getImage(archetype: string): string {
   return `/archetypeImages/${archetype}.png`;
@@ -21,9 +17,11 @@ function getImage(archetype: string): string {
 export default function PrinciplesYouCard({
   profile,
 }: SanityDocument): React.JSX.Element {
-  const [value, setValue] = React.useState<principle>(
+  const [value, setValue] = React.useState<PrincipleKey>(
     profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {}
   );
+
+  type PrincipleKey = keyof typeof principlesYouJson;
 
   return (
     <ComponentShell>
@@ -39,34 +37,43 @@ export default function PrinciplesYouCard({
           </h1>
         </div>
       </div>
-      <div className="flex flex-row mt-4 gap-6">
-        <div className="flex flex-row mt-4 gap">
-          <RadioGroup
-            value={JSON.stringify(value)}
-            onValueChange={(val) => setValue(JSON.parse(val))}
-          >
-            {profile.principleYouArchetype.map(
-              (principle: principle, index: number) => (
-                <RadioGroupItem key={index} value={JSON.stringify(principle)}>
-                  <Image
-                    src={getImage(principle.title)}
-                    alt={`${principle.title} illustration`}
-                    width={100}
-                    height={100}
-                  />
-                </RadioGroupItem>
-              )
-            )}
-          </RadioGroup>
+      {principlesYouJson[value] ? (
+        <div className="flex flex-row mt-4 gap-6">
+          <div className="flex flex-row mt-4 gap">
+            <RadioGroup
+              value={value}
+              onValueChange={(val: PrincipleKey) => setValue(val)}
+            >
+              {profile.principleYouArchetype.map(
+                (principle: string, index: number) => (
+                  <RadioGroupItem key={index} value={principle}>
+                    <Image
+                      src={getImage(principle)}
+                      alt={`${principle} illustration`}
+                      width={100}
+                      height={100}
+                    />
+                  </RadioGroupItem>
+                )
+              )}
+            </RadioGroup>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg mt-2">
+              {principlesYouJson[value]?.title}
+              {/*<span className="font-normal text-base"> {value.description}</span>*/}
+            </h3>
+            <p className="font-normal">
+              {" "}
+              {principlesYouJson[value]?.description}
+            </p>
+          </div>
         </div>
-        <div>
-          <h3 className="font-bold text-lg mt-2">
-            {value.title}
-            {/*<span className="font-normal text-base"> {value.description}</span>*/}
-          </h3>
-          <p className="font-normal"> {value.description}</p>
+      ) : (
+        <div className="flex justify-center italic text-dark3 pt-6">
+          <p>No Result.</p>
         </div>
-      </div>
+      )}
     </ComponentShell>
   );
 }

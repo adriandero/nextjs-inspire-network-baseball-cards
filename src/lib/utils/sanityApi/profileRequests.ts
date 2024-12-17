@@ -12,10 +12,10 @@ export async function getAllProfilesDashboardRowData(): Promise<
     profileImage {
       asset->{url}
     },
-    "team": Team->{
+    "team": team->{
       name,
       slug,
-      "company": Company->{
+      "company": company->{
           name,
           slug
       }
@@ -34,10 +34,10 @@ export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   profileImage {
     asset->{url}
   },
-  "team": Team->{
+  "team": team->{
       name,
       slug,
-      "company": Company->{
+      "company": company->{
         ...,
         companyLogo {
           asset->{
@@ -65,14 +65,14 @@ export async function getProfilesByTeamWithoutSpecifiedProfile(
   profileId: string,
   teamSlug: string
 ): Promise<SanityDocument[]> {
-  const query = `*[_type == "profile" && Team->slug.current == $teamSlug && _id != $profileId] {
+  const query = `*[_type == "profile" && team->slug.current == $teamSlug && _id != $profileId] {
       name,
       slug,
       jobRole,
       profileImage {
         asset->{url}
       },
-      "team": Team->{
+      "team": team->{
         _id,
         name,
         slug
@@ -100,17 +100,17 @@ export async function getProfilesFromUserTeams(
 ): Promise<ProfilesFromUserTeams> {
   const query = `
   *[_type == "user" && email == $userEmail][0] {
-    "teamProfiles": *[_type == "profile" && Team->name in $userTeams] {
+    "teamProfiles": *[_type == "profile" && team->name in $userTeams] {
       name,
       "slug":slug.current,
       jobRole,
       profileImage {
         asset->{url}
       },
-      "team": Team->{
+      "team": team->{
         name,
         slug,
-        "company": Company->{
+        "company": company->{
           name,
           slug
         }

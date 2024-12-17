@@ -18,6 +18,7 @@ import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // I
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./ComponentShell";
+import { getKolbeMethod } from "@/lib/utils";
 
 // type principle = {
 //   title: string;
@@ -28,7 +29,11 @@ export default function KolbeStrengthsCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   const kolbeObj = profile.kolbeStrengths;
-  const kolbeObjKeysArr = Object.keys(kolbeObj);
+
+  const factFinderMethod = getKolbeMethod(kolbeObj.factFinder, "factFinder");
+  const followThruMethod = getKolbeMethod(kolbeObj.followThru, "followThru");
+  const quickStartMethod = getKolbeMethod(kolbeObj.quickStart, "quickStart");
+  const implementorMethod = getKolbeMethod(kolbeObj.implementor, "implementor");
 
   return (
     <ComponentShell>
@@ -51,23 +56,21 @@ export default function KolbeStrengthsCard({
                       <TooltipTrigger>
                         <GoSearch strokeWidth={0.5} size={24} />
                       </TooltipTrigger>
-                      <TooltipContent>{kolbeObjKeysArr[0]}</TooltipContent>
+                      <TooltipContent>Fact Finder</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.factFinder.strengthLevel * 10}
+                    value={kolbeObj.factFinder * 10}
                     color="bg-inspireRed"
                   />
-                  <div className="font-bold text-lg">
-                    {kolbeObj.factFinder.strengthLevel}
-                  </div>
+                  <div className="font-bold text-lg">{kolbeObj.factFinder}</div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <h3 className="text-lg font-bold">
-                  {kolbeObj.factFinder.methodOfOperation}
+                  {factFinderMethod?.method}
                 </h3>
-                <p className="text-base">{kolbeObj.factFinder.meaning}</p>
+                <p className="text-base">{factFinderMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
@@ -78,23 +81,21 @@ export default function KolbeStrengthsCard({
                       <TooltipTrigger>
                         <GoTab strokeWidth={0.5} size={24} />
                       </TooltipTrigger>
-                      <TooltipContent>{kolbeObjKeysArr[1]}</TooltipContent>
+                      <TooltipContent>Follow Thru</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.followThru.strengthLevel * 10}
+                    value={kolbeObj.followThru * 10}
                     color="bg-inspireBlue"
                   />
-                  <div className="font-bold text-lg">
-                    {kolbeObj.followThru.strengthLevel}
-                  </div>
+                  <div className="font-bold text-lg">{kolbeObj.followThru}</div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <h3 className="text-lg font-bold">
-                  {kolbeObj.followThru.methodOfOperation}
+                  {followThruMethod?.method}
                 </h3>
-                <p className="text-base">{kolbeObj.followThru.meaning}</p>
+                <p className="text-base">{followThruMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
@@ -105,23 +106,21 @@ export default function KolbeStrengthsCard({
                       <TooltipTrigger>
                         <GoRocket strokeWidth={0.5} size={24} />
                       </TooltipTrigger>
-                      <TooltipContent>{kolbeObjKeysArr[2]}</TooltipContent>
+                      <TooltipContent>Quick Start</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.quickStart.strengthLevel * 10}
+                    value={kolbeObj.quickStart * 10}
                     color="bg-inspireGreen"
                   />
-                  <div className="font-bold text-lg">
-                    {kolbeObj.quickStart.strengthLevel}
-                  </div>
+                  <div className="font-bold text-lg">{kolbeObj.quickStart}</div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <h3 className="text-lg font-bold">
-                  {kolbeObj.quickStart.methodOfOperation}
+                  {quickStartMethod?.method}
                 </h3>
-                <p className="text-base">{kolbeObj.quickStart.meaning}</p>
+                <p className="text-base">{quickStartMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">
@@ -132,23 +131,23 @@ export default function KolbeStrengthsCard({
                       <TooltipTrigger>
                         <GoTools strokeWidth={0.5} size={24} />
                       </TooltipTrigger>
-                      <TooltipContent>{kolbeObjKeysArr[3]}</TooltipContent>
+                      <TooltipContent>Implementer</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.implementer.strengthLevel * 10}
+                    value={kolbeObj.implementor * 10}
                     color="bg-inspireYellow"
                   />
                   <div className="font-bold text-lg">
-                    {kolbeObj.implementer.strengthLevel}
+                    {kolbeObj.implementor}
                   </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <h3 className="text-lg font-bold">
-                  {kolbeObj.implementer.methodOfOperation}
+                  {implementorMethod?.method}
                 </h3>
-                <p className="text-base">{kolbeObj.implementer.meaning}</p>
+                <p className="text-base">{implementorMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
           </Accordion>

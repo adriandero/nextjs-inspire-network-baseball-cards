@@ -1,0 +1,62 @@
+{
+  "theCreativeDreamer": {
+    "title": "The Creative Dreamer",
+    "description": "A passionate idealist with an endless stream of big questions and ideas to consider. Comfortable with their head in the clouds."
+  },
+  "theDiscriminatingIdeator": {
+    "title": "The Discriminating Ideator",
+    "description": "A creative, intuitive, and confident generator of new ideas. Uses instinct and integrative thinking to solve real problems."
+  },
+  "theInsightfulCollaborator": {
+    "title": "The Insightful Collaborator",
+    "description": "A creative, intuitive, and confident generator of new ideas. Uses instinct and integrative thinking to solve real problems."
+  },
+  "theContemplativeCounselor": {
+    "title": "The Contemplative Counselor",
+    "description": "A thoughtful, insightful, and nuanced advisor. Slow to declare certainty but deep in wisdom, intuition, and rationale."
+  },
+  "theEvangelizingInnovator": {
+    "title": "The Evangelizing Innovator",
+    "description": "An excitable and convincing generator and promoter of new ideas. Combines curiosity and confidence with infectious enthusiasm."
+  },
+  "theJudiciousAccomplisher": {
+    "title": "The Judicious Accomplisher",
+    "description": "A reliable, prudent, and focused doer. A unique combination of practical urgency and intuitive judgment."
+  },
+  "thePhilosophicalMotivator": {
+    "title": "The Philosophical Motivator",
+    "description": "An excitable, curious, and enthusiastic proponent of ideas and people. A unique combination of eagerness and caution."
+  },
+  "theAdaptableDesigner": {
+    "title": "The Adaptable Designer",
+    "description": "A generator of new ideas in response to the needs of others. A unique combination of creativity and flexibility."
+  },
+  "theEnthusiasticEncourager": {
+    "title": "The Enthusiastic Encourager",
+    "description": "A warm and positive affirmer of others. Quick to support and inspire people who need energy or reassurance."
+  },
+  "theIdealisticSupporter": {
+    "title": "The Idealistic Supporter",
+    "description": "A loyal, modest, and thoughtful contributor. Carefully considers others’ needs and reluctant to demand attention."
+  },
+  "theMethodicalArchitect": {
+    "title": "The Methodical Architect",
+    "description": "A precise, reliable, and planful solver of problems. A unique combination of innovative thinking and practical implementation."
+  },
+  "theAssertiveDriver": {
+    "title": "The Assertive Driver",
+    "description": "A taskmaster extraordinaire. Willing to push and remind others, and dive in themselves, to ensure that things get done."
+  },
+  "theCarefulImplementer": {
+    "title": "The Careful Implementer",
+    "description": "A thorough, practical, and careful contributor. A unique combination of steady reliability and quiet depth."
+  },
+  "theIntuitiveActivator": {
+    "title": "The Intuitive Activator",
+    "description": "An instinctive and confident decision-maker. Able to assess situations quickly and accurately, and marshal people to act."
+  },
+  "theLoyalFinisher": {
+    "title": "The Loyal Finisher",
+    "description": "A responsive, dependable doer. Willing to step up when something is needed and determined to fulfill their commitments."
+  }
+}

@@ -6,14 +6,11 @@ import { PiDiamondsFour } from "react-icons/pi";
 import React from "react";
 import { SanityDocument } from "next-sanity";
 
-type principle = {
-  title: string;
-  description: string;
-};
 
 function getImage(archetype: string): string {
   return `/archetypeImages/${archetype}.png`;
 }
+import principlesYouJson from "../../../public/principlesYou.json";
 
 export default function PDFPrinciplesYouCard({
   profile,
@@ -28,6 +25,8 @@ export default function PDFPrinciplesYouCard({
       </span>
     );
   };
+
+  type PrincipleKey = keyof typeof principlesYouJson;
 
   return (
     <div className={`${className} flex flex-col`}>
@@ -45,14 +44,14 @@ export default function PDFPrinciplesYouCard({
       </div>
       <div className="flex flex-col mt-4 gap-6">
         {profile.principleYouArchetype.map(
-          (principle: principle, index: number) => (
+          (principle: PrincipleKey, index: number) => (
             <div
               className="flex flex-row justify-center items-start h-fit gap-3"
               key={index}
             >
               <div className="w-16 min-w-16">
                 <Image
-                  src={getImage(principle.title)}
+                  src={getImage(principle)}
                   alt="Illustration of the WIDGET gears"
                   width={100}
                   height={100}
@@ -61,7 +60,7 @@ export default function PDFPrinciplesYouCard({
               <div>
                 <p className="font-normal">
                   {" "}
-                  {makeFirstWordBold(principle.description)}
+                  {makeFirstWordBold(principlesYouJson[principle]?.description)}
                 </p>
               </div>
             </div>

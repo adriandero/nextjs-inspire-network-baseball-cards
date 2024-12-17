@@ -102,7 +102,8 @@ export const columns: ColumnDef<SanityDocument>[] = [
     footer: "Company" as const,
     header: () => <div className="text-right">Company</div>,
     cell: ({ row }) => {
-      const companyName = row.original.team.company.name || "Unknown Company";
+      console.log(row.original);
+      const companyName = row.original.team?.company?.name || "Unknown Company";
 
       return <div className="text-right">{companyName}</div>;
     },

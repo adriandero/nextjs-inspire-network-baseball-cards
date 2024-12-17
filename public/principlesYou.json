@@ -1,0 +1,116 @@
+{
+  "commander": {
+    "title": "Commander",
+    "description": "Commanders are driven to achieve goals through determination and holding themselves and others to high standards of performance."
+  },
+  "shaper": {
+    "title": "Shaper",
+    "description": "Shapers visualize ambitious goals, set plans in place, and push through relentlessly to make them happen."
+  },
+  "quietLeader": {
+    "title": "Quiet Leader",
+    "description": "Quiet Leaders focus on leading themselves and others through their open-mindedness and their equanimity in facing challenges - often leading as much through 'taking in' as 'putting out'."
+  },
+  "inspirer": {
+    "title": "Inspirer",
+    "description": "Inspirers lead through motivating people to get behind a challenging and important idea, project, or business objective."
+  },
+  "campaigner": {
+    "title": "Campaigner",
+    "description": "Campaigners focus on rallying others around ideas, positions, and solutions and achieving practical results."
+  },
+  "coach": {
+    "title": "Coach",
+    "description": "Coaches regard self-growth, development, and learning as a cornerstone of life and daily practices and they teach and model these as aspirations for others."
+  },
+  "promoter": {
+    "title": "Promoter",
+    "description": "Promoters are distinguished by their outgoing and charismatic nature and people skills."
+  },
+  "impresario": {
+    "title": "Impresario",
+    "description": "Impresarios love to entertain, engage socially, and facilitate great experiences with others."
+  },
+  "entertainer": {
+    "title": "Entertainer",
+    "description": "Entertainers are driven by creating experiences and engaging with the world and particularly the people in it."
+  },
+  "peacekeeper": {
+    "title": "Peacekeeper",
+    "description": "Peacekeepers relish developing positive relationships between people, and seeking harmony, compromise, and cooperation."
+  },
+  "problemSolver": {
+    "title": "Problem Solver",
+    "description": "Problem Solvers are motivated to support and help others in an industrious and professional manner."
+  },
+  "helper": {
+    "title": "Helper",
+    "description": "Helpers are driven by compassion and care for others, and support of their emotional needs."
+  },
+
+  "strategist": {
+    "title": "Strategist",
+    "description": "Strategists are adept at generating and translating concepts and ideas into effective strategies to achieve results."
+  },
+  "planner": {
+    "title": "Planner",
+    "description": "Planners are driven to put structure and systems around goals, translating ideas into practical and achievable plans."
+  },
+  "orchestrator": {
+    "title": "Orchestrator",
+    "description": "Orchestrators excel at bringing people together, organizing around them, and mobilizing resources to achieve and exceed expectations."
+  },
+
+  "implementer": {
+    "title": "Implementer",
+    "description": "Implementers organize and structure people and processes to reliably execute tasks."
+  },
+  "investigator": {
+    "title": "Investigator",
+    "description": "Investigators like to research and analyze information and data to build knowledge and understanding."
+  },
+  "technician": {
+    "title": "Technician",
+    "description": "Technicians are driven to break down, analyze, and solve problems in a technical and practical way."
+  },
+  "adventurer": {
+    "title": "Adventurer",
+    "description": "Adventurers are motivated by taking part in fun, exciting, and adventurous activities and pursuits."
+  },
+  "artisan": {
+    "title": "Artisan",
+    "description": "Artisans are driven to use their creativity to bring life to beautiful and well-crafted ideas."
+  },
+  "inventor": {
+    "title": "Inventor",
+    "description": "Inventors are driven by coming up with new and innovative ideas, products, and solutions."
+  },
+  "explorer": {
+    "title": "Explorer",
+    "description": "Explorers love to take in new knowledge and are drawn to new experiences through intrinsic motivations."
+  },
+  "thinker": {
+    "title": "Thinker",
+    "description": "Thinkers are inclined to approach problems in an abstract, philosophical fashion. They naturally seek the deeper meaning of issues that arise in their daily lives."
+  },
+  "growthSeeker": {
+    "title": "Growth Seeker",
+    "description": "Growth Seekers are defined by a deep passion for learning and personal growth and development."
+  },
+  "protector": {
+    "title": "Protector",
+    "description": "Protectors care about traditions, rules, and standards, and are driven by a strong sense of personal duty."
+  },
+  "enforcer": {
+    "title": "Enforcer",
+    "description": "Enforcers are driven to engage with the world through reliance on standards, rules, and traditions."
+  },
+  "critic": {
+    "title": "Critic",
+    "description": "Critics freely express their opinions and love debating different perspectives with others."
+  },
+  "individualist": {
+    "title": "Individualist",
+    "description": "Individualists walk to the beat of their own drum and find unique ways of expressing themselves and their originality."
+  }
+}

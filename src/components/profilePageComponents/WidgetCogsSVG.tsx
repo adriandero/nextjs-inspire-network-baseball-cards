@@ -11,9 +11,9 @@ export default function WidgetCogsSVG({
   };
 
   function getWidgetColor(widgetLvl: string): string {
-    if (widgetLvl === "bad") return widgetLvltoColorMap.bad;
-    if (widgetLvl === "mid") return widgetLvltoColorMap.mid;
-    if (widgetLvl === "good") return widgetLvltoColorMap.good;
+    if (widgetLvl === "red") return widgetLvltoColorMap.bad;
+    if (widgetLvl === "yellow") return widgetLvltoColorMap.mid;
+    if (widgetLvl === "green") return widgetLvltoColorMap.good;
 
     return widgetLvltoColorMap.default;
   }

@@ -1,0 +1,58 @@
+{
+  "factFinder": {
+    "1-3": {
+      "method": "Simplify",
+      "description": "Get the overview"
+    },
+    "4-6": {
+      "method": "Explain",
+      "description": "Get essential facts"
+    },
+    "7-10": {
+      "method": "Strategize",
+      "description": "Get as many specifics as possible"
+    }
+  },
+  "followThru": {
+    "1-3": {
+      "method": "Adapt",
+      "description": "Develop shortcuts and mulstitask"
+    },
+    "4-6": {
+      "method": "Maintain",
+      "description": "Detect discrepancies and sdjust procedures"
+    },
+    "7-10": {
+      "method": "Systematize",
+      "description": "Design systems that organize everything"
+    }
+  },
+  "quickStart": {
+    "1-3": {
+      "method": "Stabilize",
+      "description": "Stick with what already works well"
+    },
+    "4-6": {
+      "method": "Modify",
+      "description": "Check things out before trying them"
+    },
+    "7-10": {
+      "method": "Innovate",
+      "description": "Experiment to see what will happen"
+    }
+  },
+  "implementor": {
+    "1-3": {
+      "method": "Envision",
+      "description": "Picture how things could work"
+    },
+    "4-6": {
+      "method": "Restore",
+      "description": "Keep things working the way they should"
+    },
+    "7-10": {
+      "method": "Build",
+      "description": "Construct tangible solutions"
+    }
+  }
+}
