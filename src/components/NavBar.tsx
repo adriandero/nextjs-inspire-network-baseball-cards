@@ -36,10 +36,10 @@ export default function NavBar({
 
   return (
     <>
-      <div className="w-full h-16 flex justify-end items-center justify-self-center px-6">
+      <div className="w-full h-16 flex justify-end items-center justify-self-center px-2 sm:px-6">
         <MobileNavMenu
           userDataProfile={userProfileData}
-          className="sm:hidden text-black"
+          className="sm:hidden !text-dark1"
           _id={""}
           _rev={""}
           _type={""}
