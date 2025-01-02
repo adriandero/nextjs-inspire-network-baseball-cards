@@ -13,7 +13,7 @@ export default function MobileNavBanner({
   return (
     <div className="w-full flex md:hidden">
       <div className="w-full h-fit bg-secondary flex flex-col md:hidden items-center relative">
-        <div className="flex flex-row justify-between w-full px-2 pt-6 pb-4 xs:pt-6 xs:pb-4">
+        <div className="flex flex-row justify-between w-full p-4">
           <Link href="/dashboard">
             <GoArrowLeft
               size={32}
@@ -43,7 +43,7 @@ export default function MobileNavBanner({
             _updatedAt={""}
           />
         </div>
-        <div className="flex flex-col items-center text-center px-2 xs:px-6">
+        <div className="flex flex-col items-center text-center px-4">
           <h1 className="text-2xl xs:text-3xl font-bold text-light1 xs:hidden">
             {profile.name.toUpperCase()}
           </h1>

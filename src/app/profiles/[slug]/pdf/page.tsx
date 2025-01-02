@@ -22,7 +22,7 @@ export default async function ProfilePDF({
 
   return (
     <div
-      className={`h-[762px] w-[1123px] bg-mainbackground m-4 flex gap-4 flex-col`}
+      className={`h-fit w-[1123px] bg-mainbackground m-4 flex gap-4 flex-col`}
     >
       <div className="flex gap-4 w-full h-fit">
         <PDFBanner

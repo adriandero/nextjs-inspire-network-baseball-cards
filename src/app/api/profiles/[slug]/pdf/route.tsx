@@ -1,5 +1,6 @@
 // import { auth0 } from "@/lib/auth0";
-import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
 //import puppeteer from "puppeteer-core";
 
 export async function GET(
@@ -10,11 +11,10 @@ export async function GET(
   const slug = (await context.params).slug;
 
   const browser = await puppeteer.launch({
-    headless: true, // Make sure it's headless
-    args: [
-      "--no-sandbox", // Prevent sandbox errors (needed for cloud environments like Vercel)
-      "--disable-setuid-sandbox", // Disable sandboxing (another requirement for cloud environments)
-    ],
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: true,
   });
 
   const page = await browser.newPage();
