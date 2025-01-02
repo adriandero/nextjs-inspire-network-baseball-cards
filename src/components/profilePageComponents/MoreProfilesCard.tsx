@@ -1,5 +1,5 @@
 "use client";
-import { GoPeople } from "react-icons/go";
+import { GoInfo, GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 import { SanityDocument } from "next-sanity";
@@ -7,6 +7,16 @@ import ComponentShell from "./ComponentShell";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { redirect } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from "../ui/alert-dialog";
 
 export default function MoreProfilesCard({
   moreProfiles,
@@ -68,8 +78,26 @@ export default function MoreProfilesCard({
           }
         })
       ) : (
-        <p className="flex italic pt-6 justify-center text-dark3 ">
+        <p className="flex italic pt-6 justify-center text-dark3 gap-2">
           No Results.
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <GoInfo className="flex self-center cursor-pointer" />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>No Team Members Found</AlertDialogTitle>
+                <AlertDialogDescription>
+                  The profile is either in a team by itself, or you don&apos;t
+                  have permissions to view the teams profiles. Ask an
+                  administrator for access.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>OK</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </p>
       )}
     </ComponentShell>

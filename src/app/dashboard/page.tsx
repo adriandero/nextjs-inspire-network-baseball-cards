@@ -53,7 +53,7 @@ export default async function DashboardPage(): Promise<JSX.Element> {
         _updatedAt={""}
       />
 
-      <main className="flex flex-wrap mt-4 gap-8 justify-center">
+      <main className="flex flex-wrap gap-8 justify-center">
         <DataTable columns={columns} data={data} />
       </main>
       <footer className="flex item-center p-8"></footer>

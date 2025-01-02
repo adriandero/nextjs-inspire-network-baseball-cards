@@ -17,6 +17,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { GoInfo } from "react-icons/go";
+import { GoMultiSelect } from "react-icons/go";
+
 import {
   Table,
   TableBody,
@@ -31,6 +34,17 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { GoSearch } from "react-icons/go";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,18 +85,22 @@ export function DataTable<TData, TValue>({
   return (
     <div className="sm:min-w-96  w-full max-w-screen-lg sm:px-6 px-2">
       <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder="Search names..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="relative">
+          <GoSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search names..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="pl-8 !text-base" // Add left padding to make room for the icon
+          />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns
+              <GoMultiSelect />
+              View
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -90,7 +108,11 @@ export function DataTable<TData, TValue>({
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
-                // const title = column.columnDef.footer;
+                const columnDef = column.columnDef;
+                const displayText =
+                  (columnDef.footer as string) ||
+                  (columnDef.header as string) ||
+                  column.id;
 
                 return (
                   <DropdownMenuCheckboxItem
@@ -101,7 +123,7 @@ export function DataTable<TData, TValue>({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {displayText}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -147,11 +169,33 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
+                <TableCell colSpan={columns.length} className="h-24">
+                  <div className="h-fit flex justify-center gap-2">
+                    No results.
+                    {!data.length ? (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <GoInfo className="flex self-center cursor-pointer" />
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Missing Permissions
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              You don&apos;t have permissions to view any
+                              profiles at the moment. Ask an administrator for
+                              access.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>OK</AlertDialogCancel>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    ) : null}
+                    {/* TODO: on click of info -> You don&apos;t have permissions to view any profiles. Ask an administrator for access. */}
+                  </div>
                 </TableCell>
               </TableRow>
             )}

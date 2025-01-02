@@ -15,8 +15,13 @@ export default async function Home() {
   const userData = await getUserData(session?.user);
   if (userData?.profile) {
     redirect("/profiles/" + userData.profile.slug);
-  } else redirect("/dashboard");
-
+  } else {
+    //TODO:
+    console.log(
+      "Info: No dedicated profile assigned. Ask an Admin to create your own profile."
+    );
+    redirect("/dashboard");
+  }
   return (
     <div className="container h-screen my-auto mx-auto w-fit p-8 flex items-center ">
       <div className="flex h-fit justify-center bg-secondary hover:bg-tertiary text-light1 font-bold py-2 px-4 rounded-lg ">

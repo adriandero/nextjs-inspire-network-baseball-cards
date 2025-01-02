@@ -7,13 +7,13 @@ import Link from "next/link";
 import MobileNavMenu from "../MobileNavMenu";
 
 export default function MobileNavBanner({
-  profile, userDataProfile
+  profile,
+  userProfileData,
 }: SanityDocument): React.JSX.Element {
-
   return (
-    <div className="w-full h-64 flex md:hidden ">
-      <div className="w-full h-56 bg-secondary flex flex-col md:hidden items-center p-6">
-        <div className="flex flex-row items-center justify-between w-full">
+    <div className="w-full flex md:hidden">
+      <div className="w-full h-fit bg-secondary flex flex-col md:hidden items-center relative">
+        <div className="flex flex-row justify-between w-full px-2 pt-6 pb-4 xs:pt-6 xs:pb-4">
           <Link href="/dashboard">
             <GoArrowLeft
               size={32}
@@ -21,32 +21,58 @@ export default function MobileNavBanner({
               className="text-white hover:text-primary duration-200 mr-4"
             />
           </Link>
-          <h1 className="text-2xl xs:text-3xl font-bold text-light1 text-center ">
+          <div className="flex flex-col items-center text-center hidden xs:inline ">
+            <h1 className="text-2xl xs:text-3xl font-bold text-light1 ">
+              {profile.name.toUpperCase()}
+            </h1>
+            <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
+              {profile.jobRole.map((role: string, index: number) => (
+                <span key={index}>
+                  {role}
+                  {index < profile.jobRole.length - 1 && ", "}
+                </span>
+              ))}
+            </h1>
+          </div>
+          <MobileNavMenu
+            userProfileData={userProfileData}
+            _id={""}
+            _rev={""}
+            _type={""}
+            _createdAt={""}
+            _updatedAt={""}
+          />
+        </div>
+        <div className="flex flex-col items-center text-center px-2 xs:px-6">
+          <h1 className="text-2xl xs:text-3xl font-bold text-light1 xs:hidden">
             {profile.name.toUpperCase()}
           </h1>
-
-          <MobileNavMenu userDataProfile={userDataProfile} _id={""} _rev={""} _type={""} _createdAt={""} _updatedAt={""}/>
+          <h1 className="text-xl xs:text-2xl font-bold text-primary text-center xs:hidden">
+            {profile.jobRole.map((role: string, index: number) => (
+              <span key={index}>
+                {role}
+                {index < profile.jobRole.length - 1 && ", "}
+              </span>
+            ))}
+          </h1>
+          <div className="w-36 h-36 rounded-full bg-secondary border-6 border-secondary mt-4 xs:mt-0 z-10">
+            <Avatar className="">
+              <AvatarImage
+                src={
+                  profile.profileImage
+                    ? urlFor(profile.profileImage).toString()
+                    : "/defaultAvatar.png"
+                }
+                className="rounded-full"
+              />
+              <AvatarFallback></AvatarFallback>
+            </Avatar>
+          </div>
         </div>
-        <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
-          {profile.jobRole.map((role: string, index: number) => (
-            <span key={index}>
-              {role}
-              {index < profile.jobRole.length - 1 && ", "}
-            </span>
-          ))}
-        </h1>
-        <div className="w-36 h-36 rounded-full border-6 border-secondary mt-4">
-          <Avatar className="">
-            <AvatarImage
-              src={
-                profile.profileImage
-                  ? urlFor(profile.profileImage).toString()
-                  : "/defaultAvatar.png"
-              }
-              className="rounded-full"
-            />
-            <AvatarFallback></AvatarFallback>
-          </Avatar>
+        <div className="absolute bottom-0 w-full">
+          <div className="bg-background h-6 w-full">
+            {/* Card content goes here */}
+          </div>
         </div>
       </div>
     </div>

@@ -55,8 +55,6 @@ export default async function ProfilePage({
     );
   }
 
-  console.log(profile);
-
   // async function handleShare() {}
 
   // let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
@@ -67,7 +65,7 @@ export default async function ProfilePage({
     <div className="w-full h-screen max-w-screen-lg ">
       <MobileNavBanner
         profile={profile}
-        userDataProfile={userData.profile}
+        userProfileData={userData.profile}
         _id={""}
         _rev={""}
         _type={""}
@@ -75,7 +73,7 @@ export default async function ProfilePage({
         _updatedAt={""}
       />
       <ProfileNavBar
-        userDataProfile={userData.profile}
+        userProfileData={userData.profile}
         _id={""}
         _rev={""}
         _type={""}
@@ -90,7 +88,7 @@ export default async function ProfilePage({
         _createdAt={""}
         _updatedAt={""}
       />
-      <main className="flex flex-wrap mt-4 gap-8">
+      <main className="flex flex-wrap gap-8">
         <div className="flex flex-col grow shrink-0 basis-1/2">
           <ValuesCard
             profile={profile}

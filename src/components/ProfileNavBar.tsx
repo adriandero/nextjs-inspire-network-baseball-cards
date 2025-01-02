@@ -20,10 +20,20 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { Skeleton } from "./ui/skeleton";
-import { signOut } from "next-auth/react";
+
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from "./ui/alert-dialog";
 
 export default function ProfileNavBar({
-  userDataProfile,
+  userProfileData,
 }: SanityDocument): React.JSX.Element {
   // const { data: session, status } = useSession();
 
@@ -31,12 +41,15 @@ export default function ProfileNavBar({
 
   const userProfilePic = "/defaultAvatar.png";
 
+  function accountHasProfileAssigned() {
+    if (userProfileData) return true;
+    return false;
+  }
+
   function handleProfileRedirect() {
-    if (userDataProfile) redirect("/profiles/" + userDataProfile.slug);
-    else
-      alert(
-        "You don't have a Baseball Card assigned - Ask an administrator for access"
-      );
+    if (accountHasProfileAssigned()) {
+      redirect("/profiles/" + userProfileData.slug);
+    }
   }
 
   return (
@@ -73,15 +86,39 @@ export default function ProfileNavBar({
               <Skeleton className={`min-h-7 min-w-7 rounded-full bg-light3`} />
             ) : null}
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleProfileRedirect()}>
-              Profile
-            </DropdownMenuItem>
+
+            {accountHasProfileAssigned() ? (
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <button onClick={() => handleProfileRedirect()}>Profile</button>
+              </DropdownMenuItem>
+            ) : (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    Profile
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Missing Baseballcard</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      You don&apos;t have a Baseball Card assigned - Ask an
+                      administrator for access
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>OK</AlertDialogCancel>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+
             <DropdownMenuItem
               className="text-inspireRed hover:!text-inspireRed"
-              onClick={() => signOut()}
+              onClick={() => redirect("auth/logout")}
             >
               Sign Out
             </DropdownMenuItem>

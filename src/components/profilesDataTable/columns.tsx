@@ -102,7 +102,7 @@ export const columns: ColumnDef<SanityDocument>[] = [
     footer: "Company" as const,
     header: () => <div className="text-right">Company</div>,
     cell: ({ row }) => {
-      console.log(row.original);
+      // console.log(row.original);
       const companyName = row.original.team?.company?.name || "Unknown Company";
 
       return <div className="text-right">{companyName}</div>;
@@ -117,7 +117,10 @@ export const columns: ColumnDef<SanityDocument>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 flex justify-self-end"
+            >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
