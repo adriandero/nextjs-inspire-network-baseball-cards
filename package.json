@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "apt-get update && apt-get install -y chromium libnss3 libatk-bridge2.0-0 libxcomposite1 && npm run build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.0.0-beta.10",
@@ -27,7 +26,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@sanity/image-url": "^1.1.0",
     "@shadcn/ui": "^0.0.4",
-    "@sparticuz/chromium": "^106.0.2",
+    "@sparticuz/chromium": "^123.0.0",
     "@tanstack/react-table": "^8.20.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -37,7 +36,8 @@
     "next-auth-sanity": "^1.5.3",
     "next-sanity": "^9.8.16",
     "playwright": "^1.49.1",
-    "puppeteer-core": "^18.2.1",
+    "puppeteer": "^22.11.0",
+    "puppeteer-core": "^22.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.0",
