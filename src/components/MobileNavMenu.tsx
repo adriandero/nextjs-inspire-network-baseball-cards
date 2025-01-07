@@ -6,7 +6,7 @@ import {
 } from "@radix-ui/react-collapsible";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+
 
 import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
 import { FiMenu } from "react-icons/fi";
