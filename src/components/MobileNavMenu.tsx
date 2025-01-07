@@ -95,7 +95,7 @@ export default function MobileNavMenu({
                     href="#"
                     className="group grid h-auto w-full text-inspireRed items-center justify-start gap-1 rounded-md bg-background px-4 py-2 text-base font-medium transition-colors hover:bg-accent focus:bg-accent "
                     prefetch={false}
-                    onClick={() => signOut()}
+                    onClick={() => redirect("/auth/logout")}
                   >
                     Sign Out
                   </Link>

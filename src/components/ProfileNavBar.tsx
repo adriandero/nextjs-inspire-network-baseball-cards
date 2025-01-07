@@ -118,7 +118,7 @@ export default function ProfileNavBar({
 
             <DropdownMenuItem
               className="text-inspireRed hover:!text-inspireRed"
-              onClick={() => redirect("auth/logout")}
+              onClick={() => redirect("/auth/logout")}
             >
               Sign Out
             </DropdownMenuItem>

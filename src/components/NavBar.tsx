@@ -119,7 +119,7 @@ export default function NavBar({
 
               <DropdownMenuItem
                 className="text-inspireRed hover:!text-inspireRed"
-                onClick={() => redirect("auth/logout")}
+                onClick={() => redirect("/auth/logout")}
               >
                 Sign Out
               </DropdownMenuItem>
