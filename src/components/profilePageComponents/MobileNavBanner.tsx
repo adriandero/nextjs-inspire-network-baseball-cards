@@ -26,12 +26,14 @@ export default function MobileNavBanner({
               {profile.name.toUpperCase()}
             </h1>
             <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
-              {profile.jobRole.map((role: string, index: number) => (
-                <span key={index}>
-                  {role}
-                  {index < profile.jobRole.length - 1 && ", "}
-                </span>
-              ))}
+              {profile.jobRole
+                ? profile.jobRole.map((role: string, index: number) => (
+                    <span key={index}>
+                      {role}
+                      {index < profile.jobRole.length - 1 && ", "}
+                    </span>
+                  ))
+                : null}
             </h1>
           </div>
           <MobileNavMenu
@@ -48,12 +50,14 @@ export default function MobileNavBanner({
             {profile.name.toUpperCase()}
           </h1>
           <h1 className="text-xl xs:text-2xl font-bold text-primary text-center xs:hidden">
-            {profile.jobRole.map((role: string, index: number) => (
-              <span key={index}>
-                {role}
-                {index < profile.jobRole.length - 1 && ", "}
-              </span>
-            ))}
+            {profile.jobRole
+              ? profile.jobRole.map((role: string, index: number) => (
+                  <span key={index}>
+                    {role}
+                    {index < profile.jobRole.length - 1 && ", "}
+                  </span>
+                ))
+              : null}
           </h1>
           <div className="w-36 h-36 rounded-full bg-secondary border-6 border-secondary mt-4 xs:mt-0 z-10">
             <Avatar className="">

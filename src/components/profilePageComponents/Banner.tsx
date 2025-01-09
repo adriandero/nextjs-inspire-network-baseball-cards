@@ -35,12 +35,14 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
           {profile.name.toUpperCase()}
         </h1>
         <h1 className="text-2xl font-bold text-primary">
-          {profile.jobRole.map((role: string, index: number) => (
-            <span key={index}>
-              {role}
-              {index < profile.jobRole.length - 1 && ", "}
-            </span>
-          ))}
+          {profile.jobRole
+            ? profile.jobRole.map((role: string, index: number) => (
+                <span key={index}>
+                  {role}
+                  {index < profile.jobRole.length - 1 && ", "}
+                </span>
+              ))
+            : null}
         </h1>
       </div>
 
