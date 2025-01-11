@@ -83,7 +83,7 @@ export const columns: ColumnDef<SanityDocument>[] = [
     },
   },
   {
-    accessorKey: "team.name",
+    accessorKey: "jobRole",
     footer: "Team" as const,
     header: ({ column }) => {
       return (
@@ -96,18 +96,32 @@ export const columns: ColumnDef<SanityDocument>[] = [
         </Button>
       );
     },
-  },
-  {
-    accessorKey: "team.company.name",
-    footer: "Company" as const,
-    header: () => <div className="text-right">Company</div>,
     cell: ({ row }) => {
-      // console.log(row.original);
-      const companyName = row.original.team?.company?.name || "Unknown Company";
+      const profileTeams = row.original.teams;
 
-      return <div className="text-right">{companyName}</div>;
+      return (
+        <div className="table-cell ">
+          {profileTeams.map((team: SanityDocument, index: number) => (
+            <>
+              {team.name}
+              {index < profileTeams.length - 1 && ", "}
+            </>
+          ))}
+        </div>
+      );
     },
   },
+  // {
+  //   accessorKey: "team.company.name",
+  //   footer: "Company" as const,
+  //   header: () => <div className="text-right">Company</div>,
+  //   cell: ({ row }) => {
+  //     // console.log(row.original);
+  //     const companyName = row.original.team?.company?.name || "Unknown Company";
+
+  //     return <div className="text-right">{companyName}</div>;
+  //   },
+  // },
   {
     id: "actions",
     footer: "Action" as const,

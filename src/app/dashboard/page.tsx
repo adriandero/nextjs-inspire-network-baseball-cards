@@ -42,6 +42,12 @@ export default async function DashboardPage(): Promise<JSX.Element> {
     ? profilesFromUserTeams.teamProfiles
     : emptyData;
 
+  console.log(
+    await getProfilesFromUserTeams(
+      userProfileData.email,
+      userProfileData.team.map((team: Team) => team.name)
+    )
+  );
   return (
     <div className="w-full h-screen max-w-screen-lg ">
       <NavBar

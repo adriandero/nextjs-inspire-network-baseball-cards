@@ -61,29 +61,35 @@ export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   return profile;
 }
 
-export async function getProfilesByTeamWithoutSpecifiedProfile(
-  profileId: string,
-  teamSlug: string
+export async function getProfilesByTeamsWithoutSpecifiedProfile(
+  profileId: string
 ): Promise<SanityDocument[]> {
-  const query = `*[_type == "profile" && team->slug.current == $teamSlug && _id != $profileId] {
+  const query = `
+
+  *[_type == "profile" && _id == $profileId][0] {
+    "teamSlug": team[]->slug.current
+  } {
+  "profile": *[_type == "profile" && count((team[]->slug.current)[@ in ^.^.teamSlug]) > 0 ] {
       name,
-      slug,
+      "slug": slug.current,
       jobRole,
       profileImage {
         asset->{url}
       },
-      "team": team->{
+      "teams": team[]-> | order(name asc) {
         _id,
         name,
-        slug
-      },
+        "slug": slug.current
+      }
     }
-    `;
+  }.profile
+  `;
+
   const options = { next: { revalidate: 30 } };
 
   const profiles = await client.fetch<SanityDocument[]>(
     query,
-    { profileId, teamSlug },
+    { profileId },
     options
   );
 
@@ -100,14 +106,14 @@ export async function getProfilesFromUserTeams(
 ): Promise<ProfilesFromUserTeams> {
   const query = `
   *[_type == "user" && email == $userEmail][0] {
-    "teamProfiles": *[_type == "profile" && team->name in $userTeams] {
+    "teamProfiles": *[_type == "profile" && count((team[]->name)[@ in $userTeams]) > 0] {
       name,
-      "slug":slug.current,
+      "slug": slug.current,
       jobRole,
       profileImage {
         asset->{url}
       },
-      "team": team->{
+      "teams": team[]-> | order(name asc) {
         name,
         slug,
         "company": company->{
@@ -118,14 +124,11 @@ export async function getProfilesFromUserTeams(
     }
   }
 `;
-
   const options = { next: { revalidate: 30 } };
-
   const profiles = await client.fetch<ProfilesFromUserTeams>(
     query,
     { userEmail, userTeams },
     options
   );
-
   return profiles;
 }

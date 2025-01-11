@@ -82,6 +82,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+
   return (
     <div className="sm:min-w-96  w-full max-w-screen-lg sm:px-6 px-2">
       <div className="flex items-center py-4 gap-2">

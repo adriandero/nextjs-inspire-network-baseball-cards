@@ -1,6 +1,6 @@
 import {
   getProfileBySlug,
-  getProfilesByTeamWithoutSpecifiedProfile,
+  getProfilesByTeamsWithoutSpecifiedProfile,
 } from "@/lib/utils/sanityApi/profileRequests";
 
 import ProfileNavBar from "@/components/ProfileNavBar";
@@ -20,11 +20,6 @@ import { redirect } from "next/navigation";
 
 type tParams = Promise<{ slug: string }>;
 
-type Team = {
-  name: string;
-  slug: { current: string; _type: string };
-};
-
 export default async function ProfilePage({
   params,
 }: {
@@ -40,20 +35,8 @@ export default async function ProfilePage({
   }
   const userData = await getUserData(session?.user);
 
-  let moreProfiles: SanityDocument[] = [];
-
-  const isTeamPresent = userData.team
-    ? userData.team.some(
-        (team: Team) => team.slug.current === profile.team?.slug.current
-      )
-    : false;
-
-  if (isTeamPresent) {
-    moreProfiles = await getProfilesByTeamWithoutSpecifiedProfile(
-      profile._id,
-      profile.team?.slug.current
-    );
-  }
+  const moreProfiles: SanityDocument[] =
+    await getProfilesByTeamsWithoutSpecifiedProfile(profile._id);
 
   // async function handleShare() {}
 
@@ -61,6 +44,7 @@ export default async function ProfilePage({
 
   //TODO propper sanitydocument typing
 
+  console.log(moreProfiles);
   return (
     <div className="w-full h-screen max-w-screen-lg ">
       <MobileNavBanner
