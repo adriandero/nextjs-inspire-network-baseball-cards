@@ -21,12 +21,10 @@ export default async function ProfilePDF({
   // };
 
   return (
-    <div
-      className={`h-fit w-[1123px] bg-mainbackground m-4 flex gap-4 flex-col`}
-    >
-      <div className="flex gap-4 w-full h-fit">
+    <div className={`h-fit w-[1123px] bg-mainbackground m-4 flex gap-4`}>
+      <div className="flex gap-4 w-2/3 h-full flex-col">
         <PDFBanner
-          className={"w-full h-32 bg-secondary rounded-xl flex p-6"}
+          className={"w-full min-h-32 bg-secondary rounded-xl flex p-6"}
           profile={profile}
           _id={""}
           _rev={""}
@@ -34,8 +32,17 @@ export default async function ProfilePDF({
           _createdAt={""}
           _updatedAt={""}
         />
-        <PDFValuesCard
-          className="max-w-96 w-full h-32 border border-light3 bg-background rounded-xl flex p-6"
+        <PDFWorkingGeniusCard
+          className="w-full h-fit border border-light3 bg-background rounded-xl flex p-6"
+          profile={profile}
+          _id={""}
+          _rev={""}
+          _type={""}
+          _createdAt={""}
+          _updatedAt={""}
+        />
+        <PDFPrinciplesYouCard
+          className="w-full h-fit border border-light3 bg-background rounded-xl p-6"
           profile={profile}
           _id={""}
           _rev={""}
@@ -44,27 +51,16 @@ export default async function ProfilePDF({
           _updatedAt={""}
         />
       </div>
-      <div className="flex gap-4 w-full h-full">
-        <div className="flex flex-col gap-4 h-full w-full">
-          <PDFWorkingGeniusCard
-            className="w-full h-fit border border-light3 bg-background rounded-xl flex p-6"
-            profile={profile}
-            _id={""}
-            _rev={""}
-            _type={""}
-            _createdAt={""}
-            _updatedAt={""}
-          />
-          <PDFPrinciplesYouCard
-            className="w-full h-fit border border-light3 bg-background rounded-xl p-6"
-            profile={profile}
-            _id={""}
-            _rev={""}
-            _type={""}
-            _createdAt={""}
-            _updatedAt={""}
-          />
-        </div>
+      <div className="flex flex-col gap-4 h-full w-auto">
+        <PDFValuesCard
+          className="max-w-96 w-full min-h-32 border border-light3 bg-background rounded-xl flex p-6"
+          profile={profile}
+          _id={""}
+          _rev={""}
+          _type={""}
+          _createdAt={""}
+          _updatedAt={""}
+        />
 
         <PDFKolbeStrengthsCard
           className="max-w-96 w-full h-fit border border-light3 bg-background rounded-xl p-6 "
