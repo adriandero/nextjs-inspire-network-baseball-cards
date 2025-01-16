@@ -6,7 +6,6 @@ import { PiDiamondsFour } from "react-icons/pi";
 import React from "react";
 import { SanityDocument } from "next-sanity";
 
-
 function getImage(archetype: string): string {
   return `/archetypeImages/${archetype}.png`;
 }
@@ -38,7 +37,7 @@ export default function PDFPrinciplesYouCard({
             className="flex self-start mt-0.5"
           />{" "}
           <h1 className="text-lg font-bold flex-grow w-fit ml-6">
-            PrinciplesYou Archetype&apos;s
+            PrinciplesYou Archetypes
           </h1>
         </div>
       </div>

@@ -33,7 +33,7 @@ export default function PrinciplesYouCard({
             className="flex self-start"
           />{" "}
           <h1 className="text-xl font-bold flex-grow w-fit ml-6">
-            PrinciplesYou Archetype&apos;s
+            PrinciplesYou Archetypes
           </h1>
         </div>
       </div>
