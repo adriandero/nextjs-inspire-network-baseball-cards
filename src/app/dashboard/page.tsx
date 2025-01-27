@@ -1,6 +1,7 @@
 import {
   getProfilesFromUserTeams,
   ProfilesFromUserTeams,
+  getAllProfiles,
 } from "@/lib/utils/sanityApi/profileRequests";
 // import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
 import { columns } from "@/components/profilesDataTable/columns";
@@ -26,21 +27,37 @@ export default async function DashboardPage(): Promise<JSX.Element> {
 
   const userData = session?.user;
 
-  let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
-
   const userProfileData = await getUserData(userData);
-  if (userProfileData?.team) {
-    profilesFromUserTeams = await getProfilesFromUserTeams(
-      userProfileData.email,
-      userProfileData.team.map((team: Team) => team.name)
-    );
+
+  //TODO: put these functions ins a service or apirequest class because these call the api baseically
+  async function fillAllProfilesFromUserTeams() {
+    let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
+
+    if (userProfileData?.team) {
+      profilesFromUserTeams = await getProfilesFromUserTeams(
+        userProfileData.email,
+        userProfileData.team.map((team: Team) => team.name)
+      );
+    }
+
+    return profilesFromUserTeams;
+  }
+  //TODO: put these functions ins a service or apirequest class because these call the api baseically
+  async function fillAllProfiles() {
+    return await getAllProfiles();
   }
 
-  const emptyData: SanityDocument[] = [];
+  async function fillDashboardData() {
+    const emptyData: SanityDocument[] = [];
+    if (userProfileData.permission === "Admin") {
+      return await fillAllProfiles();
+    }
+    const data = userProfileData?.team
+        ? (await fillAllProfilesFromUserTeams()).teamProfiles
+        : emptyData;
 
-  const data = userProfileData?.team
-    ? profilesFromUserTeams.teamProfiles
-    : emptyData;
+    return data;
+  }
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">
@@ -54,7 +71,7 @@ export default async function DashboardPage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-wrap gap-8 justify-center">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={await fillDashboardData()} />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

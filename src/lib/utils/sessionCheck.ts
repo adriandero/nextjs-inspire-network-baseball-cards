@@ -8,6 +8,7 @@ export async function getUserData(userOfSession: User | undefined) {
     *[_type == "user" && email == $userEmail][0] {
       email,
       image,
+      permission,
       profile->{
         name,
         "slug":slug.current,

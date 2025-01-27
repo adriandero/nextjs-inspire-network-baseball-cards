@@ -41,21 +41,19 @@ export default function MoreProfilesCard({
             return (
               <div className="pt-6" key={index}>
                 <div onClick={() => handleProfileRedirect(profile.slug)}>
-                  <div className="flex flex-row items-center gap-4 cursor-pointer">
+                  <div className="flex flex-row items-center gap-4 cursor-pointer overflow-hidden">
                     <Avatar className="block">
                       <AvatarImage
                         src={
                           profile.profileImage?.asset?.url ??
                           "/defaultAvatar.png"
                         }
-                        width={50}
-                        height={50}
                         onLoadingStatusChange={(status) => {
                           if (status === "loaded") {
                             setIsAvatarLoaded(true);
                           }
                         }}
-                        className="rounded-full"
+                        className="rounded-full w-12 h-12 object-cover"
                       />
                       <AvatarFallback></AvatarFallback>
                     </Avatar>

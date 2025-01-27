@@ -66,11 +66,11 @@ export default function NavBar({
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200">
+            <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200 overflow-hidden">
               <Avatar className="h-full">
                 <AvatarImage
                   src={userProfilePic}
-                  className="rounded-full h-7"
+                  className="rounded-full h-7 w-7 object-cover"
                   onLoadingStatusChange={(status) => {
                     if (status === "loaded") {
                       setIsAvatarLoaded(true);

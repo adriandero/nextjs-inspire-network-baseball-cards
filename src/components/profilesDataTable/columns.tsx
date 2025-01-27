@@ -101,12 +101,16 @@ export const columns: ColumnDef<SanityDocument>[] = [
 
       return (
         <div className="table-cell ">
-          {profileTeams.map((team: SanityDocument, index: number) => (
-            <>
-              {team.name}
-              {index < profileTeams.length - 1 && ", "}
-            </>
-          ))}
+          {profileTeams !== null ? (
+            profileTeams.map((team: SanityDocument, index: number) => (
+              <div key={index}>
+                {team.name}
+                {index < profileTeams.length - 1 && ", "}
+              </div>
+            ))
+          ) : (
+            <p className="text-dark3 italic">no team</p>
+          )}
         </div>
       );
     },

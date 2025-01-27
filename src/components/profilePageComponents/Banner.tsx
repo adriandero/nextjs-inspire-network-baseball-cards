@@ -12,7 +12,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
   return (
     <div className="w-full min-w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center px-20">
-      <div className="w-32 h-32 min-w-32 rounded-full mr-12 flex justify-center">
+      <div className="w-32 h-32 min-w-32 rounded-full mr-12 flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
@@ -21,7 +21,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
                 setIsAvatarLoaded(true);
               }
             }}
-            className="rounded-full"
+            className="rounded-full w-32 h-32 object-cover"
           />
           <AvatarFallback></AvatarFallback>
         </Avatar>

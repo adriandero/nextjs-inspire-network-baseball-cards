@@ -7,7 +7,6 @@ import {
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-
 import { Sheet, SheetTrigger, SheetContent } from "./ui/sheet";
 import { FiMenu } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -51,12 +50,12 @@ export default function MobileNavMenu({
           <div className="flex h-fit w-full items-center border-b px-4 py-2">
             <Collapsible className="grid gap-2 w-full">
               <CollapsibleTrigger className="flex w-full justify-between rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&[data-state=open]>svg]:rotate-90">
-                <div className="flex gap-4">
+                <div className="flex gap-4 overflow-hidden">
                   My Account
                   <Avatar className="h-full">
                     <AvatarImage
                       src={userProfilePic}
-                      className="rounded-full h-7"
+                      className="rounded-full h-7 w-7 object-cover"
                     />
                     <AvatarFallback></AvatarFallback>
                   </Avatar>

@@ -2,32 +2,6 @@ import { type SanityDocument } from "next-sanity";
 
 import { client } from "@/lib/sanity/client";
 
-export async function getAllProfilesDashboardRowData(): Promise<
-  SanityDocument[]
-> {
-  const query = `*[ _type == "profile"] {
-    name,
-    "slug":slug.current,
-    jobRole,
-    profileImage {
-      asset->{url}
-    },
-    "team": team->{
-      name,
-      slug,
-      "company": company->{
-          name,
-          slug
-      }
-    }
-  }`;
-
-  const options = { next: { revalidate: 30 } };
-  const posts = await client.fetch<SanityDocument[]>(query, {}, options);
-
-  return posts;
-}
-
 export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   const query = `*[ _type == "profile" && slug.current == $slug ][0]{
   ...,
@@ -131,4 +105,28 @@ export async function getProfilesFromUserTeams(
     options
   );
   return profiles;
+}
+
+export async function getAllProfiles(): Promise<SanityDocument[]> {
+  const query = `*[ _type == "profile"] {
+    name,
+    "slug":slug.current,
+    jobRole,
+    profileImage {
+      asset->{url}
+    },
+    "teams": team[]-> | order(name asc) {
+      name,
+      slug,
+      "company": company->{
+          name,
+          slug
+      }
+    }
+  }`;
+
+  const options = { next: { revalidate: 30 } };
+  const posts = await client.fetch<SanityDocument[]>(query, {}, options);
+
+  return posts;
 }
