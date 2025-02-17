@@ -51,7 +51,7 @@ export default function PDFKolbeStrengthsCard({
           <div className="w-full flex flex-row items-center gap-6">
             <GoSearch strokeWidth={0.5} size={28} />
 
-            <Progress value={kolbeObj.factFinder * 10} color="bg-inspireRed" />
+            <Progress value={kolbeObj.factFinder ?? 0 * 10} color="bg-inspireRed" />
             <div className="font-bold text-lg">{kolbeObj.factFinder}</div>
           </div>
 
@@ -65,7 +65,7 @@ export default function PDFKolbeStrengthsCard({
           <div className="w-full flex flex-row items-center gap-6">
             <GoTab strokeWidth={0.5} size={28} />
 
-            <Progress value={kolbeObj.followThru * 10} color="bg-inspireBlue" />
+            <Progress value={kolbeObj.followThru ?? 0 * 10} color="bg-inspireBlue" />
             <div className="font-bold text-lg">{kolbeObj.followThru}</div>
           </div>
 
@@ -80,7 +80,7 @@ export default function PDFKolbeStrengthsCard({
             <GoRocket strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.quickStart * 10}
+              value={kolbeObj.quickStart ?? 0 * 10}
               color="bg-inspireGreen"
             />
             <div className="font-bold text-lg">{kolbeObj.quickStart}</div>
@@ -97,7 +97,7 @@ export default function PDFKolbeStrengthsCard({
             <GoTools strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.implementor * 10}
+              value={kolbeObj.implementor ?? 0 * 10}
               color="bg-inspireYellow"
             />
             <div className="font-bold text-lg">{kolbeObj.implementor}</div>

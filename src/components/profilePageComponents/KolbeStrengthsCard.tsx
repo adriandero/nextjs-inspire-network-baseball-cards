@@ -60,7 +60,7 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.factFinder * 10}
+                    value={kolbeObj.factFinder ?? 0 * 10}
                     color="bg-inspireRed"
                   />
                   <div className="font-bold text-lg">{kolbeObj.factFinder}</div>
@@ -85,7 +85,7 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.followThru * 10}
+                    value={kolbeObj.followThru ?? 0 * 10}
                     color="bg-inspireBlue"
                   />
                   <div className="font-bold text-lg">{kolbeObj.followThru}</div>
@@ -110,7 +110,7 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.quickStart * 10}
+                    value={kolbeObj.quickStart ?? 0 * 10}
                     color="bg-inspireGreen"
                   />
                   <div className="font-bold text-lg">{kolbeObj.quickStart}</div>
@@ -135,7 +135,7 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.implementor * 10}
+                    value={kolbeObj.implementor ?? 0 * 10}
                     color="bg-inspireYellow"
                   />
                   <div className="font-bold text-lg">
