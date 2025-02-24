@@ -11,8 +11,8 @@ export default function PDFBanner({
 }: SanityDocument): React.JSX.Element {
   console.log(profile);
   return (
-    <div className={`${className} w-full items-center`}>
-      <div className="w-24 h-24 rounded-full mr-12 flex justify-center overflow-hidden">
+    <div className={`${className} w-full items-center gap-6`}>
+      <div className="min-w-24 min-h-24 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={

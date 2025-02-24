@@ -44,7 +44,7 @@ export default async function ProfilePage({
 
   //TODO propper sanitydocument typing
 
-  console.log(moreProfiles);
+  // console.log(moreProfiles);
   return (
     <div className="w-full h-screen max-w-screen-lg ">
       <MobileNavBanner

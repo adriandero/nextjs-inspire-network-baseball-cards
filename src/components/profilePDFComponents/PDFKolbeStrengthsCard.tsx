@@ -43,7 +43,10 @@ export default function PDFKolbeStrengthsCard({
               value={kolbeObj.factFinder ? kolbeObj.factFinder * 10 : 0}
               color="bg-inspireRed"
             />
-            <div className="font-bold text-lg">{kolbeObj.factFinder}</div>
+            <div className="font-bold text-lg">
+              {/* TODO: bug: when nothing entered in sanity, doesnt even present the object attribute so nothing to call */}
+              {kolbeObj.factFinder ?? "*"}
+            </div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
@@ -60,7 +63,9 @@ export default function PDFKolbeStrengthsCard({
               value={kolbeObj.followThru ? kolbeObj.followThru * 10 : 0}
               color="bg-inspireBlue"
             />
-            <div className="font-bold text-lg">{kolbeObj.followThru}</div>
+            <div className="font-bold text-lg">
+              {kolbeObj.followThru ?? "*"}
+            </div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
@@ -77,7 +82,9 @@ export default function PDFKolbeStrengthsCard({
               value={kolbeObj.quickStart ? kolbeObj.quickStart * 10 : 0}
               color="bg-inspireGreen"
             />
-            <div className="font-bold text-lg">{kolbeObj.quickStart}</div>
+            <div className="font-bold text-lg">
+              {kolbeObj.quickStart ?? "*"}
+            </div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
@@ -94,7 +101,9 @@ export default function PDFKolbeStrengthsCard({
               value={kolbeObj.implementor ? kolbeObj.implementor * 10 : 0}
               color="bg-inspireYellow"
             />
-            <div className="font-bold text-lg">{kolbeObj.implementor}</div>
+            <div className="font-bold text-lg">
+              {kolbeObj.implementor ?? "*"}
+            </div>
           </div>
 
           <h3 className="text-base font-bold ml-12">

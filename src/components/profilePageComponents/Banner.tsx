@@ -10,10 +10,10 @@ import { useState } from "react";
 
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
-  console.log(profile)
+  console.log(profile);
   return (
-    <div className="w-full min-w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center px-20">
-      <div className="w-32 h-32 min-w-32 rounded-full mr-12 flex justify-center overflow-hidden">
+    <div className="w-full min-w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center gap-12 px-20">
+      <div className="w-32 h-32 min-w-32 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
@@ -30,8 +30,8 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
           <Skeleton className={`min-h-32 min-w-32 rounded-full bg-light3`} />
         ) : null}
       </div>
-
-      <div>
+      {/* TODO: instead of min-w to prevent jobRole/name to exceed layout -> calculate method for font textor adjust logo */}
+      <div className="min-w-56">
         <h1 className="text-3xl font-bold text-light1">
           {profile.name.toUpperCase()}
         </h1>
