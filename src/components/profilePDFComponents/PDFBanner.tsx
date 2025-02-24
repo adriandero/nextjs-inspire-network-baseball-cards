@@ -39,9 +39,9 @@ export default function PDFBanner({
         </h1>
       </div>
 
-      {profile?.team?.company?.companyLogo?.asset.url ? (
+      {profile?.team && profile?.team?.company?.companyLogo?.asset.url ? (
         <Image
-          src={profile?.team?.company?.companyLogo?.asset.url}
+          src={profile?.team[0]?.company?.companyLogo?.asset.url}
           width={180}
           height={180}
           alt="Company Logo"

@@ -5,7 +5,7 @@ export async function getUserData(userOfSession: User | undefined) {
   if (userOfSession) {
     // Assuming you are using Sanity's GROQ query to fetch data
     const userQuery = `
-    *[_type == "user" && email == $userEmail][0] {
+    *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
       email,
       image,
       permission,

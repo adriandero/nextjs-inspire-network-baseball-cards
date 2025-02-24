@@ -3,12 +3,12 @@ import { type SanityDocument } from "next-sanity";
 import { client } from "@/lib/sanity/client";
 
 export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
-  const query = `*[ _type == "profile" && slug.current == $slug ][0]{
+  const query = `*[ _type == "profile" && slug.current == $slug && !(_id in path('drafts.**'))][0]{
   ...,
   profileImage {
     asset->{url}
   },
-  "team": team->{
+  "team": team[]->{
       name,
       slug,
       "company": company->{
@@ -40,10 +40,10 @@ export async function getProfilesByTeamsWithoutSpecifiedProfile(
 ): Promise<SanityDocument[]> {
   const query = `
 
-  *[_type == "profile" && _id == $profileId][0] {
+  *[_type == "profile" && _id == $profileId && !(_id in path('drafts.**'))][0] {
     "teamSlug": team[]->slug.current
   } {
-  "profile": *[_type == "profile" && count((team[]->slug.current)[@ in ^.^.teamSlug]) > 0 ] {
+  "profile": *[_type == "profile" && !(_id in path("drafts.**")) && count((team[]->slug.current)[@ in ^.^.teamSlug]) > 0 ] {
       name,
       "slug": slug.current,
       jobRole,
@@ -79,7 +79,7 @@ export async function getProfilesFromUserTeams(
   userTeams: unknown
 ): Promise<ProfilesFromUserTeams> {
   const query = `
-  *[_type == "user" && email == $userEmail][0] {
+  *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
     "teamProfiles": *[_type == "profile" && count((team[]->name)[@ in $userTeams]) > 0] {
       name,
       "slug": slug.current,
@@ -108,7 +108,7 @@ export async function getProfilesFromUserTeams(
 }
 
 export async function getAllProfiles(): Promise<SanityDocument[]> {
-  const query = `*[ _type == "profile"] {
+  const query = `*[ _type == "profile" && !(_id in path('drafts.**'))] {
     name,
     "slug":slug.current,
     jobRole,
