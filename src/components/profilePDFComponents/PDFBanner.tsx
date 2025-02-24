@@ -9,7 +9,7 @@ export default function PDFBanner({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {
-  console.log(profile)
+  console.log(profile);
   return (
     <div className={`${className} w-full items-center`}>
       <div className="w-24 h-24 rounded-full mr-12 flex justify-center overflow-hidden">
