@@ -35,12 +35,12 @@ export default function MoreProfilesCard({
         <h1 className="text-xl font-bold flex-grow w-fit ml-6">The Team</h1>
       </div>
 
-      {moreProfiles.length > 1 ? (
+      {moreProfiles?.length > 1 ? (
         moreProfiles.map((profile: SanityDocument, index: number) => {
-          if (currentProfile.slug.current != profile.slug) {
+          if (currentProfile?.slug?.current != profile.slug) {
             return (
               <div className="pt-6" key={index}>
-                <div onClick={() => handleProfileRedirect(profile.slug)}>
+                <div onClick={() => handleProfileRedirect(profile?.slug)}>
                   <div className="flex flex-row items-center gap-4 cursor-pointer overflow-hidden">
                     <Avatar className="block w-12 h-12 min-w-12 rounded-full ">
                       <AvatarImage
@@ -63,14 +63,16 @@ export default function MoreProfilesCard({
                       />
                     ) : null}
                     <div>
-                      <p className="font-bold ">{profile.name}</p>
+                      <p className="font-bold ">{profile?.name}</p>
                       <p>
-                        {profile.jobRole.map((role: string, index: number) => (
-                          <span key={index}>
-                            {role}
-                            {index < profile.jobRole.length - 1 && ", "}
-                          </span>
-                        ))}
+                        {profile?.jobRole?.map(
+                          (role: string, index: number) => (
+                            <span key={index}>
+                              {role ?? null}
+                              {index < profile.jobRole.length - 1 && ", "}
+                            </span>
+                          )
+                        )}
                       </p>
                     </div>
                   </div>
