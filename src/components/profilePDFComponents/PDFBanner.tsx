@@ -31,10 +31,10 @@ export default function PDFBanner({
           {profile.name.toUpperCase()}
         </h1>
         <h1 className="text-xl font-bold text-primary">
-          {profile.jobRole.map((role: string, index: number) => (
+          {profile.jobRole?.map((role: string, index: number) => (
             <span key={index}>
               {role}
-              {index < profile.jobRole.length - 1 && ", "}
+              {index < profile.jobRole?.length - 1 && ", "}
             </span>
           ))}
         </h1>
