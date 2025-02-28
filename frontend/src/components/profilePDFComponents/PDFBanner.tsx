@@ -1,3 +1,4 @@
+"use client";
 import { urlFor } from "@/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
