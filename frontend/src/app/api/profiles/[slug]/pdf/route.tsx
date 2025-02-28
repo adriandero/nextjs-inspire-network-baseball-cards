@@ -30,24 +30,22 @@ export async function GET(
   try {
     const page = await browser.newPage();
 
-    // Optimize network by blocking unnecessary resources
+    // Optimize network by modifying image quality but keeping all images
     await page.setRequestInterception(true);
     page.on("request", (req) => {
       const resourceType = req.resourceType();
-      // Block non-essential resources
+      // Only block truly non-essential resources but keep all images
       if (
         resourceType === "font" ||
         resourceType === "media" ||
         resourceType === "stylesheet" ||
         resourceType === "script"
       ) {
-        // Only block non-essential CSS/JS - adjust based on your needs
         const url = req.url();
         if (
           url.includes("analytics") ||
           url.includes("tracking") ||
-          url.includes("ads") ||
-          (url.includes("cdn") && !url.includes("essential"))
+          url.includes("ads")
         ) {
           req.abort();
         } else {
@@ -59,28 +57,38 @@ export async function GET(
     });
 
     // Set a timeout for navigation to avoid hanging
+    // Navigate to the page - use networkidle0 to ensure everything is loaded
     await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
-      waitUntil: "domcontentloaded", // Changed from networkidle2 for faster loading
-      timeout: 15000, // 15 second timeout
+      waitUntil: "networkidle0", // Using networkidle0 to ensure complete loading
+      timeout: 25000, // Increased timeout to ensure loading completes
     });
 
-    // Load essential images only
+    // Wait for all images to load but optimize their quality first
     await page.evaluate(() => {
-      const images = Array.from(document.images);
-      const essentialImages = images.filter((img) => {
-        // Define what makes an image essential - e.g., visible in viewport
-        const rect = img.getBoundingClientRect();
-        return rect.top < window.innerHeight && rect.bottom > 0;
-      });
+      // First, reduce image quality by setting max-width on all images
+      const style = document.createElement("style");
+      style.innerHTML = `
+        img {
+          max-width: 800px !important; 
+          max-height: 600px !important;
+          transform: translateZ(0); /* Force GPU acceleration */
+        }
+        svg {
+          max-width: 800px !important;
+          max-height: 600px !important;
+        }
+      `;
+      document.head.appendChild(style);
 
+      // Now wait for all images to load
       return Promise.all(
-        essentialImages.map((img) => {
+        Array.from(document.images).map((img) => {
           if (img.complete) return Promise.resolve();
           return new Promise<void>((resolve) => {
             img.onload = () => resolve();
             img.onerror = () => resolve(); // Continue even if image fails
-            // Set a timeout for image loading
-            setTimeout(resolve, 5000);
+            // Set a reasonable timeout
+            setTimeout(resolve, 8000);
           });
         })
       );
@@ -88,13 +96,34 @@ export async function GET(
 
     await page.emulateMediaType("screen");
 
+    // Further optimize images before PDF generation
+    await page.evaluate(() => {
+      // Process SVGs to make them more lightweight
+      const svgs = Array.from(document.querySelectorAll("svg"));
+      svgs.forEach((svg) => {
+        // Remove unnecessary SVG elements that won't affect the visual output
+        const defs = svg.querySelectorAll("defs, metadata, script");
+        defs.forEach((node) => node.remove());
+      });
+
+      // Convert high-resolution images to lower resolution
+      const images = Array.from(document.images);
+      images.forEach((img) => {
+        if (!img.classList.contains("no-optimize")) {
+          // Add inline styling to reduce the image quality
+          img.style.imageRendering = "auto";
+        }
+      });
+    });
+
     // Optimize PDF generation
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
       landscape: true,
       preferCSSPageSize: true,
-      timeout: 30000, // 30 second timeout for PDF generation
+      timeout: 40000, // Increased timeout for PDF generation
+      scale: 0.9, // Slightly reduce the scale to improve performance
     });
 
     return new Response(pdfBuffer, {
