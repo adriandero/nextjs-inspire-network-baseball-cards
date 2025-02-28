@@ -1,6 +1,5 @@
 import { urlFor } from "@/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import Image from "next/image";
 import { SanityDocument } from "next-sanity";
 import React, { useEffect } from "react";
 
