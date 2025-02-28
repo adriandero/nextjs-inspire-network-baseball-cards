@@ -1,4 +1,3 @@
-import { auth0 } from "@/lib/auth0";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
