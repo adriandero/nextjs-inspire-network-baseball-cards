@@ -1,0 +1,9 @@
+# next.js
+.next/
+out/
+
+# Build output
+build/
+
+# TypeScript
+next-env.d.ts

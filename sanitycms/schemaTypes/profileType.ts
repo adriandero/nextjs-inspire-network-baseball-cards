@@ -1,0 +1,179 @@
+import {defineField, defineType} from 'sanity'
+
+const toTitleCase = (str: string) => str.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())
+
+function createWidgetField(name: string) {
+  return {
+    name,
+    title: toTitleCase(name) + ' Level',
+    type: 'string',
+    options: {
+      list: [
+        {title: 'Green', value: 'green'},
+        {title: 'Yellow', value: 'yellow'},
+        {title: 'Red', value: 'red'},
+      ],
+    },
+    validation: (rule: {required: () => any}) => rule.required(),
+  }
+}
+const wonderObj = createWidgetField('wonder')
+const discernmentObj = createWidgetField('discernment')
+const inventionObj = createWidgetField('invention')
+const enablementObj = createWidgetField('enablement')
+const galvanizingObj = createWidgetField('galvanizing')
+const tenacityObj = createWidgetField('tenacity')
+
+const principleYouArchetypeList = [
+  {title: 'Adventurer', value: 'adventurer'},
+  {title: 'Artisan', value: 'artisan'},
+  {title: 'Campaigner', value: 'campaigner'},
+  {title: 'Coach', value: 'coach'},
+  {title: 'Commander', value: 'commander'},
+  {title: 'Critic', value: 'critic'},
+  {title: 'Enforcer', value: 'enforcer'},
+  {title: 'Entertainer', value: 'entertainer'},
+  {title: 'Explorer', value: 'explorer'},
+  {title: 'Growth Seeker', value: 'growthSeeker'},
+  {title: 'Helper', value: 'helper'},
+  {title: 'Implementer', value: 'implementer'},
+  {title: 'Impresario', value: 'impresario'},
+  {title: 'Individualist', value: 'individualist'},
+  {title: 'Inspirer', value: 'inspirer'},
+  {title: 'Inventor', value: 'inventor'},
+  {title: 'Investigator', value: 'investigator'},
+  {title: 'Orchestrator', value: 'orchestrator'},
+  {title: 'Peacekeeper', value: 'peacekeeper'},
+  {title: 'Planner', value: 'planner'},
+  {title: 'Problem Solver', value: 'problemSolver'},
+  {title: 'Promoter', value: 'promoter'},
+  {title: 'Protector', value: 'protector'},
+  {title: 'Quiet Leader', value: 'quietLeader'},
+  {title: 'Shaper', value: 'shaper'},
+  {title: 'Strategist', value: 'strategist'},
+  {title: 'Technician', value: 'technician'},
+  {title: 'Thinker', value: 'thinker'},
+]
+
+const workingGeniusList = [
+  {title: 'The Adaptable Designer', value: 'theAdaptableDesigner'},
+  {title: 'The Assertive Driver', value: 'theAssertiveDriver'},
+  {title: 'The Careful Implementer', value: 'theCarefulImplementer'},
+  {title: 'The Contemplative Counselor', value: 'theContemplativeCounselor'},
+  {title: 'The Creative Dreamer', value: 'theCreativeDreamer'},
+  {title: 'The Discriminating Ideator', value: 'theDiscriminatingIdeator'},
+  {title: 'The Enthusiastic Encourager', value: 'theEnthusiasticEncourager'},
+  {title: 'The Evangelizing Innovator', value: 'theEvangelizingInnovator'},
+  {title: 'The Idealistic Supporter', value: 'theIdealisticSupporter'},
+  {title: 'The Insightful Collaborator', value: 'theInsightfulCollaborator'},
+  {title: 'The Intuitive Activator', value: 'theIntuitiveActivator'},
+  {title: 'The Judicious Accomplisher', value: 'theJudiciousAccomplisher'},
+  {title: 'The Loyal Finisher', value: 'theLoyalFinisher'},
+  {title: 'The Methodical Architect', value: 'theMethodicalArchitect'},
+  {title: 'The Philosophical Motivator', value: 'thePhilosophicalMotivator'},
+]
+
+function createKolbeStrengthField(name: string) {
+  return {
+    name,
+    type: 'number',
+    validation: (rule: any) => rule.min(1).max(10),
+  }
+}
+
+const factFinder = createKolbeStrengthField('factFinder')
+const followThru = createKolbeStrengthField('followThru')
+const quickStart = createKolbeStrengthField('quickStart')
+const implementor = createKolbeStrengthField('implementor')
+
+export const profileType = defineType({
+  name: 'profile',
+  title: 'Profile',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'name',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      type: 'slug',
+      options: {source: 'name'},
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'jobRole',
+      type: 'array',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'values',
+      type: 'array',
+      of: [{type: 'string'}],
+      validation: (rule) => rule.required().unique(),
+    }),
+    defineField({
+      name: 'profileImage',
+      type: 'image',
+    }),
+    defineField({
+      name: 'team',
+      title: 'Team',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'team'}],
+        },
+      ],
+      validation: (rule) => rule.unique(),
+    }),
+    defineField({
+      name: 'workingGenius',
+      type: 'object',
+      fields: [
+        {
+          name: 'title',
+          title: 'Working Genius Title',
+          type: 'string',
+          options: {
+            list: workingGeniusList,
+          },
+        },
+        {
+          name: 'widget',
+          type: 'object',
+          fields: [
+            wonderObj,
+            inventionObj,
+            discernmentObj,
+            galvanizingObj,
+            enablementObj,
+            tenacityObj,
+          ],
+          validation: (rule) => rule.required(),
+        },
+      ],
+    }),
+    defineField({
+      name: 'principleYouArchetype',
+      type: 'array',
+      of: [
+        {
+          name: 'archetype',
+          type: 'string',
+          options: {
+            list: principleYouArchetypeList,
+          },
+        },
+      ],
+      validation: (rule) => rule.required().unique(),
+    }),
+    defineField({
+      name: 'kolbeStrengths',
+      type: 'object',
+      fields: [factFinder, followThru, quickStart, implementor],
+    }),
+  ],
+})

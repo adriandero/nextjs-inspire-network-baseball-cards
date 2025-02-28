@@ -1,0 +1,6 @@
+# Sanity
+dist/
+.sanity/
+
+# Build output
+build/

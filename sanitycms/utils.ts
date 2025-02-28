@@ -1,0 +1,17 @@
+export const workingGeniusList = [
+  {title: 'The Creative Dreamer', value: 'theCreativeDreamer'},
+  {title: 'The Discriminating Ideator', value: 'theDiscriminatingIdeator'},
+  {title: 'The Insightful Collaborator', value: 'theInsightfulCollaborator'},
+  {title: 'The Contemplative Counselor', value: 'theContemplativeCounselor'},
+  {title: 'The Evangelizing Innovator', value: 'theEvangelizingInnovator'},
+  {title: 'The Judicious Accomplisher', value: 'theJudiciousAccomplisher'},
+  {title: 'The Philosophical Motivator', value: 'thePhilosophicalMotivator'},
+  {title: 'The Adaptable Designer', value: 'theAdaptableDesigner'},
+  {title: 'The Enthusiastic Encourager', value: 'theEnthusiasticEncourager'},
+  {title: 'The Idealistic Supporter', value: 'theIdealisticSupporter'},
+  {title: 'The Methodical Architect', value: 'theMethodicalArchitect'},
+  {title: 'The Assertive Driver', value: 'theAssertiveDriver'},
+  {title: 'The Careful Implementer', value: 'theCarefulImplementer'},
+  {title: 'The Intuitive Activator', value: 'theIntuitiveActivator'},
+  {title: 'The Loyal Finisher', value: 'theLoyalFinisher'},
+]
