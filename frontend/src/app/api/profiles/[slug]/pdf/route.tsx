@@ -21,7 +21,7 @@ export async function GET(
   //   Authorization: Bearer ${session?.tokenSet.accessToken},
   // });
   await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
-    waitUntil: "domcontentloaded",
+    waitUntil: "networkidle2",
   });
   await page.evaluate(() => {
     return Promise.all(
