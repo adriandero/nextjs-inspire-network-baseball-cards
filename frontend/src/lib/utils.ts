@@ -18,12 +18,12 @@ export interface MethodDescription {
   description: string;
 }
 export function getKolbeMethod(
-  number: number,
+  number: number | null,
   strength: KolbeStrength
 ): MethodDescription | null {
   // Ensure the number is between 1 and 10
-  if (number < 1 || number > 10) {
-    return null;
+  if (!number || number < 1 || number > 10) {
+    return { method: "In Transition...", description: "" };
   }
 
   // Find the correct range for the given number
