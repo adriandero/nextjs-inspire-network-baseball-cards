@@ -1,6 +1,9 @@
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 //import puppeteer from "puppeteer-core";
+
+export const maxDuration = 30;
+
 export async function GET(
   req: Request,
   context: { params: Promise<{ slug: string }> }
@@ -18,7 +21,7 @@ export async function GET(
   //   Authorization: Bearer ${session?.tokenSet.accessToken},
   // });
   await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
-    waitUntil: "networkidle2",
+    waitUntil: "domcontentloaded",
   });
   await page.evaluate(() => {
     return Promise.all(
