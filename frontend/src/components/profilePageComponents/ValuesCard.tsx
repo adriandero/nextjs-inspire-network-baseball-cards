@@ -3,28 +3,30 @@ import { SanityDocument } from "next-sanity";
 import { GoNorthStar } from "react-icons/go";
 import { GoDash } from "react-icons/go";
 import ComponentShell from "./ComponentShell";
+import { Badge } from "@/components/ui/Badge";
 
 export default function ValuesCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
     <ComponentShell className="flex flex-row">
-      <div className="hidden xs:flex flex-row items-center w-fit h-fit">
+      <div className="h-full mr-6 hidden xs:flex">
         <GoNorthStar strokeWidth={0.5} size={24} className="flex self-start" />{" "}
-        <h1 className="text-xl font-bold flex-grow w-fit ml-6">Values</h1>
       </div>
-      <div className="hidden xs:flex flex-wrap pl-8 ">
-        {profile.values.map((value: string, index: number) => (
-          <div
-            key={index}
-            className="text-base font-bold text-lg flex flex-row items-center"
-          >
-            {value}
-            {index < profile.values.length - 1 && (
-              <GoDash strokeWidth={1.5} className="mx-2 text-primary" />
-            )}
-          </div>
-        ))}
+      <div className="flex flex-col w-fit h-fit items-start gap-4">
+        <h1 className="text-xl font-bold flex-grow w-fit">Values</h1>
+
+        <div className="hidden xs:flex flex-wrap">
+          {profile.values.map((value: string, index: number) => (
+            <Badge
+              variant="outline"
+              key={index}
+              className="text-base font-bold mr-4 mb-3"
+            >
+              {value}
+            </Badge>
+          ))}
+        </div>
       </div>
 
       <div className="flex xs:hidden flex-row ">
