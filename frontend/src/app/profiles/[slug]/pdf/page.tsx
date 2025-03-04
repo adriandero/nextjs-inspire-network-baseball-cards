@@ -84,7 +84,13 @@ export default async function ProfilePDF({
       <div className="absolute bottom-0 left-0 w-44 h-8 bg-mainbackground blur-sm z-10"></div>
 
       <div className="absolute bottom-0 left-4 z-10 flex items-center gap-4 opacity-60">
-        <Image src={INTMLogo} width={70} height={150} alt="Company Logo" />{" "}
+        {/* Logo container with TM superscript */}
+        <div className="relative">
+          <Image src={INTMLogo} width={70} height={150} alt="Company Logo" />
+          <span className="absolute bottom-[-3px] left-[30px] transform text-[6px] font-bold">
+            TM
+          </span>
+        </div>
         <span className="text-base text-accent-foreground font-bold">
           {currentDate}
         </span>
