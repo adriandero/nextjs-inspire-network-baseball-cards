@@ -15,13 +15,16 @@ export default function PDFPrinciplesYouCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {
-  const makeFirstWordBold = (text: string) => {
-    const words = text.split(" ");
+  const formatPrincipleContent = (title: string, description: string) => {
+    const cleanDescription = description.startsWith(title)
+      ? description.substring(title.length + 1).trim()
+      : description;
+
     return (
-      <span>
-        <span style={{ fontWeight: "bold" }}>{words[0]}</span>{" "}
-        {words.slice(1).join(" ")}
-      </span>
+      <>
+        <span className="font-bold">{title}s </span>
+        {cleanDescription}
+      </>
     );
   };
 
@@ -58,8 +61,10 @@ export default function PDFPrinciplesYouCard({
               </div>
               <div>
                 <p className="font-normal">
-                  {" "}
-                  {makeFirstWordBold(principlesYouJson[principle]?.description)}
+                  {formatPrincipleContent(
+                    principlesYouJson[principle]?.title,
+                    principlesYouJson[principle]?.description
+                  )}
                 </p>
               </div>
             </div>
