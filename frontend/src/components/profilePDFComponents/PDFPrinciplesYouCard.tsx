@@ -16,14 +16,22 @@ export default function PDFPrinciplesYouCard({
   className,
 }: SanityDocument): React.JSX.Element {
   const formatPrincipleContent = (title: string, description: string) => {
-    const cleanDescription = description.startsWith(title)
-      ? description.substring(title.length + 1).trim()
-      : description;
+    const wordCount = title.trim().split(/\s+/).length;
+    const words = description.trim().split(/\s+/);
+    const numWordsToBold = Math.min(wordCount, words.length);
 
     return (
       <>
-        <span className="font-bold">{title}s </span>
-        {cleanDescription}
+        {words.map((word, index) => (
+          <React.Fragment key={index}>
+            {index > 0 && " "}
+            {index < numWordsToBold ? (
+              <span className="font-bold">{word}</span>
+            ) : (
+              word
+            )}
+          </React.Fragment>
+        ))}
       </>
     );
   };
