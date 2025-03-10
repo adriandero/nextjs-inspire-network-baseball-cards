@@ -84,7 +84,7 @@ function createKolbeStrengthField(name: string) {
 const factFinder = createKolbeStrengthField('factFinder')
 const followThru = createKolbeStrengthField('followThru')
 const quickStart = createKolbeStrengthField('quickStart')
-const implementor = createKolbeStrengthField('implementor')
+const implementer = createKolbeStrengthField('implementer')
 
 export const profileType = defineType({
   name: 'profile',
@@ -173,7 +173,7 @@ export const profileType = defineType({
     defineField({
       name: 'kolbeStrengths',
       type: 'object',
-      fields: [factFinder, followThru, quickStart, implementor],
+      fields: [factFinder, followThru, quickStart, implementer],
     }),
   ],
 })

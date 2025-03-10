@@ -10,7 +10,7 @@ export type KolbeStrength =
   | "factFinder"
   | "followThru"
   | "quickStart"
-  | "implementor";
+  | "implementer";
 export type KolbeRange = "1-3" | "4-6" | "7-10";
 
 export interface MethodDescription {

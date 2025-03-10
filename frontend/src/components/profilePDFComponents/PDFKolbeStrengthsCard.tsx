@@ -21,7 +21,7 @@ export default function PDFKolbeStrengthsCard({
   const factFinderMethod = getKolbeMethod(kolbeObj.factFinder, "factFinder");
   const followThruMethod = getKolbeMethod(kolbeObj.followThru, "followThru");
   const quickStartMethod = getKolbeMethod(kolbeObj.quickStart, "quickStart");
-  const implementorMethod = getKolbeMethod(kolbeObj.implementor, "implementor");
+  const implementerMethod = getKolbeMethod(kolbeObj.implementer, "implementer");
 
   return (
     <div className={`${className}flex`}>
@@ -98,18 +98,18 @@ export default function PDFKolbeStrengthsCard({
             <GoTools strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.implementor ? kolbeObj.implementor * 10 : 0}
+              value={kolbeObj.implementer ? kolbeObj.implementer * 10 : 0}
               color="bg-inspireYellow"
             />
             <div className="font-bold text-lg">
-              {kolbeObj.implementor ?? "*"}
+              {kolbeObj.implementer ?? "*"}
             </div>
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {implementorMethod?.method}
+            {implementerMethod?.method}
           </h3>
-          <p className="text-base ml-12">{implementorMethod?.description}</p>
+          <p className="text-base ml-12">{implementerMethod?.description}</p>
         </div>
       </div>
     </div>

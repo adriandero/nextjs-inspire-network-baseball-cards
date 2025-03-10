@@ -33,7 +33,7 @@ export default function KolbeStrengthsCard({
   const factFinderMethod = getKolbeMethod(kolbeObj.factFinder, "factFinder");
   const followThruMethod = getKolbeMethod(kolbeObj.followThru, "followThru");
   const quickStartMethod = getKolbeMethod(kolbeObj.quickStart, "quickStart");
-  const implementorMethod = getKolbeMethod(kolbeObj.implementor, "implementor");
+  const implementerMethod = getKolbeMethod(kolbeObj.implementer, "implementer");
 
   return (
     <ComponentShell>
@@ -135,19 +135,19 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.implementor ? kolbeObj.implementor * 10 : 0}
+                    value={kolbeObj.implementer ? kolbeObj.implementer * 10 : 0}
                     color="bg-inspireYellow"
                   />
                   <div className="font-bold text-lg">
-                    {kolbeObj.implementor}
+                    {kolbeObj.implementer}
                   </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <h3 className="text-lg font-bold">
-                  {implementorMethod?.method}
+                  {implementerMethod?.method}
                 </h3>
-                <p className="text-base">{implementorMethod?.description}</p>
+                <p className="text-base">{implementerMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
