@@ -93,7 +93,7 @@ export default function PDFKolbeStrengthsCard({
           <p className="text-base ml-12">{quickStartMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
-          <h3 className="text-xs font-bold ml-12">Implmentor</h3>
+          <h3 className="text-xs font-bold ml-12">Implementer</h3>
           <div className="w-full flex flex-row items-center gap-6">
             <GoTools strokeWidth={0.5} size={28} />
 
