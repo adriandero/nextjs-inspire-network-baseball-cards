@@ -79,7 +79,7 @@ export default function PDFBanner({
           width={150}
           height={150}
           alt="Company Logo"
-          className="ml-auto company-logo w-[150px]"
+          className="ml-auto company-logo rounded-lg"
           style={{
             maxWidth: "250px",
             maxHeight: "150px",
