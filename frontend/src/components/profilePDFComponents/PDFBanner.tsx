@@ -36,17 +36,16 @@ export default function PDFBanner({
 
   // Optimize image URL to request a smaller version from Sanity
   const optimizedProfileImageUrl = profile.profileImage
-    ? urlFor(profile.profileImage)
-        .width(96)
-        .height(96)
-        .auto("format")
-        .quality(80)
-        .url()
+    ? urlFor(profile.profileImage).auto("format").quality(80).url() //.width(96).height(96)
     : "/defaultAvatar.png";
 
   // Optimize company logo URL if it exists
   const companyLogoUrl =
-    profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url;
+    profile?.team &&
+    urlFor(profile?.team[0]?.company?.companyLogo?.asset.url)
+      .auto("format")
+      .quality(90)
+      .url();
 
   return (
     <div className={`${className} w-full items-center gap-6`}>
@@ -74,15 +73,15 @@ export default function PDFBanner({
         </h1>
       </div>
       {companyLogoUrl ? (
-        // Use regular img instead of Next/Image for PDF generation context
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={companyLogoUrl}
           width={150}
           height={150}
           alt="Company Logo"
-          className="ml-auto company-logo" // Added class for specific styling
+          className="ml-auto company-logo w-[150px]"
           style={{
-            maxWidth: "150px",
+            maxWidth: "250px",
             maxHeight: "150px",
           }}
         />

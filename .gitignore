@@ -24,3 +24,15 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
+
+
+# next.js
+.next/
+.next/*
+out/
+
+# Build output
+build/
+
+# TypeScript
+next-env.d.ts
