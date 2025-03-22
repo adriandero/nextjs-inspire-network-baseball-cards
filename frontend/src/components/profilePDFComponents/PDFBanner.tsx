@@ -48,12 +48,12 @@ export default function PDFBanner({
       .url();
 
   return (
-    <div className={`${className} w-full items-center gap-6`}>
-      <div className="min-w-24 min-h-24 rounded-full flex justify-center overflow-hidden">
+    <div className={`${className} w-full items-center gap-4`}>
+      <div className="min-w-20 min-h-20 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={optimizedProfileImageUrl}
-            className="rounded-full w-24 h-24 object-cover"
+            className="rounded-full w-20 h-20 object-cover"
             loading="eager" // Prioritize loading
           />
           <AvatarFallback></AvatarFallback>
@@ -63,7 +63,7 @@ export default function PDFBanner({
         <h1 className="text-2xl font-bold text-light1">
           {profile.name.toUpperCase()}
         </h1>
-        <h1 className="text-xl font-bold text-primary">
+        <h1 className="text-lg font-bold text-primary">
           {profile.jobRole?.map((role: string, index: number) => (
             <span key={index}>
               {role}
@@ -76,8 +76,8 @@ export default function PDFBanner({
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={companyLogoUrl}
-          width={150}
-          height={150}
+          width={110}
+          height={110}
           alt="Company Logo"
           className="ml-auto company-logo rounded-lg"
           style={{

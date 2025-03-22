@@ -52,7 +52,7 @@ export default function PDFPrinciplesYouCard({
           </h1>
         </div>
       </div>
-      <div className="flex flex-col mt-4 gap-6">
+      <div className="flex flex-col mt-4 gap-4">
         {profile.principleYouArchetype.map(
           (principle: PrincipleKey, index: number) => (
             <div
@@ -68,7 +68,7 @@ export default function PDFPrinciplesYouCard({
                 />
               </div>
               <div>
-                <p className="font-normal">
+                <p className="font-normal text-base">
                   {formatPrincipleContent(
                     principlesYouJson[principle]?.title,
                     principlesYouJson[principle]?.description

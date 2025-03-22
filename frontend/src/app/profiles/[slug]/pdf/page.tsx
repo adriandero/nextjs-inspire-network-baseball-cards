@@ -33,7 +33,7 @@ export default async function ProfilePDF({
     >
       <div className="flex gap-4 w-2/3 h-full flex-col">
         <PDFBanner
-          className={"w-full min-h-32 bg-secondary rounded-xl flex p-6"}
+          className={"w-full min-h-24 bg-secondary rounded-xl flex py-2 px-4"}
           profile={profile}
           _id={""}
           _rev={""}
@@ -62,7 +62,7 @@ export default async function ProfilePDF({
       </div>
       <div className="flex flex-col gap-4 h-full w-auto">
         <PDFValuesCard
-          className="max-w-96 w-full min-h-32 border border-light3 bg-background rounded-xl pl-6 pt-4 pb-2"
+          className="max-w-96 w-full min-h-[96] border border-light3 bg-background rounded-xl pl-4 py-3"
           profile={profile}
           _id={""}
           _rev={""}
@@ -81,9 +81,10 @@ export default async function ProfilePDF({
           _updatedAt={""}
         />
       </div>
-      <div className="absolute bottom-0 left-0 w-44 h-8 bg-mainbackground blur-sm z-10"></div>
+      <div className="absolute bottom-0 right-0 w-44 h-8 bg-mainbackground blur-sm z-10"></div>
 
-      <div className="absolute bottom-0 left-4 z-10 flex items-center gap-4 ">
+      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-4">
+        {/* Logo container with TM superscript */}
         <div className="relative">
           <Image src={INTMLogo} width={70} height={150} alt="Company Logo" />
           {/* <span className="absolute bottom-[-3px] left-[30px] transform text-[6px] font-bold">

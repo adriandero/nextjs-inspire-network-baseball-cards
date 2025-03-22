@@ -12,7 +12,7 @@ export default function PDFWorkingGeniusCard({
   const workingGenius: workingGeniusKey = profile.workingGenius?.title;
 
   return (
-    <div className={`${className} flex items-center  gap-4`}>
+    <div className={`${className} flex  gap-4`}>
       <div className="flex flex-row h-full w-1/2">
         <div className="h-full mr-6">
           <GoLightBulb
@@ -23,14 +23,16 @@ export default function PDFWorkingGeniusCard({
         </div>
         <div className="flex flex-col min-w-32 min-h-full items-start">
           <h2 className="text-lg font-bold">Working Genius</h2>
-          <h3 className="font-bold mt-2">
+          <h3 className="font-bold mt-2 text-base">
             {workingGeniusJson[workingGenius].title}
           </h3>
-          <p className="">{workingGeniusJson[workingGenius].description}</p>
+          <p className="text-base">
+            {workingGeniusJson[workingGenius].description}
+          </p>
         </div>
       </div>
 
-      <div className="flex justify-center w-1/2">
+      <div className="flex justify-center w-1/2 max-h-48">
         <WidgetCogsSVG
           widget={profile.workingGenius?.widget}
           _id={""}

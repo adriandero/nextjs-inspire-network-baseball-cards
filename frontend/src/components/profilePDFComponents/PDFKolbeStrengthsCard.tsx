@@ -22,10 +22,10 @@ export default function PDFKolbeStrengthsCard({
   const followThruMethod = getKolbeMethod(kolbeObj.followThru, "followThru");
   const quickStartMethod = getKolbeMethod(kolbeObj.quickStart, "quickStart");
   const implementerMethod = getKolbeMethod(kolbeObj.implementer, "implementer");
-
+  
   return (
-    <div className={`${className}flex`}>
-      <div className="flex flex-col w-full h-fit items-start gap-6">
+    <div className={`${className} flex`}>
+      <div className="flex flex-col w-full h-fit items-start gap-4">
         <div className="flex flex-row">
           <GoLaw
             strokeWidth={0.5}
@@ -50,9 +50,11 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {factFinderMethod?.method}
+            {factFinderMethod?.method}:{" "}
+            <span className="text-base font-normal">
+              {factFinderMethod?.description}
+            </span>
           </h3>
-          <p className="text-base ml-12">{factFinderMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
           <h3 className="text-xs font-bold ml-12">Follow Through</h3>
@@ -69,9 +71,11 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {followThruMethod?.method}
+            {followThruMethod?.method}:{" "}
+            <span className="text-base font-normal">
+              {followThruMethod?.description}
+            </span>
           </h3>
-          <p className="text-base ml-12">{followThruMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
           <h3 className="text-xs font-bold ml-12">Quick Start</h3>
@@ -88,9 +92,11 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {quickStartMethod?.method}
+            {quickStartMethod?.method}:{" "}
+            <span className="text-base font-normal">
+              {quickStartMethod?.description}
+            </span>
           </h3>
-          <p className="text-base ml-12">{quickStartMethod?.description}</p>
         </div>
         <div className="h-fit w-full">
           <h3 className="text-xs font-bold ml-12">Implementer</h3>
@@ -107,9 +113,11 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {implementerMethod?.method}
+            {implementerMethod?.method}:{" "}
+            <span className="text-base font-normal">
+              {implementerMethod?.description}
+            </span>
           </h3>
-          <p className="text-base ml-12">{implementerMethod?.description}</p>
         </div>
       </div>
     </div>
