@@ -13,19 +13,21 @@ export default function ValuesCard({
       <div className="h-full mr-6 hidden xs:flex">
         <GoNorthStar strokeWidth={0.5} size={24} className="flex self-start" />{" "}
       </div>
-      <div className="flex flex-col w-fit h-fit items-start gap-4">
-        <h1 className="text-xl font-bold flex-grow w-fit">Values</h1>
+      <div className="flex w-fit h-fit items-start gap-4">
+        <h1 className="text-xl font-bold flex-grow w-fit mr-2">Values</h1>
 
-        <div className="hidden xs:flex flex-wrap">
-          {profile.values.map((value: string, index: number) => (
-            <Badge
-              variant="outline"
-              key={index}
-              className="text-base font-bold mr-4 mb-3"
-            >
-              {value}
-            </Badge>
-          ))}
+        <div className="hidden xs:flex flex-wrap gap-2">
+          {profile.values
+            .sort((x: string, y: string) => x.length - y.length)
+            .map((value: string, index: number) => (
+              <Badge
+                variant="outline"
+                key={index}
+                className="text-base font-bold"
+              >
+                {value}
+              </Badge>
+            ))}
         </div>
       </div>
 

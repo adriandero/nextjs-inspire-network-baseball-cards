@@ -12,8 +12,8 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
   console.log(profile);
   return (
-    <div className="w-full min-w-full h-48 bg-secondary rounded-2xl hidden md:flex items-center gap-12 px-20">
-      <div className="w-32 h-32 min-w-32 rounded-full flex justify-center overflow-hidden">
+    <div className="w-full min-w-full min-h-16 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
+      <div className="w-28 h-28 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
@@ -22,12 +22,12 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
                 setIsAvatarLoaded(true);
               }
             }}
-            className="rounded-full w-32 h-32 object-cover"
+            className="rounded-full w-28 h-28 object-cover"
           />
           <AvatarFallback></AvatarFallback>
         </Avatar>
         {!isAvatarLoaded ? (
-          <Skeleton className={`min-h-32 min-w-32 rounded-full bg-light3`} />
+          <Skeleton className={`min-h-28 min-w-28 rounded-full bg-light3`} />
         ) : null}
       </div>
       {/* TODO: instead of min-w to prevent jobRole/name to exceed layout -> calculate method for font textor adjust logo */}
@@ -50,8 +50,8 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
       {profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url ? (
         <Image
           src={profile?.team[0]?.company?.companyLogo?.asset.url}
-          width={220}
-          height={220}
+          width={180}
+          height={180}
           alt="Company Logo"
           className="ml-auto"
         />
