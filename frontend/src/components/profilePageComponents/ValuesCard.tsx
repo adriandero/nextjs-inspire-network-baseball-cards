@@ -10,13 +10,17 @@ export default function ValuesCard({
 }: SanityDocument): React.JSX.Element {
   return (
     <ComponentShell className="flex flex-row">
-      <div className="h-full mr-6 hidden xs:flex">
-        <GoNorthStar strokeWidth={0.5} size={24} className="flex self-start" />{" "}
-      </div>
-      <div className="flex w-fit h-fit items-start gap-4">
-        <h1 className="text-xl font-bold flex-grow w-fit mr-2">Values</h1>
+      <div className="flex w-fit h-fit items-start xs:flex-nowrap flex-wrap">
+        <div className="h-full mr-6 flex">
+          <GoNorthStar
+            strokeWidth={0.5}
+            size={24}
+            className="flex self-start"
+          />{" "}
+        </div>
+        <h1 className="text-xl font-bold flex-grow w-fit mr-6">Values</h1>
 
-        <div className="hidden xs:flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 xs:mt-0 mt-4">
           {profile.values
             .sort((x: string, y: string) => x.length - y.length)
             .map((value: string, index: number) => (
@@ -31,7 +35,7 @@ export default function ValuesCard({
         </div>
       </div>
 
-      <div className="flex xs:hidden flex-row ">
+      {/* <div className="flex xs:hidden flex-row ">
         <div className="h-full mr-6">
           <GoNorthStar
             strokeWidth={0.5}
@@ -42,20 +46,20 @@ export default function ValuesCard({
         <div className="flex flex-col w-fit h-fit items-start">
           <h2 className="text-xl font-bold">Values:</h2>
           <div className="flex flex-wrap ">
-            {profile.values.map((value: string, index: number) => (
-              <div
-                key={index}
-                className="text-base font-bold text-base flex flex-row items-center"
-              >
-                {value}
-                {index < profile.values.length - 1 && (
-                  <GoDash strokeWidth={1.5} className="mx-2 text-primary" />
-                )}
-              </div>
-            ))}
+            {profile.values
+              .sort((x: string, y: string) => x.length - y.length)
+              .map((value: string, index: number) => (
+                <Badge
+                  variant="outline"
+                  key={index}
+                  className="text-base font-bold"
+                >
+                  {value}
+                </Badge>
+              ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </ComponentShell>
   );
 }

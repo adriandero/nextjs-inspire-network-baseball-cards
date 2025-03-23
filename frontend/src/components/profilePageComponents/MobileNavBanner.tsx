@@ -74,7 +74,7 @@ export default function MobileNavBanner({
           </div>
         </div>
         <div className="absolute bottom-0 w-full">
-          <div className="bg-background h-6 w-full">
+          <div className="bg-mainbackground h-6 w-full">
             {/* Card content goes here */}
           </div>
         </div>

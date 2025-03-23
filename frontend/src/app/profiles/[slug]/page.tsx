@@ -107,7 +107,7 @@ export default async function ProfilePage({
             _updatedAt={""}
           />
         </div>
-        <div className="w-full md:max-w-80 flex flex-col items-center md:items-start">
+        <div className="w-full md:max-w-80 max-h-screen flex flex-col items-center md:items-start">
           <MoreProfilesCard
             moreProfiles={moreProfiles}
             currentProfile={profile}

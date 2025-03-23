@@ -12,8 +12,8 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
   console.log(profile);
   return (
-    <div className="w-full min-w-full min-h-16 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
-      <div className="w-28 h-28 rounded-full flex justify-center overflow-hidden">
+    <div className="w-full min-w-full min-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
+      <div className="w-28 h-28 min-w-28 min-h-28 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
@@ -53,7 +53,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
           width={180}
           height={180}
           alt="Company Logo"
-          className="ml-auto"
+          className="ml-auto rounded-md"
         />
       ) : (
         <></>
