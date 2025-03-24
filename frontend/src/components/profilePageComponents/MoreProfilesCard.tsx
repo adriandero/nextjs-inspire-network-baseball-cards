@@ -29,7 +29,7 @@ export default function MoreProfilesCard({
   }
 
   return (
-    <ComponentShell className="w-full mt-0 h-full overflow-y-scroll">
+    <ComponentShell className="w-full mt-0 overflow-y-scroll">
       <div className="flex flex-row items-center w-full h-fit bg-background">
         <GoPeople strokeWidth={1} size={24} />
         <h1 className="text-xl font-bold flex-grow w-fit ml-6">The Team</h1>

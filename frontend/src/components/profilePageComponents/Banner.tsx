@@ -6,13 +6,12 @@ import { SanityDocument } from "next-sanity";
 import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
 
-//import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
-
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
+  const ameripriseCompass = "/ameriprise-compass.png";
   console.log(profile);
   return (
-    <div className="w-full min-w-full min-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
+    <div className="w-full min-w-full min-h-32 max-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
       <div className="w-28 h-28 min-w-28 min-h-28 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
@@ -46,8 +45,20 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
             : null}
         </h1>
       </div>
-
-      {profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url ? (
+      {profile?.team && profile?.team[0]?.isameriprise ? (
+        <div className="ml-auto flex flex items-center max-h-32 max-w-64 gap-3">
+          <h1 className="text-right text-light1 text-xl italic font-semibold">
+            {profile?.team && profile?.team[0]?.name}
+          </h1>
+          <Image
+            src={ameripriseCompass}
+            width={120}
+            height={120}
+            alt="Company Logo"
+            className="rounded-md max-h-16 w-fit"
+          />
+        </div>
+      ) : profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url ? (
         <Image
           src={profile?.team[0]?.company?.companyLogo?.asset.url}
           width={180}

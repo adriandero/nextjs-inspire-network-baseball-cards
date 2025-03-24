@@ -11,6 +11,7 @@ export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   "team": team[]->{
       name,
       slug,
+      isameriprise,
       "company": company->{
         ...,
         companyLogo {

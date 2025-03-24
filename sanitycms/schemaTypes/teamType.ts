@@ -21,7 +21,12 @@ export const teamType = defineType({
       title: 'Company',
       type: 'reference',
       to: [{type: 'company'}],
-      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'isameriprise',
+      title: 'is an Ameriprise team',
+      type: 'boolean',
+      initialValue: false,
     }),
   ],
 })

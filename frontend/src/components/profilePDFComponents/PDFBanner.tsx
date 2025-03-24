@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { urlFor } from "@/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
@@ -40,16 +41,16 @@ export default function PDFBanner({
     : "/defaultAvatar.png";
 
   // Optimize company logo URL if it exists
-  const companyLogoUrl =
-    profile?.team &&
-    urlFor(profile?.team[0]?.company?.companyLogo?.asset.url)
-      .auto("format")
-      .quality(90)
-      .url();
+  const companyLogoUrl = profile?.team[0]?.company?.companyLogo
+    ? urlFor(profile?.team[0]?.company?.companyLogo?.asset.url)
+        .auto("format")
+        .quality(90)
+        .url()
+    : null;
 
   return (
     <div className={`${className} w-full items-center gap-4`}>
-      <div className="min-w-20 min-h-20 rounded-full flex justify-center overflow-hidden">
+      <div className="min-w-20 min-h-20 max-h-20 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={optimizedProfileImageUrl}
@@ -72,8 +73,21 @@ export default function PDFBanner({
           ))}
         </h1>
       </div>
-      {companyLogoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
+
+      {profile?.team && profile?.team[0]?.isameriprise ? (
+        <div className="ml-auto flex flex items-center max-h-24 max-w-48 gap-3">
+          <h1 className="text-right text-light1 text-lg italic font-semibold">
+            {profile?.team && profile?.team[0]?.name}
+          </h1>
+          <img
+            src={"/ameriprise-compass.png"}
+            width={110}
+            height={110}
+            alt="Company Logo"
+            className="ml-auto company-logo rounded-md max-h-14  w-fit"
+          />
+        </div>
+      ) : companyLogoUrl ? (
         <img
           src={companyLogoUrl}
           width={110}

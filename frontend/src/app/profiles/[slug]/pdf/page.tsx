@@ -33,7 +33,9 @@ export default async function ProfilePDF({
     >
       <div className="flex gap-4 w-2/3 h-full flex-col">
         <PDFBanner
-          className={"w-full min-h-24 bg-secondary rounded-xl flex py-2 px-4"}
+          className={
+            "w-full min-h-24 max-h-24 bg-secondary rounded-xl flex py-2 px-4"
+          }
           profile={profile}
           _id={""}
           _rev={""}
