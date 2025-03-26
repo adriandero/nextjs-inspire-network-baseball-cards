@@ -24,7 +24,7 @@ export const teamType = defineType({
     }),
     defineField({
       name: 'isameriprise',
-      title: 'is an Ameriprise team',
+      title: 'Ameriprise Compass Logo',
       type: 'boolean',
       initialValue: false,
     }),

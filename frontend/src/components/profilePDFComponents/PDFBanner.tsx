@@ -3,12 +3,15 @@
 import { urlFor } from "@/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function PDFBanner({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {
+  const h1Ref = useRef<HTMLHeadingElement>(null);
+  const [isMultiLine, setIsMultiLine] = useState(false);
+
   // Add a print-specific style to the document
   useEffect(() => {
     // This style will only apply when generating PDFs
@@ -34,6 +37,16 @@ export default function PDFBanner({
       document.head.removeChild(style);
     };
   }, []);
+
+  useEffect(() => {
+    if (h1Ref.current) {
+      const lineHeight = parseInt(
+        getComputedStyle(h1Ref.current).lineHeight,
+        10
+      );
+      setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
+    }
+  }, [profile?.team[0]?.name]);
 
   // Optimize image URL to request a smaller version from Sanity
   const optimizedProfileImageUrl = profile.profileImage
@@ -75,17 +88,22 @@ export default function PDFBanner({
       </div>
 
       {profile?.team && profile?.team[0]?.isameriprise ? (
-        <div className="ml-auto flex flex items-center max-h-24 max-w-48 gap-3">
-          <h1 className="text-right text-light1 text-lg italic font-semibold">
-            {profile?.team && profile?.team[0]?.name}
-          </h1>
+        <div className="ml-auto flex flex-col items-center max-h-24 min-w-24 max-w-48">
           <img
             src={"/ameriprise-compass.png"}
-            width={110}
-            height={110}
+            width={90}
+            height={90}
             alt="Company Logo"
-            className="ml-auto company-logo rounded-md max-h-14  w-fit"
+            className=" company-logo rounded-md max-h-10 w-fit"
           />
+          <h1
+            ref={h1Ref}
+            className={`text-center text-light1 italic font-semibold ${
+              isMultiLine ? "text-sm" : "text-lg"
+            }`}
+          >
+            {profile?.team && profile?.team[0]?.name}
+          </h1>
         </div>
       ) : companyLogoUrl ? (
         <img
