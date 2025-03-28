@@ -48,6 +48,8 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
     header: "Name",
     cell: ({ row }) => {
       const teamName = row.original.name;
+      const teamSlug = row.original.slug;
+
       // const profileImageSrc =
       // row.row.original.profileImage?.asset.url ?? "/defaultAvatar.png";
       //const isAvatarLoaded = useImageLoadState(profileImageSrc);
@@ -56,66 +58,19 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
         <div
           className="flex flex-row items-center gap-4 cursor-pointer"
           onClick={() => {
-            return redirect(`/teams/${teamName}`);
+            return redirect(`/teams/${teamSlug}`);
           }}
         >
-          <div>
-            <p className="font-bold text-base">{profileName}</p>
-            <div className="table-cell ">{profileJobRole}</div>
-          </div>
+          <p className="font-bold text-base">{teamName}</p>
         </div>
       );
     },
   },
-  {
-    accessorKey: "jobRole",
-    footer: "Team" as const,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Team
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const profileTeams = row.original.teams;
-
-      return (
-        <div className="table-cell ">
-          {profileTeams !== null ? (
-            profileTeams.map((team: SanityDocument, index: number) => (
-              <div key={index}>
-                {team.name}
-                {index < profileTeams.length - 1 && ", "}
-              </div>
-            ))
-          ) : (
-            <p className="text-dark3 italic">no team</p>
-          )}
-        </div>
-      );
-    },
-  },
-  // {
-  //   accessorKey: "team.company.name",
-  //   footer: "Company" as const,
-  //   header: () => <div className="text-right">Company</div>,
-  //   cell: ({ row }) => {
-  //     // console.log(row.original);
-  //     const companyName = row.original.team?.company?.name || "Unknown Company";
-
-  //     return <div className="text-right">{companyName}</div>;
-  //   },
-  // },
   {
     id: "actions",
     footer: "Action" as const,
     cell: ({ row }) => {
-      const profileSlug = row.original.slug;
+      const teamName = row.original.name;
 
       return (
         <DropdownMenu>
@@ -133,10 +88,10 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                return redirect(`/profiles/${profileSlug}`);
+                return redirect(`/teams/${teamName}`);
               }}
             >
-              View Profile
+              View Team
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -54,7 +54,7 @@ export default function ProfileNavBar({
 
   return (
     <div className="w-full h-16 hidden md:flex justify-between items-center justify-self-center px-6">
-      <Link href={`/dashboard/`}>
+      <Link href={`/teams/`}>
         <GoArrowLeft
           size={28}
           strokeWidth="0.5"
@@ -62,8 +62,8 @@ export default function ProfileNavBar({
         />
       </Link>
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
-        <Link href={`/dashboard`} className="hover:text-primary duration-200">
-          Dashboard
+        <Link href={`/teams`} className="hover:text-primary duration-200">
+          Teams
         </Link>
         {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}

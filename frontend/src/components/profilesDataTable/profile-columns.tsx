@@ -19,7 +19,7 @@ import { SanityDocument } from "next-sanity";
 // import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 // import { Skeleton } from "../ui/skeleton";
 
-export const columns: ColumnDef<SanityDocument>[] = [
+export const profileColumns: ColumnDef<SanityDocument>[] = [
   {
     id: "select",
     header: ({ table }) => (

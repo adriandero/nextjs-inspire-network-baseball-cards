@@ -18,7 +18,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/Breadcrumbs";
 
@@ -97,7 +96,7 @@ export function DataTable<TData, TValue>({
         <Breadcrumb className="justify-self-start">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">All Teams</BreadcrumbLink>
+              <BreadcrumbLink href="/teams">All Teams</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
           </BreadcrumbList>
@@ -118,7 +117,7 @@ export function DataTable<TData, TValue>({
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
               <GoMultiSelect />
-              View
+              <span className=" hidden sm:inline">View</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
