@@ -1,5 +1,5 @@
 import {
-  getProfileBySlug,
+  getProfileByUuid,
   getProfilesByTeamsWithoutSpecifiedProfile,
 } from "@/lib/utils/sanityApi/profileRequests";
 
@@ -18,15 +18,15 @@ import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 
-type tParams = Promise<{ slug: string }>;
+type tParams = Promise<{ uuid: string }>;
 
 export default async function ProfilePage({
   params,
 }: {
   params: tParams;
 }): Promise<JSX.Element> {
-  const { slug } = await params;
-  const profile = await getProfileBySlug(slug);
+  const { uuid } = await params;
+  const profile = await getProfileByUuid(uuid);
 
   const session = await auth0.getSession();
 
@@ -107,7 +107,7 @@ export default async function ProfilePage({
             _updatedAt={""}
           />
         </div>
-        <div className="w-full md:max-w-80 max-h-screen flex flex-col items-center md:items-start">
+        <div className="w-full md:max-w-80 h-fit max-h-screen flex flex-col items-center md:items-start">
           <MoreProfilesCard
             moreProfiles={moreProfiles}
             currentProfile={profile}
@@ -117,7 +117,7 @@ export default async function ProfilePage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <DownloadButton slug={slug} />
+          <DownloadButton uuid={uuid} />
           {/* {  <Button
             variant="outline"
             className="mt-6 h-fit rounded-xl text-base p-3"

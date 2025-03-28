@@ -5,10 +5,10 @@ export const maxDuration = 30;
 
 export async function GET(
   req: Request,
-  context: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ uuid: string }> }
 ) {
   // const session = await auth0.getSession();
-  const slug = (await context.params).slug;
+  const uuid = (await context.params).uuid;
   const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
@@ -19,7 +19,7 @@ export async function GET(
   // await page.setExtraHTTPHeaders({
   //   Authorization: Bearer ${session?.tokenSet.accessToken},
   // });
-  await page.goto(process.env.BASE_URL + `/profiles/${slug}/pdf`, {
+  await page.goto(process.env.BASE_URL + `/profiles/${uuid}/pdf`, {
     waitUntil: "networkidle2",
   });
   await page.evaluate(() => {

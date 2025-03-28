@@ -1,7 +1,6 @@
 import { SanityDocument } from "next-sanity";
 
 import { GoNorthStar } from "react-icons/go";
-import { GoDash } from "react-icons/go";
 import ComponentShell from "./ComponentShell";
 import { Badge } from "@/components/ui/Badge";
 

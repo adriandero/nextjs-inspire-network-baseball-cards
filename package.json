@@ -11,10 +11,18 @@
         "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:sanitycms\"",
         "build:frontend": "npm run --workspace=frontend build",
         "build:sanitycms": "npm run --workspace=sanitycms build",
-        "deploy:sanitycms": "npm run --workspace=sanitycms deploy"
+        "deploy:sanitycms": "npm run --workspace=sanitycms deploy",
+        "lint:frontend": "npm run --workspace=frontend lint",
+        "lint:sanitycms": "npm run --workspace=sanitycms lint",
+        "lint": "npm run lint:frontend && npm run lint:sanitycms"
     },
     "devDependencies": {
+        "@types/uuid": "^10.0.0",
         "concurrently": "^8.2.2",
         "rxjs": "^7.8.2"
+    },
+    "dependencies": {
+        "@sanity/uuid": "^3.0.2",
+        "uuid": "^11.1.0"
     }
 }

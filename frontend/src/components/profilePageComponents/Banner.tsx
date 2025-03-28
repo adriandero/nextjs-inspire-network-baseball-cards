@@ -4,16 +4,28 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Image from "next/image";
 import { SanityDocument } from "next-sanity";
 import { Skeleton } from "../ui/skeleton";
-import { useState } from "react";
-
-//import widgetimage from "@/../public/widgetIllustrations/WIDGET1.png";
+import { useEffect, useRef, useState } from "react";
 
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
+  const h1Ref = useRef<HTMLHeadingElement>(null);
+  const [isMultiLine, setIsMultiLine] = useState(false);
+
+  useEffect(() => {
+    if (h1Ref.current) {
+      const lineHeight = parseInt(
+        getComputedStyle(h1Ref.current).lineHeight,
+        10
+      );
+      setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
+    }
+  }, [profile?.team[0]?.name]);
+
+  const ameripriseCompass = "/ameriprise-compass.png";
   console.log(profile);
   return (
-    <div className="w-full min-w-full min-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
-      <div className="w-28 h-28 min-w-28 min-h-28 rounded-full flex justify-center overflow-hidden">
+    <div className="w-full min-w-full min-h-32 max-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
+      <div className="w-24 h-24 min-w-24 min-h-24 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
             src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
@@ -22,7 +34,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
                 setIsAvatarLoaded(true);
               }
             }}
-            className="rounded-full w-28 h-28 object-cover"
+            className="rounded-full w-24 h-24 object-cover"
           />
           <AvatarFallback></AvatarFallback>
         </Avatar>
@@ -46,8 +58,22 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
             : null}
         </h1>
       </div>
-
-      {profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url ? (
+      {profile?.team && profile?.team[0]?.isameriprise ? (
+        <div className="ml-auto flex flex-col items-center max-h-32 max-w-64 min-w-24">
+          <Image
+            src={ameripriseCompass}
+            width={100}
+            height={100}
+            alt="Company Logo"
+            className="rounded-md max-h-12 w-fit"
+          />
+          <h1
+            className={`text-center text-light1 text-xl italic font-semibold ${isMultiLine ? "leading-tight" : ""}`}
+          >
+            {profile?.team && profile?.team[0]?.name}
+          </h1>
+        </div>
+      ) : profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url ? (
         <Image
           src={profile?.team[0]?.company?.companyLogo?.asset.url}
           width={180}

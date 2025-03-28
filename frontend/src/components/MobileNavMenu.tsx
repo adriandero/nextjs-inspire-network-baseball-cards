@@ -30,7 +30,7 @@ export default function MobileNavMenu({
   const userProfilePic = "/defaultAvatar.png";
 
   function handleProfileRedirect() {
-    if (userProfileData) redirect("/profiles/" + userProfileData.slug);
+    if (userProfileData) redirect("/profiles/" + userProfileData.uuid);
     // else
     //   alert(
     //     "You don't have a Baseball Card assigned - Ask an administrator for access"

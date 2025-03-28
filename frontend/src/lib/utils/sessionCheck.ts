@@ -11,6 +11,7 @@ export async function getUserData(userOfSession: User | undefined) {
       permission,
       profile->{
         name,
+        uuid,
         "slug":slug.current,
         jobRole,
         profileImage {

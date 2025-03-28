@@ -14,7 +14,7 @@ export default async function Home() {
   }
   const userData = await getUserData(session?.user);
   if (userData?.profile) {
-    redirect("/profiles/" + userData.profile.slug);
+    redirect("/profiles/" + userData.profile.uuid);
   } else {
     //TODO:
     console.log(
