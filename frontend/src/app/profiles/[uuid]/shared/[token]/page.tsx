@@ -1,19 +1,19 @@
-import { getProfileBySlug } from "@/lib/utils/sanityApi/profileRequests";
+import { getProfileByUuid } from "@/lib/utils/sanityApi/profileRequests";
 import PDFBanner from "@/components/profilePDFComponents/PDFBanner";
 import PDFKolbeStrengthsCard from "@/components/profilePDFComponents/PDFKolbeStrengthsCard";
 import PDFPrinciplesYouCard from "@/components/profilePDFComponents/PDFPrinciplesYouCard";
 import PDFValuesCard from "@/components/profilePDFComponents/PDFValuesCard";
 import PDFWorkingGeniusCard from "@/components/profilePDFComponents/PDFWorkingGeniusCard";
 
-type tParams = Promise<{ slug: string }>;
+type tParams = Promise<{ uuid: string }>;
 
 export default async function SharedProfile({
   params,
 }: {
   params: tParams;
 }): Promise<JSX.Element> {
-  const { slug } = await params;
-  const profile = await getProfileBySlug(slug);
+  const { uuid } = await params;
+  const profile = await getProfileByUuid(uuid);
 
   // const A4DimensionsInPx = {
   //   h: "762px",

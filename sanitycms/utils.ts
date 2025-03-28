@@ -1,3 +1,5 @@
+import {createClient} from '@sanity/client'
+
 export const workingGeniusList = [
   {title: 'The Creative Dreamer', value: 'theCreativeDreamer'},
   {title: 'The Discriminating Ideator', value: 'theDiscriminatingIdeator'},

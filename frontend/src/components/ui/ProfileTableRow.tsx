@@ -15,7 +15,7 @@ export default function ProfileTableRow({
   return (
     <TableRow>
       <TableCell className="font-medium">
-        <Link href={`/profiles/${profile.slug}`}>
+        <Link href={`/profiles/${profile.uuid}`}>
           <div className="flex flex-row items-center gap-4">
             <Avatar className="block">
               <AvatarImage
