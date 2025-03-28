@@ -37,15 +37,16 @@ export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
 }
 
 export async function getProfilesByTeamsWithoutSpecifiedProfile(
-  profileId: string
+  uuid: string
 ): Promise<SanityDocument[]> {
   const query = `
 
-  *[_type == "profile" && _id == $profileId && !(_id in path('drafts.**'))][0] {
+  *[_type == "profile" && uuid == $uuid && !(_id in path('drafts.**'))][0] {
     "teamSlug": team[]->slug.current
   } {
   "profile": *[_type == "profile" && !(_id in path("drafts.**")) && count((team[]->slug.current)[@ in ^.^.teamSlug]) > 0 ] {
       name,
+      uuid,
       "slug": slug.current,
       jobRole,
       profileImage {
@@ -64,7 +65,7 @@ export async function getProfilesByTeamsWithoutSpecifiedProfile(
 
   const profiles = await client.fetch<SanityDocument[]>(
     query,
-    { profileId },
+    { uuid },
     options
   );
 
