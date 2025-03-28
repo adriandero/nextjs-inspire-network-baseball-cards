@@ -36,7 +36,7 @@ export default async function ProfilePage({
   const userData = await getUserData(session?.user);
 
   const moreProfiles: SanityDocument[] =
-    await getProfilesByTeamsWithoutSpecifiedProfile(profile._id);
+    await getProfilesByTeamsWithoutSpecifiedProfile(uuid);
 
   // async function handleShare() {}
 
