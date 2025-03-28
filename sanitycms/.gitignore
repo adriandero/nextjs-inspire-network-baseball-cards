@@ -4,3 +4,42 @@ dist/
 
 # Build output
 build/
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Yarn/npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env*
+!.env.example
+
+# OS files
+.DS_Store
+*.pem
+
+# Editor directories
+.idea
+.vscode
+*.swp
+*.swo
+
+# TypeScript
+*.tsbuildinfo
+
+
+# next.js
+.next/
+.next/*
+out/
+
+# Build output
+build/
+
+# TypeScript
+next-env.d.ts

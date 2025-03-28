@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {v4 as uuidv4} from 'uuid'
 
 const toTitleCase = (str: string) => str.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())
 
@@ -91,6 +92,15 @@ export const profileType = defineType({
   title: 'Profile',
   type: 'document',
   fields: [
+    defineField({
+      name: 'uuid',
+      title: 'UUID',
+      type: 'string',
+      readOnly: true,
+      description: 'Unique identifier for this profile',
+      initialValue: () => uuidv4(),
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: 'name',
       type: 'string',

@@ -1,4 +1,4 @@
-import { getProfileBySlug } from "@/lib/utils/sanityApi/profileRequests";
+import { getProfileByUuid } from "@/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
 
@@ -8,15 +8,15 @@ import PDFPrinciplesYouCard from "@/components/profilePDFComponents/PDFPrinciple
 import PDFValuesCard from "@/components/profilePDFComponents/PDFValuesCard";
 import PDFWorkingGeniusCard from "@/components/profilePDFComponents/PDFWorkingGeniusCard";
 
-type tParams = Promise<{ slug: string }>;
+type tParams = Promise<{ uuid: string }>;
 
 export default async function ProfilePDF({
   params,
 }: {
   params: tParams;
 }): Promise<JSX.Element> {
-  const { slug } = await params;
-  const profile = await getProfileBySlug(slug);
+  const { uuid } = await params;
+  const profile = await getProfileByUuid(uuid);
 
   const currentDate = new Date().toLocaleDateString("en-US", {
     month: "numeric",

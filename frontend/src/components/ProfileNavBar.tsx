@@ -48,7 +48,7 @@ export default function ProfileNavBar({
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/profiles/" + userProfileData.slug);
+      redirect("/profiles/" + userProfileData.uuid);
     }
   }
 

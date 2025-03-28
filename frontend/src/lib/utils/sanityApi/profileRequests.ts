@@ -2,8 +2,8 @@ import { type SanityDocument } from "next-sanity";
 
 import { client } from "@/lib/sanity/client";
 
-export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
-  const query = `*[ _type == "profile" && slug.current == $slug && !(_id in path('drafts.**'))][0]{
+export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
+  const query = `*[ _type == "profile" && uuid == $uuid && !(_id in path('drafts.**'))][0]{
   ...,
   profileImage {
     asset->{url}
@@ -31,7 +31,7 @@ export async function getProfileBySlug(slug: string): Promise<SanityDocument> {
   `;
   const options = { next: { revalidate: 30 } };
 
-  const profile = await client.fetch<SanityDocument>(query, { slug }, options);
+  const profile = await client.fetch<SanityDocument>(query, { uuid }, options);
 
   return profile;
 }
@@ -83,6 +83,7 @@ export async function getProfilesFromUserTeams(
   *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
     "teamProfiles": *[_type == "profile" && count((team[]->name)[@ in $userTeams]) > 0] {
       name,
+      uuid,
       "slug": slug.current,
       jobRole,
       profileImage {

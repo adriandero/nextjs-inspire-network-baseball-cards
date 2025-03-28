@@ -17,8 +17,12 @@
         "lint": "npm run lint:frontend && npm run lint:sanitycms"
     },
     "devDependencies": {
+        "@types/uuid": "^10.0.0",
         "concurrently": "^8.2.2",
         "rxjs": "^7.8.2"
+    },
+    "dependencies": {
+        "@sanity/uuid": "^3.0.2",
+        "uuid": "^11.1.0"
     }
 }
-

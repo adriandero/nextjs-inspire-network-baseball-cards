@@ -5,14 +5,14 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-export default function DownloadButton({ slug }: { slug: string }) {
+export default function DownloadButton({ uuid }: { uuid: string }) {
   const [loading, setLoading] = useState(false);
 
   const handlePDFDownloadCall = async () => {
     try {
       setLoading(true);
 
-      const pdfBlob = await fetch(`/api/profiles/${slug}/pdf`).then((res) =>
+      const pdfBlob = await fetch(`/api/profiles/${uuid}/pdf`).then((res) =>
         res.blob()
       );
 
@@ -20,7 +20,7 @@ export default function DownloadButton({ slug }: { slug: string }) {
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `${slug}.pdf`;
+      link.download = `${uuid}.pdf`;
 
       document.body.appendChild(link);
       link.click();

@@ -24,8 +24,8 @@ export default function MoreProfilesCard({
 }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
-  function handleProfileRedirect(slug: string): void {
-    redirect(`/profiles/${slug}`);
+  function handleProfileRedirect(uuid: string): void {
+    redirect(`/profiles/${uuid}`);
   }
 
   return (
@@ -37,10 +37,10 @@ export default function MoreProfilesCard({
 
       {moreProfiles?.length > 1 ? (
         moreProfiles.map((profile: SanityDocument, index: number) => {
-          if (currentProfile?.slug?.current != profile.slug) {
+          if (currentProfile?.uuid != profile.uuid) {
             return (
               <div className="pt-6" key={index}>
-                <div onClick={() => handleProfileRedirect(profile?.slug)}>
+                <div onClick={() => handleProfileRedirect(profile?.uuid)}>
                   <div className="flex flex-row items-center gap-4 cursor-pointer overflow-hidden">
                     <Avatar className="block w-12 h-12 min-w-12 rounded-full ">
                       <AvatarImage

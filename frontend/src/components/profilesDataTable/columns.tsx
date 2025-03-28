@@ -48,7 +48,7 @@ export const columns: ColumnDef<SanityDocument>[] = [
     header: "Name",
     cell: ({ row }) => {
       const profileName = row.original.name;
-      const profileSlug = row.original.slug;
+      const profileUuid = row.original.uuid;
       const profileJobRole = row.original.jobRole;
       // const profileImageSrc =
       // row.row.original.profileImage?.asset.url ?? "/defaultAvatar.png";
@@ -58,7 +58,7 @@ export const columns: ColumnDef<SanityDocument>[] = [
         <div
           className="flex flex-row items-center gap-4 cursor-pointer"
           onClick={() => {
-            return redirect(`/profiles/${profileSlug}`);
+            return redirect(`/profiles/${profileUuid}`);
           }}
         >
           {/* {<Avatar className="block min-w-[40px]">
@@ -130,7 +130,7 @@ export const columns: ColumnDef<SanityDocument>[] = [
     id: "actions",
     footer: "Action" as const,
     cell: ({ row }) => {
-      const profileSlug = row.original.slug;
+      const profileUuid = row.original.uuid;
 
       return (
         <DropdownMenu>
@@ -148,7 +148,7 @@ export const columns: ColumnDef<SanityDocument>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                return redirect(`/profiles/${profileSlug}`);
+                return redirect(`/profiles/${profileUuid}`);
               }}
             >
               View Profile
