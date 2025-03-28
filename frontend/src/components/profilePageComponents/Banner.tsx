@@ -67,7 +67,9 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
             alt="Company Logo"
             className="rounded-md max-h-12 w-fit"
           />
-          <h1 className="text-center text-light1 text-xl italic font-semibold">
+          <h1
+            className={`text-center text-light1 text-xl italic font-semibold ${isMultiLine ? "leading-tight" : ""}`}
+          >
             {profile?.team && profile?.team[0]?.name}
           </h1>
         </div>

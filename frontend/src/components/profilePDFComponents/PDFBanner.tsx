@@ -11,7 +11,7 @@ export default function PDFBanner({
 }: SanityDocument): React.JSX.Element {
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
-
+  const profilesTeamName = profile?.team[0]?.name;
   // Add a print-specific style to the document
   useEffect(() => {
     // This style will only apply when generating PDFs
@@ -46,7 +46,7 @@ export default function PDFBanner({
       );
       setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
     }
-  }, [profile?.team[0]?.name]);
+  }, [profilesTeamName]);
 
   // Optimize image URL to request a smaller version from Sanity
   const optimizedProfileImageUrl = profile.profileImage
@@ -102,7 +102,7 @@ export default function PDFBanner({
               isMultiLine ? "text-sm" : "text-lg"
             }`}
           >
-            {profile?.team && profile?.team[0]?.name}
+            {profile?.team && profilesTeamName}
           </h1>
         </div>
       ) : companyLogoUrl ? (
