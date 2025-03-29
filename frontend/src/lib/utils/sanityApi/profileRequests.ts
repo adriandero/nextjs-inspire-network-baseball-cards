@@ -113,6 +113,7 @@ export async function getProfilesFromUserTeams(
 export async function getAllProfiles(): Promise<SanityDocument[]> {
   const query = `*[ _type == "profile" && !(_id in path('drafts.**'))] {
     name,
+    uuid,
     "slug":slug.current,
     jobRole,
     profileImage {
