@@ -203,3 +203,21 @@ export async function getAllTeams(): Promise<SanityDocument[]> {
 
   return posts;
 }
+
+export async function getTeamBySlug(
+  slug: string
+): Promise<SanityDocument | null> {
+  const query = `*[ _type == "team" && slug.current == $slug && !(_id in path('drafts.**'))][0] {
+    ...,
+    "slug": slug.current,
+  }`;
+
+  const options = { next: { revalidate: 30 } };
+  const team = await client.fetch<SanityDocument | null>(
+    query,
+    { slug },
+    options
+  );
+
+  return team;
+}

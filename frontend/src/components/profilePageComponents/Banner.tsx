@@ -11,6 +11,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
 
+  const profileTeamName = profile?.team[0]?.name;
   useEffect(() => {
     if (h1Ref.current) {
       const lineHeight = parseInt(
@@ -19,7 +20,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
       );
       setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
     }
-  }, [profile?.team[0]?.name]);
+  }, [profileTeamName]);
 
   const ameripriseCompass = "/ameriprise-compass.png";
   console.log(profile);
@@ -65,7 +66,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
             width={100}
             height={100}
             alt="Company Logo"
-            className="rounded-md max-h-12 w-fit"
+            className="rounded-md max-h-12 max-w-12 w-12 h-12"
           />
           <h1
             className={`text-center text-light1 text-xl italic font-semibold ${isMultiLine ? "leading-tight" : ""}`}

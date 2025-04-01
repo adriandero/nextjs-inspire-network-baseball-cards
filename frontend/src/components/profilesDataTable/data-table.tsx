@@ -52,15 +52,18 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { GoSearch } from "react-icons/go";
+import { SanityDocument } from "next-sanity";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  team?: SanityDocument;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  team,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -98,7 +101,16 @@ export function DataTable<TData, TValue>({
             <BreadcrumbItem>
               <BreadcrumbLink href="/teams">All Teams</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            {team ? (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/teams/${team.slug}`}>
+                    {team.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : null}
           </BreadcrumbList>
         </Breadcrumb>
 

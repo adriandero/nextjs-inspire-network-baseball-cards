@@ -1,5 +1,6 @@
 import {
   getProfilesFromUserTeams,
+  getTeamBySlug,
   ProfilesFromUserTeams,
 } from "@/lib/utils/sanityApi/profileRequests";
 // import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
@@ -72,6 +73,7 @@ export default async function TeamsPage({
         <DataTable
           columns={profileColumns}
           data={await fillDataTableProfileData()}
+          team={(await getTeamBySlug(slug)) || undefined}
         />
       </main>
       <footer className="flex item-center p-8"></footer>

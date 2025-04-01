@@ -1,7 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { ArrowUpDown } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -56,7 +55,7 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
 
       return (
         <div
-          className="flex flex-row items-center gap-4 cursor-pointer"
+          className="flex flex-row items-center cursor-pointer "
           onClick={() => {
             return redirect(`/teams/${teamSlug}`);
           }}
@@ -74,11 +73,8 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 flex justify-self-end"
-            >
+          <DropdownMenuTrigger asChild className="ml-auto">
+            <Button variant="ghost" className="h-8 w-8 p-0 flex">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
