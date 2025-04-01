@@ -44,7 +44,7 @@ export async function getProfilesByTeamsWithoutSpecifiedProfile(
   *[_type == "profile" && uuid == $uuid && !(_id in path('drafts.**'))][0] {
     "teamSlug": team[]->slug.current
   } {
-  "profile": *[_type == "profile" && !(_id in path("drafts.**")) && count((team[]->slug.current)[@ in ^.^.teamSlug]) > 0 ] {
+  "profile": *[_type == "profile" && !(_id in path('drafts.**')) && count((team[]->slug.current)[@ in ^.^.teamSlug]) > 0 ] {
       name,
       uuid,
       "slug": slug.current,
@@ -76,7 +76,7 @@ export async function getProfilesByTeamId(
   teamId: string
 ): Promise<SanityDocument[]> {
   const query = `
-  *[_type == "profile" && !(_id in path("drafts.**")) && $teamId in team[]->_id] {
+  *[_type == "profile" && !(_id in path('drafts.**')) && $teamId in team[]->_id] {
     name,
     "slug": slug.current,
     jobRole,
@@ -112,7 +112,7 @@ export async function getProfilesFromUserTeams(
 ): Promise<ProfilesFromUserTeams> {
   const query = `
   *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
-    "teamProfiles": *[_type == "profile" && count((team[]->slug.current)[@ in $userTeamSlugs]) > 0] {
+    "teamProfiles": *[_type == "profile" && !(_id in path('drafts.**')) && count((team[]->slug.current)[@ in $userTeamSlugs]) > 0] {
       name,
       uuid,
       "slug": slug.current,
@@ -139,6 +139,7 @@ export async function getProfilesFromUserTeams(
   );
   return profiles;
 }
+
 export interface TeamsFromUser {
   teams: SanityDocument[];
 }

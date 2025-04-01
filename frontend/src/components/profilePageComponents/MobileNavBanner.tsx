@@ -23,7 +23,7 @@ export default function MobileNavBanner({
           </Link>
           <div className="flex flex-col items-center text-center hidden xs:inline ">
             <h1 className="text-2xl xs:text-3xl font-bold text-light1 ">
-              {profile.name.toUpperCase()}
+              {profile.name?.toUpperCase()}
             </h1>
             <h1 className="text-xl xs:text-2xl font-bold text-primary text-center ">
               {profile.jobRole
@@ -47,7 +47,7 @@ export default function MobileNavBanner({
         </div>
         <div className="flex flex-col items-center text-center px-4">
           <h1 className="text-2xl xs:text-3xl font-bold text-light1 xs:hidden">
-            {profile.name.toUpperCase()}
+            {profile.name?.toUpperCase()}
           </h1>
           <h1 className="text-xl xs:text-2xl font-bold text-primary text-center xs:hidden">
             {profile.jobRole

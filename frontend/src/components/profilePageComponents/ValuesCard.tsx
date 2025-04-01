@@ -21,7 +21,7 @@ export default function ValuesCard({
 
         <div className="flex flex-wrap gap-2 xs:mt-0 mt-4">
           {profile.values
-            .sort((x: string, y: string) => x.length - y.length)
+            ?.sort((x: string, y: string) => x.length - y.length)
             .map((value: string, index: number) => (
               <Badge
                 variant="outline"

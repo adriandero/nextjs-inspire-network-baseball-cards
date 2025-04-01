@@ -80,7 +80,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
           width={180}
           height={180}
           alt="Company Logo"
-          className="ml-auto rounded-md"
+          className="ml-auto rounded-md max-h-28"
         />
       ) : (
         <></>

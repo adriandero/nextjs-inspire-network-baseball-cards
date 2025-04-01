@@ -69,7 +69,7 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
     id: "actions",
     footer: "Action" as const,
     cell: ({ row }) => {
-      const teamName = row.original.name;
+      const teamSlug = row.original.slug;
 
       return (
         <DropdownMenu>
@@ -84,7 +84,7 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                return redirect(`/teams/${teamName}`);
+                return redirect(`/teams/${teamSlug}`);
               }}
             >
               View Team
