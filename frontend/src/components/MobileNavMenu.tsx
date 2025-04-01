@@ -105,11 +105,11 @@ export default function MobileNavMenu({
           <div className="flex-1 overflow-auto py-2">
             <nav className="grid items-start px-4 text-base font-medium">
               <Link
-                href="/dashboard"
+                href="/teams"
                 className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 prefetch={false}
               >
-                Dashboard
+                Teams
               </Link>
             </nav>
           </div>

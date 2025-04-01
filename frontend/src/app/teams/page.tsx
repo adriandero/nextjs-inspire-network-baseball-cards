@@ -1,10 +1,9 @@
 import {
-  getProfilesFromUserTeams,
-  ProfilesFromUserTeams,
-  getAllProfiles,
+  getAllTeams,
+  getUserTeams,
+  TeamsFromUser,
 } from "@/lib/utils/sanityApi/profileRequests";
 // import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
-import { columns } from "@/components/profilesDataTable/columns";
 import { DataTable } from "@/components/profilesDataTable/data-table";
 import NavBar from "@/components/NavBar";
 import { SanityDocument } from "next-sanity";
@@ -12,13 +11,14 @@ import { SanityDocument } from "next-sanity";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
+import { teamColumns } from "@/components/profilesDataTable/team-columns";
 
 export interface Team {
   name: string;
   slug: string;
 }
 
-export default async function DashboardPage(): Promise<JSX.Element> {
+export default async function TeamsPage(): Promise<JSX.Element> {
   const session = await auth0.getSession();
 
   if (!session) {
@@ -30,31 +30,26 @@ export default async function DashboardPage(): Promise<JSX.Element> {
   const userProfileData = await getUserData(userData);
 
   //TODO: put these functions ins a service or apirequest class because these call the api baseically
-  async function fillAllProfilesFromUserTeams() {
-    let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
+  async function fillAllUserTeams() {
+    let profilesFromUserTeams: TeamsFromUser = { teams: [] };
 
     if (userProfileData?.team) {
-      profilesFromUserTeams = await getProfilesFromUserTeams(
-        userProfileData.email,
-        userProfileData.team.map((team: Team) => team.name)
-      );
+      profilesFromUserTeams = await getUserTeams(userProfileData.email);
     }
 
     return profilesFromUserTeams;
   }
-  //TODO: put these functions ins a service or apirequest class because these call the api baseically
-  async function fillAllProfiles() {
-    return await getAllProfiles();
-  }
 
-  async function fillDashboardData() {
+  //TODO: put these functions ins a service or apirequest class because these call the api baseically
+
+  async function fillDataTableTeamData() {
     const emptyData: SanityDocument[] = [];
     if (userProfileData.permission === "Admin") {
-      return await fillAllProfiles();
+      return await getAllTeams();
     }
     const data = userProfileData?.team
-        ? (await fillAllProfilesFromUserTeams()).teamProfiles
-        : emptyData;
+      ? (await fillAllUserTeams()).teams
+      : emptyData;
 
     return data;
   }
@@ -71,7 +66,7 @@ export default async function DashboardPage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-wrap gap-8 justify-center">
-        <DataTable columns={columns} data={await fillDashboardData()} />
+        <DataTable columns={teamColumns} data={await fillDataTableTeamData()} />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

@@ -72,17 +72,47 @@ export async function getProfilesByTeamsWithoutSpecifiedProfile(
   return profiles;
 }
 
+export async function getProfilesByTeamId(
+  teamId: string
+): Promise<SanityDocument[]> {
+  const query = `
+  *[_type == "profile" && !(_id in path("drafts.**")) && $teamId in team[]->_id] {
+    name,
+    "slug": slug.current,
+    jobRole,
+    profileImage {
+      asset->{url}
+    },
+    "teams": team[]-> | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current
+    }
+  }
+  `;
+
+  const options = { next: { revalidate: 30 } };
+
+  const profiles = await client.fetch<SanityDocument[]>(
+    query,
+    { teamId },
+    options
+  );
+
+  return profiles;
+}
+
 export interface ProfilesFromUserTeams {
   teamProfiles: SanityDocument[];
 }
 
 export async function getProfilesFromUserTeams(
   userEmail: string | undefined,
-  userTeams: unknown
+  userTeamSlugs: unknown
 ): Promise<ProfilesFromUserTeams> {
   const query = `
   *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
-    "teamProfiles": *[_type == "profile" && count((team[]->name)[@ in $userTeams]) > 0] {
+    "teamProfiles": *[_type == "profile" && count((team[]->slug.current)[@ in $userTeamSlugs]) > 0] {
       name,
       uuid,
       "slug": slug.current,
@@ -104,10 +134,38 @@ export async function getProfilesFromUserTeams(
   const options = { next: { revalidate: 30 } };
   const profiles = await client.fetch<ProfilesFromUserTeams>(
     query,
-    { userEmail, userTeams },
+    { userEmail, userTeamSlugs },
     options
   );
   return profiles;
+}
+export interface TeamsFromUser {
+  teams: SanityDocument[];
+}
+
+export async function getUserTeams(
+  userEmail: string | undefined
+): Promise<TeamsFromUser> {
+  const query = `
+  *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
+    "teams": team[]-> | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      "company": company->{
+        name,
+        "slug": slug.current
+      }
+    }
+  }
+`;
+  const options = { next: { revalidate: 30 } };
+  const userTeams = await client.fetch<TeamsFromUser>(
+    query,
+    { userEmail },
+    options
+  );
+  return userTeams;
 }
 
 export async function getAllProfiles(): Promise<SanityDocument[]> {
@@ -133,4 +191,34 @@ export async function getAllProfiles(): Promise<SanityDocument[]> {
   const posts = await client.fetch<SanityDocument[]>(query, {}, options);
 
   return posts;
+}
+
+export async function getAllTeams(): Promise<SanityDocument[]> {
+  const query = `*[ _type == "team" && !(_id in path('drafts.**'))] {
+    ...,
+    "slug":slug.current,
+  }`;
+
+  const options = { next: { revalidate: 30 } };
+  const posts = await client.fetch<SanityDocument[]>(query, {}, options);
+
+  return posts;
+}
+
+export async function getTeamBySlug(
+  slug: string
+): Promise<SanityDocument | null> {
+  const query = `*[ _type == "team" && slug.current == $slug && !(_id in path('drafts.**'))][0] {
+    ...,
+    "slug": slug.current,
+  }`;
+
+  const options = { next: { revalidate: 30 } };
+  const team = await client.fetch<SanityDocument | null>(
+    query,
+    { slug },
+    options
+  );
+
+  return team;
 }

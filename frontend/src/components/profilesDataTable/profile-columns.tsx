@@ -19,7 +19,7 @@ import { SanityDocument } from "next-sanity";
 // import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 // import { Skeleton } from "../ui/skeleton";
 
-export const columns: ColumnDef<SanityDocument>[] = [
+export const profileColumns: ColumnDef<SanityDocument>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -134,11 +134,8 @@ export const columns: ColumnDef<SanityDocument>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 flex justify-self-end"
-            >
+          <DropdownMenuTrigger asChild className="ml-auto">
+            <Button variant="ghost" className="h-8 w-8 p-0 flex">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>

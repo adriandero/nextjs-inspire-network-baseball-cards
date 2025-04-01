@@ -13,6 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/Breadcrumbs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,15 +52,18 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { GoSearch } from "react-icons/go";
+import { SanityDocument } from "next-sanity";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  team?: SanityDocument;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  team,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -84,9 +94,27 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="sm:min-w-96  w-full max-w-screen-lg sm:px-6 px-2">
+    <div className="sm:min-w-96  w-full max-w-screen-lg sm:px-6 px-2 ">
       <div className="flex items-center py-4 gap-2">
-        <div className="relative">
+        <Breadcrumb className="justify-self-start">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/teams">All Teams</BreadcrumbLink>
+            </BreadcrumbItem>
+            {team ? (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/teams/${team.slug}`}>
+                    {team.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : null}
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <div className="relative ml-auto">
           <GoSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search names..."
@@ -99,9 +127,9 @@ export function DataTable<TData, TValue>({
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline">
               <GoMultiSelect />
-              View
+              <span className=" hidden sm:inline">View</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

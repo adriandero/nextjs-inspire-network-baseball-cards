@@ -94,7 +94,7 @@ export default function PDFBanner({
             width={90}
             height={90}
             alt="Company Logo"
-            className=" company-logo rounded-md max-h-10 w-fit"
+            className=" company-logo rounded-md max-h-10 max-w-10 w-10 h-10"
           />
           <h1
             ref={h1Ref}

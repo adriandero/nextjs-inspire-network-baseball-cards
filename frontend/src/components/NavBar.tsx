@@ -59,8 +59,8 @@ export default function NavBar({
           _updatedAt={""}
         />
         <div className=" hidden sm:flex space-x-12 text-lg h-full items-center font-medium">
-          <Link href={`/dasboard`} className="hover:text-primary duration-200">
-            Dashboard
+          <Link href={`/teams`} className="hover:text-primary duration-200">
+            Teams
           </Link>
           {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
