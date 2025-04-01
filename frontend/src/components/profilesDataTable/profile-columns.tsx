@@ -76,7 +76,17 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
           </Avatar>} */}
           <div>
             <p className="font-bold text-base">{profileName}</p>
-            <div className="table-cell ">{profileJobRole}</div>
+            <div className="table-cell ">
+              {" "}
+              {profileJobRole
+                ? profileJobRole.map((role: string, index: number) => (
+                    <span key={index}>
+                      {role}
+                      {index < profileJobRole.length - 1 && ", "}
+                    </span>
+                  ))
+                : null}
+            </div>
           </div>
         </div>
       );
