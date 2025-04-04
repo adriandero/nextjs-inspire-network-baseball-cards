@@ -56,9 +56,9 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
       return (
         <div
           className="flex flex-row items-center cursor-pointer "
-          onClick={() => {
-            return redirect(`/teams/${teamSlug}`);
-          }}
+          // onClick={() => {
+          //   return redirect(`/teams/${teamSlug}`);
+          // }}
         >
           <p className="font-bold text-base">{teamName}</p>
         </div>
@@ -83,9 +83,9 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {
-                return redirect(`/teams/${teamSlug}`);
-              }}
+            // onClick={() => {
+            //   return redirect(`/teams/${teamSlug}`);
+            // }}
             >
               View Team
             </DropdownMenuItem>
