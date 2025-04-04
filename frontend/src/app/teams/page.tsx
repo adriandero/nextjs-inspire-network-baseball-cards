@@ -3,7 +3,6 @@ import {
   getUserTeams,
   TeamsFromUser,
 } from "@/lib/utils/sanityApi/profileRequests";
-// import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
 import { DataTable } from "@/components/profilesDataTable/data-table";
 import NavBar from "@/components/NavBar";
 import { SanityDocument } from "next-sanity";
@@ -13,7 +12,6 @@ import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { teamColumns } from "@/components/profilesDataTable/team-columns";
 import { profileColumns } from "@/components/profilesDataTable/profile-columns";
-import { ColumnDef } from "@tanstack/react-table";
 
 export interface Team {
   name: string;

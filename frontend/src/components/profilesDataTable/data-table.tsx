@@ -105,7 +105,6 @@ export function DataTable<TData, TValue>({
   const returnToTeamsView = () => {
     setCurrentView("teams");
     setSelectedTeam(null);
-    // Reset table state when switching views
     setSorting([]);
     setColumnFilters([]);
     setColumnVisibility({});
@@ -170,7 +169,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
             }
-            className="pl-8 !text-base" // Add left padding to make room for the icon
+            className="pl-8 !text-base"
           />
         </div>
         <DropdownMenu>
