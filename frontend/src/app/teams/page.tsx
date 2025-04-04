@@ -3,7 +3,6 @@ import {
   getUserTeams,
   TeamsFromUser,
 } from "@/lib/utils/sanityApi/profileRequests";
-// import { checkIfSession, getUserData } from "@/lib/utils/sessionCheck";
 import { DataTable } from "@/components/profilesDataTable/data-table";
 import NavBar from "@/components/NavBar";
 import { SanityDocument } from "next-sanity";
@@ -12,6 +11,7 @@ import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { teamColumns } from "@/components/profilesDataTable/team-columns";
+import { profileColumns } from "@/components/profilesDataTable/profile-columns";
 
 export interface Team {
   name: string;
@@ -66,7 +66,12 @@ export default async function TeamsPage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-wrap gap-8 justify-center">
-        <DataTable columns={teamColumns} data={await fillDataTableTeamData()} />
+        <DataTable
+          teamColumns={teamColumns}
+          profileColumns={profileColumns}
+          teamsData={await fillDataTableTeamData()}
+          userProfileData={userProfileData}
+        />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

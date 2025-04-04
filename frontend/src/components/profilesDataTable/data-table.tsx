@@ -53,18 +53,29 @@ import {
 } from "../ui/alert-dialog";
 import { GoSearch } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
+import { getProfilesFromUserTeams } from "@/lib/utils/sanityApi/profileRequests";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  team?: SanityDocument;
+  teamColumns: ColumnDef<TData, TValue>[];
+  profileColumns: ColumnDef<TData, TValue>[];
+  teamsData: TData[];
+  userProfileData: SanityDocument;
 }
 
 export function DataTable<TData, TValue>({
-  columns,
-  data,
-  team,
+  teamColumns,
+  profileColumns,
+  teamsData,
+  userProfileData,
 }: DataTableProps<TData, TValue>) {
+  const [currentView, setCurrentView] = React.useState<"teams" | "profiles">(
+    "teams"
+  );
+  const [selectedTeam, setSelectedTeam] = React.useState<SanityDocument | null>(
+    null
+  );
+  const [profilesData, setProfilesData] = React.useState<SanityDocument[]>([]);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -74,9 +85,38 @@ export function DataTable<TData, TValue>({
 
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const handleTeamSelect = async (team: SanityDocument) => {
+    try {
+      const profiles = await getProfilesFromUserTeams(userProfileData.email, [
+        team.slug,
+      ]);
+      setSelectedTeam(team);
+      setProfilesData(profiles.teamProfiles);
+      setCurrentView("profiles");
+      setSorting([]);
+      setColumnFilters([]);
+      setColumnVisibility({});
+      setRowSelection({});
+    } catch (error) {
+      console.error("Error fetching profiles:", error);
+    }
+  };
+
+  const returnToTeamsView = () => {
+    setCurrentView("teams");
+    setSelectedTeam(null);
+    setSorting([]);
+    setColumnFilters([]);
+    setColumnVisibility({});
+    setRowSelection({});
+  };
+
+  const columns = currentView === "teams" ? teamColumns : profileColumns;
+  const data = currentView === "teams" ? teamsData : profilesData;
+
   const table = useReactTable({
-    data,
-    columns,
+    data: data as TData[],
+    columns: columns as ColumnDef<TData, TValue>[],
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -98,19 +138,26 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4 gap-2">
         <Breadcrumb className="justify-self-start">
           <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/teams">All Teams</BreadcrumbLink>
-            </BreadcrumbItem>
-            {team ? (
+            {currentView === "teams" ? (
+              <BreadcrumbItem>
+                <BreadcrumbLink href="#">All Teams</BreadcrumbLink>
+              </BreadcrumbItem>
+            ) : (
               <>
-                <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/teams/${team.slug}`}>
-                    {team.name}
+                  <BreadcrumbLink
+                    onClick={returnToTeamsView}
+                    className="cursor-pointer"
+                  >
+                    All Teams
                   </BreadcrumbLink>
                 </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink>{selectedTeam?.name}</BreadcrumbLink>
+                </BreadcrumbItem>
               </>
-            ) : null}
+            )}
           </BreadcrumbList>
         </Breadcrumb>
 
@@ -122,7 +169,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
             }
-            className="pl-8 !text-base" // Add left padding to make room for the icon
+            className="pl-8 !text-base"
           />
         </div>
         <DropdownMenu>
@@ -185,6 +232,12 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => {
+                    console.log(row);
+                    currentView === "teams"
+                      ? handleTeamSelect(row.original as SanityDocument)
+                      : undefined;
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
