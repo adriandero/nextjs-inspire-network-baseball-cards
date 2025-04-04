@@ -23,7 +23,6 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import { GoInfo } from "react-icons/go";
 import { GoMultiSelect } from "react-icons/go";
 
@@ -232,11 +231,9 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    console.log(row);
-                    currentView === "teams"
-                      ? handleTeamSelect(row.original as SanityDocument)
-                      : undefined;
+                  onClick={async () => {
+                    if (currentView === "teams")
+                      await handleTeamSelect(row.original as SanityDocument);
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
