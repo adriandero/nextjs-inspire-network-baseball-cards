@@ -16,6 +16,7 @@ import { CompareDataTable } from "@/components/compareDataTable/compare-data-tab
 import { SelectedProfilesTable } from "@/components/compareDataTable/selectedProfilesTable";
 import { CompareWrapper } from "./compareWrapper";
 import { compactProfileColumns } from "@/components/compareDataTable/compact-profile-columns";
+import TeamProfileSelector from "@/components/simpleCompareDataTable/teamProfileSelector";
 
 export interface Team {
   name: string;
@@ -70,12 +71,7 @@ export default async function TeamsPage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-row justify-center">
-        <CompareWrapper
-          teamColumns={teamColumns}
-          profileColumns={compactProfileColumns}
-          teamsData={await fillDataTableTeamData()}
-          userProfileData={userProfileData}
-        />
+        <TeamProfileSelector userProfileData={userProfileData} />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

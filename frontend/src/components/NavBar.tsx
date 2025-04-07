@@ -59,6 +59,12 @@ export default function NavBar({
           _updatedAt={""}
         />
         <div className=" hidden sm:flex space-x-12 text-lg h-full items-center font-medium">
+          <Link href={`#`} className="opacity-50 disabled">
+            Lineup Builder
+          </Link>
+          <Link href={`/compare`} className="hover:text-primary duration-200">
+            Compare
+          </Link>
           <Link href={`/teams`} className="hover:text-primary duration-200">
             Teams
           </Link>
