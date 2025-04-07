@@ -36,13 +36,13 @@ export default function NavBar({
   const userProfilePic = "/defaultAvatar.png";
 
   function accountHasProfileAssigned() {
-    if (userProfileData.profile) return true;
+    if (userProfileData?.profile) return true;
     return false;
   }
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/profiles/" + userProfileData.profile.uuid);
+      redirect("/profiles/" + userProfileData?.profile.uuid);
     }
   }
 
@@ -50,7 +50,7 @@ export default function NavBar({
     <>
       <div className="w-full h-16 flex justify-end items-center justify-self-center px-2 sm:px-6">
         <MobileNavMenu
-          userProfileData={userProfileData.profile}
+          userProfileData={userProfileData?.profile}
           className="sm:hidden !text-dark1"
           _id={""}
           _rev={""}

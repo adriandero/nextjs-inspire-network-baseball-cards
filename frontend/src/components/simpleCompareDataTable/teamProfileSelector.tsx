@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, User, Users } from "lucide-react";
+import { User } from "lucide-react";
 import Image from "next/image";
 import {
   getAllProfilesGroupedByTeam,
@@ -36,6 +36,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/Breadcrumbs";
+import { useRouter } from "next/navigation";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
@@ -55,7 +56,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [nameFilter, setNameFilter] = useState<string>("");
-
   useEffect(() => {
     async function loadData() {
       try {
@@ -378,9 +378,22 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       </div>
     </div>
   );
+  const router = useRouter();
 
   const renderSelectedProfiles = (): JSX.Element => {
     const selectedProfilesData = getSelectedProfilesData();
+
+    const handleContinue = () => {
+      if (selectedProfilesData.length > 0) {
+        // Create a URL-safe string of profile IDs
+        const profileIds = selectedProfilesData
+          .map((profile) => profile.uuid)
+          .join(",");
+
+        // Navigate to the workingGenius comparison page with selected profiles
+        router.push(`/compare/workingGenius/?profiles=${profileIds}`);
+      }
+    };
 
     return (
       <div>
@@ -437,7 +450,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           </div>
         )}
         <div className="flex justify-end">
-          <Button variant="outline" className="mt-2 hover:border-primary">
+          <Button
+            variant="outline"
+            className="mt-2 hover:border-primary"
+            onClick={() => handleContinue()}
+          >
             Continue <GoArrowRight size={24} />
           </Button>
         </div>
