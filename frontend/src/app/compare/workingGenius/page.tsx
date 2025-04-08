@@ -37,7 +37,7 @@ function ProfileComparison() {
   }, [profiles]);
 
   return (
-    <div>
+    <div className="px-6">
       {isLoading ? (
         <div>Loading profiles...</div>
       ) : error ? (
@@ -54,11 +54,11 @@ function ProfileComparison() {
 // Main page component with Suspense boundary
 export default function WorkingGeniusPage() {
   return (
-    <>
+    <div className="w-full max-w-screen-lg">
       <NavBar _id={""} _rev={""} _type={""} _createdAt={""} _updatedAt={""} />
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison />
       </Suspense>
-    </>
+    </div>
   );
 }
