@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
@@ -56,6 +56,28 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [nameFilter, setNameFilter] = useState<string>("");
+
+  const fillAllUserTeams = useCallback(async () => {
+    let profilesFromUserTeams: TeamsFromUser = { teams: [] };
+    if (userProfileData?.team) {
+      profilesFromUserTeams = await getUserTeams(userProfileData.email);
+    }
+    return profilesFromUserTeams;
+  }, [userProfileData.email, userProfileData?.team]);
+
+  const fillDataTableTeamData = useCallback(async (): Promise<
+    SanityDocument[]
+  > => {
+    const emptyData: SanityDocument[] = [];
+    if (userProfileData.permission === "Admin") {
+      return await getAllTeams();
+    }
+    const data = userProfileData?.team
+      ? (await fillAllUserTeams()).teams
+      : emptyData;
+    return data;
+  }, [userProfileData, fillAllUserTeams]); // Include dependencies this function uses
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -78,26 +100,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     }
 
     loadData();
-  }, []);
-
-  async function fillAllUserTeams() {
-    let profilesFromUserTeams: TeamsFromUser = { teams: [] };
-    if (userProfileData?.team) {
-      profilesFromUserTeams = await getUserTeams(userProfileData.email);
-    }
-    return profilesFromUserTeams;
-  }
-
-  async function fillDataTableTeamData(): Promise<SanityDocument[]> {
-    const emptyData: SanityDocument[] = [];
-    if (userProfileData.permission === "Admin") {
-      return await getAllTeams();
-    }
-    const data = userProfileData?.team
-      ? (await fillAllUserTeams()).teams
-      : emptyData;
-    return data;
-  }
+  }, [fillDataTableTeamData]);
 
   const handleTeamClick = (teamSlug: string, teamName: string): void => {
     setSelectedTeam(teamSlug);
@@ -270,19 +273,19 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     },
   });
 
-  const renderLoading = (): JSX.Element => (
+  const RenderLoading = () => (
     <div className="flex justify-center items-center h-48">
       <p className="text-gray-500">Loading...</p>
     </div>
   );
 
-  const renderError = (): JSX.Element => (
+  const RenderError = () => (
     <div className="flex justify-center items-center h-48">
       <p className="text-red-500">{error}</p>
     </div>
   );
 
-  const renderTable = (): JSX.Element => (
+  const RenderTable = () => (
     <div className="w-full">
       <div className="flex w-full items-center py-4 gap-2">
         <Breadcrumb className="justify-self-start">
@@ -380,7 +383,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   );
   const router = useRouter();
 
-  const renderSelectedProfiles = (): JSX.Element => {
+  const RenderSelectedProfiles = () => {
     const selectedProfilesData = getSelectedProfilesData();
 
     const handleContinue = () => {
@@ -463,17 +466,29 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   };
 
   if (isLoading) {
-    return renderLoading();
+    return (
+      <div>
+        <RenderLoading />
+      </div>
+    );
   }
 
   if (error) {
-    return renderError();
+    return (
+      <div>
+        <RenderError />
+      </div>
+    );
   }
 
   return (
     <div className="w-full flex gap-4 px-6">
-      <div className=" rounded-lg w-3/5">{renderTable()}</div>
-      <div className="rounded-lg w-2/5">{renderSelectedProfiles()}</div>
+      <div className=" rounded-lg w-3/5">
+        <RenderTable />
+      </div>
+      <div className="rounded-lg w-2/5">
+        <RenderSelectedProfiles />
+      </div>
     </div>
   );
 };
