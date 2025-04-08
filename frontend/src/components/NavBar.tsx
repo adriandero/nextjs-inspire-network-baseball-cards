@@ -36,13 +36,13 @@ export default function NavBar({
   const userProfilePic = "/defaultAvatar.png";
 
   function accountHasProfileAssigned() {
-    if (userProfileData.profile) return true;
+    if (userProfileData?.profile) return true;
     return false;
   }
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/profiles/" + userProfileData.profile.uuid);
+      redirect("/profiles/" + userProfileData?.profile.uuid);
     }
   }
 
@@ -50,7 +50,7 @@ export default function NavBar({
     <>
       <div className="w-full h-16 flex justify-end items-center justify-self-center px-2 sm:px-6">
         <MobileNavMenu
-          userProfileData={userProfileData.profile}
+          userProfileData={userProfileData?.profile}
           className="sm:hidden !text-dark1"
           _id={""}
           _rev={""}
@@ -59,12 +59,17 @@ export default function NavBar({
           _updatedAt={""}
         />
         <div className=" hidden sm:flex space-x-12 text-lg h-full items-center font-medium">
+          <Link href={`#`} className="opacity-50 disabled">
+            Lineup Builder
+          </Link>
+          <Link href={`/compare`} className="hover:text-primary duration-200">
+            Compare
+          </Link>
           <Link href={`/teams`} className="hover:text-primary duration-200">
             Teams
           </Link>
           {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
-
           <DropdownMenu>
             <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200 overflow-hidden">
               <Avatar className="h-full">

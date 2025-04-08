@@ -61,7 +61,7 @@ interface DataTableProps<TData, TValue> {
   userProfileData: SanityDocument;
 }
 
-export function DataTable<TData, TValue>({
+export function CompareDataTable<TData, TValue>({
   teamColumns,
   profileColumns,
   teamsData,
@@ -133,8 +133,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="sm:min-w-96 w-full max-w-screen-lg sm:px-6 px-2 ">
-      <div className="flex items-center py-4 gap-2">
+    <div className="sm:min-w-96  w-3/5 max-w-screen-lg sm:px-6 px-2 ">
+      <div className="flex w-full items-center py-4 gap-2">
         <Breadcrumb className="justify-self-start">
           <BreadcrumbList>
             {currentView === "teams" ? (
@@ -171,39 +171,6 @@ export function DataTable<TData, TValue>({
             className="pl-8 !text-base bg-light1"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <GoMultiSelect />
-              <span className=" hidden sm:inline">View</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                const columnDef = column.columnDef;
-                const displayText =
-                  (columnDef.footer as string) ||
-                  (columnDef.header as string) ||
-                  column.id;
-
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {displayText}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="rounded-md border bg-light1">
         <Table>

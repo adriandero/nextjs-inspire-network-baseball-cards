@@ -36,6 +36,46 @@ export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
   return profile;
 }
 
+export async function getProfilesByUuids(
+  uuids: string[]
+): Promise<SanityDocument[]> {
+  const query = `*[ _type == "profile" && uuid in $uuids && !(_id in path('drafts.**'))]{
+  ...,
+  profileImage {
+    asset->{url}
+  },
+  "team": team[]->{
+      name,
+      slug,
+      isameriprise,
+      "company": company->{
+        ...,
+        companyLogo {
+          asset->{
+            url, 
+            metadata {
+              dimensions {
+                width,
+                height
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  `;
+  const options = { next: { revalidate: 30 } };
+
+  const profiles = await client.fetch<SanityDocument[]>(
+    query,
+    { uuids },
+    options
+  );
+
+  return profiles;
+}
+
 export async function getProfilesByTeamsWithoutSpecifiedProfile(
   uuid: string
 ): Promise<SanityDocument[]> {
@@ -138,6 +178,50 @@ export async function getProfilesFromUserTeams(
     options
   );
   return profiles;
+}
+
+export interface ProfilesByTeam {
+  teams: {
+    [teamSlug: string]: SanityDocument[];
+  };
+}
+
+export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
+  const query = `
+  {
+    "teams": *[_type == "team" && !(_id in path('drafts.**'))] {
+      "slug": slug.current,
+      name,
+      "company": company->{
+        name,
+        slug
+      },
+      "profiles": *[_type == "profile" && !(_id in path('drafts.**')) && references(^._id)] {
+        name,
+        uuid,
+        "slug": slug.current,
+        jobRole,
+        profileImage {
+          asset->{url}
+        }
+      }
+    }
+  }
+  `;
+
+  const options = { next: { revalidate: 30 } };
+  const result = await client.fetch(query, {}, options);
+
+  // Transform the data structure into the desired format
+  const profilesByTeam = result.teams.reduce(
+    (acc: SanityDocument, team: SanityDocument) => {
+      acc[team.slug] = team.profiles;
+      return acc;
+    },
+    {}
+  );
+
+  return { teams: profilesByTeam };
 }
 
 export interface TeamsFromUser {
