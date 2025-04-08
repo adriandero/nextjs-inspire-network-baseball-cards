@@ -48,7 +48,7 @@ export default function WorkingGeniusPage() {
         _updatedAt={""}
       />
 
-      <div className=" w-full flex justify-center">
+      <div className=" w-full flex justify-center px-6">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <p className="text-gray-500">Loading profiles...</p>

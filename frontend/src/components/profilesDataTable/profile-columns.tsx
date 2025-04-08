@@ -110,7 +110,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
       const profileTeams = row.original.teams;
 
       return (
-        <div className="table-cell ">
+        <div className="">
           {profileTeams !== null ? (
             profileTeams.map((team: SanityDocument, index: number) => (
               <div key={index}>

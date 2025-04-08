@@ -70,7 +70,6 @@ export default function NavBar({
           </Link>
           {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
-
           <DropdownMenu>
             <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200 overflow-hidden">
               <Avatar className="h-full">

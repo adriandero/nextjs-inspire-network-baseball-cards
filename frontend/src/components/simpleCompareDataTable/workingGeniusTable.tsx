@@ -18,8 +18,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import WidgetCogsSVG from "./WidgetCogsSimple";
-import { Input } from "@/components/ui/input";
-import { GoMultiSelect, GoSearch } from "react-icons/go";
+import {
+  GoChevronDown,
+  GoDownload,
+  GoMultiSelect,
+  GoShare,
+} from "react-icons/go";
 import { Button } from "../ui/button";
 
 interface WorkingGeniusTableProps {
@@ -74,6 +78,10 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     },
   ];
 
+  const handleCopyURLToClipboard = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+  };
+
   // Create table instance
   const table = useReactTable({
     data: profiles,
@@ -91,17 +99,31 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center gap-4">
-      <div className="flex w-full items-center h-8 py-4 gap-2 max-w-screen-md">
+      <div className="flex w-full items-center h-8 py-4 gap-2">
         <h1>Working Genius</h1>
-        <Button variant="outline" className="ml-auto">
+        <Button variant="outline" className="ml-auto" disabled>
+          <GoChevronDown />
+
           <span className=" hidden sm:inline">Working Genius</span>
         </Button>
-        <Button variant="outline">
+        <Button variant="outline" disabled>
           <GoMultiSelect />
-          <span className=" hidden sm:inline">View</span>
+          <span className="hidden sm:inline">View</span>
+        </Button>
+        <Button
+          variant="outline"
+          className=""
+          onClick={() => handleCopyURLToClipboard()}
+        >
+          <GoShare />
+          {/* <span className=" hidden sm:inline"></span> */}
+        </Button>
+        <Button variant="outline" disabled className="">
+          <GoDownload />
+          {/* <span className=" hidden sm:inline"></span> */}
         </Button>
       </div>
-      <div className="rounded-md border bg-light1 w-full max-w-screen-md ">
+      <div className="rounded-md border bg-light1 w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

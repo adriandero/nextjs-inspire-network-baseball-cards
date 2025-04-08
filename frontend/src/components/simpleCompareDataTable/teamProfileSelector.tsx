@@ -141,7 +141,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       accessorKey: "name",
       header: "Team Name",
       cell: ({ row }) => (
-        <div className="font-medium">{row.getValue("name")}</div>
+        <div className="font-bold text-base">{row.getValue("name")}</div>
       ),
     },
   ];
@@ -214,7 +214,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                 </div>
               </div>
             )}
-            <div className="font-medium">{profile.name}</div>
+            <div className="font-medium text-base">{profile.name}</div>
           </div>
         );
       },
@@ -397,10 +397,10 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
     return (
       <div>
-        <div className="flex w-full items-center justify-end py-5 gap-2">
+        <div className="flex w-full items-center py-5 gap-2">
           <User className="mr-2" size={20} />
-          <h2 className="text-lg font-medium">
-            ({selectedProfilesData.length}) Selected Profiles
+          <h2 className="text-lg ml-auto">
+            Selected Profiles - {selectedProfilesData.length}
           </h2>
         </div>
         {selectedProfilesData.length === 0 ? (
@@ -471,7 +471,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   }
 
   return (
-    <div className="w-full flex gap-4">
+    <div className="w-full flex gap-4 px-6">
       <div className=" rounded-lg w-3/5">{renderTable()}</div>
       <div className="rounded-lg w-2/5">{renderSelectedProfiles()}</div>
     </div>

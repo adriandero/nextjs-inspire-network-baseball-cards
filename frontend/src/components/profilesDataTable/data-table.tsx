@@ -133,7 +133,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="sm:min-w-96  w-full max-w-screen-lg sm:px-6 px-2 ">
+    <div className="sm:min-w-96 w-full max-w-screen-lg sm:px-6 px-2 ">
       <div className="flex items-center py-4 gap-2">
         <Breadcrumb className="justify-self-start">
           <BreadcrumbList>
@@ -168,7 +168,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
             }
-            className="pl-8 !text-base"
+            className="pl-8 !text-base bg-light1"
           />
         </div>
         <DropdownMenu>
@@ -205,7 +205,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-light1">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
