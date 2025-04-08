@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SanityDocument } from "next-sanity";
@@ -40,7 +39,7 @@ export default function WorkingGeniusPage() {
   return (
     <div className="w-full h-screen max-w-screen-lg">
       <NavBar
-        userProfileData={undefined}
+        userProfileData={{}}
         _id={""}
         _rev={""}
         _type={""}
