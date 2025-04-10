@@ -1,6 +1,5 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import WorkingGeniusTable from "@/components/simpleCompareDataTable/workingGeniusTable";
@@ -8,8 +7,8 @@ import { SanityDocument } from "next-sanity";
 import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
 
-// Reuse the ProfileComparison component but with PDF-specific styling
-function PDFProfileComparison() {
+// Content component that uses useSearchParams
+function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const profiles = searchParams.get("profiles");
   const [profileData, setProfileData] = useState<SanityDocument[]>([]);
@@ -36,7 +35,6 @@ function PDFProfileComparison() {
     fetchProfiles();
 
     // This tells Puppeteer when the content is ready to be captured
-    // by setting a data attribute on the document body
     const checkIfReady = setInterval(() => {
       if (!isLoading) {
         document.body.setAttribute("data-render-ready", "true");
@@ -71,7 +69,16 @@ function PDFProfileComparison() {
   );
 }
 
-// PDF page component - no navbar, optimized for printing/PDF generation
+// Wrapper with Suspense
+function PDFProfileComparison() {
+  return (
+    <Suspense fallback={<div>Loading profiles...</div>}>
+      <ProfileComparisonContent />
+    </Suspense>
+  );
+}
+
+// PDF page component
 export default function WorkingGeniusPDFPage() {
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
