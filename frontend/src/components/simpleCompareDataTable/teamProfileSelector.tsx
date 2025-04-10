@@ -318,6 +318,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           <Input
             placeholder={`Search ${view === "teams" ? "teams" : "profiles"}...`}
             value={nameFilter}
+            disabled
             onChange={(e) => setNameFilter(e.target.value)}
             className="pl-8 !text-base bg-light1"
           />

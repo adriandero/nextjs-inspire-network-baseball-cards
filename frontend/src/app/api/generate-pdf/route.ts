@@ -17,13 +17,6 @@ export async function GET(req: Request) {
 
   const page = await browser.newPage();
 
-  // Set viewport to A4 size
-  await page.setViewport({
-    width: 1240,
-    height: 1754, // A4 aspect ratio
-    deviceScaleFactor: 1.5, // Higher resolution
-  });
-
   await page.goto(
     process.env.BASE_URL + `/compare/workingGenius/pdf?profiles=${profiles}`,
     {
@@ -48,7 +41,7 @@ export async function GET(req: Request) {
   const pdfBuffer = await page.pdf({
     format: "A4",
     printBackground: true,
-    landscape: true,
+    landscape: false,
   });
   await browser.close();
   return new Response(pdfBuffer, {
