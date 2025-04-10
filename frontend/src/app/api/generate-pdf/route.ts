@@ -1,5 +1,6 @@
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer";
+export const maxDuration = 30;
 
 export async function GET(req: Request) {
   // Get query parameters
