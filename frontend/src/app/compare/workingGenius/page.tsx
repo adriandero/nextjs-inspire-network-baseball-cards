@@ -15,7 +15,7 @@ import {
 } from "react-icons/go";
 import { Loader2 } from "lucide-react";
 
-export function ProfileComparison() {
+function ProfileComparison() {
   const searchParams = useSearchParams();
   const profiles = searchParams.get("profiles");
   const [profileData, setProfileData] = useState<SanityDocument[]>([]);
@@ -46,42 +46,6 @@ export function ProfileComparison() {
 
   const handleCopyURLToClipboard = async () => {
     await navigator.clipboard.writeText(window.location.href);
-  };
-
-  const handleDownloadPDF = () => {
-    // Instead of navigating to the PDF page, call our API route
-    const apiUrl = `/api/generate-pdf?profiles=${profiles}`;
-
-    // This will trigger a file download
-    window.location.href = apiUrl;
-
-    // Alternative approach: show loading state
-    // const downloadButton = document.getElementById('download-button');
-    // if (downloadButton) {
-    //   downloadButton.textContent = 'Generating PDF...';
-    //   downloadButton.disabled = true;
-    //
-    //   fetch(apiUrl)
-    //     .then(response => response.blob())
-    //     .then(blob => {
-    //       // Create a link to download the PDF
-    //       const url = window.URL.createObjectURL(blob);
-    //       const a = document.createElement('a');
-    //       a.style.display = 'none';
-    //       a.href = url;
-    //       a.download = `working-genius-comparison-${new Date().toISOString().split('T')[0]}.pdf`;
-    //       document.body.appendChild(a);
-    //       a.click();
-    //       window.URL.revokeObjectURL(url);
-    //     })
-    //     .finally(() => {
-    //       // Reset button state
-    //       if (downloadButton) {
-    //         downloadButton.textContent = 'Download as PDF';
-    //         downloadButton.disabled = false;
-    //       }
-    //     });
-    // }
   };
 
   const [loading, setLoading] = useState(false);

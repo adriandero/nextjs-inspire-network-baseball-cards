@@ -18,13 +18,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import WidgetCogsSVG from "./WidgetCogsSimple";
-import {
-  GoChevronDown,
-  GoDownload,
-  GoMultiSelect,
-  GoShare,
-} from "react-icons/go";
-import { Button } from "../ui/button";
 
 interface WorkingGeniusTableProps {
   profiles: SanityDocument[];
