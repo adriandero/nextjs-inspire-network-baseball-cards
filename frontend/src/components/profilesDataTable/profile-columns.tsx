@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { ArrowUpDown } from "lucide-react";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,34 +15,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { SanityDocument } from "next-sanity";
 // import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 // import { Skeleton } from "../ui/skeleton";
 
 export const profileColumns: ColumnDef<SanityDocument>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "name",
     footer: "Name" as const,
@@ -50,9 +28,8 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
       const profileName = row.original.name;
       const profileUuid = row.original.uuid;
       const profileJobRole = row.original.jobRole;
-      // const profileImageSrc =
-      // row.row.original.profileImage?.asset.url ?? "/defaultAvatar.png";
-      //const isAvatarLoaded = useImageLoadState(profileImageSrc);
+      const profileImageSrc =
+        row.original.profileImage?.asset.url ?? "/defaultAvatar.png";
 
       return (
         <div
@@ -74,6 +51,14 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
             ) : null}
             <AvatarFallback></AvatarFallback>
           </Avatar>} */}
+          <div className="relative w-8 h-8 rounded-full overflow-hidden">
+            <Image
+              src={profileImageSrc}
+              alt={profileName}
+              fill
+              style={{ objectFit: "cover" }}
+            />
+          </div>
           <div>
             <p className="font-bold text-base">{profileName}</p>
             <div className="table-cell ">

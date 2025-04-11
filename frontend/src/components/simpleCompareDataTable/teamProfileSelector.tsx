@@ -1,8 +1,7 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
 import Image from "next/image";
 import {
   getAllProfilesGroupedByTeam,
@@ -26,6 +25,12 @@ import {
   getCoreRowModel,
   useReactTable,
   RowSelectionState,
+  getPaginationRowModel,
+  SortingState,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  getSortedRowModel,
+  VisibilityState,
 } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { GoArrowRight, GoSearch } from "react-icons/go";
@@ -55,7 +60,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [nameFilter, setNameFilter] = useState<string>("");
 
   const fillAllUserTeams = useCallback(async () => {
     let profilesFromUserTeams: TeamsFromUser = { teams: [] };
@@ -76,7 +80,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       ? (await fillAllUserTeams()).teams
       : emptyData;
     return data;
-  }, [userProfileData, fillAllUserTeams]); // Include dependencies this function uses
+  }, [userProfileData, fillAllUserTeams]);
 
   useEffect(() => {
     async function loadData() {
@@ -106,13 +110,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     setSelectedTeam(teamSlug);
     setSelectedTeamName(teamName);
     setView("profiles");
-    setNameFilter("");
   };
 
   const handleBackToTeams = (): void => {
     setView("teams");
     setSelectedTeam(null);
-    setNameFilter("");
   };
 
   const handleProfileCheck = (profileId: string): void => {
@@ -205,18 +207,20 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         const profile = row.original;
         return (
           <div className="flex items-center gap-3">
-            {profile.profileImage?.asset?.url && (
-              <div className="flex-shrink-0">
-                <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                  <Image
-                    src={profile.profileImage.asset.url}
-                    alt={profile.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
+            <div className="flex-shrink-0">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                <Image
+                  src={
+                    profile.profileImage
+                      ? profile.profileImage.asset.url
+                      : "/defaultAvatar.png"
+                  }
+                  alt={profile.name}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
               </div>
-            )}
+            </div>
             <div className="font-medium text-base">{profile.name}</div>
           </div>
         );
@@ -234,35 +238,37 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     },
   ];
 
-  // Filter data based on name filter
-  const getFilteredData = () => {
-    if (view === "teams") {
-      return nameFilter
-        ? teams.filter((team) =>
-            team.name.toLowerCase().includes(nameFilter.toLowerCase())
-          )
-        : teams;
-    } else {
-      if (!selectedTeam || !profilesByTeam?.teams) return [];
-      const profiles = profilesByTeam.teams[selectedTeam] || [];
-      return nameFilter
-        ? profiles.filter((profile) =>
-            profile.name.toLowerCase().includes(nameFilter.toLowerCase())
-          )
-        : profiles;
-    }
-  };
+  const data =
+    view === "teams"
+      ? teams
+      : selectedTeam && profilesByTeam?.teams
+        ? profilesByTeam.teams[selectedTeam] || []
+        : [];
 
-  // Create table instance
-  const data = getFilteredData();
   const columns = view === "teams" ? teamColumns : profileColumns;
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const table = useReactTable({
     data,
     columns,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     enableRowSelection: true,
     state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
       rowSelection:
         view === "profiles"
           ? data.reduce((acc, profile, index) => {
@@ -316,10 +322,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         <div className="relative ml-auto">
           <GoSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder={`Search ${view === "teams" ? "teams" : "profiles"}...`}
-            value={nameFilter}
-            disabled
-            onChange={(e) => setNameFilter(e.target.value)}
+            ref={searchInputRef}
+            placeholder="Search names..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) => {
+              table.getColumn("name")?.setFilterValue(event.target.value);
+              setTimeout(() => searchInputRef.current?.focus(), 0);
+            }}
             className="pl-8 !text-base bg-light1"
           />
         </div>
@@ -380,6 +389,28 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           </TableBody>
         </Table>
       </div>
+      <div className="flex items-center justify-end space-x-2 py-4 w-full h-full">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
   const router = useRouter();
@@ -389,30 +420,22 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
     const handleContinue = () => {
       if (selectedProfilesData.length > 0) {
-        // Create a URL-safe string of profile IDs
         const profileIds = selectedProfilesData
           .map((profile) => profile.uuid)
           .join(",");
-
-        // Navigate to the workingGenius comparison page with selected profiles
         router.push(`/compare/workingGenius/?profiles=${profileIds}`);
       }
     };
 
     return (
       <div>
-        <div className="flex w-full items-center py-5 gap-2">
-          <User className="mr-2" size={20} />
-          <h2 className="text-lg ml-auto">
-            Selected Profiles - {selectedProfilesData.length}
-          </h2>
-        </div>
+        <div className="flex w-full items-center h-[68px]"></div>
         {selectedProfilesData.length === 0 ? (
           <div className="rounded-md flex justify-center border bg-light1 border rounded-md p-4">
-            <p className="text-gray-500 italic">No profiles selected</p>
+            <p className="text-dark3">Select profiles to compare</p>
           </div>
         ) : (
-          <div className="rounded-md border bg-light1 border rounded-md">
+          <div className="rounded-md border bg-light1 border rounded-md max-h-[699.5px] overflow-y-scroll">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -425,18 +448,21 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                   <TableRow key={profile.uuid}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {profile.profileImage?.asset?.url && (
-                          <div className="flex-shrink-0">
-                            <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                              <Image
-                                src={profile.profileImage.asset.url}
-                                alt={profile.name}
-                                fill
-                                style={{ objectFit: "cover" }}
-                              />
-                            </div>
+                        <div className="flex-shrink-0">
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                            <Image
+                              src={
+                                profile.profileImage
+                                  ? profile.profileImage.asset.url
+                                  : "/defaultAvatar.png"
+                              }
+                              alt={profile.name}
+                              fill
+                              style={{ objectFit: "cover" }}
+                            />
                           </div>
-                        )}
+                        </div>
+
                         <div className="font-medium">{profile.name}</div>
                       </div>
                     </TableCell>
@@ -456,6 +482,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         <div className="flex justify-end">
           <Button
             variant="outline"
+            disabled={selectedProfilesData.length === 0}
             className="mt-2 hover:border-primary"
             onClick={() => handleContinue()}
           >
