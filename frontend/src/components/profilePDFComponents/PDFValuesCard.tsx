@@ -18,13 +18,11 @@ export default function PDFValuesCard({
         <h2 className="ml-6 text-lg font-bold mb-3">Values</h2>
       </div>
       <div className="flex flex-wrap gap-2">
-        {profile.values
-          .sort((x: string, y: string) => x.length - y.length)
-          .map((value: string, index: number) => (
-            <Badge variant="outline" key={index} className="text-sm font-bold">
-              {value}
-            </Badge>
-          ))}
+        {profile.values.map((value: string, index: number) => (
+          <Badge variant="outline" key={index} className="text-sm font-bold">
+            {value}
+          </Badge>
+        ))}
       </div>
     </div>
   );
