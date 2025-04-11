@@ -12,8 +12,9 @@ export const user = {
     },
     {
       name: 'auth0UserID',
-      title: 'Auth0UserID',
+      title: 'Auth0 User ID',
       type: 'string',
+      readOnly: true,
     },
     {
       name: 'permission',
