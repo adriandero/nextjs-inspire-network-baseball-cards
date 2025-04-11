@@ -95,10 +95,11 @@ export default function NavBar({
               <DropdownMenuSeparator />
 
               {accountHasProfileAssigned() ? (
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <button onClick={() => handleProfileRedirect()}>
-                    Profile
-                  </button>
+                <DropdownMenuItem
+                  onSelect={(e) => e.preventDefault()}
+                  onClick={() => handleProfileRedirect()}
+                >
+                  Profile
                 </DropdownMenuItem>
               ) : (
                 <AlertDialog>
