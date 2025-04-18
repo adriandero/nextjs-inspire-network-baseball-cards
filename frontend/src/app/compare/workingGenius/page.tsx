@@ -1,21 +1,29 @@
+"use client";
+
 import NavBar from "@/components/NavBar";
 import { ProfileComparison } from "@/components/simpleCompareDataTable/profileComparison";
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import WorkingGeniusTable from "@/components/simpleCompareDataTable/workingGeniusTable";
+import { useEffect, useState } from "react";
+import { SanityDocument } from "next-sanity";
 
-// Main page component with Suspense boundary
-export default async function WorkingGeniusPage(): Promise<JSX.Element> {
-  const session = await auth0.getSession();
+// Client component with dynamic data loading
+export default function WorkingGeniusClientPage({
+  userData,
+  userProfileData,
+}: {
+  userData: any;
+  userProfileData: SanityDocument[];
+}): JSX.Element {
+  const [isReady, setIsReady] = useState(false);
 
-  if (!session) {
-    redirect("/auth/login");
+  useEffect(() => {
+    // Ensure the component is mounted before rendering
+    setIsReady(true);
+  }, []);
+
+  if (!isReady) {
+    return <div>Loading...</div>;
   }
-
-  const userData = session?.user;
-
-  const userProfileData = await getUserData(userData);
 
   return (
     <div className="w-full max-w-screen-lg">
@@ -27,9 +35,11 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
         _createdAt={""}
         _updatedAt={""}
       />
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProfileComparison />
-      </Suspense>
+      <ProfileComparison
+        TableComponent={WorkingGeniusTable}
+        ComponentTitle={"Working Genius"}
+        initialProfiles={userProfileData}
+      />
     </div>
   );
 }

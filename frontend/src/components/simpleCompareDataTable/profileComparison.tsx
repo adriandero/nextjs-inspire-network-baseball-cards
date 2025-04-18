@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
-import WorkingGeniusTable from "@/components/simpleCompareDataTable/workingGeniusTable";
 import { SanityDocument } from "next-sanity";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,21 +13,49 @@ import {
   GoDownload,
 } from "react-icons/go";
 import { Loader2 } from "lucide-react";
+import React from "react";
 
-export function ProfileComparison() {
+// Define the props type that will be shared between all table components
+export interface TableComponentProps {
+  profiles: SanityDocument[];
+  // Add any other props that might be needed by different table components
+}
+
+// Simplified version with direct profile support
+export function ProfileComparison({
+  TableComponent,
+  ComponentTitle,
+  initialProfiles,
+  tableProps = {},
+  ...rest
+}: {
+  TableComponent: React.ComponentType<any>;
+  ComponentTitle: string;
+  initialProfiles?: SanityDocument[];
+  tableProps?: Record<string, any>;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "children">) {
   const searchParams = useSearchParams();
-  const profiles = searchParams.get("profiles");
-  const [profileData, setProfileData] = useState<SanityDocument[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const profilesParam = searchParams.get("profiles");
+  const [profileData, setProfileData] = useState<SanityDocument[]>(
+    initialProfiles || []
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(!initialProfiles);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // If profiles were provided directly, don't fetch from URL
+    if (initialProfiles && initialProfiles.length > 0) {
+      setProfileData(initialProfiles);
+      setIsLoading(false);
+      return;
+    }
+
     async function fetchProfiles() {
       try {
         setIsLoading(true);
 
-        if (profiles) {
-          const profileUuids = profiles.split(",");
+        if (profilesParam) {
+          const profileUuids = profilesParam.split(",");
           const data = await getProfilesByUuids(profileUuids);
           setProfileData(data);
         }
@@ -41,7 +69,7 @@ export function ProfileComparison() {
     }
 
     fetchProfiles();
-  }, [profiles]);
+  }, [profilesParam, initialProfiles]);
 
   const handleCopyURLToClipboard = async () => {
     await navigator.clipboard.writeText(window.location.href);
@@ -54,7 +82,7 @@ export function ProfileComparison() {
       setLoading(true);
 
       const pdfBlob = await fetch(
-        `/api/generate-pdf?profiles=${profiles}`
+        `/api/generate-pdf?profiles=${profilesParam}`
       ).then((res) => res.blob());
 
       const blobUrl = URL.createObjectURL(pdfBlob);
@@ -75,8 +103,13 @@ export function ProfileComparison() {
     }
   };
 
+  if (!TableComponent) {
+    console.error("No TableComponent provided");
+    return <div>Error: No table component available</div>;
+  }
+
   return (
-    <div className="px-6">
+    <div className="px-6" {...rest}>
       {isLoading ? (
         <div>Loading profiles...</div>
       ) : error ? (
@@ -86,11 +119,10 @@ export function ProfileComparison() {
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex w-full items-center h-8 py-4 gap-2">
-            <h1>Working Genius</h1>
+            <h1>{ComponentTitle}</h1>
             <Button variant="outline" className="ml-auto" disabled>
               <GoChevronDown />
-
-              <span className=" hidden sm:inline">Working Genius</span>
+              <span className=" hidden sm:inline">{ComponentTitle}</span>
             </Button>
             <Button variant="outline" disabled>
               <GoMultiSelect />
@@ -102,7 +134,6 @@ export function ProfileComparison() {
               onClick={() => handleCopyURLToClipboard()}
             >
               <GoShare />
-              {/* <span className=" hidden sm:inline"></span> */}
             </Button>
             <Button
               variant="outline"
@@ -118,10 +149,12 @@ export function ProfileComparison() {
                   <GoDownload />
                 </>
               )}
-              {/* <span className=" hidden sm:inline"></span> */}
             </Button>
           </div>
-          <WorkingGeniusTable profiles={profileData} />
+          {React.createElement(TableComponent, {
+            profiles: profileData,
+            ...tableProps,
+          })}
         </div>
       )}
     </div>

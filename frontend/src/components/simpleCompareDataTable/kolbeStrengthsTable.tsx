@@ -17,16 +17,15 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import WidgetCogsSVG from "./WidgetCogsSimple";
 
-interface WorkingGeniusTableProps {
+interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
 }
 
-const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
+const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
 }) => {
-  // console.log(profiles);
+
   // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
     {
@@ -68,18 +67,22 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
       },
     },
     {
-      accessorKey: "widget",
-      header: "WIDGET",
-      cell: ({ row }) => (
-        <WidgetCogsSVG
-          widget={row.original.workingGenius?.widget}
-          _id={""}
-          _rev={""}
-          _type={""}
-          _createdAt={""}
-          _updatedAt={""}
-        />
-      ),
+      accessorKey: "kolbe",
+      header: "Kolbe",
+      cell: ({ row }) => {
+        const factFinder = row.original.kolbeStrengths.factFinder;
+        const followThru = row.original.kolbeStrengths.followThru;
+        const quickStart = row.original.kolbeStrengths.quickStart;
+        const implementer = row.original.kolbeStrengths.implementer;
+        return (
+          <div>
+            <div>{factFinder}</div>
+            <div>{factFinder}</div>
+            <div>{factFinder}</div>
+            <div>{factFinder}</div>
+          </div>
+        );
+      },
     },
   ];
 
@@ -133,4 +136,4 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   );
 };
 
-export default WorkingGeniusTable;
+export default KolbeStrengthsTable;

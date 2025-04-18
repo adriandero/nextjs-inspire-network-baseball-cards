@@ -42,13 +42,26 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/Breadcrumbs";
 import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
 }
 
+enum CompareType {
+  WORKING_GENIUS = "workinggenius",
+  KOLBE_STRENGTHS = "kolbestrengths",
+}
+
 const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
+
+  const [compareType, setCompareType] = useState<CompareType | null>(null);
 
   const [view, setView] = useState<ViewType>("teams");
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
@@ -254,6 +267,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     React.useState<VisibilityState>({});
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 9, // Set to 9 rows per page instead of default 10
+  });
+
   const table = useReactTable({
     data,
     columns,
@@ -265,10 +283,12 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     enableRowSelection: true,
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      pagination,
       rowSelection:
         view === "profiles"
           ? data.reduce((acc, profile, index) => {
@@ -418,12 +438,22 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const RenderSelectedProfiles = () => {
     const selectedProfilesData = getSelectedProfilesData();
 
+    const getCompareTypeDisplayName = (): string | null => {
+      if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
+      if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
+      return null;
+    };
+
+    const handleCompareTypeSelect = (type: CompareType) => {
+      setCompareType(type);
+    };
+
     const handleContinue = () => {
       if (selectedProfilesData.length > 0) {
         const profileIds = selectedProfilesData
           .map((profile) => profile.uuid)
           .join(",");
-        router.push(`/compare/workingGenius/?profiles=${profileIds}`);
+        router.push(`/compare/${compareType}/?profiles=${profileIds}`);
       }
     };
 
@@ -435,7 +465,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             <p className="text-dark3">Select profiles to compare</p>
           </div>
         ) : (
-          <div className="rounded-md border bg-light1 border rounded-md max-h-[699.5px] overflow-y-scroll">
+          <div className="rounded-md border bg-light1 border rounded-md max-h-[635.5px] overflow-y-scroll">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -479,11 +509,37 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             </Table>
           </div>
         )}
-        <div className="flex justify-end">
+        <div className="flex justify-end pt-4 gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <span>{getCompareTypeDisplayName() ?? "Compare Type"}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-fit">
+              <DropdownMenuItem
+                className="text-sm"
+                onClick={() =>
+                  handleCompareTypeSelect(CompareType.WORKING_GENIUS)
+                }
+              >
+                Working Genius
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-sm"
+                onClick={() =>
+                  handleCompareTypeSelect(CompareType.KOLBE_STRENGTHS)
+                }
+              >
+                Kolbe Strengths
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button
             variant="outline"
-            disabled={selectedProfilesData.length === 0}
-            className="mt-2 hover:border-primary"
+            disabled={selectedProfilesData.length === 0 || !compareType}
+            className="hover:border-primary"
+            size="sm"
             onClick={() => handleContinue()}
           >
             Continue <GoArrowRight size={24} />
@@ -510,11 +566,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   }
 
   return (
-    <div className="w-full flex gap-4 px-6">
-      <div className=" rounded-lg w-3/5">
+    <div className="w-full flex gap-4 px-6 md:flex-nowrap flex-wrap">
+      <div className=" rounded-lg md:w-3/5 w-full">
         <RenderTable />
       </div>
-      <div className="rounded-lg w-2/5">
+      <div className="rounded-lg md:w-2/5 w-full">
         <RenderSelectedProfiles />
       </div>
     </div>
