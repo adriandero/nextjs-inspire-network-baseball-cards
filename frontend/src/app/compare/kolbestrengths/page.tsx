@@ -31,7 +31,7 @@ export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
           TableComponent={KolbeStrengthsTable}
-          tableTitle="Working Genius"
+          tableTitle="Kolbe Strengths"
         />
       </Suspense>
     </div>

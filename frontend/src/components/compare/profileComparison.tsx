@@ -4,7 +4,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
-import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
 import { SanityDocument } from "next-sanity";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,14 +16,14 @@ import { Loader2 } from "lucide-react";
 
 // Define the props interface
 interface ProfileComparisonProps {
-  TableComponent?: React.ComponentType<any>;
-  tableTitle?: string;
+  TableComponent: React.ComponentType<any>;
+  tableTitle: string;
   tableProps?: Record<string, any>;
 }
 
 export function ProfileComparison({
-  TableComponent = WorkingGeniusTable,
-  tableTitle = "Working Genius",
+  TableComponent,
+  tableTitle,
   tableProps = {},
 }: ProfileComparisonProps) {
   const searchParams = useSearchParams();
@@ -86,6 +85,8 @@ export function ProfileComparison({
       setLoading(false);
     }
   };
+
+  console.log(profileData);
 
   return (
     <div className="px-6">

@@ -17,7 +17,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import WidgetCogsSVG from "../../../../public/WidgetCogsSimple";
 
 interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
@@ -67,9 +66,24 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
       },
     },
     {
-      accessorKey: "widget",
-      header: "WIDGET",
-      cell: ({ row }) => <div>Hello mello</div>,
+      accessorKey: "kolbe",
+      header: "Kolbe Strengths",
+      cell: ({ row }) => (
+        <div className="flex gap-2 justify-end">
+          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireRed font-bold">
+            {row.original.kolbeStrengths.factFinder ?? "*"}
+          </div>
+          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireBlue font-bold">
+            {row.original.kolbeStrengths.followThru ?? "*"}
+          </div>
+          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireGreen font-bold">
+            {row.original.kolbeStrengths.quickStart ?? "*"}
+          </div>
+          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireYellow font-bold">
+            {row.original.kolbeStrengths.implementer ?? "*"}
+          </div>
+        </div>
+      ),
     },
   ];
 
@@ -95,7 +109,14 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  className={
+                    header.id.includes("kolbe")
+                      ? "w-1/3 text-right"
+                      : "w-2/3 text-left"
+                  }
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -111,7 +132,10 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id} className="px-4">
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className=" py-2">
+                <TableCell
+                  key={cell.id}
+                  className={`py-2 ${cell.id.includes("kolbe") ? "text-right" : "text-left"}`}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
