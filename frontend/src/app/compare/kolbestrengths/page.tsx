@@ -1,16 +1,13 @@
 import NavBar from "@/components/NavBar";
-
+import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
+import { ProfileComparison } from "@/components/compare/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import TeamProfileSelector from "@/components/compare/teamProfileSelector";
+import { Suspense } from "react";
 
-export interface Team {
-  name: string;
-  slug: string;
-}
-
-export default async function ComparePage(): Promise<JSX.Element> {
+// Main page component with Suspense boundary
+export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
   const session = await auth0.getSession();
 
   if (!session) {
@@ -22,7 +19,7 @@ export default async function ComparePage(): Promise<JSX.Element> {
   const userProfileData = await getUserData(userData);
 
   return (
-    <div className="w-full h-screen max-w-screen-lg ">
+    <div className="w-full max-w-screen-lg">
       <NavBar
         userProfileData={userProfileData}
         _id={""}
@@ -31,11 +28,12 @@ export default async function ComparePage(): Promise<JSX.Element> {
         _createdAt={""}
         _updatedAt={""}
       />
-
-      <main className="flex flex-row justify-center">
-        <TeamProfileSelector userProfileData={userProfileData} />
-      </main>
-      <footer className="flex item-center p-8"></footer>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProfileComparison
+          TableComponent={KolbeStrengthsTable}
+          tableTitle="Kolbe Strengths"
+        />
+      </Suspense>
     </div>
   );
 }

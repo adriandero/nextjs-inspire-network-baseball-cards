@@ -6,6 +6,7 @@ export async function GET(req: Request) {
   // Get query parameters
   const url = new URL(req.url);
   const profiles = url.searchParams.get("profiles");
+  const segment = url.searchParams.get("segment");
 
   // Launch browser
   const browser = await puppeteer.launch({
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
   const page = await browser.newPage();
 
   await page.goto(
-    process.env.BASE_URL + `/compare/workingGenius/pdf?profiles=${profiles}`,
+    process.env.BASE_URL + `/compare/${segment}/pdf?profiles=${profiles}`,
     {
       waitUntil: "networkidle2",
     }
