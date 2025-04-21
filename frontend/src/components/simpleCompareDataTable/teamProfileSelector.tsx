@@ -423,7 +423,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         const profileIds = selectedProfilesData
           .map((profile) => profile.uuid)
           .join(",");
-        router.push(`/compare/workingGenius/?profiles=${profileIds}`);
+        router.push(`/compare/workinggenius/?profiles=${profileIds}`);
       }
     };
 
