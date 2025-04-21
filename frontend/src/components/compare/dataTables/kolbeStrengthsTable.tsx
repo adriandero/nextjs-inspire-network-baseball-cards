@@ -17,13 +17,13 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import WidgetCogsSVG from "./WidgetCogsSimple";
+import WidgetCogsSVG from "../../../../public/WidgetCogsSimple";
 
-interface WorkingGeniusTableProps {
+interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
 }
 
-const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
+const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
 }) => {
   // Define columns for the table
@@ -69,16 +69,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     {
       accessorKey: "widget",
       header: "WIDGET",
-      cell: ({ row }) => (
-        <WidgetCogsSVG
-          widget={row.original.workingGenius?.widget}
-          _id={""}
-          _rev={""}
-          _type={""}
-          _createdAt={""}
-          _updatedAt={""}
-        />
-      ),
+      cell: ({ row }) => <div>Hello mello</div>,
     },
   ];
 
@@ -132,4 +123,4 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   );
 };
 
-export default WorkingGeniusTable;
+export default KolbeStrengthsTable;

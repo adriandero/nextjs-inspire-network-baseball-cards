@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
-import WorkingGeniusTable from "@/components/simpleCompareDataTable/workingGeniusTable";
+import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
 import { SanityDocument } from "next-sanity";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +15,18 @@ import {
 } from "react-icons/go";
 import { Loader2 } from "lucide-react";
 
-export function ProfileComparison() {
+// Define the props interface
+interface ProfileComparisonProps {
+  TableComponent?: React.ComponentType<any>;
+  tableTitle?: string;
+  tableProps?: Record<string, any>;
+}
+
+export function ProfileComparison({
+  TableComponent = WorkingGeniusTable,
+  tableTitle = "Working Genius",
+  tableProps = {},
+}: ProfileComparisonProps) {
   const searchParams = useSearchParams();
   const profiles = searchParams.get("profiles");
   const [profileData, setProfileData] = useState<SanityDocument[]>([]);
@@ -86,11 +98,10 @@ export function ProfileComparison() {
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex w-full items-center h-8 py-4 gap-2">
-            <h1>Working Genius</h1>
+            <h1>{tableTitle}</h1>
             <Button variant="outline" className="ml-auto" disabled>
               <GoChevronDown />
-
-              <span className=" hidden sm:inline">Working Genius</span>
+              <span className="hidden sm:inline">{tableTitle}</span>
             </Button>
             <Button variant="outline" disabled>
               <GoMultiSelect />
@@ -102,7 +113,6 @@ export function ProfileComparison() {
               onClick={() => handleCopyURLToClipboard()}
             >
               <GoShare />
-              {/* <span className=" hidden sm:inline"></span> */}
             </Button>
             <Button
               variant="outline"
@@ -118,10 +128,9 @@ export function ProfileComparison() {
                   <GoDownload />
                 </>
               )}
-              {/* <span className=" hidden sm:inline"></span> */}
             </Button>
           </div>
-          <WorkingGeniusTable profiles={profileData} />
+          <TableComponent profiles={profileData} {...tableProps} />
         </div>
       )}
     </div>
