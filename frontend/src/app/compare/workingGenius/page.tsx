@@ -33,7 +33,7 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
           TableComponent={WorkingGeniusTable}
           tableTitle="Working Genius"
           tableSlug="workinggenius"
-        />{" "}
+        />
       </Suspense>
     </div>
   );
