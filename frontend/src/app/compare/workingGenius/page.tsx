@@ -32,6 +32,7 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
         <ProfileComparison
           TableComponent={WorkingGeniusTable}
           tableTitle="Working Genius"
+          tableSlug="workinggenius"
         />{" "}
       </Suspense>
     </div>

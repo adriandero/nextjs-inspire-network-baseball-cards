@@ -32,6 +32,7 @@ export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
         <ProfileComparison
           TableComponent={KolbeStrengthsTable}
           tableTitle="Kolbe Strengths"
+          tableSlug="kolbestrengths"
         />
       </Suspense>
     </div>

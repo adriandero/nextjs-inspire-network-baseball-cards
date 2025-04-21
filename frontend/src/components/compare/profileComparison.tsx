@@ -18,12 +18,14 @@ import { Loader2 } from "lucide-react";
 interface ProfileComparisonProps {
   TableComponent: React.ComponentType<any>;
   tableTitle: string;
+  tableSlug: string;
   tableProps?: Record<string, any>;
 }
 
 export function ProfileComparison({
   TableComponent,
   tableTitle,
+  tableSlug,
   tableProps = {},
 }: ProfileComparisonProps) {
   const searchParams = useSearchParams();
@@ -65,14 +67,15 @@ export function ProfileComparison({
       setLoading(true);
 
       const pdfBlob = await fetch(
-        `/api/generate-pdf?profiles=${profiles}`
+        `/api/generate-pdf?profiles=${profiles}&segment=${tableSlug}`
       ).then((res) => res.blob());
 
       const blobUrl = URL.createObjectURL(pdfBlob);
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `Compare-IN-Baseball-Cards.pdf`;
+      // You might also want to update the filename to reflect the segment
+      link.download = `Compare-IN-${tableTitle}-Cards.pdf`;
 
       document.body.appendChild(link);
       link.click();

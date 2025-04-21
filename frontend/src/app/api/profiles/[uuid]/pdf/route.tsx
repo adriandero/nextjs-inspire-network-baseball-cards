@@ -1,7 +1,7 @@
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
-export const maxDuration = 30;
+export const maxDuration = 50;
 
 export async function GET(
   req: Request,
