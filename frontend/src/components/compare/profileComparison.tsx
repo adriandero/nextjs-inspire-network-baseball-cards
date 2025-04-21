@@ -67,7 +67,7 @@ export function ProfileComparison({
       setLoading(true);
 
       const pdfBlob = await fetch(
-        `/api/generate-pdf?profiles=${profiles}&segment=${tableSlug}`
+        `/api/compare/${tableSlug}/pdf?profiles=${profiles}`
       ).then((res) => res.blob());
 
       const blobUrl = URL.createObjectURL(pdfBlob);

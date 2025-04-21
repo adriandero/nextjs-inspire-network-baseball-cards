@@ -3,11 +3,14 @@ import puppeteer from "puppeteer";
 
 export const maxDuration = 50;
 
-export async function GET(req: Request) {
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ type: string }> }
+) {
   // Get query parameters
+  const type = (await context.params).type;
   const url = new URL(req.url);
   const profiles = url.searchParams.get("profiles");
-  const segment = url.searchParams.get("segment");
 
   // Launch browser
   const browser = await puppeteer.launch({
@@ -20,7 +23,7 @@ export async function GET(req: Request) {
   const page = await browser.newPage();
 
   await page.goto(
-    process.env.BASE_URL + `/compare/${segment}/pdf?profiles=${profiles}`,
+    process.env.BASE_URL + `/compare/${type}/pdf?profiles=${profiles}`,
     {
       waitUntil: "networkidle2",
     }
