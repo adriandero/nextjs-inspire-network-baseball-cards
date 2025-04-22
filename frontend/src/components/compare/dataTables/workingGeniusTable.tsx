@@ -18,13 +18,16 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import WidgetCogsSVG from "../../../../public/WidgetCogsSimple";
+import { urlFor } from "@/lib/sanity/client";
 
 interface WorkingGeniusTableProps {
   profiles: SanityDocument[];
+  optimizedImages?: boolean;
 }
 
 const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   profiles,
+  optimizedImages = false,
 }) => {
   // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
@@ -41,7 +44,14 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                   <Image
                     src={
                       profile.profileImage
-                        ? profile.profileImage.asset.url
+                        ? optimizedImages
+                          ? urlFor(profile.profileImage.asset.url)
+                              .width(80)
+                              .height(80)
+                              .auto("format")
+                              .quality(75)
+                              .url()
+                          : profile.profileImage.asset.url
                         : "/defaultAvatar.png"
                     }
                     alt={profile.name}
