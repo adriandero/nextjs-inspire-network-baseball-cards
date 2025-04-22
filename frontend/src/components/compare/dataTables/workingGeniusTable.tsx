@@ -49,7 +49,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                               .width(80)
                               .height(80)
                               .auto("format")
-                              .quality(75)
+                              .quality(40)
                               .url()
                           : profile.profileImage.asset.url
                         : "/defaultAvatar.png"

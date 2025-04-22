@@ -48,7 +48,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                               .width(80)
                               .height(80)
                               .auto("format")
-                              .quality(75)
+                              .quality(40)
                               .url()
                           : profile.profileImage.asset.url
                         : "/defaultAvatar.png"
@@ -78,22 +78,25 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
     {
       accessorKey: "kolbe",
       header: "Kolbe Strengths",
-      cell: ({ row }) => (
-        <div className="flex gap-2 justify-end">
-          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireRed font-bold">
-            {row.original.kolbeStrengths.factFinder ?? "*"}
+      cell: ({ row }) => {
+        const profileKolbeStrengths = row.original.kolbeStrengths;
+        return (
+          <div className="flex gap-2 justify-end">
+            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireRed font-bold">
+              {profileKolbeStrengths.factFinder ?? "*"}
+            </div>
+            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireBlue font-bold">
+              {profileKolbeStrengths.followThru ?? "*"}
+            </div>
+            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireGreen font-bold">
+              {profileKolbeStrengths.quickStart ?? "*"}
+            </div>
+            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireYellow font-bold">
+              {profileKolbeStrengths.implementer ?? "*"}
+            </div>
           </div>
-          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireBlue font-bold">
-            {row.original.kolbeStrengths.followThru ?? "*"}
-          </div>
-          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireGreen font-bold">
-            {row.original.kolbeStrengths.quickStart ?? "*"}
-          </div>
-          <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireYellow font-bold">
-            {row.original.kolbeStrengths.implementer ?? "*"}
-          </div>
-        </div>
-      ),
+        );
+      },
     },
   ];
 
