@@ -6,6 +6,7 @@ import { SanityDocument } from "next-sanity";
 import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
 import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
+import { urlFor } from "@/lib/sanity/client";
 
 // Content component that uses useSearchParams
 function ProfileComparisonContent() {
@@ -57,13 +58,18 @@ function ProfileComparisonContent() {
         <span className="text-base ml-auto text-accent-foreground font-bold">
           {currentDate}
         </span>
-        <Image src={INTMLogo} width={70} height={150} alt="Company Logo" />
+        <Image
+          src={urlFor(INTMLogo).auto("format").quality(90).url()}
+          width={70}
+          height={150}
+          alt="Company Logo"
+        />
       </div>
 
       {profileData.length === 0 ? (
         <div>No profiles found. Please select profiles to compare.</div>
       ) : (
-        <KolbeStrengthsTable profiles={profileData} />
+        <KolbeStrengthsTable profiles={profileData} lowQuality={true} />
       )}
     </div>
   );

@@ -17,13 +17,16 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { urlFor } from "@/lib/sanity/client";
 
 interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
+  lowQuality?: boolean;
 }
 
 const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
+  lowQuality = false,
 }) => {
   // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
@@ -40,7 +43,12 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                   <Image
                     src={
                       profile.profileImage
-                        ? profile.profileImage.asset.url
+                        ? lowQuality
+                          ? urlFor(profile.profileImage.asset.url)
+                              .auto("format")
+                              .quality(90)
+                              .url()
+                          : profile.profileImage.asset.url
                         : "/defaultAvatar.png"
                     }
                     alt={profile.name}
