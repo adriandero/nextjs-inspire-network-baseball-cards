@@ -3,7 +3,7 @@ import NavBar from "@/components/NavBar";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import TeamProfileSelector from "@/components/compare/teamProfileSelector";
+import TeamProfileSelector from "@/components/compare/profileSelection/teamProfileSelector";
 
 export interface Team {
   name: string;
