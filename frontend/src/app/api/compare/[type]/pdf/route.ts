@@ -11,7 +11,22 @@ export async function GET(
   const type = (await context.params).type;
   const url = new URL(req.url);
   const profiles = url.searchParams.get("profiles");
+  const warmup = url.searchParams.get("warm") === "true";
 
+  if (warmup) {
+    // Initialize browser but don't generate full PDF
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    });
+
+    await browser.close();
+    return new Response(JSON.stringify({ status: "warmed" }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   // Launch browser
   const browser = await puppeteer.launch({
     args: chromium.args,

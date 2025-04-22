@@ -66,6 +66,15 @@ export function ProfileComparison({
     try {
       setLoading(true);
 
+      // First, send a warm-up request to initialize the serverless function
+      await fetch(
+        `/api/compare/${tableSlug}/pdf?profiles=${profiles?.split(",")[0]}&warm=true`
+      ).catch(() => console.log("Warm-up request completed"));
+
+      // Short delay to ensure the function is fully initialized
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Now send the actual PDF request
       const pdfBlob = await fetch(
         `/api/compare/${tableSlug}/pdf?profiles=${profiles}`
       ).then((res) => res.blob());
@@ -74,7 +83,6 @@ export function ProfileComparison({
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      // You might also want to update the filename to reflect the segment
       link.download = `Compare-IN-${tableTitle}-Cards.pdf`;
 
       document.body.appendChild(link);
