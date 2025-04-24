@@ -31,6 +31,10 @@ import {
   pointerWithin,
   defaultDropAnimationSideEffects,
   DropAnimation,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 import RenderTable from "@/components/compare/profileSelection/RenderTable"; // Import the TeamTable component
 import SelectedRenderTable, {
@@ -60,6 +64,26 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [activeDragProfile, setActiveDragProfile] =
     useState<SanityDocument | null>(null);
   const router = useRouter();
+
+  // Configure sensors with delay
+  const mouseSensor = useSensor(MouseSensor, {
+    // Add a delay of 300ms for mouse operations
+    activationConstraint: {
+      delay: 100,
+      tolerance: 5, // Allow slight movement during delay (5px)
+    },
+  });
+
+  const touchSensor = useSensor(TouchSensor, {
+    // Add a delay of 300ms for touch operations
+    activationConstraint: {
+      delay: 100,
+      tolerance: 5, // Allow slight movement during delay (5px)
+    },
+  });
+
+  // Combine the sensors
+  const sensors = useSensors(mouseSensor, touchSensor);
 
   // Custom drop animation
   const dropAnimation: DropAnimation = {
@@ -377,6 +401,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   return (
     <div className="w-full flex gap-4 px-6 md:flex-nowrap flex-wrap">
       <DndContext
+        sensors={sensors}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}

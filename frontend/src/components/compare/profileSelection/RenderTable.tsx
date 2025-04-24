@@ -47,31 +47,18 @@ const RenderRow: React.FC<any> = ({ row }) => {
     <TableRow
       key={row.id}
       data-state={row.getIsSelected() && "selected"}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      ref={setNodeRef}
+      style={{ opacity: isDragging ? 0.5 : 1, cursor: "grab" }}
+      {...attributes}
+      {...listeners}
+      data-draggable="true"
+      className="hover:bg-primary/5 relative group"
     >
-      {row.getVisibleCells().map((cell: any, cellIndex: any) => {
-        // First cell (checkbox) should not be draggable
-        if (cellIndex === 0) {
-          return (
-            <TableCell key={cell.id}>
-              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-            </TableCell>
-          );
-        }
-
-        // Other cells are draggable
-        return (
-          <TableCell
-            key={cell.id}
-            ref={setNodeRef}
-            style={{ cursor: "grab" }}
-            {...attributes}
-            {...listeners}
-          >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </TableCell>
-        );
-      })}
+      {row.getVisibleCells().map((cell: any) => (
+        <TableCell key={cell.id}>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
     </TableRow>
   );
 };
