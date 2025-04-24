@@ -74,9 +74,9 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
             {profile?.team && profile?.team[0]?.name}
           </h1>
         </div>
-      ) : profile?.team && profile?.team[0]?.company?.companyLogo?.asset.url ? (
+      ) : profile?.team && profile?.team[0]?.teamLogo?.asset.url ? (
         <Image
-          src={profile?.team[0]?.company?.companyLogo?.asset.url}
+          src={profile?.team[0]?.company?.teamLogo?.asset.url}
           width={180}
           height={180}
           alt="Company Logo"

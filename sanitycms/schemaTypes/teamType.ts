@@ -17,6 +17,10 @@ export const teamType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'teamLogo',
+      type: 'image',
+    }),
+    defineField({
       name: 'company',
       title: 'Company',
       type: 'reference',
