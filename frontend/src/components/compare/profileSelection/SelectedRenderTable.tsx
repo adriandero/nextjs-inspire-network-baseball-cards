@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/Table";
 import { SanityDocument } from "next-sanity";
+import { useDroppable } from "@dnd-kit/core";
 
 // Import the enum for compare types
 export enum CompareType {
@@ -24,19 +25,23 @@ export enum CompareType {
   KOLBE_STRENGTHS = "kolbestrengths",
 }
 
-interface SelectedRenderTableProps {
+interface SelectedProfilesTableProps {
   selectedProfilesData: SanityDocument[];
   compareType: CompareType | null;
   onCompareTypeSelect: (type: CompareType) => void;
   onContinue: () => void;
 }
 
-const SelectedRenderTable: React.FC<SelectedRenderTableProps> = ({
+const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
   selectedProfilesData,
   compareType,
   onCompareTypeSelect,
   onContinue,
 }) => {
+  const { setNodeRef: dropRef, isOver } = useDroppable({
+    id: "selected-profiles-droppable",
+  });
+
   const getCompareTypeDisplayName = (): string | null => {
     if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
     if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
@@ -47,11 +52,21 @@ const SelectedRenderTable: React.FC<SelectedRenderTableProps> = ({
     <div>
       <div className="flex w-full items-center h-[68px]"></div>
       {selectedProfilesData.length === 0 ? (
-        <div className="rounded-md flex justify-center border bg-light1 border rounded-md p-4">
-          <p className="text-dark3">Select profiles to compare</p>
+        <div
+          ref={dropRef}
+          className={`rounded-md flex justify-center border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md p-4 transition-colors min-h-[100px]`}
+        >
+          <p className="text-dark3 self-center">
+            {isOver
+              ? "Drop profile here"
+              : "Select or drag profiles to compare"}
+          </p>
         </div>
       ) : (
-        <div className="rounded-md border bg-light1 border rounded-md max-h-[635.5px] overflow-y-scroll">
+        <div
+          ref={dropRef}
+          className={`rounded-md border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md max-h-[635.5px] overflow-y-scroll transition-colors`}
+        >
           <Table>
             <TableHeader>
               <TableRow>

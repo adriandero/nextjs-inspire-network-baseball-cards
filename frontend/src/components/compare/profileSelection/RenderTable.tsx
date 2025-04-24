@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { RefObject } from "react";
 import {
   Table,
@@ -23,6 +24,7 @@ import {
   type Table as ReactTable,
 } from "@tanstack/react-table";
 import { SanityDocument } from "next-sanity";
+import { useDraggable } from "@dnd-kit/core";
 
 interface RenderTableProps {
   view: "teams" | "profiles";
@@ -33,6 +35,46 @@ interface RenderTableProps {
   handleTeamClick: (teamSlug: string, teamName: string) => void;
   columns: ColumnDef<SanityDocument>[];
 }
+
+const RenderRow: React.FC<any> = ({ row }) => {
+  const profile = row.original;
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: profile.uuid,
+    data: { profile },
+  });
+
+  return (
+    <TableRow
+      key={row.id}
+      data-state={row.getIsSelected() && "selected"}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
+      {row.getVisibleCells().map((cell: any, cellIndex: any) => {
+        // First cell (checkbox) should not be draggable
+        if (cellIndex === 0) {
+          return (
+            <TableCell key={cell.id}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </TableCell>
+          );
+        }
+
+        // Other cells are draggable
+        return (
+          <TableCell
+            key={cell.id}
+            ref={setNodeRef}
+            style={{ cursor: "grab" }}
+            {...attributes}
+            {...listeners}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        );
+      })}
+    </TableRow>
+  );
+};
 
 const RenderTable: React.FC<RenderTableProps> = ({
   view,
@@ -106,28 +148,36 @@ const RenderTable: React.FC<RenderTableProps> = ({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    if (view === "teams") {
-                      const team = row.original as SanityDocument;
-                      handleTeamClick(team.slug || team._id, team.name);
-                    }
-                  }}
-                  className={view === "teams" ? "cursor-pointer" : ""}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row) => {
+                // For profiles view, wrap with draggable functionality
+                if (view === "profiles") {
+                  return <RenderRow key={row.id} row={row} />;
+                }
+
+                // For teams view, keep original behavior
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() => {
+                      if (view === "teams") {
+                        const team = row.original as SanityDocument;
+                        handleTeamClick(team.slug || team._id, team.name);
+                      }
+                    }}
+                    className={view === "teams" ? "cursor-pointer" : ""}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell

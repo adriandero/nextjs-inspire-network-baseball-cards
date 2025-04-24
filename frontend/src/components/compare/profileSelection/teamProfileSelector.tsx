@@ -23,11 +23,20 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { DndContext } from "@dnd-kit/core";
-import RenderTable from "@/components/compare/profileSelection/RenderTable";
+import {
+  DndContext,
+  DragOverlay,
+  DragStartEvent,
+  DragEndEvent,
+  pointerWithin,
+  defaultDropAnimationSideEffects,
+  DropAnimation,
+} from "@dnd-kit/core";
+import RenderTable from "@/components/compare/profileSelection/RenderTable"; // Import the TeamTable component
 import SelectedRenderTable, {
   CompareType,
-} from "@/components/compare/profileSelection/SelectedRenderTable";
+} from "@/components/compare/profileSelection/SelectedRenderTable"; // Import the new component
+import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview"; // Import the drag overlay component
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
@@ -48,7 +57,20 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeDragProfile, setActiveDragProfile] =
+    useState<SanityDocument | null>(null);
   const router = useRouter();
+
+  // Custom drop animation
+  const dropAnimation: DropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: {
+        active: {
+          opacity: "0.5",
+        },
+      },
+    }),
+  };
 
   const fillAllUserTeams = useCallback(async () => {
     let profilesFromUserTeams: TeamsFromUser = { teams: [] };
@@ -287,7 +309,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     </div>
   );
 
-  // Handler functions for the SelectedRenderTable component
+  // Handler functions for the SelectedProfilesTable component
   const handleCompareTypeSelect = (type: CompareType) => {
     setCompareType(type);
   };
@@ -300,6 +322,40 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         .join(",");
       router.push(`/compare/${compareType}/?profiles=${profileIds}`);
     }
+  };
+
+  // Drag and drop handlers
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    // Set the currently dragged profile
+    if (active.data.current) {
+      setActiveDragProfile(active.data.current.profile);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    // Reset the drag state
+    setActiveDragProfile(null);
+
+    // If dropped on the droppable target
+    if (
+      over &&
+      over.id === "selected-profiles-droppable" &&
+      active.data.current
+    ) {
+      const profileId = active.id as string;
+
+      // Only add if not already selected
+      if (!selectedProfiles.includes(profileId)) {
+        setSelectedProfiles((prev) => [...prev, profileId]);
+      }
+    }
+  };
+
+  const handleDragCancel = () => {
+    setActiveDragProfile(null);
   };
 
   if (isLoading) {
@@ -320,7 +376,12 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   return (
     <div className="w-full flex gap-4 px-6 md:flex-nowrap flex-wrap">
-      <DndContext>
+      <DndContext
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+        collisionDetection={pointerWithin}
+      >
         <div className="rounded-lg md:w-3/5 w-full">
           <RenderTable
             view={view}
@@ -340,6 +401,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             onContinue={handleContinue}
           />
         </div>
+
+        {/* Drag Overlay */}
+        <DragOverlay dropAnimation={dropAnimation}>
+          {activeDragProfile ? (
+            <DraggedProfilePreview profile={activeDragProfile} />
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );
