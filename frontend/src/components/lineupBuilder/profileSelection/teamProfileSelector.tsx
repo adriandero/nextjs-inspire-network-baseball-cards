@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,7 +24,6 @@ import {
   getSortedRowModel,
   VisibilityState,
 } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
 import {
   DndContext,
   DragOverlay,
@@ -36,11 +37,22 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import RenderTable from "@/components/compare/profileSelection/RenderTable"; // Import the TeamTable component
-import SelectedRenderTable, {
-  CompareType,
-} from "@/components/compare/profileSelection/SelectedRenderTable"; // Import the new component
-import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview"; // Import the drag overlay component
+import { nanoid } from "nanoid";
+import RenderTable from "@/components/compare/profileSelection/RenderTable";
+import ProfileTablesManager, {
+  ProfileTable,
+} from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
+import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview";
+import { Button } from "@/components/ui/button";
+import { GoArrowRight, GoPlus } from "react-icons/go";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { CompareType } from "@/components/compare/profileSelection/SelectedRenderTable";
+import { useRouter } from "next/navigation";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
@@ -49,12 +61,20 @@ interface TeamProfileSelectorProps {
 const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
 
-  const [compareType, setCompareType] = useState<CompareType | null>(null);
-
   const [view, setView] = useState<ViewType>("teams");
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
-  const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
+  const router = useRouter();
+
+  // Profile tables for grouping
+  const [profileTables, setProfileTables] = useState<ProfileTable[]>([
+    {
+      id: nanoid(),
+      profiles: [],
+      name: "Default Group",
+    },
+  ]);
+
   const [teams, setTeams] = useState<SanityDocument[]>([]);
   const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam>({
     teams: {},
@@ -63,7 +83,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [error, setError] = useState<string | null>(null);
   const [activeDragProfile, setActiveDragProfile] =
     useState<SanityDocument | null>(null);
-  const router = useRouter();
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -145,16 +164,24 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   };
 
   const handleProfileCheck = (profileId: string): void => {
-    setSelectedProfiles((prev) => {
-      if (prev.includes(profileId)) {
-        return prev.filter((id) => id !== profileId);
-      } else {
-        return [...prev, profileId];
+    // Add/remove profile from the first table (for backward compatibility)
+    setProfileTables((prev) => {
+      const updatedTables = [...prev];
+      if (updatedTables.length > 0) {
+        const firstTable = updatedTables[0];
+        if (firstTable.profiles.includes(profileId)) {
+          firstTable.profiles = firstTable.profiles.filter(
+            (id: any) => id !== profileId
+          );
+        } else {
+          firstTable.profiles = [...firstTable.profiles, profileId];
+        }
       }
+      return updatedTables;
     });
   };
 
-  const getSelectedProfilesData = () => {
+  const getAllProfiles = (): SanityDocument[] => {
     if (!profilesByTeam?.teams) return [];
 
     const allProfiles: SanityDocument[] = [];
@@ -162,9 +189,46 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       allProfiles.push(...profiles);
     });
 
-    return allProfiles.filter((profile) =>
-      selectedProfiles.includes(profile.uuid)
-    );
+    return allProfiles;
+  };
+
+  // Table management functions
+  const handleAddTable = () => {
+    setProfileTables((prev) => [
+      ...prev,
+      {
+        id: nanoid(),
+        profiles: [],
+        name: `Group ${prev.length + 1}`,
+      },
+    ]);
+  };
+
+  const handleRemoveTable = (tableId: string) => {
+    setProfileTables((prev) => prev.filter((table) => table.id !== tableId));
+  };
+
+  const handleUpdateTableProfiles = (tableId: string, profiles: string[]) => {
+    setProfileTables((prev) => {
+      return prev.map((table) => {
+        if (table.id === tableId) {
+          return { ...table, profiles };
+        }
+        return table;
+      });
+    });
+  };
+
+  const handleCreateTableWithProfile = (profileId: string) => {
+    // Create a new table with the dropped profile
+    const newTable: ProfileTable = {
+      id: nanoid(),
+      profiles: [profileId],
+      name: `Group ${profileTables.length + 1}`,
+    };
+
+    // Add the new table
+    setProfileTables((prev) => [...prev, newTable]);
   };
 
   // Table column definitions for teams
@@ -186,9 +250,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         <Checkbox
           checked={
             table.getFilteredRowModel().rows.length > 0 &&
-            table
-              .getFilteredRowModel()
-              .rows.every((row) => selectedProfiles.includes(row.original.uuid))
+            table.getFilteredRowModel().rows.every((row) => {
+              // Check if this profile is in any table
+              const profileId = row.original.uuid;
+              return profileTables.some((table) =>
+                table.profiles.includes(profileId)
+              );
+            })
           }
           onCheckedChange={(value) => {
             const allProfileIds = table
@@ -196,21 +264,35 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
               .rows.map((row) => row.original.uuid);
 
             if (value) {
-              // Add all filtered profiles that aren't already selected
-              setSelectedProfiles((prev) => {
-                const newSelection = [...prev];
-                allProfileIds.forEach((id) => {
-                  if (!newSelection.includes(id)) {
-                    newSelection.push(id);
-                  }
-                });
-                return newSelection;
+              // Add all filtered profiles to the first table
+              setProfileTables((prev) => {
+                const updatedTables = [...prev];
+                if (updatedTables.length > 0) {
+                  const firstTable = { ...updatedTables[0] };
+
+                  // Add all filtered profiles that aren't already selected
+                  const newProfiles = [...firstTable.profiles];
+                  allProfileIds.forEach((id) => {
+                    if (!newProfiles.includes(id)) {
+                      newProfiles.push(id);
+                    }
+                  });
+
+                  firstTable.profiles = newProfiles;
+                  updatedTables[0] = firstTable;
+                }
+                return updatedTables;
               });
             } else {
-              // Remove all filtered profiles
-              setSelectedProfiles((prev) =>
-                prev.filter((id) => !allProfileIds.includes(id))
-              );
+              // Remove all filtered profiles from all tables
+              setProfileTables((prev) => {
+                return prev.map((table) => ({
+                  ...table,
+                  profiles: table.profiles.filter(
+                    (id: any) => !allProfileIds.includes(id)
+                  ),
+                }));
+              });
             }
           }}
           aria-label="Select all"
@@ -218,7 +300,9 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       ),
       cell: ({ row }) => (
         <Checkbox
-          checked={selectedProfiles.includes(row.original.uuid)}
+          checked={profileTables.some((table) =>
+            table.profiles.includes(row.original.uuid)
+          )}
           onCheckedChange={() => handleProfileCheck(row.original.uuid)}
           aria-label="Select row"
           onClick={(e) => e.stopPropagation()}
@@ -283,7 +367,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 9, // Set to 9 rows per page instead of default 10
+    pageSize: 9,
   });
 
   const table = useReactTable({
@@ -306,7 +390,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       rowSelection:
         view === "profiles"
           ? data.reduce((acc, profile, index) => {
-              acc[index] = selectedProfiles.includes(profile.uuid);
+              // Check if profile is in any table
+              const isSelected = profileTables.some((table) =>
+                table.profiles.includes(profile.uuid)
+              );
+              acc[index] = isSelected;
               return acc;
             }, {} as RowSelectionState)
           : {},
@@ -325,21 +413,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     </div>
   );
 
-  // Handler functions for the SelectedProfilesTable component
-  const handleCompareTypeSelect = (type: CompareType) => {
-    setCompareType(type);
-  };
-
-  const handleContinue = () => {
-    const selectedProfilesData = getSelectedProfilesData();
-    if (selectedProfilesData.length > 0 && compareType) {
-      const profileIds = selectedProfilesData
-        .map((profile) => profile.uuid)
-        .join(",");
-      router.push(`/compare/${compareType}/?profiles=${profileIds}`);
-    }
-  };
-
   // Drag and drop handlers
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -355,19 +428,62 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     // Reset the drag state
     setActiveDragProfile(null);
 
-    // If dropped on the droppable target
-    if (
-      over &&
-      over.id === "selected-profiles-droppable" &&
-      active.data.current
-    ) {
+    // If dropped on a droppable target
+    if (over && active.data.current) {
       const profileId = active.id as string;
+      const targetId = over.id as string;
 
-      // Only add if not already selected
-      if (!selectedProfiles.includes(profileId)) {
-        setSelectedProfiles((prev) => [...prev, profileId]);
+      // Check if it's the new group creator
+      if (targetId === "new-group-creator") {
+        handleCreateTableWithProfile(profileId);
+      }
+      // Check if it's one of our table dropzones
+      else if (targetId.startsWith("table-")) {
+        const tableId = targetId.replace("table-", "");
+
+        // Update the target table
+        setProfileTables((prev) => {
+          return prev.map((table) => {
+            if (table.id === tableId) {
+              // Only add if not already in this table
+              if (!table.profiles.includes(profileId)) {
+                return {
+                  ...table,
+                  profiles: [...table.profiles, profileId],
+                };
+              }
+            }
+            return table;
+          });
+        });
       }
     }
+  };
+  const [compareType, setCompareType] = useState<CompareType | null>(null);
+
+  const handleCompareTypeSelect = (type: CompareType) => {
+    setCompareType(type);
+  };
+
+  const getCompareTypeDisplayName = (): string | null => {
+    if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
+    if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
+    return null;
+  };
+
+  function encodeProfileTablesToURL(profileTables: ProfileTable[]) {
+    return profileTables
+      .map((group) => {
+        const profileUuids = group.profiles.join(",");
+        return `${encodeURIComponent(group.name)}:${group.id}:${profileUuids}`;
+      })
+      .join(";");
+  }
+
+  const handleContinue = () => {
+    // const urlParam = encodeProfileTablesToURL(profileTables);
+    // router.push(`/lineupbuilder/${compareType}/?profiles=${urlParam}`);
+    console.log("Soon to be implemented");
   };
 
   const handleDragCancel = () => {
@@ -411,12 +527,61 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">
-          <SelectedRenderTable
-            selectedProfilesData={getSelectedProfilesData()}
-            compareType={compareType}
-            onCompareTypeSelect={handleCompareTypeSelect}
-            onContinue={handleContinue}
+          <div className="flex w-full items-center h-[68px]"> Groups</div>
+
+          <ProfileTablesManager
+            profileTables={profileTables}
+            onRemoveTable={handleRemoveTable}
+            onUpdateTableProfiles={handleUpdateTableProfiles}
+            onCreateTableWithProfile={handleCreateTableWithProfile}
+            allProfiles={getAllProfiles()}
           />
+
+          <div className="flex justify-end pt-4 gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="self-center mr-auto"
+              onClick={() => handleAddTable()}
+            >
+              <GoPlus size={32} />
+              Add Group
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <span>{getCompareTypeDisplayName() ?? "Compare Type"}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-fit">
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() =>
+                    handleCompareTypeSelect(CompareType.WORKING_GENIUS)
+                  }
+                >
+                  Working Genius
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() =>
+                    handleCompareTypeSelect(CompareType.KOLBE_STRENGTHS)
+                  }
+                >
+                  Kolbe Strengths
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="outline"
+              // disabled={getSelectedProfilesData().length === 0 || !compareType}
+              className="hover:border-primary"
+              size="sm"
+              onClick={handleContinue}
+            >
+              Continue <GoArrowRight size={24} />
+            </Button>
+          </div>
         </div>
 
         {/* Drag Overlay */}

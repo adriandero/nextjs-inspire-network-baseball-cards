@@ -62,7 +62,10 @@ export default function ProfileNavBar({
         />
       </Link>
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
-        <Link href={`#`} className="opacity-50 disabled">
+        <Link
+          href={`/lineupbuilder`}
+          className="hover:text-primary duration-200"
+        >
           Lineup Builder
         </Link>
         <Link href={`/compare`} className="hover:text-primary duration-200">
