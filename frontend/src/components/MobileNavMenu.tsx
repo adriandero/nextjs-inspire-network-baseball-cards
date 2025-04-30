@@ -119,8 +119,8 @@ export default function MobileNavMenu({
                 Compare
               </Link>
               <Link
-                href="#"
-                className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors"
+                href="/lineupbuilder"
+                className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 prefetch={false}
               >
                 Lineup Builder
