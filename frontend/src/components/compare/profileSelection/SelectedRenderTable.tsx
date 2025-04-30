@@ -65,7 +65,7 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
       ) : (
         <div
           ref={dropRef}
-          className={`rounded-md border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md max-h-[635.5px] overflow-y-scroll transition-colors`}
+          className={`rounded-md border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md max-h-[635.5px] overflow-y-auto transition-colors`}
         >
           <Table>
             <TableHeader>
