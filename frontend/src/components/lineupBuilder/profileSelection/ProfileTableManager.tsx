@@ -23,6 +23,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   profileTables,
   onRemoveTable,
   onUpdateTableProfiles,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCreateTableWithProfile,
   allProfiles,
 }) => {

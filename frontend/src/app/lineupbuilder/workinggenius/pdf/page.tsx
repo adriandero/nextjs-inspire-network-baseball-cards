@@ -17,6 +17,7 @@ interface CompleteProfileTable {
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const profiles = searchParams.get("profiles");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [profileTables, setProfileTables] = useState<ProfileTable[]>([]);
   const [profileData, setProfileData] = useState<CompleteProfileTable[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -29,8 +30,6 @@ function ProfileComparisonContent() {
         if (profiles) {
           const tables = decodeURLToProfileTables(profiles);
           setProfileTables(tables);
-
-          console.log(searchParams);
 
           const completeTablesPromises = tables.map(async (group) => {
             if (group.profiles.length > 0) {
