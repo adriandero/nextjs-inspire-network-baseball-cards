@@ -14,14 +14,14 @@ export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
       isameriprise,
       "company": company->{
         ...,
-        companyLogo {
-          asset->{
-            url, 
-            metadata {
-              dimensions {
-                width,
-                height
-              }
+      },
+      teamLogo {
+        asset->{
+          url, 
+          metadata {
+            dimensions {
+              width,
+              height
             }
           }
         }
@@ -50,14 +50,14 @@ export async function getProfilesByUuids(
       isameriprise,
       "company": company->{
         ...,
-        companyLogo {
-          asset->{
-            url, 
-            metadata {
-              dimensions {
-                width,
-                height
-              }
+      },
+      teamLogo {
+        asset->{
+          url, 
+          metadata {
+            dimensions {
+              width,
+              height
             }
           }
         }

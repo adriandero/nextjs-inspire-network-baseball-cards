@@ -25,7 +25,7 @@ export default function PDFBanner({
           transform: translateZ(0);
         }
         
-        .company-logo {
+        .team-logo {
           max-width: 150px !important;
           max-height: 150px !important;
         }
@@ -48,14 +48,12 @@ export default function PDFBanner({
     }
   }, [profilesTeamName]);
 
-  // Optimize image URL to request a smaller version from Sanity
   const optimizedProfileImageUrl = profile.profileImage
-    ? urlFor(profile.profileImage).auto("format").quality(80).url() //.width(96).height(96)
+    ? urlFor(profile.profileImage).auto("format").quality(80).url()
     : "/defaultAvatar.png";
 
-  // Optimize company logo URL if it exists
-  const companyLogoUrl = profile?.team[0]?.company?.companyLogo
-    ? urlFor(profile?.team[0]?.company?.companyLogo?.asset.url)
+  const teamLogoUrl = profile?.team[0]?.teamLogo
+    ? urlFor(profile?.team[0]?.teamLogo?.asset.url)
         .auto("format")
         .quality(90)
         .url()
@@ -93,8 +91,8 @@ export default function PDFBanner({
             src={"/ameriprise-compass.png"}
             width={90}
             height={90}
-            alt="Company Logo"
-            className=" company-logo rounded-md max-h-10 max-w-10 w-10 h-10"
+            alt="Team Logo"
+            className=" team-logo rounded-md max-h-10 max-w-10 w-10 h-10"
           />
           <h1
             ref={h1Ref}
@@ -105,13 +103,13 @@ export default function PDFBanner({
             {profile?.team && profilesTeamName}
           </h1>
         </div>
-      ) : companyLogoUrl ? (
+      ) : teamLogoUrl ? (
         <img
-          src={companyLogoUrl}
+          src={teamLogoUrl}
           width={110}
           height={110}
-          alt="Company Logo"
-          className="ml-auto company-logo rounded-lg"
+          alt="Team Logo"
+          className="ml-auto team-logo rounded-lg"
           style={{
             maxWidth: "250px",
             maxHeight: "150px",
