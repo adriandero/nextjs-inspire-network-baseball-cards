@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {CreateCompanyField} from '../customFields/CreateCompanyField'
 
 export const teamType = defineType({
   name: 'team',
@@ -25,6 +26,9 @@ export const teamType = defineType({
       title: 'Company',
       type: 'reference',
       to: [{type: 'company'}],
+      components: {
+        field: CreateCompanyField,
+      },
     }),
     defineField({
       name: 'isameriprise',
