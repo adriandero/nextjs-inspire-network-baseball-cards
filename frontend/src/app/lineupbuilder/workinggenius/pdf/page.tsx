@@ -3,38 +3,34 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
-import { SanityDocument } from "next-sanity";
 import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
 import { ProfileTable } from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
-
-interface CompleteProfileTable {
-  id: string;
-  name: string;
-  profiles: SanityDocument[];
-}
+import { CompleteProfileTable } from "@/components/lineupBuilder/profileComparison";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
-  const profiles = searchParams.get("profiles");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [profileTables, setProfileTables] = useState<ProfileTable[]>([]);
-  const [profileData, setProfileData] = useState<CompleteProfileTable[]>([]);
+  const groupedProfiles = searchParams.get("groupedProfiles");
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const [profileTables, setProfileTables] = useState<ProfileTable[]>([]);
+  const [completeProfileTables, setCompleteProfileTables] = useState<
+    CompleteProfileTable[]
+  >([]);
   useEffect(() => {
     async function fetchProfiles() {
       try {
         setIsLoading(true);
 
-        if (profiles) {
-          const tables = decodeURLToProfileTables(profiles);
+        if (groupedProfiles) {
+          // First, parse the URL to get the ProfileTable structure
+          const tables = decodeURLToProfileTables(groupedProfiles);
           setProfileTables(tables);
 
+          // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
+            // Only fetch if there are profiles in this group
             if (group.profiles.length > 0) {
               const profileObjects = await getProfilesByUuids(group.profiles);
-
               return {
                 id: group.id,
                 name: group.name,
@@ -42,6 +38,7 @@ function ProfileComparisonContent() {
               };
             }
 
+            // Return group with empty profiles array if no profiles
             return {
               id: group.id,
               name: group.name,
@@ -49,8 +46,9 @@ function ProfileComparisonContent() {
             };
           });
 
+          // Wait for all groups to be processed
           const completeTables = await Promise.all(completeTablesPromises);
-          setProfileData(completeTables);
+          setCompleteProfileTables(completeTables);
         }
 
         setIsLoading(false);
@@ -70,13 +68,14 @@ function ProfileComparisonContent() {
     }, 100);
 
     return () => clearInterval(checkIfReady);
-  }, [profiles, isLoading]);
+  }, [groupedProfiles]);
 
   function decodeURLToProfileTables(paramString: string): ProfileTable[] {
     if (!paramString) return [];
 
     return paramString.split(";").map((groupString) => {
       const [nameEncoded, id, profilesString] = groupString.split(":");
+      console.log(nameEncoded, id, profilesString);
       const name = decodeURIComponent(nameEncoded);
       const profiles = profilesString ? profilesString.split(",") : [];
 
@@ -96,25 +95,32 @@ function ProfileComparisonContent() {
   return (
     <div className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]">
       <div className="flex items-center text-center gap-4">
-        <h1 className="text-2xl font-bold">Compare - Working Genius</h1>
+        <h1 className="text-2xl font-bold">Working Genius</h1>
         <span className="text-base ml-auto text-accent-foreground font-bold">
           {currentDate}
         </span>
         <Image src={INTMLogo} width={70} height={150} alt="Company Logo" />
       </div>
 
-      {profileData.length === 0 ? (
-        <div>No profiles found hahha. Please select profiles to compare.</div>
+      {isLoading ? (
+        <div>Loading profiles...</div>
+      ) : completeProfileTables.length === 0 ||
+        completeProfileTables.every((table) => table.profiles.length === 0) ? (
+        <div>No profiles found. Please select profiles to compare.</div>
       ) : (
-        profileData.map((profilesTable, index) => {
-          return (
+        // Map through all tables instead of just accessing index 0
+        completeProfileTables.map((table, index) => (
+          <div key={table.id} className="flex flex-col gap-4 ">
+            {/* Display the group name if there are multiple groups */}
+            {completeProfileTables.length > 1 && (
+              <h2 className="text-base font-semibold">{table.name}</h2>
+            )}
             <WorkingGeniusTable
-              key={index}
-              profiles={profilesTable.profiles}
+              profiles={table.profiles}
               optimizedImages={true}
             />
-          );
-        })
+          </div>
+        ))
       )}
     </div>
   );

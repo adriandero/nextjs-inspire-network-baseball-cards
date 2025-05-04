@@ -481,14 +481,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   }
 
   const handleContinue = () => {
-    // const urlParam = encodeProfileTablesToURL(profileTables);
-    // router.push(`/lineupbuilder/${compareType}/?profiles=${urlParam}`);
-    console.log("Soon to be implemented");
+    const urlParam = encodeProfileTablesToURL(profileTables);
+    router.push(`/lineupbuilder/${compareType}/?groupedProfiles=${urlParam}`);
   };
 
   const handleDragCancel = () => {
     setActiveDragProfile(null);
-  };
+  };  
 
   if (isLoading) {
     return (

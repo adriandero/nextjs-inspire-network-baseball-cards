@@ -1,6 +1,6 @@
 import NavBar from "@/components/NavBar";
 import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
-import { ProfileComparison } from "@/components/compare/profileComparison";
+import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
