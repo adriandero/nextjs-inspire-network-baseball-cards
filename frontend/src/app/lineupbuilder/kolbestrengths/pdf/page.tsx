@@ -94,7 +94,7 @@ function ProfileComparisonContent() {
   return (
     <div className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]">
       <div className="flex items-center text-center gap-4">
-        <h1 className="text-2xl font-bold">Working Genius</h1>
+        <h1 className="text-2xl font-bold">Kolbe Strengths</h1>
         <span className="text-base ml-auto text-accent-foreground font-bold">
           {currentDate}
         </span>
@@ -133,7 +133,7 @@ function PDFProfileComparison() {
   );
 }
 
-export default function WorkingGeniusPDFPage() {
+export default function KolbeStrengthsPDFPage() {
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
       <PDFProfileComparison />
