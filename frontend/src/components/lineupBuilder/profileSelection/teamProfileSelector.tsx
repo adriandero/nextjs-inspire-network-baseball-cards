@@ -487,7 +487,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const handleDragCancel = () => {
     setActiveDragProfile(null);
-  };  
+  };
 
   if (isLoading) {
     return (
@@ -544,7 +544,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
               onClick={() => handleAddTable()}
             >
               <GoPlus size={32} />
-              Add Group
+              <span className="hidden lg:inline"> Add Group</span>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

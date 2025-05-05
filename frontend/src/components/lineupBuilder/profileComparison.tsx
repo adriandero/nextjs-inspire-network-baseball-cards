@@ -45,7 +45,6 @@ export function ProfileComparison({
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
-  const [profileTables, setProfileTables] = useState<ProfileTable[]>([]);
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
   >([]);
@@ -59,7 +58,6 @@ export function ProfileComparison({
         if (groupedProfiles) {
           // First, parse the URL to get the ProfileTable structure
           const tables = decodeURLToProfileTables(groupedProfiles);
-          setProfileTables(tables);
           // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
             // Only fetch if there are profiles in this group
@@ -194,7 +192,7 @@ export function ProfileComparison({
             </Button>
           </div>
 
-          {completeProfileTables.map((table, index) => (
+          {completeProfileTables.map((table) => (
             <div key={table.id} className="flex flex-col gap-4">
               <h2 className="text-base font-semibold">{table.name}</h2>
               <TableComponent profiles={table.profiles} {...tableProps} />

@@ -12,7 +12,6 @@ function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [profileTables, setProfileTables] = useState<ProfileTable[]>([]);
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
   >([]);
@@ -24,7 +23,6 @@ function ProfileComparisonContent() {
         if (groupedProfiles) {
           // First, parse the URL to get the ProfileTable structure
           const tables = decodeURLToProfileTables(groupedProfiles);
-          setProfileTables(tables);
 
           // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
@@ -68,6 +66,7 @@ function ProfileComparisonContent() {
     }, 100);
 
     return () => clearInterval(checkIfReady);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupedProfiles]);
 
   function decodeURLToProfileTables(paramString: string): ProfileTable[] {
@@ -109,7 +108,7 @@ function ProfileComparisonContent() {
         <div>No profiles found. Please select profiles to compare.</div>
       ) : (
         // Map through all tables instead of just accessing index 0
-        completeProfileTables.map((table, index) => (
+        completeProfileTables.map((table) => (
           <div key={table.id} className="flex flex-col gap-4 ">
             {/* Display the group name if there are multiple groups */}
             {completeProfileTables.length > 1 && (
