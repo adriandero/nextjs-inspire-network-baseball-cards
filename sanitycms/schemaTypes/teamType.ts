@@ -36,5 +36,17 @@ export const teamType = defineType({
       type: 'boolean',
       initialValue: false,
     }),
+    defineField({
+      name: 'groups',
+      title: 'Groups',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Client', value: 'client'},
+          {title: 'EGF', value: 'egf'},
+          {title: 'Prospect', value: 'prospect'},
+        ],
+      },
+    }),
   ],
 })
