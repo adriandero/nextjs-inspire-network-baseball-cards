@@ -1,5 +1,5 @@
 import NavBar from "@/components/NavBar";
-import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
+import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
 import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
@@ -30,9 +30,9 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
       />
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
-          TableComponent={WorkingGeniusTable}
-          tableTitle="Working Genius"
-          tableSlug="workinggenius"
+          TableComponent={KolbeStrengthsTable}
+          tableTitle="Kolbe Strengths"
+          tableSlug="kolbestrengths"
         />
       </Suspense>
     </div>

@@ -2,11 +2,11 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
-import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
 import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
 import { ProfileTable } from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
 import { CompleteProfileTable } from "@/components/lineupBuilder/profileComparison";
+import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
@@ -114,7 +114,7 @@ function ProfileComparisonContent() {
             {completeProfileTables.length > 1 && (
               <h2 className="text-base font-semibold">{table.name}</h2>
             )}
-            <WorkingGeniusTable
+            <KolbeStrengthsTable
               profiles={table.profiles}
               optimizedImages={true}
             />

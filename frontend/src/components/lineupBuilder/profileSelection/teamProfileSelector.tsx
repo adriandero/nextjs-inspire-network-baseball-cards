@@ -481,9 +481,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   }
 
   const handleContinue = () => {
-    // const urlParam = encodeProfileTablesToURL(profileTables);
-    // router.push(`/lineupbuilder/${compareType}/?profiles=${urlParam}`);
-    console.log("Soon to be implemented");
+    const urlParam = encodeProfileTablesToURL(profileTables);
+    router.push(`/lineupbuilder/${compareType}/?groupedProfiles=${urlParam}`);
   };
 
   const handleDragCancel = () => {
@@ -545,7 +544,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
               onClick={() => handleAddTable()}
             >
               <GoPlus size={32} />
-              Add Group
+              <span className="hidden lg:inline"> Add Group</span>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
