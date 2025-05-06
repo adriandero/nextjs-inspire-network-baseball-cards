@@ -468,6 +468,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const getCompareTypeDisplayName = (): string | null => {
     if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
     if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
+    if (compareType === CompareType.KOLBE_GRAPH) return "Kolbe Graph";
+
     return null;
   };
 
@@ -568,6 +570,14 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                   }
                 >
                   Kolbe Strengths
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() =>
+                    handleCompareTypeSelect(CompareType.KOLBE_GRAPH)
+                  }
+                >
+                  Kolbe Graph
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

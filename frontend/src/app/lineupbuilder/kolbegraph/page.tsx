@@ -1,5 +1,5 @@
 import NavBar from "@/components/NavBar";
-import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
+import KolbeGraph from "@/components/lineupBuilder/dataTables/kolbeGraph";
 import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 // Main page component with Suspense boundary
-export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
+export default async function KolbeGraphPage(): Promise<JSX.Element> {
   const session = await auth0.getSession();
 
   if (!session) {
@@ -30,7 +30,7 @@ export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
       />
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
-          TableComponent={KolbeStrengthsTable}
+          TableComponent={KolbeGraph}
           tableTitle="Kolbe Strengths"
           tableSlug="kolbestrengths"
         />
