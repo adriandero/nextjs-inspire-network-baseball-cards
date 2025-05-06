@@ -18,6 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { urlFor } from "@/lib/sanity/client";
+import { Progress } from "@/components/ui/Progress";
 
 interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
@@ -81,18 +82,57 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
       cell: ({ row }) => {
         const profileKolbeStrengths = row.original.kolbeStrengths;
         return (
-          <div className="flex gap-2">
-            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireRed font-bold">
+          <div className="flex ">
+            <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
               {profileKolbeStrengths.factFinder ?? "*"}
             </div>
-            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireBlue font-bold">
+            <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
               {profileKolbeStrengths.followThru ?? "*"}
             </div>
-            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireGreen font-bold">
+            <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
               {profileKolbeStrengths.quickStart ?? "*"}
             </div>
-            <div className="w-7 h-7 text-base rounded-lg flex items-center justify-center border border-2 border-inspireYellow font-bold">
+            <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
               {profileKolbeStrengths.implementer ?? "*"}
+            </div>
+
+            <div className="w-6 h-6 items-center justify-between flex flex-col transform -rotate-90 ml-2">
+              <Progress
+                value={
+                  profileKolbeStrengths.factFinder
+                    ? profileKolbeStrengths.factFinder * 10
+                    : 0
+                }
+                color="bg-inspireRed"
+                className="h-1 rounded-[1px]"
+              />
+              <Progress
+                value={
+                  profileKolbeStrengths.followThru
+                    ? profileKolbeStrengths.followThru * 10
+                    : 0
+                }
+                color="bg-inspireBlue"
+                className="h-1 rounded-[1px]"
+              />{" "}
+              <Progress
+                value={
+                  profileKolbeStrengths.quickStart
+                    ? profileKolbeStrengths.quickStart * 10
+                    : 0
+                }
+                color="bg-inspireGreen"
+                className="h-1 rounded-[1px]"
+              />{" "}
+              <Progress
+                value={
+                  profileKolbeStrengths.implementer
+                    ? profileKolbeStrengths.implementer * 10
+                    : 0
+                }
+                color="bg-inspireYellow"
+                className="h-1 rounded-[1px]"
+              />
             </div>
           </div>
         );
