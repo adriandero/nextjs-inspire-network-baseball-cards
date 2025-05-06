@@ -14,6 +14,7 @@ export default function WorkingGeniusCard({
   type workingGeniusKey = keyof typeof workingGeniusJson;
 
   const workingGenius: workingGeniusKey = profile.workingGenius?.title;
+
   return (
     <ComponentShell>
       <div className="flex flex-row">
@@ -27,9 +28,9 @@ export default function WorkingGeniusCard({
         <div className="flex flex-col w-fit h-fit items-start">
           <h2 className="text-xl font-bold">Working Genius</h2>
           <h3 className="font-bold mt-2">
-            {workingGeniusJson[workingGenius].title}
+            {workingGeniusJson[workingGenius]?.title}
           </h3>
-          <p className="">{workingGeniusJson[workingGenius].description}</p>
+          <p className="">{workingGeniusJson[workingGenius]?.description}</p>
         </div>
       </div>
       <div className="h-px w-full bg-light3 my-6"></div>
