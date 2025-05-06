@@ -23,6 +23,7 @@ import { useDroppable } from "@dnd-kit/core";
 export enum CompareType {
   WORKING_GENIUS = "workinggenius",
   KOLBE_STRENGTHS = "kolbestrengths",
+  KOLBE_GRAPH = "kolbegraph",
 }
 
 interface SelectedProfilesTableProps {
@@ -45,6 +46,8 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
   const getCompareTypeDisplayName = (): string | null => {
     if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
     if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
+    if (compareType === CompareType.KOLBE_GRAPH) return "Kolbe Graph";
+
     return null;
   };
 
@@ -129,6 +132,12 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
               onClick={() => onCompareTypeSelect(CompareType.KOLBE_STRENGTHS)}
             >
               Kolbe Strengths
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-sm"
+              onClick={() => onCompareTypeSelect(CompareType.KOLBE_GRAPH)}
+            >
+              Kolbe Graph
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
