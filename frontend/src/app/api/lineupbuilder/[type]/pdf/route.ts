@@ -10,7 +10,7 @@ export async function GET(
   // Get query parameters
   const type = (await context.params).type;
   const url = new URL(req.url);
-  const profiles = url.searchParams.get("groupedProfiles");
+  const groupedProfiles = url.searchParams.get("groupedProfiles");
   const warmup = url.searchParams.get("warm") === "true";
 
   if (warmup) {
@@ -38,7 +38,8 @@ export async function GET(
   const page = await browser.newPage();
 
   await page.goto(
-    process.env.BASE_URL + `/lineupbuilder/${type}/pdf?groupedProfiles=${profiles}`,
+    process.env.BASE_URL +
+      `/lineupbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}`,
     {
       waitUntil: "networkidle2",
     }

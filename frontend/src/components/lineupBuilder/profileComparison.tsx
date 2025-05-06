@@ -123,6 +123,9 @@ export function ProfileComparison({
     try {
       setLoading(true);
       // First, send a warm-up request to initialize the serverless function
+      console.log(
+        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&warm=true`
+      );
       await fetch(
         `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&warm=true`
       ).catch(() => console.log("Warm-up request completed"));
@@ -130,7 +133,7 @@ export function ProfileComparison({
       await new Promise((resolve) => setTimeout(resolve, 1000));
       // Now send the actual PDF request
       const pdfBlob = await fetch(
-        `/api/lineupbuilderƒ/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}`
+        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}`
       ).then((res) => res.blob());
       const blobUrl = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
