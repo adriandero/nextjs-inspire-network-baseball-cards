@@ -10,7 +10,7 @@ interface KolbeGraphProps {
   optimizedImages?: boolean;
 }
 
-interface PersonData {
+interface ProfileData {
   name: string;
   value: number;
   method?: string;
@@ -18,7 +18,7 @@ interface PersonData {
 
 interface CellData {
   percent: string;
-  people: PersonData[];
+  people: ProfileData[];
 }
 
 const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles }) => {
@@ -120,7 +120,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles }) => {
   const gridData = processProfiles();
 
   return (
-    <div className="w-full mx-auto p-4">
+    <div className="w-full mx-auto">
       <div className="flex mb-2">
         <div className="w-8 mr-4"></div>
 
@@ -180,16 +180,16 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles }) => {
 
                 <div className="space-y-1">
                   {cell.people.map(
-                    (person: PersonData, personIndex: number) => (
+                    (profile: ProfileData, profileIndex: number) => (
                       <div
-                        key={`person-${rowIndex}-${colIndex}-${personIndex}`}
+                        key={`profile-${rowIndex}-${colIndex}-${profileIndex}`}
                         className="flex justify-between"
                       >
-                        <span>{person.name}</span>
+                        <span>{profile.name}</span>
                         <span
                           className={`${columnNumberColors[colIndex]} font-bold`}
                         >
-                          {person.value}
+                          {profile.value}
                         </span>
                       </div>
                     )

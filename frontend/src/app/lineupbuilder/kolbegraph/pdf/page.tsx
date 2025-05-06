@@ -7,6 +7,7 @@ import INTMLogo from "@/../public/IN-TM-Logo.png";
 import { ProfileTable } from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
 import { CompleteProfileTable } from "@/components/lineupBuilder/profileComparison";
 import KolbeGraph from "@/components/lineupBuilder/dataTables/kolbeGraph";
+import { SanityDocument } from "next-sanity";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
@@ -91,6 +92,20 @@ function ProfileComparisonContent() {
     year: "numeric",
   });
 
+  function shortNamesOfProfiles(profiles: SanityDocument[]) {
+    return profiles.map((profile) => {
+      const nameParts = profile.name.split(" ");
+      const firstName = nameParts.slice(0, -1).join(" ");
+      const lastInitial = nameParts[nameParts.length - 1][0] + ".";
+      const transformedName = `${firstName} ${lastInitial}`;
+
+      return {
+        ...profile,
+        name: transformedName,
+      };
+    });
+  }
+
   return (
     <div className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]">
       <div className="flex items-center text-center gap-4">
@@ -110,11 +125,8 @@ function ProfileComparisonContent() {
         // Map through all tables instead of just accessing index 0
         completeProfileTables.map((table) => (
           <div key={table.id} className="flex flex-col gap-4 ">
-            {/* Display the group name if there are multiple groups */}
-            {completeProfileTables.length > 1 && (
-              <h2 className="text-base font-semibold">{table.name}</h2>
-            )}
-            <KolbeGraph profiles={table.profiles} />
+            <h2 className="text-base font-semibold">{table.name}</h2>
+            <KolbeGraph profiles={shortNamesOfProfiles(table.profiles)} />
           </div>
         ))
       )}
