@@ -31,8 +31,8 @@ export default async function KolbeGraphPage(): Promise<JSX.Element> {
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
           TableComponent={KolbeGraph}
-          tableTitle="Kolbe Strengths"
-          tableSlug="kolbestrengths"
+          tableTitle="Kolbe Graph"
+          tableSlug="kolbegraph"
         />
       </Suspense>
     </div>
