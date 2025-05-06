@@ -19,12 +19,12 @@ export default function WidgetCogsSVG({
   }
 
   const actualWidgetColors = {
-    wonder: getWidgetColor(widget.wonder),
-    invention: getWidgetColor(widget.invention),
-    discernment: getWidgetColor(widget.discernment),
-    galvanizing: getWidgetColor(widget.galvanizing),
-    enablement: getWidgetColor(widget.enablement),
-    tenacity: getWidgetColor(widget.tenacity),
+    wonder: getWidgetColor(widget?.wonder),
+    invention: getWidgetColor(widget?.invention),
+    discernment: getWidgetColor(widget?.discernment),
+    galvanizing: getWidgetColor(widget?.galvanizing),
+    enablement: getWidgetColor(widget?.enablement),
+    tenacity: getWidgetColor(widget?.tenacity),
   };
 
   return (
