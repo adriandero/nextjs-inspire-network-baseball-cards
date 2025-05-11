@@ -6,7 +6,7 @@ import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
 import { ProfileTable } from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
 import { CompleteProfileTable } from "@/components/lineupBuilder/profileComparison";
-import ValuesTable from "@/components/compare/dataTables/valuesTable";
+import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
@@ -94,7 +94,7 @@ function ProfileComparisonContent() {
   return (
     <div className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]">
       <div className="flex items-center text-center gap-4">
-        <h1 className="text-2xl font-bold">Values</h1>
+        <h1 className="text-2xl font-bold">Working Genius</h1>
         <span className="text-base ml-auto text-accent-foreground font-bold">
           {currentDate}
         </span>
@@ -114,7 +114,10 @@ function ProfileComparisonContent() {
             {completeProfileTables.length > 1 && (
               <h2 className="text-base font-semibold">{table.name}</h2>
             )}
-            <ValuesTable profiles={table.profiles} optimizedImages={true} />
+            <WorkingGeniusTable
+              profiles={table.profiles}
+              optimizedImages={true}
+            />
           </div>
         ))
       )}
@@ -130,7 +133,7 @@ function PDFProfileComparison() {
   );
 }
 
-export default function ValuesPDFPage() {
+export default function WorkingGeniusPDFPage() {
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
       <PDFProfileComparison />
