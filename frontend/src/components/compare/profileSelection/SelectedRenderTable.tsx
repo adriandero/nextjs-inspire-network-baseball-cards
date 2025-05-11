@@ -24,6 +24,7 @@ export enum CompareType {
   WORKING_GENIUS = "workinggenius",
   KOLBE_STRENGTHS = "kolbestrengths",
   KOLBE_GRAPH = "kolbegraph",
+  VALUES = "values",
 }
 
 interface SelectedProfilesTableProps {
@@ -47,6 +48,7 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
     if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
     if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
     if (compareType === CompareType.KOLBE_GRAPH) return "Kolbe Graph";
+    if (compareType === CompareType.VALUES) return "Values";
 
     return null;
   };
@@ -138,6 +140,12 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
               onClick={() => onCompareTypeSelect(CompareType.KOLBE_GRAPH)}
             >
               Kolbe Graph
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-sm"
+              onClick={() => onCompareTypeSelect(CompareType.VALUES)}
+            >
+              Values
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
