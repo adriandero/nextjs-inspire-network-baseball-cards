@@ -40,7 +40,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
     <div className="flex flex-col w-full gap-2">
       {profileTables.map((table, index) => (
         <React.Fragment key={table.id}>
-          <div className="flex justify-between">
+          <div className="flex justify-end gap-3">
             <div className="font-medium text-base flex items-center">
               <span>
                 {index + 1} - {table.name}
