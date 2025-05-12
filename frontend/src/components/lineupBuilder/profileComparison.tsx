@@ -13,6 +13,7 @@ import {
   GoDownload,
 } from "react-icons/go";
 import { Loader2 } from "lucide-react";
+import { useToast } from "../ui/use-toast";
 
 interface ProfileTable {
   //TODO: own file
@@ -42,6 +43,7 @@ export function ProfileComparison({
   tableSlug,
   tableProps = {},
 }: ProfileComparisonProps) {
+  const { toast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
@@ -115,6 +117,12 @@ export function ProfileComparison({
 
   const handleCopyURLToClipboard = async () => {
     await navigator.clipboard.writeText(window.location.href);
+    // Show toast notification
+    toast({
+      title: "Link copied!",
+      description: "URL has been copied to clipboard",
+      duration: 3000, // 3 seconds
+    });
   };
 
   const [loading, setLoading] = useState(false);
