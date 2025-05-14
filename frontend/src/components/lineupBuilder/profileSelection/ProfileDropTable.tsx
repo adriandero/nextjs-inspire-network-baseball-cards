@@ -101,7 +101,7 @@ const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-inspireRed"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-red-500"
                       onClick={() => handleRemoveProfile(profile.uuid)}
                     >
                       {hoveredRowId === profile.uuid && (

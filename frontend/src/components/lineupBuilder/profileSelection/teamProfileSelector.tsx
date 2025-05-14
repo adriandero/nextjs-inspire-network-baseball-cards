@@ -44,7 +44,7 @@ import ProfileTablesManager, {
 } from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
 import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview";
 import { Button } from "@/components/ui/button";
-import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
+import { GoArrowRight, GoPlus } from "react-icons/go";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,37 +53,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CompareType } from "@/components/compare/profileSelection/SelectedRenderTable";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/Command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/Popover";
-import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/Tooltip";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
 }
-const STORAGE_KEY = "profileSelector_data";
 
 const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
 
   const [view, setView] = useState<ViewType>("teams");
-  const [open, setOpen] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
   const router = useRouter();
@@ -481,82 +459,20 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       }
     }
   };
-
-  const compareTypes = [
-    { value: CompareType.WORKING_GENIUS, label: "Working Genius" },
-    { value: CompareType.KOLBE_STRENGTHS, label: "Kolbe Strengths" },
-    { value: CompareType.KOLBE_GRAPH, label: "Kolbe Graph" },
-    { value: CompareType.VALUES, label: "Values" },
-  ];
-
-  const [currentCompareType, setCompareType] = useState<CompareType | null>(
-    null
-  );
+  const [compareType, setCompareType] = useState<CompareType | null>(null);
 
   const handleCompareTypeSelect = (type: CompareType) => {
     setCompareType(type);
   };
 
   const getCompareTypeDisplayName = (): string | null => {
-    if (currentCompareType === CompareType.WORKING_GENIUS)
-      return "Working Genius";
-    if (currentCompareType === CompareType.KOLBE_STRENGTHS)
-      return "Kolbe Strengths";
-    if (currentCompareType === CompareType.KOLBE_GRAPH) return "Kolbe Graph";
-    if (currentCompareType === CompareType.VALUES) return "Values";
+    if (compareType === CompareType.WORKING_GENIUS) return "Working Genius";
+    if (compareType === CompareType.KOLBE_STRENGTHS) return "Kolbe Strengths";
+    if (compareType === CompareType.KOLBE_GRAPH) return "Kolbe Graph";
+    if (compareType === CompareType.VALUES) return "Values";
 
     return null;
   };
-
-  useEffect(() => {
-    // Only save if we have meaningful data to save
-    if (
-      profileTables.some((table) => table.profiles.length > 0) ||
-      selectedTeam
-    ) {
-      const dataToSave = {
-        profileTables,
-        selectedTeam,
-        selectedTeamName,
-        currentCompareType,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-    }
-  }, [profileTables, selectedTeam, selectedTeamName, currentCompareType]);
-
-  // Add this useEffect to load saved selections when the component mounts
-  useEffect(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-
-    if (savedData) {
-      try {
-        const parsedData = JSON.parse(savedData);
-
-        // Only restore if we have valid data
-        if (
-          parsedData.profileTables &&
-          Array.isArray(parsedData.profileTables)
-        ) {
-          setProfileTables(parsedData.profileTables);
-        }
-
-        if (parsedData.selectedTeam) {
-          setSelectedTeam(parsedData.selectedTeam);
-          setSelectedTeamName(parsedData.selectedTeamName || "");
-          // If we're restoring a team selection, switch to profiles view
-          setView("profiles");
-        }
-
-        if (parsedData.compareType) {
-          setCompareType(parsedData.compareType);
-        }
-      } catch (e) {
-        console.error("Error restoring saved profile selection:", e);
-        // If there's an error parsing, remove the invalid data
-        localStorage.removeItem(STORAGE_KEY);
-      }
-    }
-  }, []);
 
   function encodeProfileTablesToURL(profileTables: ProfileTable[]) {
     return profileTables
@@ -569,20 +485,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const handleContinue = () => {
     const urlParam = encodeProfileTablesToURL(profileTables);
-    router.push(
-      `/lineupbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`
-    );
-  };
-
-  const handleClearSelections = () => {
-    setProfileTables([
-      {
-        id: nanoid(),
-        profiles: [],
-        name: "Default Group",
-      },
-    ]);
-    localStorage.removeItem(STORAGE_KEY);
+    router.push(`/lineupbuilder/${compareType}/?groupedProfiles=${urlParam}`);
   };
 
   const handleDragCancel = () => {
@@ -605,8 +508,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     );
   }
 
-  const currentValue = getCompareTypeDisplayName() || "";
-
   return (
     <div className="w-full flex gap-4 px-6 md:flex-nowrap flex-wrap">
       <DndContext
@@ -628,65 +529,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">
-          <div className="flex w-full items-center justify-end py-4 gap-2">
-            {" "}
-            {/* <span className="mr-auto">Groups</span> */}
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-fit justify-between"
-                >
-                  {currentValue || "Compare Type"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-fit p-0">
-                <Command>
-                  <CommandInput placeholder="Search compare type..." />
-                  <CommandEmpty>No compare type found.</CommandEmpty>
-                  <CommandGroup>
-                    {compareTypes?.map((type) => (
-                      <CommandItem
-                        key={type.value}
-                        value={type.value}
-                        onSelect={() => {
-                          handleCompareTypeSelect(type.value);
-                          setOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            currentValue === type.label
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {type.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    variant="ghost"
-                    className="self-center hover:text-inspireRed"
-                    onClick={handleClearSelections}
-                  >
-                    <GoTrash strokeWidth="0.6" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Clear All</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <div className="flex w-full items-center h-[68px]"> Groups</div>
 
           <ProfileTablesManager
             profileTables={profileTables}
@@ -699,17 +542,57 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           <div className="flex justify-end pt-4 gap-2">
             <Button
               variant="outline"
+              size="sm"
               className="self-center mr-auto"
               onClick={() => handleAddTable()}
             >
               <GoPlus size={32} />
               <span className="hidden lg:inline"> Add Group</span>
             </Button>
-
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <span>{getCompareTypeDisplayName() ?? "Compare Type"}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-fit">
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() =>
+                    handleCompareTypeSelect(CompareType.WORKING_GENIUS)
+                  }
+                >
+                  Working Genius
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() =>
+                    handleCompareTypeSelect(CompareType.KOLBE_STRENGTHS)
+                  }
+                >
+                  Kolbe Strengths
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() =>
+                    handleCompareTypeSelect(CompareType.KOLBE_GRAPH)
+                  }
+                >
+                  Kolbe Graph
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-sm"
+                  onClick={() => handleCompareTypeSelect(CompareType.VALUES)}
+                >
+                  Values{" "}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button
               variant="outline"
-              disabled={!currentValue}
+              // disabled={getSelectedProfilesData().length === 0 || !compareType}
               className="hover:border-primary"
+              size="sm"
               onClick={handleContinue}
             >
               Continue <GoArrowRight size={24} />
