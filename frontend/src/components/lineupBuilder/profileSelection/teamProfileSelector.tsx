@@ -60,19 +60,19 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/Command";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/Popover";
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/Tooltip";
+} from "@/components/ui/tooltip";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;

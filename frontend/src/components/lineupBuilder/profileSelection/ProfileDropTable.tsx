@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/Table";
+} from "@/components/ui/table";
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
