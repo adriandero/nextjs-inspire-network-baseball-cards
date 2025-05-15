@@ -82,7 +82,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
       cell: ({ row }) => {
         const profileKolbeStrengths = row.original.kolbeStrengths;
         return (
-          <div className="flex ">
+          <div className="flex">
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
               {profileKolbeStrengths.factFinder ?? "*"}
             </div>
