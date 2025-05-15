@@ -34,6 +34,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
     {
       accessorKey: "name",
       header: "Name",
+      size: 300, // Set this to 1/3 of your expected table width
       cell: ({ row }) => {
         const profile = row.original;
         return (
@@ -79,6 +80,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
     {
       accessorKey: "kolbe",
       header: "Kolbe Strengths",
+      size: 600, // Set this to 1/3 of your expected table width
       cell: ({ row }) => {
         const profileKolbeStrengths = row.original.kolbeStrengths;
         return (
@@ -144,6 +146,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   const table = useReactTable({
     data: profiles,
     columns,
+    columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -157,17 +160,22 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
 
   return (
     <div className="rounded-md border bg-light1 w-full">
-      <Table>
+      <Table className="table-fixed  w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  className={`py-2 ${
+                    header.column.id === "name" ? "w-1/3" : "w-2/3"
+                  }`}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}
@@ -178,7 +186,12 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id} className="px-4">
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className={`py-2`}>
+                <TableCell
+                  key={cell.id}
+                  className={`py-2 ${
+                    cell.column.id === "name" ? "w-1/3" : "w-2/3"
+                  }`}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
