@@ -61,7 +61,11 @@ function ProfileComparisonContent() {
       {profileData.length === 0 ? (
         <div>No profiles found. Please select profiles to compare.</div>
       ) : (
-        <WorkingGeniusTable profiles={profileData} optimizedImages={true} />
+        <WorkingGeniusTable
+          profiles={profileData}
+          optimizedImages={true}
+          showJobRole={true}
+        />
       )}
     </div>
   );
