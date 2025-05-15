@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/Table";
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GoSearch } from "react-icons/go";
@@ -17,7 +17,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/Breadcrumbs";
+} from "@/components/ui/breadcrumbs";
 import {
   ColumnDef,
   flexRender,

@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/Table";
+} from "@/components/ui/table";
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
@@ -101,7 +101,7 @@ const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-red-500"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-inspireRed"
                       onClick={() => handleRemoveProfile(profile.uuid)}
                     >
                       {hoveredRowId === profile.uuid && (

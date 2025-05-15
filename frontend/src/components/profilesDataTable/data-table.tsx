@@ -19,7 +19,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/Breadcrumbs";
+} from "@/components/ui/breadcrumbs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +33,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/Table";
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,

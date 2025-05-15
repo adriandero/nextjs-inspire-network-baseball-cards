@@ -3,7 +3,7 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { SanityDocument } from "next-sanity";
-import { TableRow, TableCell } from "@/components/ui/Table";
+import { TableRow, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 

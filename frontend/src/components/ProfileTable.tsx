@@ -8,7 +8,7 @@ import {
   TableRow,
   TableHead,
   TableBody,
-} from "./ui/Table";
+} from "./ui/table";
 
 import ProfileTableRow from "./ui/ProfileTableRow";
 
