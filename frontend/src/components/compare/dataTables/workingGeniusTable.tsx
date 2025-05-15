@@ -34,6 +34,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     {
       accessorKey: "name",
       header: "Name",
+      size: 300, // Set this to 1/3 of your expected table width
       cell: ({ row }) => {
         const profile = row.original;
         return (
@@ -79,6 +80,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     {
       accessorKey: "widget",
       header: "WIDGET",
+      size: 600, // Set this to 1/3 of your expected table width
       cell: ({ row }) => (
         <WidgetCogsSVG
           widget={row.original.workingGenius?.widget}
@@ -96,6 +98,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   const table = useReactTable({
     data: profiles,
     columns,
+    columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -114,12 +117,17 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  className={`py-2 ${
+                    header.column.id === "name" ? "w-1/3" : "w-2/3"
+                  }`}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}
@@ -130,7 +138,12 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id} className="px-4">
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className=" py-2">
+                <TableCell
+                  key={cell.id}
+                  className={`py-2 ${
+                    cell.column.id === "name" ? "w-1/3" : "w-2/3"
+                  }`}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
