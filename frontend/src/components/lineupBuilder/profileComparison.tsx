@@ -124,13 +124,7 @@ export function ProfileComparison({
   const handlePDFDownloadCall = async () => {
     try {
       setLoading(true);
-      // First, send a warm-up request to initialize the serverless function
-      const showJobRoleParam = showJobRole
-        ? "&showJobRole=true"
-        : "&showJobRole=false";
-
-      const fetchURL = `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`;
-
+      const fetchURL = `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
       console.log(fetchURL);
 
       await fetch(fetchURL + `&warm=true`).catch(() =>
