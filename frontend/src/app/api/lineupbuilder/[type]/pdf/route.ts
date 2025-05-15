@@ -5,12 +5,13 @@ export const maxDuration = 60;
 
 export async function GET(
   req: Request,
-  context: { params: Promise<{ type: string }> }
+  context: { params: Promise<{ type: string }> },
 ) {
   // Get query parameters
   const type = (await context.params).type;
   const url = new URL(req.url);
   const groupedProfiles = url.searchParams.get("groupedProfiles");
+  const showJobRoleParam = url.searchParams.get("showJobRole");
   const warmup = url.searchParams.get("warm") === "true";
 
   if (warmup) {
@@ -39,10 +40,10 @@ export async function GET(
 
   await page.goto(
     process.env.BASE_URL +
-      `/lineupbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}`,
+      `/lineupbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
     {
       waitUntil: "networkidle2",
-    }
+    },
   );
 
   await page.evaluate(() => {
@@ -54,7 +55,7 @@ export async function GET(
           img.onerror = () =>
             reject(new Error(`Failed to load image: ${img.src}`));
         });
-      })
+      }),
     );
   });
 
