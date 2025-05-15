@@ -45,12 +45,6 @@ import ProfileTablesManager, {
 import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview";
 import { Button } from "@/components/ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { CompareType } from "@/components/compare/profileSelection/SelectedRenderTable";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
