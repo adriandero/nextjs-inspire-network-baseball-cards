@@ -48,13 +48,7 @@ import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import { CompareType } from "@/components/compare/profileSelection/SelectedRenderTable";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+
 import {
   Popover,
   PopoverContent,
@@ -67,10 +61,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
 }
+
 const STORAGE_KEY = "profileSelector_data";
 
 const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
@@ -187,7 +189,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         const firstTable = updatedTables[0];
         if (firstTable.profiles.includes(profileId)) {
           firstTable.profiles = firstTable.profiles.filter(
-            (id: any) => id !== profileId
+            (id: any) => id !== profileId,
           );
         } else {
           firstTable.profiles = [...firstTable.profiles, profileId];
@@ -270,7 +272,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
               // Check if this profile is in any table
               const profileId = row.original.uuid;
               return profileTables.some((table) =>
-                table.profiles.includes(profileId)
+                table.profiles.includes(profileId),
               );
             })
           }
@@ -305,7 +307,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                 return prev.map((table) => ({
                   ...table,
                   profiles: table.profiles.filter(
-                    (id: any) => !allProfileIds.includes(id)
+                    (id: any) => !allProfileIds.includes(id),
                   ),
                 }));
               });
@@ -317,7 +319,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       cell: ({ row }) => (
         <Checkbox
           checked={profileTables.some((table) =>
-            table.profiles.includes(row.original.uuid)
+            table.profiles.includes(row.original.uuid),
           )}
           onCheckedChange={() => handleProfileCheck(row.original.uuid)}
           aria-label="Select row"
@@ -375,7 +377,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const columns = view === "teams" ? teamColumns : profileColumns;
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -408,7 +410,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           ? data.reduce((acc, profile, index) => {
               // Check if profile is in any table
               const isSelected = profileTables.some((table) =>
-                table.profiles.includes(profile.uuid)
+                table.profiles.includes(profile.uuid),
               );
               acc[index] = isSelected;
               return acc;
@@ -484,7 +486,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   ];
 
   const [currentCompareType, setCompareType] = useState<CompareType | null>(
-    null
+    null,
   );
 
   const handleCompareTypeSelect = (type: CompareType) => {
@@ -564,7 +566,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleContinue = () => {
     const urlParam = encodeProfileTablesToURL(profileTables);
     router.push(
-      `/lineupbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`
+      `/lineupbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`,
     );
   };
 
@@ -656,7 +658,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                             "mr-2 h-4 w-4",
                             currentValue === type.label
                               ? "opacity-100"
-                              : "opacity-0"
+                              : "opacity-0",
                           )}
                         />
                         {type.label}
