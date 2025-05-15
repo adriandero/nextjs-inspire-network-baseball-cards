@@ -18,7 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { urlFor } from "@/lib/sanity/client";
-import { Progress } from "@/components/ui/Progress";
+import { Progress } from "@/components/ui/progress";
 
 interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
@@ -167,7 +167,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}
