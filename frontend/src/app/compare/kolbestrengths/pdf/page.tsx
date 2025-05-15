@@ -63,7 +63,11 @@ function ProfileComparisonContent() {
       {profileData.length === 0 ? (
         <div>No profiles found. Please select profiles to compare.</div>
       ) : (
-        <KolbeStrengthsTable profiles={profileData} optimizedImages={true}/>
+        <KolbeStrengthsTable
+          profiles={profileData}
+          optimizedImages={true}
+          showJobRole={true}
+        />
       )}
     </div>
   );
