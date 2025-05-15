@@ -11,6 +11,8 @@ import ValuesTable from "@/components/compare/dataTables/valuesTable";
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
+  const showJobRoleParam = searchParams.get("showJobRole");
+  const showJobRole = showJobRoleParam === "true"; // Convert string to boolean
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
@@ -114,7 +116,11 @@ function ProfileComparisonContent() {
             {completeProfileTables.length > 1 && (
               <h2 className="text-base font-semibold">{table.name}</h2>
             )}
-            <ValuesTable profiles={table.profiles} optimizedImages={true} />
+            <ValuesTable
+              profiles={table.profiles}
+              optimizedImages={true}
+              showJobRole={showJobRole}
+            />
           </div>
         ))
       )}

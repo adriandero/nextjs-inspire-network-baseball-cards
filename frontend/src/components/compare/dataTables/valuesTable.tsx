@@ -21,11 +21,13 @@ import { urlFor } from "@/lib/sanity/client";
 
 interface ValuesTableProps {
   profiles: SanityDocument[];
+  showJobRole: boolean;
   optimizedImages?: boolean;
 }
 
 const ValuesTable: React.FC<ValuesTableProps> = ({
   profiles,
+  showJobRole,
   optimizedImages = false,
 }) => {
   console.log(profiles);
@@ -64,12 +66,14 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
               <div className="font-bold text-base">{profile.name}</div>
               {profile.jobRole && (
                 <div className="text-base">
-                  {profile.jobRole?.map((role: string, index: number) => (
-                    <span key={index}>
-                      {role}
-                      {index < profile.jobRole.length - 1 && ", "}
-                    </span>
-                  ))}
+                  {showJobRole
+                    ? profile.jobRole?.map((role: string, index: number) => (
+                        <span key={index}>
+                          {role}
+                          {index < profile.jobRole.length - 1 && ", "}
+                        </span>
+                      ))
+                    : null}
                 </div>
               )}
             </div>
@@ -144,7 +148,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}

@@ -126,7 +126,9 @@ function ProfileComparisonContent() {
         completeProfileTables.map((table) => (
           <div key={table.id} className="flex flex-col gap-4 ">
             <h2 className="text-base font-semibold">{table.name}</h2>
-            <KolbeGraph profiles={shortNamesOfProfiles(table.profiles)} />
+            <KolbeGraph
+              profiles={shortNamesOfProfiles(table.profiles)}
+            />
           </div>
         ))
       )}
