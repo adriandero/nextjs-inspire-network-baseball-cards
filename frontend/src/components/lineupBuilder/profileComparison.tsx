@@ -129,21 +129,19 @@ export function ProfileComparison({
         ? "&showJobRole=true"
         : "&showJobRole=false";
 
-      console.log(
-        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}${showJobRoleParam}&warm=true`,
-      );
+      const fetchURL = `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`;
 
-      await fetch(
-        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}${showJobRoleParam}&warm=true`,
-      ).catch(() => console.log("Warm-up request completed"));
+      console.log(fetchURL);
+
+      await fetch(fetchURL + `&warm=true`).catch(() =>
+        console.log("Warm-up request completed"),
+      );
 
       // Short delay to ensure the function is fully initialized
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Now send the actual PDF request
-      const pdfBlob = await fetch(
-        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}${showJobRoleParam}`,
-      ).then((res) => res.blob());
+      const pdfBlob = await fetch(fetchURL).then((res) => res.blob());
 
       const blobUrl = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
