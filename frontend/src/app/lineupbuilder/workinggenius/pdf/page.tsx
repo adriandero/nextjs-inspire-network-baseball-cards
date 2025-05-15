@@ -11,6 +11,8 @@ import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTab
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
+  const showJobRoleParam = searchParams.get("showJobRole");
+  const showJobRole = showJobRoleParam === "true"; // Convert string to boolean
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
@@ -117,6 +119,7 @@ function ProfileComparisonContent() {
             <WorkingGeniusTable
               profiles={table.profiles}
               optimizedImages={true}
+              showJobRole={showJobRole}
             />
           </div>
         ))

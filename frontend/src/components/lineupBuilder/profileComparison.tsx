@@ -13,6 +13,7 @@ import {
   GoDownload,
 } from "react-icons/go";
 import { Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ProfileTable {
   //TODO: own file
@@ -118,23 +119,32 @@ export function ProfileComparison({
   };
 
   const [loading, setLoading] = useState(false);
+  const [showJobRole, setShowJobRole] = useState<boolean>(false);
 
   const handlePDFDownloadCall = async () => {
     try {
       setLoading(true);
       // First, send a warm-up request to initialize the serverless function
+      const showJobRoleParam = showJobRole
+        ? "&showJobRole=true"
+        : "&showJobRole=false";
+
       console.log(
-        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&warm=true`
+        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}${showJobRoleParam}&warm=true`,
       );
+
       await fetch(
-        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&warm=true`
+        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}${showJobRoleParam}&warm=true`,
       ).catch(() => console.log("Warm-up request completed"));
+
       // Short delay to ensure the function is fully initialized
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Now send the actual PDF request
       const pdfBlob = await fetch(
-        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}`
+        `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}${showJobRoleParam}`,
       ).then((res) => res.blob());
+
       const blobUrl = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
       link.href = blobUrl;
@@ -163,7 +173,27 @@ export function ProfileComparison({
         <div className="flex flex-col gap-4">
           <div className="flex w-full items-center h-8 py-4 gap-2">
             <h1 className="text-lg font-bold">{tableTitle}</h1>
-            <Button variant="outline" className="ml-auto" disabled>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 ml-auto"
+            >
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="show-job-role"
+                  checked={showJobRole}
+                  onCheckedChange={(checked) =>
+                    setShowJobRole(checked as boolean)
+                  }
+                />
+                <label
+                  htmlFor="show-job-role"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Show Title
+                </label>
+              </div>
+            </Button>
+            <Button variant="outline" disabled>
               <GoChevronDown />
               <span className="hidden sm:inline">{tableTitle}</span>
             </Button>
@@ -198,7 +228,11 @@ export function ProfileComparison({
           {completeProfileTables.map((table) => (
             <div key={table.id} className="flex flex-col gap-4">
               <h2 className="text-base font-semibold">{table.name}</h2>
-              <TableComponent profiles={table.profiles} {...tableProps} />
+              <TableComponent
+                profiles={table.profiles}
+                showJobRole={showJobRole}
+                {...tableProps}
+              />
             </div>
           ))}
         </div>

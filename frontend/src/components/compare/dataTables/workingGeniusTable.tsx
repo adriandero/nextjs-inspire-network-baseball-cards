@@ -22,11 +22,13 @@ import { urlFor } from "@/lib/sanity/client";
 
 interface WorkingGeniusTableProps {
   profiles: SanityDocument[];
+  showJobRole: boolean;
   optimizedImages?: boolean;
 }
 
 const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   profiles,
+  showJobRole,
   optimizedImages = false,
 }) => {
   // Define columns for the table
@@ -65,12 +67,14 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
             <div>
               <div className="font-bold text-base">{profile.name}</div>
               <div className="text-base">
-                {profile.jobRole?.map((role: string, index: number) => (
-                  <span key={index}>
-                    {role}
-                    {index < profile.jobRole.length - 1 && ", "}
-                  </span>
-                ))}
+                {showJobRole
+                  ? profile.jobRole?.map((role: string, index: number) => (
+                      <span key={index}>
+                        {role}
+                        {index < profile.jobRole.length - 1 && ", "}
+                      </span>
+                    ))
+                  : null}
               </div>
             </div>
           </div>

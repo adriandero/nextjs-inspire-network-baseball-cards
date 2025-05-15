@@ -22,11 +22,13 @@ import { Progress } from "@/components/ui/progress";
 
 interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
+  showJobRole: boolean;
   optimizedImages?: boolean;
 }
 
 const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
+  showJobRole,
   optimizedImages = false,
 }) => {
   // Define columns for the table
@@ -65,12 +67,14 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
             <div>
               <div className="font-bold text-base">{profile.name}</div>
               <div className="text-base">
-                {profile.jobRole?.map((role: string, index: number) => (
-                  <span key={index}>
-                    {role}
-                    {index < profile.jobRole.length - 1 && ", "}
-                  </span>
-                ))}
+                {showJobRole
+                  ? profile.jobRole?.map((role: string, index: number) => (
+                      <span key={index}>
+                        {role}
+                        {index < profile.jobRole.length - 1 && ", "}
+                      </span>
+                    ))
+                  : null}
               </div>
             </div>
           </div>
