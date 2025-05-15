@@ -22,14 +22,14 @@ import { Progress } from "@/components/ui/progress";
 
 interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
-  showJobRole: boolean;
   optimizedImages?: boolean;
+  showJobRole: boolean;
 }
 
 const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
-  showJobRole,
   optimizedImages = false,
+  showJobRole,
 }) => {
   // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
