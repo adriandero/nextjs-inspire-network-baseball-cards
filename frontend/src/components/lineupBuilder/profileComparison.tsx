@@ -195,7 +195,11 @@ export function ProfileComparison({
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex w-full items-center h-8 py-4 gap-2">
-            <h1 className="text-lg font-bold">{tableTitle}</h1>
+            <h1 className="text-lg font-bold">
+              {" "}
+              {store.getCompareTypeLabel() || "Compare Type"}{" "}
+              {/* TODO: check compare type label twice -> make a variable*/}
+            </h1>
             <Button
               variant="outline"
               className="flex items-center gap-2 ml-auto"
