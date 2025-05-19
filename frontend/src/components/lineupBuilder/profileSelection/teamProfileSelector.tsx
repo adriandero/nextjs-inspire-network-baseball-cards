@@ -590,6 +590,20 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     setOpen(false);
   };
 
+  const handleUpdateTableName = (tableId: string, newName: string) => {
+    setProfileTables((prev) =>
+      prev.map((table) =>
+        table.id === tableId ? { ...table, name: newName } : table
+      )
+    );
+
+    // If you're storing this in localStorage, update that as well
+    const updatedTables = profileTables.map((table) =>
+      table.id === tableId ? { ...table, name: newName } : table
+    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTables));
+  };
+
   return (
     <div className="w-full flex gap-4 px-6 md:flex-nowrap flex-wrap">
       <DndContext
@@ -672,6 +686,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             profileTables={profileTables}
             onRemoveTable={handleRemoveTable}
             onUpdateTableProfiles={handleUpdateTableProfiles}
+            onUpdateTableName={handleUpdateTableName} // Add this new prop
             onCreateTableWithProfile={handleCreateTableWithProfile}
             allProfiles={getAllProfiles()}
           />
