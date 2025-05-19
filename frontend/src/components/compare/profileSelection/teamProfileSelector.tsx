@@ -37,10 +37,9 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import RenderTable from "@/components/compare/profileSelection/RenderTable"; // Import the TeamTable component
-import SelectedRenderTable, {
-  CompareType,
-} from "@/components/compare/profileSelection/SelectedRenderTable"; // Import the new component
+import SelectedRenderTable from "@/components/compare/profileSelection/SelectedRenderTable"; // Import the new component
 import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview"; // Import the drag overlay component
+import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;

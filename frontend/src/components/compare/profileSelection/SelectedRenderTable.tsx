@@ -20,7 +20,6 @@ import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 
-
 interface SelectedProfilesTableProps {
   selectedProfilesData: SanityDocument[];
   compareType: CompareType | null;
