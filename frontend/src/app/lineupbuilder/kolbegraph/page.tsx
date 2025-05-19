@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import KolbeGraph from "@/components/lineupBuilder/dataTables/kolbeGraph";
+import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
@@ -31,7 +32,7 @@ export default async function KolbeGraphPage(): Promise<JSX.Element> {
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
           TableComponent={KolbeGraph}
-          tableTitle="Kolbe Graph"
+          tableTitle={CompareType.KOLBE_GRAPH}
           tableSlug="kolbegraph"
         />
       </Suspense>

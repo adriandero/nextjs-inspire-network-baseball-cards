@@ -18,14 +18,7 @@ import {
 } from "@/components/ui/table";
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
-
-// Import the enum for compare types
-export enum CompareType {
-  WORKING_GENIUS = "workinggenius",
-  KOLBE_STRENGTHS = "kolbestrengths",
-  KOLBE_GRAPH = "kolbegraph",
-  VALUES = "values",
-}
+import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 
 interface SelectedProfilesTableProps {
   selectedProfilesData: SanityDocument[];

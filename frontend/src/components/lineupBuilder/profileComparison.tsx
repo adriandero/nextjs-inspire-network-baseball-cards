@@ -2,18 +2,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
 import { Button } from "@/components/ui/button";
-import {
-  GoChevronDown,
-  GoMultiSelect,
-  GoShare,
-  GoDownload,
-} from "react-icons/go";
-import { Loader2 } from "lucide-react";
+import { GoMultiSelect, GoShare, GoDownload } from "react-icons/go";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import React from "react";
+import { CompareType, lineupBuilderStoreInstance } from "./lineupBuilderStore";
 
 interface ProfileTable {
   //TODO: own file
@@ -37,6 +47,8 @@ export interface ProfileComparisonProps {
   tableProps?: Record<string, any>;
 }
 
+//TODO: make this one compare mode where changing the graph is only acomponent change and not a page update
+
 export function ProfileComparison({
   TableComponent,
   tableTitle,
@@ -50,6 +62,13 @@ export function ProfileComparison({
     CompleteProfileTable[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [open, setOpen] = React.useState(false);
+
+  const [currentCompareType, setCompareType] = useState<CompareType | null>(
+    null
+  );
+
+  const store = lineupBuilderStoreInstance;
 
   useEffect(() => {
     async function fetchProfiles() {
@@ -128,7 +147,7 @@ export function ProfileComparison({
       console.log(fetchURL);
 
       await fetch(fetchURL + `&warm=true`).catch(() =>
-        console.log("Warm-up request completed"),
+        console.log("Warm-up request completed")
       );
 
       // Short delay to ensure the function is fully initialized
@@ -150,6 +169,18 @@ export function ProfileComparison({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCompareTypeSelect = (type: CompareType) => {
+    store.setCompareType(type);
+    setCompareType(type);
+    setOpen(false);
+    const currentUrl = new URL(window.location.href);
+    const pathParts = currentUrl.pathname.split("/");
+    pathParts[pathParts.length - 1] = type;
+    const newUrl = `${currentUrl.origin}${pathParts.join("/")}${currentUrl.search}`;
+
+    redirect(newUrl);
   };
 
   return (
@@ -185,10 +216,45 @@ export function ProfileComparison({
                 </label>
               </div>
             </Button>
-            <Button variant="outline" disabled>
-              <GoChevronDown />
-              <span className="hidden sm:inline">{tableTitle}</span>
-            </Button>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-fit justify-between"
+                >
+                  {store.getCompareTypeLabel() || "Compare Type"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-0">
+                <Command>
+                  <CommandInput placeholder="Search compare type..." />
+                  <CommandEmpty>No compare type found.</CommandEmpty>
+                  <CommandGroup>
+                    {store.compareTypes.map((item) => (
+                      <CommandItem
+                        key={item.value}
+                        value={item.label}
+                        onSelect={() => handleCompareTypeSelect(item.value)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            currentCompareType === item.value
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                        {item.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+
             <Button variant="outline" disabled>
               <GoMultiSelect />
               <span className="hidden sm:inline">View</span>
