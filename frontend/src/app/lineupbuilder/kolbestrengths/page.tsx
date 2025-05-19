@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
+import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
@@ -31,7 +32,7 @@ export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
           TableComponent={KolbeStrengthsTable}
-          tableTitle="Kolbe Strengths"
+          tableTitle={CompareType.KOLBE_STRENGTHS}
           tableSlug="kolbestrengths"
         />
       </Suspense>

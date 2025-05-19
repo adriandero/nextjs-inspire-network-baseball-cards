@@ -45,7 +45,10 @@ import ProfileTablesManager, {
 import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview";
 import { Button } from "@/components/ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
-import { CompareType } from "@/components/compare/profileSelection/SelectedRenderTable";
+import {
+  CompareType,
+  lineupBuilderStoreInstance,
+} from "@/components/lineupBuilder/lineupBuilderStore";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 
@@ -83,6 +86,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
   const router = useRouter();
+
+  const store = lineupBuilderStoreInstance;
 
   // Profile tables for grouping
   const [profileTables, setProfileTables] = useState<ProfileTable[]>([
@@ -189,7 +194,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         const firstTable = updatedTables[0];
         if (firstTable.profiles.includes(profileId)) {
           firstTable.profiles = firstTable.profiles.filter(
-            (id: any) => id !== profileId,
+            (id: any) => id !== profileId
           );
         } else {
           firstTable.profiles = [...firstTable.profiles, profileId];
@@ -272,7 +277,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
               // Check if this profile is in any table
               const profileId = row.original.uuid;
               return profileTables.some((table) =>
-                table.profiles.includes(profileId),
+                table.profiles.includes(profileId)
               );
             })
           }
@@ -307,7 +312,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                 return prev.map((table) => ({
                   ...table,
                   profiles: table.profiles.filter(
-                    (id: any) => !allProfileIds.includes(id),
+                    (id: any) => !allProfileIds.includes(id)
                   ),
                 }));
               });
@@ -319,7 +324,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       cell: ({ row }) => (
         <Checkbox
           checked={profileTables.some((table) =>
-            table.profiles.includes(row.original.uuid),
+            table.profiles.includes(row.original.uuid)
           )}
           onCheckedChange={() => handleProfileCheck(row.original.uuid)}
           aria-label="Select row"
@@ -377,7 +382,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const columns = view === "teams" ? teamColumns : profileColumns;
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -410,7 +415,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           ? data.reduce((acc, profile, index) => {
               // Check if profile is in any table
               const isSelected = profileTables.some((table) =>
-                table.profiles.includes(profile.uuid),
+                table.profiles.includes(profile.uuid)
               );
               acc[index] = isSelected;
               return acc;
@@ -478,31 +483,9 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     }
   };
 
-  const compareTypes = [
-    { value: CompareType.WORKING_GENIUS, label: "Working Genius" },
-    { value: CompareType.KOLBE_STRENGTHS, label: "Kolbe Strengths" },
-    { value: CompareType.KOLBE_GRAPH, label: "Kolbe Graph" },
-    { value: CompareType.VALUES, label: "Values" },
-  ];
-
   const [currentCompareType, setCompareType] = useState<CompareType | null>(
-    null,
+    null
   );
-
-  const handleCompareTypeSelect = (type: CompareType) => {
-    setCompareType(type);
-  };
-
-  const getCompareTypeDisplayName = (): string | null => {
-    if (currentCompareType === CompareType.WORKING_GENIUS)
-      return "Working Genius";
-    if (currentCompareType === CompareType.KOLBE_STRENGTHS)
-      return "Kolbe Strengths";
-    if (currentCompareType === CompareType.KOLBE_GRAPH) return "Kolbe Graph";
-    if (currentCompareType === CompareType.VALUES) return "Values";
-
-    return null;
-  };
 
   useEffect(() => {
     // Only save if we have meaningful data to save
@@ -566,7 +549,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleContinue = () => {
     const urlParam = encodeProfileTablesToURL(profileTables);
     router.push(
-      `/lineupbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`,
+      `/lineupbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`
     );
   };
 
@@ -601,7 +584,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     );
   }
 
-  const currentValue = getCompareTypeDisplayName() || "";
+  const handleCompareTypeSelect = (type: CompareType) => {
+    store.setCompareType(type);
+    setCompareType(type);
+    setOpen(false);
+  };
 
   return (
     <div className="w-full flex gap-4 px-6 md:flex-nowrap flex-wrap">
@@ -635,7 +622,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                   aria-expanded={open}
                   className="w-fit justify-between"
                 >
-                  {currentValue || "Compare Type"}
+                  {store.getCompareTypeLabel() || "Compare Type"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -644,24 +631,21 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                   <CommandInput placeholder="Search compare type..." />
                   <CommandEmpty>No compare type found.</CommandEmpty>
                   <CommandGroup>
-                    {compareTypes?.map((type) => (
+                    {store.compareTypes.map((item) => (
                       <CommandItem
-                        key={type.value}
-                        value={type.value}
-                        onSelect={() => {
-                          handleCompareTypeSelect(type.value);
-                          setOpen(false);
-                        }}
+                        key={item.value}
+                        value={item.label}
+                        onSelect={() => handleCompareTypeSelect(item.value)}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            currentValue === type.label
+                            currentCompareType === item.value
                               ? "opacity-100"
-                              : "opacity-0",
+                              : "opacity-0"
                           )}
                         />
-                        {type.label}
+                        {item.label}
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -704,7 +688,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
             <Button
               variant="outline"
-              disabled={!currentValue}
+              disabled={!currentCompareType}
               className="hover:border-primary"
               onClick={handleContinue}
             >

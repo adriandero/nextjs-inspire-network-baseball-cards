@@ -1,6 +1,7 @@
 import NavBar from "@/components/NavBar";
 import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
 import { ProfileComparison } from "@/components/compare/profileComparison";
+import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
@@ -31,7 +32,7 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison
           TableComponent={WorkingGeniusTable}
-          tableTitle="Working Genius"
+          tableTitle={CompareType.WORKING_GENIUS}
           tableSlug="workinggenius"
         />
       </Suspense>
