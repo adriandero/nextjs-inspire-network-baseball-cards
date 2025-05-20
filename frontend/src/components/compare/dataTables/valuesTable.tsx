@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { SanityDocument } from "next-sanity";
 import {
@@ -18,6 +18,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { urlFor } from "@/lib/sanity/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ValuesTableProps {
   profiles: SanityDocument[];
@@ -25,13 +32,87 @@ interface ValuesTableProps {
   optimizedImages?: boolean;
 }
 
+interface ProfileColors {
+  [profileId: string]: {
+    [cellId: string]: string;
+  };
+}
+
 const ValuesTable: React.FC<ValuesTableProps> = ({
   profiles,
   showJobRole,
   optimizedImages = false,
 }) => {
-  console.log(profiles);
-  // Define columns for the table
+  const colors: Record<string, string> = {
+    none: "",
+    purple: "#69336F",
+    teal: "#007E8C",
+    cyan: "#3FAFBA",
+    rose: "#AF4B63",
+    orange: "#F25F3E",
+  };
+
+  const [profileColors, setProfileColors] = useState<ProfileColors>({});
+
+  const handleColorChange = (
+    profileId: string,
+    cellId: string,
+    color: string
+  ) => {
+    setProfileColors((prev) => ({
+      ...prev,
+      [profileId]: {
+        ...(prev[profileId] || {}),
+        [cellId]: color,
+      },
+    }));
+  };
+
+  const ColorDropdown = ({
+    profileId,
+    cellId,
+  }: {
+    profileId: string;
+    cellId: string;
+  }) => {
+    const selectedColor = profileColors[profileId]?.[cellId] || "";
+
+    return (
+      <Select
+        onValueChange={(value) => handleColorChange(profileId, cellId, value)}
+      >
+        <SelectTrigger className="h-fit w-fit p-0 rounded-full bg-light1">
+          <SelectValue
+            placeholder={
+              <div
+                className="w-4 h-4 rounded-full"
+                style={{
+                  backgroundColor:
+                    !selectedColor || selectedColor === "none"
+                      ? "transparent"
+                      : colors[selectedColor],
+                }}
+              />
+            }
+          />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.entries(colors).map(([name, hex]) => (
+            <SelectItem key={name} value={name}>
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-4 h-4 rounded-full ${name === "none" ? "border border-gray-300" : ""}`}
+                  style={{ backgroundColor: hex }}
+                />
+                <span className="capitalize">{name}</span>
+              </div>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
+  };
+
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",
@@ -148,7 +229,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )}
                 </TableHead>
               ))}
@@ -158,15 +239,30 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
         <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell, index) => (
-                <TableCell
-                  key={cell.id}
-                  className={`py-2 ${cell.column.id !== "name" ? "w-1/6 " : "w-1/3"}  ${index > 0 ? "border-l border-light2" : ""}
-`}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
+              {row.getVisibleCells().map((cell, index) => {
+                const profileId = row.original._id || row.id;
+                const cellId = cell.column.id;
+                const selectedColor = profileColors[profileId]?.[cellId];
+                const backgroundColor =
+                  selectedColor && selectedColor !== "none"
+                    ? colors[selectedColor] + "BF"
+                    : "";
+
+                return (
+                  <TableCell
+                    key={cell.id}
+                    className={`py-2 relative group ${cell.column.id !== "name" ? "w-1/6" : "w-1/3"} ${
+                      index > 0 ? "border-l border-light2" : ""
+                    }`}
+                    style={selectedColor ? { backgroundColor } : {}}
+                  >
+                    <div className="absolute right-2 bottom-2 group-hover:opacity-100 transition-opacity duration-200 opacity-0">
+                      <ColorDropdown profileId={profileId} cellId={cellId} />
+                    </div>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           ))}
         </TableBody>
