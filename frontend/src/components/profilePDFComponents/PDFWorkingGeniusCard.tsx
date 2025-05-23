@@ -24,10 +24,10 @@ export default function PDFWorkingGeniusCard({
         <div className="flex flex-col min-w-32 min-h-full items-start">
           <h2 className="text-lg font-bold">Working Genius</h2>
           <h3 className="font-bold mt-2 text-base">
-            {workingGeniusJson[workingGenius].title}
+            {workingGeniusJson[workingGenius]?.title}
           </h3>
           <p className="text-base">
-            {workingGeniusJson[workingGenius].description}
+            {workingGeniusJson[workingGenius]?.description}
           </p>
         </div>
       </div>

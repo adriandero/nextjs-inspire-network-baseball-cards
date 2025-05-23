@@ -79,7 +79,7 @@ export default function PDFBanner({
           {profile.jobRole?.map((role: string, index: number) => (
             <span key={index}>
               {role}
-              {index < profile.jobRole.length - 1 && ", "}
+              {index < profile.jobRole?.length - 1 && ", "}
             </span>
           ))}
         </h1>
