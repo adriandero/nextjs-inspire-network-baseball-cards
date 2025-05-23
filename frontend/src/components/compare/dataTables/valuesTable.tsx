@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { SanityDocument } from "next-sanity";
 import {
@@ -25,11 +25,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { GoReply, GoTrash } from "react-icons/go";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ValuesTableProps {
   profiles: SanityDocument[];
   showJobRole: boolean;
   optimizedImages?: boolean;
+  tableName: string;
 }
 
 interface ProfileColors {
@@ -38,10 +47,15 @@ interface ProfileColors {
   };
 }
 
+interface ValueColorMap {
+  [value: string]: string;
+}
+
 const ValuesTable: React.FC<ValuesTableProps> = ({
   profiles,
   showJobRole,
   optimizedImages = false,
+  tableName,
 }) => {
   const colors: Record<string, string> = {
     none: "",
@@ -53,6 +67,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   };
 
   const [profileColors, setProfileColors] = useState<ProfileColors>({});
+  const [valueColorMap, setValueColorMap] = useState<ValueColorMap>({});
 
   const handleColorChange = (
     profileId: string,
@@ -68,14 +83,67 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
     }));
   };
 
+  const revertToAutoColors = () => {
+    setProfileColors({});
+    if (Object.keys(valueColorMap).length === 0) {
+      setValueColorMap(generateAutoColorMap());
+    }
+  };
+
+  const clearAllColorSystems = () => {
+    setProfileColors({});
+    setValueColorMap({});
+  };
+
+  const generateAutoColorMap = () => {
+    if (!profiles || profiles.length === 0) return {};
+
+    // Count occurrences of each value
+    const valueCounts: Record<string, number> = {};
+
+    profiles.forEach((profile) => {
+      if (profile.values && Array.isArray(profile.values)) {
+        profile.values.forEach((value) => {
+          if (value) {
+            valueCounts[value] = (valueCounts[value] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    const sortedValues = Object.entries(valueCounts)
+      .sort((a, b) => b[1] - a[1])
+      .map((entry) => entry[0])
+      .slice(0, 5);
+
+    const colorKeys = Object.keys(colors).filter((c) => c !== "none");
+    const newValueColorMap: ValueColorMap = {};
+
+    sortedValues.forEach((value, index) => {
+      if (index < colorKeys.length) {
+        newValueColorMap[value] = colorKeys[index];
+      }
+    });
+
+    return newValueColorMap;
+  };
+
+  useEffect(() => {
+    setValueColorMap(generateAutoColorMap());
+  }, [profiles]);
+
   const ColorDropdown = ({
     profileId,
     cellId,
+    value,
   }: {
     profileId: string;
     cellId: string;
+    value: string;
   }) => {
-    const selectedColor = profileColors[profileId]?.[cellId] || "";
+    const manualColor = profileColors[profileId]?.[cellId];
+    const autoColor = !manualColor && value ? valueColorMap[value] : null;
+    const selectedColor = manualColor || autoColor || "";
 
     return (
       <Select
@@ -215,58 +283,112 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   }
 
   return (
-    <div className="rounded-md border bg-light1 w-full">
-      <Table className="table-fixed w-full border-collapse">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead
-                  key={header.id}
-                  className={`${header.id !== "name" ? "w-1/6 text-center" : "w-1/3"}`}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell, index) => {
-                const profileId = row.original._id || row.id;
-                const cellId = cell.column.id;
-                const selectedColor = profileColors[profileId]?.[cellId];
-                const backgroundColor =
-                  selectedColor && selectedColor !== "none"
-                    ? colors[selectedColor] + "BF"
-                    : "";
+    <div className="space-y-4 mb-4 ">
+      <div className="flex justify-between items-center mb-4 ">
+        <h2 className="text-base font-semibold">{tableName}</h2>
 
-                return (
-                  <TableCell
-                    key={cell.id}
-                    className={`py-2 relative group ${cell.column.id !== "name" ? "w-1/6" : "w-1/3"} ${
-                      index > 0 ? "border-l border-light2" : ""
-                    }`}
-                    style={selectedColor ? { backgroundColor } : {}}
+        <div className="flex gap-2 ">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  variant="ghost"
+                  className="self-center hover:text-tertiary"
+                  size="sm"
+                  onClick={revertToAutoColors}
+                >
+                  <GoReply strokeWidth="0.6" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Automatically Assign Colors</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  variant="ghost"
+                  className="self-center hover:text-inspireRed"
+                  size="sm"
+                  onClick={clearAllColorSystems}
+                >
+                  <GoTrash strokeWidth="0.6" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Clear All Colors</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
+      <div className="rounded-md border bg-light1 w-full">
+        <Table className="table-fixed w-full border-collapse">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={`${header.id !== "name" ? "w-1/6 text-center" : "w-1/3"}`}
                   >
-                    <div className="absolute right-2 bottom-2 group-hover:opacity-100 transition-opacity duration-200 opacity-0">
-                      <ColorDropdown profileId={profileId} cellId={cellId} />
-                    </div>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell, index) => {
+                  const profileId = row.original._id || row.id;
+                  const cellId = cell.column.id;
+                  const cellValue = cellId.startsWith("value")
+                    ? row.original.values[
+                        parseInt(cellId.replace("value", "")) - 1
+                      ]
+                    : "";
+                  const manualColor = profileColors[profileId]?.[cellId];
+                  const autoColor =
+                    !manualColor && cellValue ? valueColorMap[cellValue] : null;
+                  const selectedColor = manualColor || autoColor || "";
+                  const backgroundColor =
+                    selectedColor && selectedColor !== "none"
+                      ? colors[selectedColor] + ""
+                      : "";
+
+                  return (
+                    <TableCell
+                      key={cell.id}
+                      className={`py-2 relative group ${selectedColor ? "text-white" : ""} ${cell.column.id !== "name" ? "w-1/6" : "w-1/3"} ${
+                        index > 0 ? "border-l border-light2" : ""
+                      }`}
+                      style={selectedColor ? { backgroundColor } : {}}
+                    >
+                      <div className="absolute right-2 bottom-2 group-hover:opacity-100 transition-opacity duration-200 opacity-0">
+                        <ColorDropdown
+                          profileId={profileId}
+                          cellId={cellId}
+                          value={cellValue}
+                        />
+                      </div>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>{" "}
     </div>
   );
 };
