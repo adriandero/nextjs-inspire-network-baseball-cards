@@ -120,6 +120,7 @@ function ProfileComparisonContent() {
               profiles={table.profiles}
               optimizedImages={true}
               showJobRole={showJobRole}
+              tableName={"Values"}
             />
           </div>
         ))
