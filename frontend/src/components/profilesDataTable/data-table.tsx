@@ -23,7 +23,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GoInfo } from "react-icons/go";
+import { GoInfo, GoVersions } from "react-icons/go";
 import { GoMultiSelect } from "react-icons/go";
 
 import {
@@ -39,6 +39,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
@@ -52,7 +53,10 @@ import {
 } from "../ui/alert-dialog";
 import { GoSearch } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
-import { getProfilesFromUserTeams } from "@/lib/utils/sanityApi/profileRequests";
+import {
+  getAllProfiles,
+  getProfilesFromUserTeams,
+} from "@/lib/utils/sanityApi/profileRequests";
 
 interface DataTableProps<TData, TValue> {
   teamColumns: ColumnDef<TData, TValue>[];
@@ -67,6 +71,9 @@ export function DataTable<TData, TValue>({
   teamsData,
   userProfileData,
 }: DataTableProps<TData, TValue>) {
+  const [groupingMode, setGroupingMode] = React.useState<"teams" | "profiles">( // TODO - Enum
+    "teams"
+  );
   const [currentView, setCurrentView] = React.useState<"teams" | "profiles">(
     "teams"
   );
@@ -74,6 +81,10 @@ export function DataTable<TData, TValue>({
     null
   );
   const [profilesData, setProfilesData] = React.useState<SanityDocument[]>([]);
+  const [allProfilesData, setAllProfilesData] = React.useState<
+    SanityDocument[]
+  >([]);
+  const [loadingProfiles, setLoadingProfiles] = React.useState(false);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -84,6 +95,13 @@ export function DataTable<TData, TValue>({
 
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const resetTableState = () => {
+    setSorting([]);
+    setColumnFilters([]);
+    setColumnVisibility({});
+    setRowSelection({});
+  };
+
   const handleTeamSelect = async (team: SanityDocument) => {
     try {
       const profiles = await getProfilesFromUserTeams(userProfileData.email, [
@@ -92,26 +110,75 @@ export function DataTable<TData, TValue>({
       setSelectedTeam(team);
       setProfilesData(profiles.teamProfiles);
       setCurrentView("profiles");
-      setSorting([]);
-      setColumnFilters([]);
-      setColumnVisibility({});
-      setRowSelection({});
+      resetTableState();
     } catch (error) {
       console.error("Error fetching profiles:", error);
     }
   };
 
-  const returnToTeamsView = () => {
-    setCurrentView("teams");
-    setSelectedTeam(null);
-    setSorting([]);
-    setColumnFilters([]);
-    setColumnVisibility({});
-    setRowSelection({});
+  const fetchAllProfiles = async () => {
+    try {
+      setLoadingProfiles(true);
+      const allProfiles = await getAllProfiles();
+      setAllProfilesData(allProfiles);
+    } catch (error) {
+      console.error("Error fetching all profiles:", error);
+    } finally {
+      setLoadingProfiles(false);
+    }
   };
 
-  const columns = currentView === "teams" ? teamColumns : profileColumns;
-  const data = currentView === "teams" ? teamsData : profilesData;
+  const handleGroupingChange = async (mode: "teams" | "profiles") => {
+    setGroupingMode(mode);
+    resetTableState();
+
+    if (mode === "profiles") {
+      setCurrentView("profiles");
+      setSelectedTeam(null);
+      if (allProfilesData.length === 0) {
+        await fetchAllProfiles();
+      }
+    } else {
+      setCurrentView("teams");
+      setSelectedTeam(null);
+    }
+  };
+
+  const returnToTeamsView = () => {
+    if (groupingMode === "teams") {
+      setCurrentView("teams");
+      setSelectedTeam(null);
+      resetTableState();
+    }
+  };
+
+  // Determine which data and columns to use
+  const getTableConfig = () => {
+    if (groupingMode === "profiles") {
+      return {
+        columns: profileColumns,
+        data: allProfilesData,
+        showSearch: true,
+        allowRowClick: false,
+      };
+    } else if (currentView === "teams") {
+      return {
+        columns: teamColumns,
+        data: teamsData,
+        showSearch: true,
+        allowRowClick: true,
+      };
+    } else {
+      return {
+        columns: profileColumns,
+        data: profilesData,
+        showSearch: true,
+        allowRowClick: false,
+      };
+    }
+  };
+
+  const { columns, data, showSearch, allowRowClick } = getTableConfig();
 
   const table = useReactTable({
     data: data as TData[],
@@ -132,45 +199,62 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const getBreadcrumbContent = () => {
+    if (groupingMode === "profiles") {
+      return (
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">All Profiles</BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    } else if (currentView === "teams") {
+      return (
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">All Teams</BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    } else {
+      return (
+        <>
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              onClick={returnToTeamsView}
+              className="cursor-pointer"
+            >
+              All Teams
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink>{selectedTeam?.name}</BreadcrumbLink>
+          </BreadcrumbItem>
+        </>
+      );
+    }
+  };
+
   return (
     <div className="sm:min-w-96 w-full max-w-screen-lg sm:px-6 px-2 ">
       <div className="flex items-center py-4 gap-2">
         <Breadcrumb className="justify-self-start">
-          <BreadcrumbList>
-            {currentView === "teams" ? (
-              <BreadcrumbItem>
-                <BreadcrumbLink href="#">All Teams</BreadcrumbLink>
-              </BreadcrumbItem>
-            ) : (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    onClick={returnToTeamsView}
-                    className="cursor-pointer"
-                  >
-                    All Teams
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink>{selectedTeam?.name}</BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-          </BreadcrumbList>
+          <BreadcrumbList>{getBreadcrumbContent()}</BreadcrumbList>
         </Breadcrumb>
 
-        <div className="relative ml-auto">
-          <GoSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search names..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="pl-8 !text-base bg-light1"
-          />
-        </div>
+        {showSearch && (
+          <div className="relative ml-auto">
+            <GoSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search names..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+              className="pl-8 !text-base bg-light1"
+            />
+          </div>
+        )}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
@@ -204,6 +288,28 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <GoVersions />
+              <span className="hidden sm:inline">Group By</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => handleGroupingChange("profiles")}
+              className={groupingMode === "profiles" ? "bg-accent" : ""}
+            >
+              Profiles
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleGroupingChange("teams")}
+              className={groupingMode === "teams" ? "bg-accent" : ""}
+            >
+              Teams
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="rounded-md border bg-light1">
         <Table>
@@ -226,15 +332,26 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loadingProfiles ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Loading profiles...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   onClick={async () => {
-                    if (currentView === "teams")
+                    if (allowRowClick) {
                       await handleTeamSelect(row.original as SanityDocument);
+                    }
                   }}
+                  className={allowRowClick ? "cursor-pointer" : ""}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -273,7 +390,6 @@ export function DataTable<TData, TValue>({
                         </AlertDialogContent>
                       </AlertDialog>
                     ) : null}
-                    {/* TODO: on click of info -> You don&apos;t have permissions to view any profiles. Ask an administrator for access. */}
                   </div>
                 </TableCell>
               </TableRow>

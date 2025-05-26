@@ -90,22 +90,22 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
         return (
           <div className="flex">
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths.factFinder ?? "*"}
+              {profileKolbeStrengths?.factFinder ?? "*"}
             </div>
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths.followThru ?? "*"}
+              {profileKolbeStrengths?.followThru ?? "*"}
             </div>
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths.quickStart ?? "*"}
+              {profileKolbeStrengths?.quickStart ?? "*"}
             </div>
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths.implementer ?? "*"}
+              {profileKolbeStrengths?.implementer ?? "*"}
             </div>
 
             <div className="w-6 h-6 items-center justify-between flex flex-col transform -rotate-90 ml-2">
               <Progress
                 value={
-                  profileKolbeStrengths.factFinder
+                  profileKolbeStrengths?.factFinder
                     ? profileKolbeStrengths.factFinder * 10
                     : 0
                 }
@@ -114,7 +114,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
               />
               <Progress
                 value={
-                  profileKolbeStrengths.followThru
+                  profileKolbeStrengths?.followThru
                     ? profileKolbeStrengths.followThru * 10
                     : 0
                 }
@@ -123,7 +123,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
               />{" "}
               <Progress
                 value={
-                  profileKolbeStrengths.quickStart
+                  profileKolbeStrengths?.quickStart
                     ? profileKolbeStrengths.quickStart * 10
                     : 0
                 }
@@ -132,7 +132,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
               />{" "}
               <Progress
                 value={
-                  profileKolbeStrengths.implementer
+                  profileKolbeStrengths?.implementer
                     ? profileKolbeStrengths.implementer * 10
                     : 0
                 }

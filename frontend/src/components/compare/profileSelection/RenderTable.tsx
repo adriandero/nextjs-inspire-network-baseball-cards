@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GoSearch } from "react-icons/go";
+import { GoSearch, GoVersions } from "react-icons/go";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,6 +18,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumbs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   ColumnDef,
   flexRender,
@@ -28,12 +34,15 @@ import { useDraggable } from "@dnd-kit/core";
 
 interface RenderTableProps {
   view: "teams" | "profiles";
+  groupingMode: "teams" | "profiles";
   selectedTeamName: string;
   table: ReactTable<SanityDocument>;
   searchInputRef: RefObject<HTMLInputElement>;
   handleBackToTeams: () => void;
   handleTeamClick: (teamSlug: string, teamName: string) => void;
+  handleGroupingChange: (mode: "teams" | "profiles") => void;
   columns: ColumnDef<SanityDocument>[];
+  isLoadingProfiles?: boolean;
 }
 
 const RenderRow: React.FC<any> = ({ row }) => {
@@ -65,39 +74,57 @@ const RenderRow: React.FC<any> = ({ row }) => {
 
 const RenderTable: React.FC<RenderTableProps> = ({
   view,
+  groupingMode,
   selectedTeamName,
   table,
   searchInputRef,
   handleBackToTeams,
   handleTeamClick,
+  handleGroupingChange,
   columns,
+  isLoadingProfiles = false,
 }) => {
+  const getBreadcrumbContent = () => {
+    if (groupingMode === "profiles") {
+      return (
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">All Profiles</BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    } else if (view === "teams") {
+      return (
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">All Teams</BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    } else {
+      return (
+        <>
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              onClick={handleBackToTeams}
+              className="cursor-pointer"
+            >
+              All Teams
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink>{selectedTeamName}</BreadcrumbLink>
+          </BreadcrumbItem>
+        </>
+      );
+    }
+  };
+
+  const shouldAllowRowClick = groupingMode === "teams" && view === "teams";
+  const shouldUseDraggableRows = view === "profiles";
+
   return (
     <div className="w-full">
       <div className="flex w-full items-center py-4 gap-2">
         <Breadcrumb className="justify-self-start">
-          <BreadcrumbList>
-            {view === "teams" ? (
-              <BreadcrumbItem>
-                <BreadcrumbLink href="#">All Teams</BreadcrumbLink>
-              </BreadcrumbItem>
-            ) : (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    onClick={handleBackToTeams}
-                    className="cursor-pointer"
-                  >
-                    All Teams
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink>{selectedTeamName}</BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-          </BreadcrumbList>
+          <BreadcrumbList>{getBreadcrumbContent()}</BreadcrumbList>
         </Breadcrumb>
 
         <div className="relative ml-auto">
@@ -113,6 +140,28 @@ const RenderTable: React.FC<RenderTableProps> = ({
             className="pl-8 !text-base bg-light1"
           />
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <GoVersions />
+              <span className="hidden sm:inline">Group By</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => handleGroupingChange("profiles")}
+              className={groupingMode === "profiles" ? "bg-accent" : ""}
+            >
+              Profiles
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleGroupingChange("teams")}
+              className={groupingMode === "teams" ? "bg-accent" : ""}
+            >
+              Teams
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="rounded-md border bg-light1">
@@ -134,25 +183,34 @@ const RenderTable: React.FC<RenderTableProps> = ({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoadingProfiles ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Loading profiles...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => {
-                // For profiles view, wrap with draggable functionality
-                if (view === "profiles") {
+                // For profiles view (both teams and profiles), use draggable rows
+                if (shouldUseDraggableRows) {
                   return <RenderRow key={row.id} row={row} />;
                 }
 
-                // For teams view, keep original behavior
+                // For teams view in teams mode, keep original clickable behavior
                 return (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
-                      if (view === "teams") {
+                      if (shouldAllowRowClick) {
                         const team = row.original as SanityDocument;
                         handleTeamClick(team.slug || team._id, team.name);
                       }
                     }}
-                    className={view === "teams" ? "cursor-pointer" : ""}
+                    className={shouldAllowRowClick ? "cursor-pointer" : ""}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

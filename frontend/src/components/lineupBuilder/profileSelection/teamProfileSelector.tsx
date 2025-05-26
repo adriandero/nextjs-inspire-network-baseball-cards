@@ -82,9 +82,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
 
   const [view, setView] = useState<ViewType>("teams");
+  const [groupingMode, setGroupingMode] = useState<"teams" | "profiles">("teams");
   const [open, setOpen] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
+  const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
   const router = useRouter();
 
   const store = lineupBuilderStoreInstance;
@@ -102,6 +104,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam>({
     teams: {},
   });
+  const [allProfilesData, setAllProfilesData] = useState<SanityDocument[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeDragProfile, setActiveDragProfile] =
@@ -151,6 +154,63 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     return data;
   }, [userProfileData, fillAllUserTeams]);
 
+  const resetTableState = () => {
+    setSorting([]);
+    setColumnFilters([]);
+    setColumnVisibility({});
+    setPagination({ pageIndex: 0, pageSize: 9 });
+  };
+
+  const fetchAllProfiles = async (): Promise<SanityDocument[]> => {
+    try {
+      setIsLoadingProfiles(true);
+      
+      // Get all available teams
+      const availableTeams = await fillDataTableTeamData();
+      const allProfiles: SanityDocument[] = [];
+      
+      // If we already have profilesByTeam data, use it
+      if (profilesByTeam?.teams && Object.keys(profilesByTeam.teams).length > 0) {
+        Object.values(profilesByTeam.teams).forEach((profiles) => {
+          allProfiles.push(...profiles);
+        });
+      } else {
+        // Otherwise, fetch fresh data
+        const profilesData = await getAllProfilesGroupedByTeam();
+        Object.values(profilesData.teams).forEach((profiles) => {
+          allProfiles.push(...profiles);
+        });
+      }
+      
+      return allProfiles;
+    } catch (error) {
+      console.error("Error fetching all profiles:", error);
+      return [];
+    } finally {
+      setIsLoadingProfiles(false);
+    }
+  };
+
+  const handleGroupingChange = async (mode: "teams" | "profiles") => {
+    setGroupingMode(mode);
+    resetTableState();
+    
+    if (mode === "profiles") {
+      setView("profiles");
+      setSelectedTeam(null);
+      setSelectedTeamName("");
+      
+      if (allProfilesData.length === 0) {
+        const profiles = await fetchAllProfiles();
+        setAllProfilesData(profiles);
+      }
+    } else {
+      setView("teams");
+      setSelectedTeam(null);
+      setSelectedTeamName("");
+    }
+  };
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -176,14 +236,21 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   }, [fillDataTableTeamData]);
 
   const handleTeamClick = (teamSlug: string, teamName: string): void => {
-    setSelectedTeam(teamSlug);
-    setSelectedTeamName(teamName);
-    setView("profiles");
+    if (groupingMode === "teams") {
+      setSelectedTeam(teamSlug);
+      setSelectedTeamName(teamName);
+      setView("profiles");
+      resetTableState();
+    }
   };
 
   const handleBackToTeams = (): void => {
-    setView("teams");
-    setSelectedTeam(null);
+    if (groupingMode === "teams") {
+      setView("teams");
+      setSelectedTeam(null);
+      setSelectedTeamName("");
+      resetTableState();
+    }
   };
 
   const handleProfileCheck = (profileId: string): void => {
@@ -205,6 +272,10 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   };
 
   const getAllProfiles = (): SanityDocument[] => {
+    if (groupingMode === "profiles" && allProfilesData.length > 0) {
+      return allProfilesData;
+    }
+    
     if (!profilesByTeam?.teams) return [];
 
     const allProfiles: SanityDocument[] = [];
@@ -372,14 +443,22 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     },
   ];
 
-  const data =
-    view === "teams"
-      ? teams
-      : selectedTeam && profilesByTeam?.teams
+  // Determine which data to show based on grouping mode and view
+  const getTableData = () => {
+    if (groupingMode === "profiles") {
+      return allProfilesData;
+    } else if (view === "teams") {
+      return teams;
+    } else {
+      return selectedTeam && profilesByTeam?.teams
         ? profilesByTeam.teams[selectedTeam] || []
         : [];
+    }
+  };
 
-  const columns = view === "teams" ? teamColumns : profileColumns;
+  const data = getTableData();
+  const columns = (groupingMode === "profiles" || view === "profiles") ? profileColumns : teamColumns;
+  
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -411,7 +490,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       columnVisibility,
       pagination,
       rowSelection:
-        view === "profiles"
+        (view === "profiles" || groupingMode === "profiles")
           ? data.reduce((acc, profile, index) => {
               // Check if profile is in any table
               const isSelected = profileTables.some((table) =>
@@ -498,10 +577,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         selectedTeam,
         selectedTeamName,
         currentCompareType,
+        groupingMode,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }
-  }, [profileTables, selectedTeam, selectedTeamName, currentCompareType]);
+  }, [profileTables, selectedTeam, selectedTeamName, currentCompareType, groupingMode]);
 
   // Add this useEffect to load saved selections when the component mounts
   useEffect(() => {
@@ -528,6 +608,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
         if (parsedData.compareType) {
           setCompareType(parsedData.compareType);
+        }
+
+        if (parsedData.groupingMode) {
+          setGroupingMode(parsedData.groupingMode);
+          if (parsedData.groupingMode === "profiles") {
+            setView("profiles");
+          }
         }
       } catch (e) {
         console.error("Error restoring saved profile selection:", e);
@@ -616,12 +703,15 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         <div className="rounded-lg md:w-3/5 w-full">
           <RenderTable
             view={view}
+            groupingMode={groupingMode}
             selectedTeamName={selectedTeamName}
             table={table}
             searchInputRef={searchInputRef}
             handleBackToTeams={handleBackToTeams}
             handleTeamClick={handleTeamClick}
+            handleGroupingChange={handleGroupingChange}
             columns={columns}
+            isLoadingProfiles={isLoadingProfiles}
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">

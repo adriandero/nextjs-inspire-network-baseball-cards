@@ -51,7 +51,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
             ) : null}
             <AvatarFallback></AvatarFallback>
           </Avatar>} */}
-          <div className="relative w-8 h-8 rounded-full overflow-hidden">
+          <div className="relative min-w-10 min-h-10 rounded-full overflow-hidden">
             <Image
               src={profileImageSrc}
               alt={profileName}
