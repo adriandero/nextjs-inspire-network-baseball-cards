@@ -130,6 +130,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
 
   useEffect(() => {
     setValueColorMap(generateAutoColorMap());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profiles]);
 
   const ColorDropdown = ({

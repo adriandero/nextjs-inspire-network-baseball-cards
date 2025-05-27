@@ -1,4 +1,5 @@
 "use client";
+// NOTE: depricated
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
@@ -407,6 +408,10 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             handleBackToTeams={handleBackToTeams}
             handleTeamClick={handleTeamClick}
             columns={columns}
+            groupingMode={"teams"}
+            handleGroupingChange={function (): void {
+              throw new Error("Function not implemented.");
+            }}
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">
