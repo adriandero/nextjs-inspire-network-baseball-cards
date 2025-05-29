@@ -145,13 +145,13 @@ export default function KolbeStrengthsCard({
                   </TooltipProvider>
                   <Progress
                     value={
-                      kolbeObj?.implementer ? kolbeObj.implementer * 10 : 0
+                      kolbeObj?.implementer ? kolbeObj?.implementer * 10 : 0
                     }
                     color="bg-inspireYellow"
                   />
                   beObj?.
                   <div className="font-bold text-lg">
-                    {kolbeObj.implementer}
+                    {kolbeObj?.implementer}
                   </div>
                 </div>
               </AccordionTrigger>
