@@ -18,9 +18,9 @@ export interface MethodDescription {
   description: string;
 }
 export function getKolbeMethod(
-  number: number | null,
+  number: number | undefined,
   strength: KolbeStrength
-): MethodDescription | null {
+): MethodDescription | undefined {
   // Ensure the number is between 1 and 10
   if (!number || number < 1 || number > 10) {
     return { method: "In Transition...", description: "" };
@@ -40,8 +40,8 @@ export function getKolbeMethod(
   const strengthData = kolbeStrengthJson[strength];
   if (strengthData) {
     const methodDescription = strengthData[range];
-    return methodDescription || null;
+    return methodDescription || undefined;
   }
 
-  return null;
+  return undefined;
 }

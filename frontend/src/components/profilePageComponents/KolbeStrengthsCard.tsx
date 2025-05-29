@@ -30,10 +30,13 @@ export default function KolbeStrengthsCard({
 }: SanityDocument): React.JSX.Element {
   const kolbeObj = profile.kolbeStrengths;
 
-  const factFinderMethod = getKolbeMethod(kolbeObj.factFinder, "factFinder");
-  const followThruMethod = getKolbeMethod(kolbeObj.followThru, "followThru");
-  const quickStartMethod = getKolbeMethod(kolbeObj.quickStart, "quickStart");
-  const implementerMethod = getKolbeMethod(kolbeObj.implementer, "implementer");
+  const factFinderMethod = getKolbeMethod(kolbeObj?.factFinder, "factFinder");
+  const followThruMethod = getKolbeMethod(kolbeObj?.followThru, "followThru");
+  const quickStartMethod = getKolbeMethod(kolbeObj?.quickStart, "quickStart");
+  const implementerMethod = getKolbeMethod(
+    kolbeObj?.implementer,
+    "implementer"
+  );
 
   return (
     <ComponentShell>
@@ -60,10 +63,12 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.factFinder ? kolbeObj.factFinder * 10 : 0}
+                    value={kolbeObj?.factFinder ? kolbeObj?.factFinder * 10 : 0}
                     color="bg-inspireRed"
                   />
-                  <div className="font-bold text-lg">{kolbeObj.factFinder}</div>
+                  <div className="font-bold text-lg">
+                    {kolbeObj?.factFinder}
+                  </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -85,10 +90,12 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.followThru ? kolbeObj.followThru * 10 : 0}
+                    value={kolbeObj?.followThru ? kolbeObj?.followThru * 10 : 0}
                     color="bg-inspireBlue"
                   />
-                  <div className="font-bold text-lg">{kolbeObj.followThru}</div>
+                  <div className="font-bold text-lg">
+                    {kolbeObj?.followThru}
+                  </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -110,10 +117,12 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.quickStart ? kolbeObj.quickStart * 10 : 0}
+                    value={kolbeObj?.quickStart ? kolbeObj?.quickStart * 10 : 0}
                     color="bg-inspireGreen"
                   />
-                  <div className="font-bold text-lg">{kolbeObj.quickStart}</div>
+                  <div className="font-bold text-lg">
+                    {kolbeObj?.quickStart}
+                  </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -135,9 +144,12 @@ export default function KolbeStrengthsCard({
                     </Tooltip>
                   </TooltipProvider>
                   <Progress
-                    value={kolbeObj.implementer ? kolbeObj.implementer * 10 : 0}
+                    value={
+                      kolbeObj?.implementer ? kolbeObj.implementer * 10 : 0
+                    }
                     color="bg-inspireYellow"
                   />
+                  beObj?.
                   <div className="font-bold text-lg">
                     {kolbeObj.implementer}
                   </div>

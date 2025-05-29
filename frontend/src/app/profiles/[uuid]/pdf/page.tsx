@@ -62,9 +62,9 @@ export default async function ProfilePDF({
           _updatedAt={""}
         />
       </div>
-      <div className="flex flex-col gap-4 h-full w-auto">
+      <div className="flex flex-col gap-4 h-full w-1/3">
         <PDFValuesCard
-          className="max-w-96 w-full min-h-[96] border border-light3 bg-background rounded-xl pl-4 py-3"
+          className="w-full min-h-[96] border border-light3 bg-background rounded-xl pl-4 py-3"
           profile={profile}
           _id={""}
           _rev={""}
@@ -74,7 +74,7 @@ export default async function ProfilePDF({
         />
 
         <PDFKolbeStrengthsCard
-          className="max-w-96 w-full h-fit border border-light3 bg-background rounded-xl p-6 "
+          className="w-full h-fit border border-light3 bg-background rounded-xl p-6 "
           profile={profile}
           _id={""}
           _rev={""}

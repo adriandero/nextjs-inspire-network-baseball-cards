@@ -18,11 +18,14 @@ export default function PDFKolbeStrengthsCard({
 }: SanityDocument): React.JSX.Element {
   const kolbeObj = profile.kolbeStrengths;
 
-  const factFinderMethod = getKolbeMethod(kolbeObj.factFinder, "factFinder");
-  const followThruMethod = getKolbeMethod(kolbeObj.followThru, "followThru");
-  const quickStartMethod = getKolbeMethod(kolbeObj.quickStart, "quickStart");
-  const implementerMethod = getKolbeMethod(kolbeObj.implementer, "implementer");
-  
+  const factFinderMethod = getKolbeMethod(kolbeObj?.factFinder, "factFinder");
+  const followThruMethod = getKolbeMethod(kolbeObj?.followThru, "followThru");
+  const quickStartMethod = getKolbeMethod(kolbeObj?.quickStart, "quickStart");
+  const implementerMethod = getKolbeMethod(
+    kolbeObj?.implementer,
+    "implementer"
+  );
+
   return (
     <div className={`${className} flex`}>
       <div className="flex flex-col w-full h-fit items-start gap-4">
@@ -40,12 +43,12 @@ export default function PDFKolbeStrengthsCard({
             <GoSearch strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.factFinder ? kolbeObj.factFinder * 10 : 0}
+              value={kolbeObj?.factFinder ? kolbeObj?.factFinder * 10 : 0}
               color="bg-inspireRed"
             />
             <div className="font-bold text-lg">
               {/* TODO: bug: when nothing entered in sanity, doesnt even present the object attribute so nothing to call */}
-              {kolbeObj.factFinder ?? "*"}
+              {kolbeObj?.factFinder ?? "*"}
             </div>
           </div>
 
@@ -62,11 +65,11 @@ export default function PDFKolbeStrengthsCard({
             <GoTab strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.followThru ? kolbeObj.followThru * 10 : 0}
+              value={kolbeObj?.followThru ? kolbeObj?.followThru * 10 : 0}
               color="bg-inspireBlue"
             />
             <div className="font-bold text-lg">
-              {kolbeObj.followThru ?? "*"}
+              {kolbeObj?.followThru ?? "*"}
             </div>
           </div>
 
@@ -83,11 +86,11 @@ export default function PDFKolbeStrengthsCard({
             <GoRocket strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.quickStart ? kolbeObj.quickStart * 10 : 0}
+              value={kolbeObj?.quickStart ? kolbeObj?.quickStart * 10 : 0}
               color="bg-inspireGreen"
             />
             <div className="font-bold text-lg">
-              {kolbeObj.quickStart ?? "*"}
+              {kolbeObj?.quickStart ?? "*"}
             </div>
           </div>
 
@@ -104,11 +107,11 @@ export default function PDFKolbeStrengthsCard({
             <GoTools strokeWidth={0.5} size={28} />
 
             <Progress
-              value={kolbeObj.implementer ? kolbeObj.implementer * 10 : 0}
+              value={kolbeObj?.implementer ? kolbeObj?.implementer * 10 : 0}
               color="bg-inspireYellow"
             />
             <div className="font-bold text-lg">
-              {kolbeObj.implementer ?? "*"}
+              {kolbeObj?.implementer ?? "*"}
             </div>
           </div>
 

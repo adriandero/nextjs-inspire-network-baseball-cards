@@ -8,32 +8,33 @@ export default function ValuesCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
-    <ComponentShell className="flex flex-row">
-      <div className="flex w-fit h-fit items-start xs:flex-nowrap flex-wrap">
-        <div className="h-full mr-6 flex">
-          <GoNorthStar
-            strokeWidth={0.5}
-            size={24}
-            className="flex self-start"
-          />{" "}
-        </div>
-        <h1 className="text-xl font-bold flex-grow w-fit mr-6">Values</h1>
+    <>
+      {profile.values ? (
+        <ComponentShell className="flex flex-row">
+          <div className="flex w-fit h-fit items-start xs:flex-nowrap flex-wrap">
+            <div className="h-full mr-6 flex">
+              <GoNorthStar
+                strokeWidth={0.5}
+                size={24}
+                className="flex self-start"
+              />{" "}
+            </div>
+            <h1 className="text-xl font-bold flex-grow w-fit mr-6">Values</h1>
 
-        <div className="flex flex-wrap gap-2 xs:mt-0 mt-4">
-          {profile.values
-            ?.map((value: string, index: number) => (
-              <Badge
-                variant="outline"
-                key={index}
-                className="text-base font-bold"
-              >
-                {value}
-              </Badge>
-            ))}
-        </div>
-      </div>
+            <div className="flex flex-wrap gap-2 xs:mt-0 mt-4">
+              {profile.values?.map((value: string, index: number) => (
+                <Badge
+                  variant="outline"
+                  key={index}
+                  className="text-base font-bold"
+                >
+                  {value}
+                </Badge>
+              ))}
+            </div>
+          </div>
 
-      {/* <div className="flex xs:hidden flex-row ">
+          {/* <div className="flex xs:hidden flex-row ">
         <div className="h-full mr-6">
           <GoNorthStar
             strokeWidth={0.5}
@@ -58,6 +59,8 @@ export default function ValuesCard({
           </div>
         </div>
       </div> */}
-    </ComponentShell>
+        </ComponentShell>
+      ) : null}
+    </>
   );
 }

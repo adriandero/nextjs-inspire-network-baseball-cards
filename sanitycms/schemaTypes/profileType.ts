@@ -15,7 +15,7 @@ function createWidgetField(name: string) {
         {title: 'Red', value: 'red'},
       ],
     },
-    validation: (rule: {required: () => any}) => rule.required(),
+    // validation: (rule: {required: () => any}) => rule.required(),
   }
 }
 const wonderObj = createWidgetField('wonder')
@@ -121,7 +121,7 @@ export const profileType = defineType({
       name: 'values',
       type: 'array',
       of: [{type: 'string'}],
-      validation: (rule) => rule.required().unique(),
+      validation: (rule) => rule.unique(),
     }),
     defineField({
       name: 'profileImage',
@@ -162,7 +162,7 @@ export const profileType = defineType({
             enablementObj,
             tenacityObj,
           ],
-          validation: (rule) => rule.required(),
+          // validation: (rule) => rule.required(),
         },
       ],
     }),
@@ -178,7 +178,7 @@ export const profileType = defineType({
           },
         },
       ],
-      validation: (rule) => rule.required().unique(),
+      validation: (rule) => rule.unique(),
     }),
     defineField({
       name: 'kolbeStrengths',
