@@ -149,7 +149,6 @@ export default function KolbeStrengthsCard({
                     }
                     color="bg-inspireYellow"
                   />
-                  beObj?.
                   <div className="font-bold text-lg">
                     {kolbeObj?.implementer}
                   </div>
