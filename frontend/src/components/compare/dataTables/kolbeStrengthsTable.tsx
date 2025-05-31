@@ -157,7 +157,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   if (profiles.length === 0) {
     return (
       <div className="p-4 text-center">
-        <p className="text-gray-500">No profiles to display</p>
+        <p className="text-gray-500">No TUG Cards to display</p>
       </div>
     );
   }

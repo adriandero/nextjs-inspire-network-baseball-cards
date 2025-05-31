@@ -7,7 +7,7 @@ import PDFWorkingGeniusCard from "@/components/profilePDFComponents/PDFWorkingGe
 
 type tParams = Promise<{ uuid: string }>;
 
-export default async function SharedProfile({
+export default async function SharedTugCard({
   params,
 }: {
   params: tParams;

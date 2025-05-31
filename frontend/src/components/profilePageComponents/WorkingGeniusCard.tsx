@@ -17,22 +17,29 @@ export default function WorkingGeniusCard({
 
   return (
     <ComponentShell>
-      <div className="flex flex-row">
-        <div className="h-full mr-6">
-          <GoLightBulb
-            strokeWidth={0.5}
-            size={24}
-            className="flex self-start"
-          />
+      {workingGeniusJson[workingGenius] ? (
+        <div className="flex flex-row">
+          <div className="h-full mr-6">
+            <GoLightBulb
+              strokeWidth={0.5}
+              size={24}
+              className="flex self-start"
+            />
+          </div>
+          <div className="flex flex-col w-fit h-fit items-start">
+            <h2 className="text-xl font-bold">Working Genius</h2>
+            <h3 className="font-bold mt-2">
+              {workingGeniusJson[workingGenius]?.title}
+            </h3>
+            <p className="">{workingGeniusJson[workingGenius]?.description}</p>
+          </div>
         </div>
-        <div className="flex flex-col w-fit h-fit items-start">
-          <h2 className="text-xl font-bold">Working Genius</h2>
-          <h3 className="font-bold mt-2">
-            {workingGeniusJson[workingGenius]?.title}
-          </h3>
-          <p className="">{workingGeniusJson[workingGenius]?.description}</p>
+      ) : (
+        <div className="flex w-full h-fit justify-center items-center italic text-dark3">
+          {" "}
+          <p>No Result.</p>
         </div>
-      </div>
+      )}
       <div className="h-px w-full bg-light3 my-6"></div>
       <div className="flex justify-center">
         <WidgetCogsSVG

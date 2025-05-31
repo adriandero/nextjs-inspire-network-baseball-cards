@@ -53,7 +53,7 @@ function ProfileComparisonContent() {
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
-        console.error("Error loading profiles:", err);
+        console.error("Error loading TUG Cards:", err);
       }
     }
 
@@ -120,7 +120,7 @@ function ProfileComparisonContent() {
         <div>Loading profiles...</div>
       ) : completeProfileTables.length === 0 ||
         completeProfileTables.every((table) => table.profiles.length === 0) ? (
-        <div>No profiles found. Please select profiles to compare.</div>
+        <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
         // Map through all tables instead of just accessing index 0
         completeProfileTables.map((table) => (
@@ -138,7 +138,7 @@ function ProfileComparisonContent() {
 
 function PDFProfileComparison() {
   return (
-    <Suspense fallback={<div>Loading profiles...</div>}>
+    <Suspense fallback={<div>Loading Tug Cards...</div>}>
       <ProfileComparisonContent />
     </Suspense>
   );

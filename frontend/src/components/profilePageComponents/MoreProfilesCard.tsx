@@ -25,7 +25,7 @@ export default function MoreProfilesCard({
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   function handleProfileRedirect(uuid: string): void {
-    redirect(`/profiles/${uuid}`);
+    redirect(`/tugcards/${uuid}`);
   }
 
   return (
@@ -92,8 +92,8 @@ export default function MoreProfilesCard({
               <AlertDialogHeader>
                 <AlertDialogTitle>No Team Members Found</AlertDialogTitle>
                 <AlertDialogDescription>
-                  The profile is either in a team by itself, or you don&apos;t
-                  have permissions to view the teams profiles. Ask an
+                  The TUG Card is either in a team by itself, or you don&apos;t
+                  have permissions to view the teams TUG Cards. Ask an
                   administrator for access.
                 </AlertDialogDescription>
               </AlertDialogHeader>

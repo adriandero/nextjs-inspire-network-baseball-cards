@@ -88,7 +88,7 @@ const RenderTable: React.FC<RenderTableProps> = ({
     if (groupingMode === "profiles") {
       return (
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">All Profiles</BreadcrumbLink>
+          <BreadcrumbLink href="#">All TUG Cards</BreadcrumbLink>
         </BreadcrumbItem>
       );
     } else if (view === "teams") {
@@ -152,7 +152,7 @@ const RenderTable: React.FC<RenderTableProps> = ({
               onClick={() => handleGroupingChange("profiles")}
               className={groupingMode === "profiles" ? "bg-accent" : ""}
             >
-              Profiles
+              TUG Cards
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => handleGroupingChange("teams")}
@@ -189,7 +189,7 @@ const RenderTable: React.FC<RenderTableProps> = ({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Loading profiles...
+                  Loading TUG Cards...
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (

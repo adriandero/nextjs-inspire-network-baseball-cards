@@ -35,7 +35,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
         <div
           className="flex flex-row items-center gap-4 cursor-pointer"
           onClick={() => {
-            return redirect(`/profiles/${profileUuid}`);
+            return redirect(`/tugcards/${profileUuid}`);
           }}
         >
           {/* {<Avatar className="block min-w-[40px]">
@@ -140,7 +140,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                return redirect(`/profiles/${profileUuid}`);
+                return redirect(`/tugcards/${profileUuid}`);
               }}
             >
               View Profile

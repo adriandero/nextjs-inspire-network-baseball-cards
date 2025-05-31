@@ -27,7 +27,7 @@ function ProfileComparisonContent() {
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
-        console.error("Error loading profiles:", err);
+        console.error("Error loading TUG Cards:", err);
       }
     }
 
@@ -73,7 +73,7 @@ function ProfileComparisonContent() {
 
 function PDFProfileComparison() {
   return (
-    <Suspense fallback={<div>Loading profiles...</div>}>
+    <Suspense fallback={<div>Loading TUG Cards...</div>}>
       <ProfileComparisonContent />
     </Suspense>
   );

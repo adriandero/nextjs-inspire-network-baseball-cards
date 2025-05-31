@@ -42,7 +42,7 @@ export default function NavBar({
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/profiles/" + userProfileData?.profile.uuid);
+      redirect("/tugcards/" + userProfileData?.profile.uuid);
     }
   }
 
@@ -68,8 +68,8 @@ export default function NavBar({
           <Link href={`/compare`} className="hover:text-primary duration-200">
             Compare
           </Link>
-          <Link href={`/teams`} className="hover:text-primary duration-200">
-            Teams
+          <Link href={`/browse`} className="hover:text-primary duration-200">
+            Browse Cards
           </Link>
           {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
@@ -102,20 +102,20 @@ export default function NavBar({
                   onSelect={(e) => e.preventDefault()}
                   onClick={() => handleProfileRedirect()}
                 >
-                  Profile
+                  My TUG Card
                 </DropdownMenuItem>
               ) : (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      Profile
+                      My TUG Card
                     </DropdownMenuItem>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>Missing Baseballcard</AlertDialogTitle>
                       <AlertDialogDescription>
-                        You don&apos;t have a Baseball Card assigned - Ask an
+                        You don&apos;t have a TUG Card assigned - Ask an
                         administrator for access
                       </AlertDialogDescription>
                     </AlertDialogHeader>

@@ -20,7 +20,7 @@ import { redirect } from "next/navigation";
 
 type tParams = Promise<{ uuid: string }>;
 
-export default async function ProfilePage({
+export default async function TugPage({
   params,
 }: {
   params: tParams;

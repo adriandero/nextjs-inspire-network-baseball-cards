@@ -47,7 +47,7 @@ const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
           className={`rounded-md flex justify-center border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md p-4 transition-colors min-h-[100px]`}
         >
           <p className="text-dark3 self-center">
-            {isOver ? "Drop profile here" : "Drag profiles here"}
+            {isOver ? "Drop TUG Cards here" : "Drag TUG Cards here"}
           </p>
         </div>
       ) : (

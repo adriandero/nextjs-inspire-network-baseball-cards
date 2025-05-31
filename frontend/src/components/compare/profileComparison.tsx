@@ -47,9 +47,9 @@ export function ProfileComparison({
 
         setIsLoading(false);
       } catch (err) {
-        setError("Failed to load profile data");
+        setError("Failed to load TUG Card data");
         setIsLoading(false);
-        console.error("Error loading profiles:", err);
+        console.error("Error loading TUG Cards:", err);
       }
     }
 
@@ -102,11 +102,11 @@ export function ProfileComparison({
   return (
     <div className="px-6">
       {isLoading ? (
-        <div>Loading profiles...</div>
+        <div>Loading TUG Cards...</div>
       ) : error ? (
         <div>{error}</div>
       ) : profileData.length === 0 ? (
-        <div>No profiles found. Please select profiles to compare.</div>
+        <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex w-full items-center h-8 py-4 gap-2">

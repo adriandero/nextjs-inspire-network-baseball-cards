@@ -19,7 +19,7 @@ export async function GET(
   // await page.setExtraHTTPHeaders({
   //   Authorization: Bearer ${session?.tokenSet.accessToken},
   // });
-  await page.goto(process.env.BASE_URL + `/profiles/${uuid}/pdf`, {
+  await page.goto(process.env.BASE_URL + `/tugcards/${uuid}/pdf`, {
     waitUntil: "networkidle2",
   });
   await page.evaluate(() => {

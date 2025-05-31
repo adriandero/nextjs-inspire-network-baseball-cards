@@ -53,7 +53,8 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {factFinderMethod?.method}:{" "}
+            {factFinderMethod?.method}
+            {kolbeObj?.factFinder ? ":" : null}{" "}
             <span className="text-base font-normal">
               {factFinderMethod?.description}
             </span>
@@ -74,7 +75,8 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {followThruMethod?.method}:{" "}
+            {followThruMethod?.method}
+            {kolbeObj?.followThru ? ":" : null}{" "}
             <span className="text-base font-normal">
               {followThruMethod?.description}
             </span>
@@ -95,7 +97,8 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {quickStartMethod?.method}:{" "}
+            {quickStartMethod?.method}
+            {kolbeObj?.quickStart ? ":" : null}{" "}
             <span className="text-base font-normal">
               {quickStartMethod?.description}
             </span>
@@ -116,7 +119,8 @@ export default function PDFKolbeStrengthsCard({
           </div>
 
           <h3 className="text-base font-bold ml-12">
-            {implementerMethod?.method}:{" "}
+            {implementerMethod?.method}
+            {kolbeObj?.implementer ? ":" : null}{" "}
             <span className="text-base font-normal">
               {implementerMethod?.description}
             </span>
