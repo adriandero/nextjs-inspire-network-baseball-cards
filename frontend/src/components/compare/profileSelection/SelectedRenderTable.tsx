@@ -56,7 +56,7 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
         >
           <p className="text-dark3 self-center">
             {isOver
-              ? "Drop TUG Cards here"
+              ? "Drop TUG Cards in here"
               : "Select or drag TUG Cards to compare"}
           </p>
         </div>

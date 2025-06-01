@@ -807,7 +807,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
             <Button
               variant="outline"
-              disabled={!currentCompareType}
+              disabled={!currentCompareType || !profileTables[0].profiles[0]}
               className="hover:border-primary"
               onClick={handleContinue}
             >

@@ -49,7 +49,7 @@ export default function MobileNavMenu({
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-fit w-full items-center border-b px-4 py-2">
             <Collapsible className="grid gap-2 w-full">
-              <CollapsibleTrigger className="flex w-full justify-between rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&[data-state=open]>svg]:rotate-90">
+              <CollapsibleTrigger className="flex w-full justify-between items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&[data-state=open]>svg]:rotate-90">
                 <div className="flex gap-4 overflow-hidden">
                   My Account
                   <Avatar className="h-full">

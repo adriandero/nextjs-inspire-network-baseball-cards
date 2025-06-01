@@ -1,4 +1,4 @@
-import NavBar from "@/components/NavBar";
+import ProfileNavBar from "@/components/ProfileNavBar";
 import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
 import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
 import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
@@ -21,7 +21,7 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
 
   return (
     <div className="w-full max-w-screen-lg">
-      <NavBar
+      <ProfileNavBar
         userProfileData={userProfileData}
         _id={""}
         _rev={""}

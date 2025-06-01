@@ -3,6 +3,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 import Link from "next/link";
+import Image from "next/image";
+import INTMLogo from "@/../public/IN-TM-Logo.png";
 
 import {
   DropdownMenu,
@@ -48,7 +50,17 @@ export default function NavBar({
 
   return (
     <>
-      <div className="w-full h-16 flex justify-end items-center justify-self-center px-2 sm:px-6">
+      <div className="w-full h-16 flex items-center justify-self-center px-2 sm:px-6">
+        <Link href="/browse" className="mr-auto">
+          <Image
+            src={INTMLogo}
+            width={70}
+            height={150}
+            alt="Company Logo"
+            className="cursor-pointer"
+          />
+        </Link>
+
         <MobileNavMenu
           userProfileData={userProfileData?.profile}
           className="sm:hidden !text-dark1"

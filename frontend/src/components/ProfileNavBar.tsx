@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { Skeleton } from "./ui/skeleton";
@@ -40,6 +40,11 @@ export default function ProfileNavBar({
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const userProfilePic = "/defaultAvatar.png";
+  const router = useRouter();
+
+  function handleBack() {
+    router.back();
+  }
 
   function accountHasProfileAssigned() {
     if (userProfileData) return true;
@@ -48,19 +53,19 @@ export default function ProfileNavBar({
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/tugcards/" + userProfileData.uuid);
+      redirect("/profiles/" + userProfileData.uuid);
     }
   }
 
   return (
     <div className="w-full h-16 hidden md:flex justify-between items-center justify-self-center px-6">
-      <Link href={`/browse/`}>
-        <GoArrowLeft
-          size={28}
-          strokeWidth="0.5"
-          className="text-dark1 hover:text-primary hover:scale-110 duration-200"
-        />
-      </Link>
+      <GoArrowLeft
+        size={28}
+        strokeWidth="0.5"
+        onClick={() => handleBack()}
+        className="text-dark1 hover:text-primary hover:scale-110 duration-200"
+      />
+
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
         <Link
           href={`/lineupbuilder`}
@@ -101,22 +106,20 @@ export default function ProfileNavBar({
 
             {accountHasProfileAssigned() ? (
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <button onClick={() => handleProfileRedirect()}>
-                  My TUG Card
-                </button>
+                <button onClick={() => handleProfileRedirect()}>Profile</button>
               </DropdownMenuItem>
             ) : (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    My TUG Card
+                    Profile
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Missing Baseballcard</AlertDialogTitle>
                     <AlertDialogDescription>
-                      You don&apos;t have a TUG Card assigned - Ask an
+                      You don&apos;t have a Baseball Card assigned - Ask an
                       administrator for access
                     </AlertDialogDescription>
                   </AlertDialogHeader>
