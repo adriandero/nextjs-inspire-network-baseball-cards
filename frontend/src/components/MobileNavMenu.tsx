@@ -30,7 +30,7 @@ export default function MobileNavMenu({
   const userProfilePic = "/defaultAvatar.png";
 
   function handleProfileRedirect() {
-    if (userProfileData) redirect("/profiles/" + userProfileData.uuid);
+    if (userProfileData) redirect("/tugcards/" + userProfileData.uuid);
     // else
     //   alert(
     //     "You don't have a Baseball Card assigned - Ask an administrator for access"
@@ -49,7 +49,7 @@ export default function MobileNavMenu({
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-fit w-full items-center border-b px-4 py-2">
             <Collapsible className="grid gap-2 w-full">
-              <CollapsibleTrigger className="flex w-full justify-between rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&[data-state=open]>svg]:rotate-90">
+              <CollapsibleTrigger className="flex w-full justify-between items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&[data-state=open]>svg]:rotate-90">
                 <div className="flex gap-4 overflow-hidden">
                   My Account
                   <Avatar className="h-full">
@@ -72,7 +72,7 @@ export default function MobileNavMenu({
                         prefetch={false}
                         onClick={() => handleProfileRedirect()}
                       >
-                        Profile
+                        My TUG Card
                       </Link>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -105,11 +105,11 @@ export default function MobileNavMenu({
           <div className="flex-1 overflow-auto py-2">
             <nav className="grid items-start px-4 text-base font-medium">
               <Link
-                href="/teams"
+                href="/browse"
                 className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                 prefetch={false}
               >
-                Teams
+                Browse Cards
               </Link>
               <Link
                 href="/compare"

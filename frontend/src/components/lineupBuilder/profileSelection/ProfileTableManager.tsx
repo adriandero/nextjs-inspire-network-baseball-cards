@@ -79,10 +79,10 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className="flex flex-col w-full">
       {profileTables.map((table) => (
         <React.Fragment key={table.id}>
-          <div className="flex justify-end gap-3 items-center">
+          <div className="flex h-12 justify-end items-center">
             <div className="font-medium text-base flex">
               {editingTableId === table.id ? (
                 <Input

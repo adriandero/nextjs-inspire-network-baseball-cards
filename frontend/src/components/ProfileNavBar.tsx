@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { Skeleton } from "./ui/skeleton";
@@ -40,6 +40,11 @@ export default function ProfileNavBar({
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const userProfilePic = "/defaultAvatar.png";
+  const router = useRouter();
+
+  function handleBack() {
+    router.back();
+  }
 
   function accountHasProfileAssigned() {
     if (userProfileData) return true;
@@ -54,13 +59,13 @@ export default function ProfileNavBar({
 
   return (
     <div className="w-full h-16 hidden md:flex justify-between items-center justify-self-center px-6">
-      <Link href={`/teams/`}>
-        <GoArrowLeft
-          size={28}
-          strokeWidth="0.5"
-          className="text-dark1 hover:text-primary hover:scale-110 duration-200"
-        />
-      </Link>
+      <GoArrowLeft
+        size={28}
+        strokeWidth="0.5"
+        onClick={() => handleBack()}
+        className="text-dark1 hover:text-primary hover:scale-110 duration-200"
+      />
+
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
         <Link
           href={`/lineupbuilder`}
@@ -71,8 +76,8 @@ export default function ProfileNavBar({
         <Link href={`/compare`} className="hover:text-primary duration-200">
           Compare
         </Link>
-        <Link href={`/teams`} className="hover:text-primary duration-200">
-          Teams
+        <Link href={`/browse`} className="hover:text-primary duration-200">
+          Browse Cards
         </Link>
         {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}

@@ -1,26 +1,33 @@
+"use client";
 import { urlFor } from "@/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { GoArrowLeft } from "react-icons/go";
 
 import { SanityDocument } from "next-sanity";
-import Link from "next/link";
 import MobileNavMenu from "../MobileNavMenu";
+import { useRouter } from "next/navigation";
 
 export default function MobileNavBanner({
   profile,
   userProfileData,
 }: SanityDocument): React.JSX.Element {
+  const router = useRouter();
+
+  function handleBack() {
+    router.back();
+  }
+
   return (
     <div className="w-full flex md:hidden">
       <div className="w-full h-fit bg-secondary flex flex-col md:hidden items-center relative">
         <div className="flex flex-row justify-between w-full p-4">
-          <Link href="/teams">
-            <GoArrowLeft
-              size={32}
-              strokeWidth="0"
-              className="text-white hover:text-primary duration-200 mr-4"
-            />
-          </Link>
+          <GoArrowLeft
+            size={32}
+            strokeWidth="0"
+            onClick={() => handleBack()}
+            className="text-white hover:text-primary duration-200 mr-4"
+          />
+
           <div className="flex flex-col items-center text-center hidden xs:inline ">
             <h1 className="text-2xl xs:text-3xl font-bold text-light1 ">
               {profile.name?.toUpperCase()}

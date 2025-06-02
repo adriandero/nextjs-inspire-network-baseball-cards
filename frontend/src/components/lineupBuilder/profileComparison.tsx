@@ -6,7 +6,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
 import { Button } from "@/components/ui/button";
-import { GoMultiSelect, GoShare, GoDownload } from "react-icons/go";
+import { GoMultiSelect, GoDownload, GoLink } from "react-icons/go";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -24,6 +24,12 @@ import {
 } from "@/components/ui/command";
 import React from "react";
 import { CompareType, lineupBuilderStoreInstance } from "./lineupBuilderStore";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface ProfileTable {
   //TODO: own file
@@ -186,12 +192,12 @@ export function ProfileComparison({
   return (
     <div className="px-6">
       {isLoading ? (
-        <div>Loading profiles...</div>
+        <div>Loading TUG Cards...</div>
       ) : error ? (
         <div>{error}</div>
       ) : completeProfileTables.length === 0 ||
         completeProfileTables.every((table) => table.profiles.length === 0) ? (
-        <div>No profiles found. Please select profiles to compare.</div>
+        <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex w-full items-center h-8 py-4 gap-2">
@@ -263,28 +269,42 @@ export function ProfileComparison({
               <GoMultiSelect />
               <span className="hidden sm:inline">View</span>
             </Button>
-            <Button
-              variant="outline"
-              className=""
-              onClick={() => handleCopyURLToClipboard()}
-            >
-              <GoShare />
-            </Button>
-            <Button
-              variant="outline"
-              className=""
-              onClick={() => handlePDFDownloadCall()}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin" />
-                </>
-              ) : (
-                <>
-                  <GoDownload />
-                </>
-              )}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    className=""
+                    onClick={() => handleCopyURLToClipboard()}
+                  >
+                    <GoLink />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Copy Link</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    className=""
+                    onClick={() => handlePDFDownloadCall()}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <GoDownload />
+                      </>
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Download PDF</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           {completeProfileTables.map((table) => (

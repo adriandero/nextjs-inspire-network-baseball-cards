@@ -14,18 +14,18 @@ export default async function Home() {
   }
   const userData = await getUserData(session?.user);
   if (userData?.profile) {
-    redirect("/profiles/" + userData.profile.uuid);
+    redirect("/tugcards/" + userData.profile.uuid);
   } else {
     //TODO:
     console.log(
-      "Info: No dedicated profile assigned. Ask an Admin to create your own profile."
+      "Info: No dedicated TUG Card assigned. Ask an Admin to create your own TUG Card."
     );
-    redirect("/teams");
+    redirect("/browse");
   }
   return (
     <div className="container h-screen my-auto mx-auto w-fit p-8 flex items-center ">
       <div className="flex h-fit justify-center bg-secondary hover:bg-tertiary text-light1 font-bold py-2 px-4 rounded-lg ">
-        <Link href="/teams" className="flex flex-row items-center gap-3">
+        <Link href="/browse" className="flex flex-row items-center gap-3">
           Go to Team List <GoArrowRight size={24} />
         </Link>
       </div>

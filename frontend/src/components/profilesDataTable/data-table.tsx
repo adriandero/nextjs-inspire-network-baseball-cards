@@ -112,7 +112,7 @@ export function DataTable<TData, TValue>({
       setCurrentView("profiles");
       resetTableState();
     } catch (error) {
-      console.error("Error fetching profiles:", error);
+      console.error("Error fetching TUG Cards:", error);
     }
   };
 
@@ -122,7 +122,7 @@ export function DataTable<TData, TValue>({
       const allProfiles = await getAllProfiles();
       setAllProfilesData(allProfiles);
     } catch (error) {
-      console.error("Error fetching all profiles:", error);
+      console.error("Error fetching all TUG Cards:", error);
     } finally {
       setLoadingProfiles(false);
     }
@@ -203,7 +203,7 @@ export function DataTable<TData, TValue>({
     if (groupingMode === "profiles") {
       return (
         <BreadcrumbItem>
-          <BreadcrumbLink href="#">All Profiles</BreadcrumbLink>
+          <BreadcrumbLink href="#">All TUG Cards</BreadcrumbLink>
         </BreadcrumbItem>
       );
     } else if (currentView === "teams") {
@@ -300,7 +300,7 @@ export function DataTable<TData, TValue>({
               onClick={() => handleGroupingChange("profiles")}
               className={groupingMode === "profiles" ? "bg-accent" : ""}
             >
-              Profiles
+              TUG Cards
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => handleGroupingChange("teams")}
@@ -380,7 +380,7 @@ export function DataTable<TData, TValue>({
                             </AlertDialogTitle>
                             <AlertDialogDescription>
                               You don&apos;t have permissions to view any
-                              profiles at the moment. Ask an administrator for
+                              TUG Cards at the moment. Ask an administrator for
                               access.
                             </AlertDialogDescription>
                           </AlertDialogHeader>

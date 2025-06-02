@@ -82,7 +82,9 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
 
   const [view, setView] = useState<ViewType>("teams");
-  const [groupingMode, setGroupingMode] = useState<"teams" | "profiles">("teams");
+  const [groupingMode, setGroupingMode] = useState<"teams" | "profiles">(
+    "teams"
+  );
   const [open, setOpen] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
@@ -164,13 +166,16 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const fetchAllProfiles = async (): Promise<SanityDocument[]> => {
     try {
       setIsLoadingProfiles(true);
-      
+
       // Get all available teams
       const availableTeams = await fillDataTableTeamData();
       const allProfiles: SanityDocument[] = [];
-      
+
       // If we already have profilesByTeam data, use it
-      if (profilesByTeam?.teams && Object.keys(profilesByTeam.teams).length > 0) {
+      if (
+        profilesByTeam?.teams &&
+        Object.keys(profilesByTeam.teams).length > 0
+      ) {
         Object.values(profilesByTeam.teams).forEach((profiles) => {
           allProfiles.push(...profiles);
         });
@@ -181,7 +186,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           allProfiles.push(...profiles);
         });
       }
-      
+
       return allProfiles;
     } catch (error) {
       console.error("Error fetching all profiles:", error);
@@ -194,12 +199,12 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleGroupingChange = async (mode: "teams" | "profiles") => {
     setGroupingMode(mode);
     resetTableState();
-    
+
     if (mode === "profiles") {
       setView("profiles");
       setSelectedTeam(null);
       setSelectedTeamName("");
-      
+
       if (allProfilesData.length === 0) {
         const profiles = await fetchAllProfiles();
         setAllProfilesData(profiles);
@@ -275,7 +280,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     if (groupingMode === "profiles" && allProfilesData.length > 0) {
       return allProfilesData;
     }
-    
+
     if (!profilesByTeam?.teams) return [];
 
     const allProfiles: SanityDocument[] = [];
@@ -457,8 +462,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   };
 
   const data = getTableData();
-  const columns = (groupingMode === "profiles" || view === "profiles") ? profileColumns : teamColumns;
-  
+  const columns =
+    groupingMode === "profiles" || view === "profiles"
+      ? profileColumns
+      : teamColumns;
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -490,7 +498,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       columnVisibility,
       pagination,
       rowSelection:
-        (view === "profiles" || groupingMode === "profiles")
+        view === "profiles" || groupingMode === "profiles"
           ? data.reduce((acc, profile, index) => {
               // Check if profile is in any table
               const isSelected = profileTables.some((table) =>
@@ -563,7 +571,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   };
 
   const [currentCompareType, setCompareType] = useState<CompareType | null>(
-    null
+    CompareType.WORKING_GENIUS
   );
 
   useEffect(() => {
@@ -581,7 +589,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }
-  }, [profileTables, selectedTeam, selectedTeamName, currentCompareType, groupingMode]);
+  }, [
+    profileTables,
+    selectedTeam,
+    selectedTeamName,
+    currentCompareType,
+    groupingMode,
+  ]);
 
   // Add this useEffect to load saved selections when the component mounts
   useEffect(() => {
@@ -617,7 +631,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           }
         }
       } catch (e) {
-        console.error("Error restoring saved profile selection:", e);
+        console.error("Error restoring saved TUG Card selection:", e);
         // If there's an error parsing, remove the invalid data
         localStorage.removeItem(STORAGE_KEY);
       }
@@ -793,7 +807,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
             <Button
               variant="outline"
-              disabled={!currentCompareType}
+              disabled={!currentCompareType || !profileTables[0].profiles[0]}
               className="hover:border-primary"
               onClick={handleContinue}
             >

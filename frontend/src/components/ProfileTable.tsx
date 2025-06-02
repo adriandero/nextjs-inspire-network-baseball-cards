@@ -19,7 +19,7 @@ export default function ProfileTable({
 }: SanityDocument): React.JSX.Element {
   return (
     <Table>
-      <TableCaption>A list of your available profiles</TableCaption>
+      <TableCaption>A list of your available TUG Cards</TableCaption>
       <TableHeader className="hidden sm:table-row-group">
         <TableRow>
           <TableHead className="flex flex-row items-center">

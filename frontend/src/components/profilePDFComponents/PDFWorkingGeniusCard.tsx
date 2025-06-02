@@ -12,8 +12,8 @@ export default function PDFWorkingGeniusCard({
   const workingGenius: workingGeniusKey = profile.workingGenius?.title;
 
   return (
-    <div className={`${className} flex  gap-4`}>
-      <div className="flex flex-row h-full w-1/2">
+    <div className={`${className} flex h-full gap-4`}>
+      <div className="flex flex-row min-h-full w-1/2">
         <div className="h-full mr-6">
           <GoLightBulb
             strokeWidth={0.5}
@@ -21,14 +21,23 @@ export default function PDFWorkingGeniusCard({
             className="flex self-start mt-0.5"
           />
         </div>
-        <div className="flex flex-col min-w-32 min-h-full items-start">
+        <div className="flex flex-col min-w-32 min-h-full h-full items-start">
           <h2 className="text-lg font-bold">Working Genius</h2>
-          <h3 className="font-bold mt-2 text-base">
-            {workingGeniusJson[workingGenius]?.title}
-          </h3>
-          <p className="text-base">
-            {workingGeniusJson[workingGenius]?.description}
-          </p>
+          {workingGeniusJson[workingGenius] ? (
+            <>
+              <h3 className="font-bold mt-2 text-base">
+                {workingGeniusJson[workingGenius]?.title}
+              </h3>
+              <p className="text-base">
+                {workingGeniusJson[workingGenius]?.description}
+              </p>
+            </>
+          ) : (
+            <div className="flex w-full h-full justify-center items-center italic text-dark3">
+              {" "}
+              <p>No Result.</p>
+            </div>
+          )}
         </div>
       </div>
 

@@ -12,7 +12,7 @@ export default function DownloadButton({ uuid }: { uuid: string }) {
     try {
       setLoading(true);
 
-      const pdfBlob = await fetch(`/api/profiles/${uuid}/pdf`).then((res) =>
+      const pdfBlob = await fetch(`/api/tugcards/${uuid}/pdf`).then((res) =>
         res.blob()
       );
 
@@ -47,7 +47,7 @@ export default function DownloadButton({ uuid }: { uuid: string }) {
       ) : (
         <>
           <GoDownload size={30} strokeWidth="0.5" className="!w-5 !h-5" />{" "}
-          <span>Download Profile</span>
+          <span>Download TUG Card</span>
         </>
       )}
     </Button>

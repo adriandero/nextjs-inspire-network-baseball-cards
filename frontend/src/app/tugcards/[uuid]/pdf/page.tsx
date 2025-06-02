@@ -10,7 +10,7 @@ import PDFWorkingGeniusCard from "@/components/profilePDFComponents/PDFWorkingGe
 
 type tParams = Promise<{ uuid: string }>;
 
-export default async function ProfilePDF({
+export default async function TugCardPDF({
   params,
 }: {
   params: tParams;

@@ -18,7 +18,7 @@ export interface Team {
   slug: string;
 }
 
-export default async function TeamsPage(): Promise<JSX.Element> {
+export default async function BrowsePage(): Promise<JSX.Element> {
   const session = await auth0.getSession();
 
   if (!session) {
