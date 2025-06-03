@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { Skeleton } from "./ui/skeleton";
@@ -34,16 +34,16 @@ import {
 
 export default function ProfileNavBar({
   userProfileData,
+  backwardsNavigationUrl,
 }: SanityDocument): React.JSX.Element {
   // const { data: session, status } = useSession();
 
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const userProfilePic = "/defaultAvatar.png";
-  const router = useRouter();
 
   function handleBack() {
-    router.back();
+    redirect(backwardsNavigationUrl);
   }
 
   function accountHasProfileAssigned() {
@@ -53,7 +53,7 @@ export default function ProfileNavBar({
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/profiles/" + userProfileData.uuid);
+      redirect("/tugcards/" + userProfileData.uuid);
     }
   }
 
@@ -106,7 +106,9 @@ export default function ProfileNavBar({
 
             {accountHasProfileAssigned() ? (
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <button onClick={() => handleProfileRedirect()}>Profile</button>
+                <button onClick={() => handleProfileRedirect()}>
+                  My TUG Card
+                </button>
               </DropdownMenuItem>
             ) : (
               <AlertDialog>

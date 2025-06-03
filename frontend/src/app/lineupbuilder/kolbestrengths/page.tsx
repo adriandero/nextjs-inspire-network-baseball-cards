@@ -23,6 +23,7 @@ export default async function KolbeStrengthsPage(): Promise<JSX.Element> {
     <div className="w-full max-w-screen-lg">
       <ProfileNavBar
         userProfileData={userProfileData}
+        backwardsNavigationUrl={"/lineupbuilder/"}
         _id={""}
         _rev={""}
         _type={""}

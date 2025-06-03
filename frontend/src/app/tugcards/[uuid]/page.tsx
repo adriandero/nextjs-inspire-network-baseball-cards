@@ -58,6 +58,7 @@ export default async function TugPage({
       />
       <ProfileNavBar
         userProfileData={userData.profile}
+        backwardsNavigationUrl={"/browse/"}
         _id={""}
         _rev={""}
         _type={""}
