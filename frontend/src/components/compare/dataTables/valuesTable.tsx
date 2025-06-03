@@ -235,35 +235,35 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
       accessorKey: "value1",
       header: "Value 1",
       cell: ({ row }) => (
-        <div className="text-center">{row.original.values[0]}</div>
+        <div className="text-center">{row.original.values?.[0] || "-"}</div>
       ),
     },
     {
       accessorKey: "value2",
       header: "Value 2",
       cell: ({ row }) => (
-        <div className="text-center">{row.original.values[1]}</div>
+        <div className="text-center">{row.original.values?.[1] || "-"}</div>
       ),
     },
     {
       accessorKey: "value3",
       header: "Value 3",
       cell: ({ row }) => (
-        <div className="text-center">{row.original.values[2]}</div>
+        <div className="text-center">{row.original.values?.[2] || "-"}</div>
       ),
     },
     {
       accessorKey: "value4",
       header: "Value 4",
       cell: ({ row }) => (
-        <div className="text-center">{row.original.values[3]}</div>
+        <div className="text-center">{row.original.values?.[3] || "-"}</div>
       ),
     },
     {
       accessorKey: "value5",
       header: "Value 5",
       cell: ({ row }) => (
-        <div className="text-center">{row.original.values[4]}</div>
+        <div className="text-center">{row.original.values?.[4] || "-"}</div>
       ),
     },
   ];
@@ -349,10 +349,9 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                 {row.getVisibleCells().map((cell, index) => {
                   const profileId = row.original._id || row.id;
                   const cellId = cell.column.id;
+                  const values = row.original.values || [];
                   const cellValue = cellId.startsWith("value")
-                    ? row.original.values[
-                        parseInt(cellId.replace("value", "")) - 1
-                      ]
+                    ? values[parseInt(cellId.replace("value", "")) - 1] || ""
                     : "";
                   const manualColor = profileColors[profileId]?.[cellId];
                   const autoColor =

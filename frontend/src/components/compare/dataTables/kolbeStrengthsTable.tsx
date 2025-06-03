@@ -24,12 +24,14 @@ interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
   showJobRole: boolean;
+  tableName: string;
 }
 
 const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
   optimizedImages = false,
   showJobRole,
+  tableName,
 }) => {
   // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
@@ -163,46 +165,49 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   }
 
   return (
-    <div className="rounded-md border bg-light1 w-full">
-      <Table className="table-fixed  w-full">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead
-                  key={header.id}
-                  className={`py-2 ${
-                    header.column.id === "name" ? "w-1/3" : "w-2/3"
-                  }`}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id} className="px-4">
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className={`py-2 ${
-                    cell.column.id === "name" ? "w-1/3" : "w-2/3"
-                  }`}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div className="space-y-4 mb-4 ">
+      <h2 className="text-base font-semibold">{tableName}</h2>
+      <div className="rounded-md border bg-light1 w-full">
+        <Table className="table-fixed  w-full">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={`py-2 ${
+                      header.column.id === "name" ? "w-1/3" : "w-2/3"
+                    }`}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id} className="px-4">
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    className={`py-2 ${
+                      cell.column.id === "name" ? "w-1/3" : "w-2/3"
+                    }`}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

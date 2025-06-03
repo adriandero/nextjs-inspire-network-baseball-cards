@@ -8,6 +8,7 @@ import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
 interface KolbeGraphProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
+  tableName: string;
 }
 
 interface ProfileData {
@@ -21,7 +22,7 @@ interface CellData {
   people: ProfileData[];
 }
 
-const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles }) => {
+const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles, tableName }) => {
   if (profiles.length === 0) {
     return (
       <div className="p-4 text-center">
@@ -120,86 +121,89 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles }) => {
   const gridData = processProfiles();
 
   return (
-    <div className="w-full mx-auto">
-      <div className="flex mb-2">
-        <div className="w-8 mr-4"></div>
+    <div className="space-y-4 mb-4 ">
+      <h2 className="text-base font-semibold">{tableName}</h2>
+      <div className="w-full mx-auto">
+        <div className="flex mb-2">
+          <div className="w-8 mr-4"></div>
 
-        <div className="flex-1 grid grid-cols-4 gap-2">
-          {columnHeaders.map((header, colIndex) => {
-            // Get the correct icon for each header
-            let HeaderIcon;
-            switch (colIndex) {
-              case 0:
-                HeaderIcon = GoTools;
-                break;
-              case 1:
-                HeaderIcon = GoTab;
-                break;
-              case 2:
-                HeaderIcon = GoSearch;
-                break;
-              case 3:
-                HeaderIcon = GoRocket;
-                break;
-              default:
-                HeaderIcon = null;
-            }
+          <div className="flex-1 grid grid-cols-4 gap-2">
+            {columnHeaders.map((header, colIndex) => {
+              // Get the correct icon for each header
+              let HeaderIcon;
+              switch (colIndex) {
+                case 0:
+                  HeaderIcon = GoTools;
+                  break;
+                case 1:
+                  HeaderIcon = GoTab;
+                  break;
+                case 2:
+                  HeaderIcon = GoSearch;
+                  break;
+                case 3:
+                  HeaderIcon = GoRocket;
+                  break;
+                default:
+                  HeaderIcon = null;
+              }
 
-            return (
-              <div
-                key={`header-${colIndex}`}
-                className={`text-center font-medium p-2 ${columnColors[colIndex]} flex items-center justify-center gap-3 `}
-              >
-                {HeaderIcon && <HeaderIcon strokeWidth={1} size={18} />}
-                <span className="font-bold">{header}</span>
-              </div>
-            );
-          })}
+              return (
+                <div
+                  key={`header-${colIndex}`}
+                  className={`text-center font-medium p-2 ${columnColors[colIndex]} flex items-center justify-center gap-3 `}
+                >
+                  {HeaderIcon && <HeaderIcon strokeWidth={1} size={18} />}
+                  <span className="font-bold">{header}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {gridData.map((row: CellData[], rowIndex: number) => (
-        <div key={`row-${rowIndex + 1}`} className="flex mb-2">
-          <div className="w-8 mr-4 flex items-center justify-center">
-            <div className="transform -rotate-90 whitespace-nowrap flex items-center">
-              <span className="font-bold">{rowLabels[rowIndex]}</span>
+        {gridData.map((row: CellData[], rowIndex: number) => (
+          <div key={`row-${rowIndex + 1}`} className="flex mb-2">
+            <div className="w-8 mr-4 flex items-center justify-center">
+              <div className="transform -rotate-90 whitespace-nowrap flex items-center">
+                <span className="font-bold">{rowLabels[rowIndex]}</span>
+              </div>
+            </div>
+
+            <div className="flex-1 grid grid-cols-4 gap-2 min-h-48">
+              {row.map((cell: CellData, colIndex: number) => (
+                <div
+                  key={`cell-${rowIndex}-${colIndex}`}
+                  className={`border-4 rounded-lg p-3 ${columnColors[colIndex]}`}
+                >
+                  <div className="text-3xl font-bold text-center mb-2">
+                    {cell.percent}
+                  </div>
+
+                  <div className="border-t border-light3 mb-2"></div>
+
+                  <div className="space-y-1">
+                    {cell.people.map(
+                      (profile: ProfileData, profileIndex: number) => (
+                        <div
+                          key={`profile-${rowIndex}-${colIndex}-${profileIndex}`}
+                          className="flex justify-between"
+                        >
+                          <span>{profile.name}</span>
+                          <span
+                            className={`${columnNumberColors[colIndex]} font-bold`}
+                          >
+                            {profile.value}
+                          </span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-
-          <div className="flex-1 grid grid-cols-4 gap-2 min-h-48">
-            {row.map((cell: CellData, colIndex: number) => (
-              <div
-                key={`cell-${rowIndex}-${colIndex}`}
-                className={`border-4 rounded-lg p-3 ${columnColors[colIndex]}`}
-              >
-                <div className="text-3xl font-bold text-center mb-2">
-                  {cell.percent}
-                </div>
-
-                <div className="border-t border-light3 mb-2"></div>
-
-                <div className="space-y-1">
-                  {cell.people.map(
-                    (profile: ProfileData, profileIndex: number) => (
-                      <div
-                        key={`profile-${rowIndex}-${colIndex}-${profileIndex}`}
-                        className="flex justify-between"
-                      >
-                        <span>{profile.name}</span>
-                        <span
-                          className={`${columnNumberColors[colIndex]} font-bold`}
-                        >
-                          {profile.value}
-                        </span>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
