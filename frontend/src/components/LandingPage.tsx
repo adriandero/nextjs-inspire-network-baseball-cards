@@ -66,42 +66,19 @@ export default function LandingPage({
                 {" "}
                 Browse Cards
                 <GoArrowRight
-                  // size={32}
-                  // weight={1}
-                  // className="group-hover:translate-x-1 transition-transform duration-300"
                   size={40}
                   strokeWidth="1"
                   className="text-light1 w-8 h-4 hover:text-primary hover:scale-110 duration-200"
                 />
               </Button>
-              {/* <Link
-                  href="/browse"
-                  className="group bg-primary text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/25 hover:-translate-y-1 flex items-center justify-center gap-3"
-                ></Link> */}
 
               {userProfileData?.profile ? (
-                //   <Link
-                //     href={`/tugcards/${userData.profile.uuid}`}
-                //     className=" bg-tertiary font-semibold py-4 px-8 rounded-full backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-3"
-                //   >
-                //     View My Card
-                //     <span className="text-lg">📋</span>
-                //   </Link>
-
                 <Button
                   variant="ghost"
-                  className="text-xl h-fit w-fit py-2 px-6 rounded-xl group transition-all duration-200 hover:border hover:-translate-y-1 flex items-center justify-center gap-3"
+                  className="text-xl h-fit w-fit py-2 px-6 rounded-xl group transition-all duration-200 border border-mainbackground hover:bg-mainbackground hover:border-light3 hover:-translate-y-1 flex items-center justify-center gap-3"
                   onClick={handleMyCardRedirect}
                 >
                   View My Card
-                  {/* <GoArrowRight
-                      // size={32}
-                      // weight={1}
-                      // className="group-hover:translate-x-1 transition-transform duration-300"
-                      size={40}
-                      strokeWidth="1"
-                      className="text-light1 w-8 h-4 hover:text-primary hover:scale-110 duration-200"
-                    /> */}
                 </Button>
               ) : null}
             </div>
