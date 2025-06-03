@@ -10,6 +10,7 @@ import {
   getAllTeams,
   ProfilesByTeam,
   TeamsFromUser,
+  getAllProfiles,
 } from "@/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
 import {
@@ -169,22 +170,12 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
       // Get all available teams
       const availableTeams = await fillDataTableTeamData();
-      const allProfiles: SanityDocument[] = [];
+      let allProfiles: SanityDocument[] = [];
 
       // If we already have profilesByTeam data, use it
-      if (
-        profilesByTeam?.teams &&
-        Object.keys(profilesByTeam.teams).length > 0
-      ) {
-        Object.values(profilesByTeam.teams).forEach((profiles) => {
-          allProfiles.push(...profiles);
-        });
-      } else {
-        // Otherwise, fetch fresh data
-        const profilesData = await getAllProfilesGroupedByTeam();
-        Object.values(profilesData.teams).forEach((profiles) => {
-          allProfiles.push(...profiles);
-        });
+      if (allProfilesData.length <= 0) {
+        const profilesData = await getAllProfiles();
+        allProfiles = profilesData;
       }
 
       return allProfiles;
@@ -204,11 +195,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       setView("profiles");
       setSelectedTeam(null);
       setSelectedTeamName("");
-
-      if (allProfilesData.length === 0) {
-        const profiles = await fetchAllProfiles();
-        setAllProfilesData(profiles);
-      }
     } else {
       setView("teams");
       setSelectedTeam(null);
@@ -228,6 +214,11 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         // Load profiles grouped by team
         const profilesData = await getAllProfilesGroupedByTeam();
         setProfilesByTeam(profilesData);
+
+        if (allProfilesData.length === 0) {
+          const profiles = await fetchAllProfiles();
+          setAllProfilesData(profiles);
+        }
 
         setIsLoading(false);
       } catch (err) {
@@ -262,6 +253,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     // Add/remove profile from the first table (for backward compatibility)
     setProfileTables((prev) => {
       const updatedTables = [...prev];
+      console.log(updatedTables);
       if (updatedTables.length > 0) {
         const firstTable = updatedTables[0];
         if (firstTable.profiles.includes(profileId)) {
@@ -274,21 +266,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       }
       return updatedTables;
     });
-  };
-
-  const getAllProfiles = (): SanityDocument[] => {
-    if (groupingMode === "profiles" && allProfilesData.length > 0) {
-      return allProfilesData;
-    }
-
-    if (!profilesByTeam?.teams) return [];
-
-    const allProfiles: SanityDocument[] = [];
-    Object.values(profilesByTeam.teams).forEach((profiles) => {
-      allProfiles.push(...profiles);
-    });
-
-    return allProfiles;
   };
 
   // Table management functions
@@ -792,7 +769,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             onUpdateTableProfiles={handleUpdateTableProfiles}
             onUpdateTableName={handleUpdateTableName} // Add this new prop
             onCreateTableWithProfile={handleCreateTableWithProfile}
-            allProfiles={getAllProfiles()}
+            allProfiles={allProfilesData}
           />
 
           <div className="flex justify-end pt-4 gap-2">
