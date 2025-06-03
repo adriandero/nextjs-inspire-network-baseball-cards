@@ -27,11 +27,13 @@ export default async function RootLayout({
   return (
     <html lang="en" className="font-sans bg-mainbackground">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-mainbackground antialiased text-dark1`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-mainbackground antialiased text-dark1 justify-center flex`}
       >
         {/* {<SessionProvider session={session}>{children} </SessionProvider>} */}
         <header></header>
-        <main className="w-full flex justify-center">{children}</main>
+        <main className="w-full flex justify-center h-screen max-w-screen-lg ">
+          {children}
+        </main>
         <Toaster />
       </body>
     </html>
