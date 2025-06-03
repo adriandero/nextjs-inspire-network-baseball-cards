@@ -115,13 +115,13 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
-      delay: 100,
+      delay: 200,
       tolerance: 5,
     },
   });
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 100,
+      delay: 200,
       tolerance: 5,
     },
   });
@@ -703,6 +703,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             handleGroupingChange={handleGroupingChange}
             columns={columns}
             isLoadingProfiles={isLoadingProfiles}
+            handleProfileCheck={handleProfileCheck}
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">

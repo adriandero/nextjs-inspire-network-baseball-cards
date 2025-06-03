@@ -41,11 +41,12 @@ interface RenderTableProps {
   handleBackToTeams: () => void;
   handleTeamClick: (teamSlug: string, teamName: string) => void;
   handleGroupingChange: (mode: "teams" | "profiles") => void;
+  handleProfileCheck: (uuid: string) => void;
   columns: ColumnDef<SanityDocument>[];
   isLoadingProfiles?: boolean;
 }
 
-const RenderRow: React.FC<any> = ({ row }) => {
+const RenderRow: React.FC<any> = ({ row, handleProfileCheck }) => {
   const profile = row.original;
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: profile.uuid,
@@ -61,6 +62,7 @@ const RenderRow: React.FC<any> = ({ row }) => {
       {...attributes}
       {...listeners}
       data-draggable="true"
+      onClick={() => handleProfileCheck(row.original.uuid)}
       className="hover:bg-primary/5 relative group"
     >
       {row.getVisibleCells().map((cell: any) => (
@@ -81,6 +83,7 @@ const RenderTable: React.FC<RenderTableProps> = ({
   handleBackToTeams,
   handleTeamClick,
   handleGroupingChange,
+  handleProfileCheck,
   columns,
   isLoadingProfiles = false,
 }) => {
@@ -196,7 +199,13 @@ const RenderTable: React.FC<RenderTableProps> = ({
               table.getRowModel().rows.map((row) => {
                 // For profiles view (both teams and profiles), use draggable rows
                 if (shouldUseDraggableRows) {
-                  return <RenderRow key={row.id} row={row} />;
+                  return (
+                    <RenderRow
+                      key={row.id}
+                      row={row}
+                      handleProfileCheck={handleProfileCheck}
+                    />
+                  );
                 }
 
                 // For teams view in teams mode, keep original clickable behavior

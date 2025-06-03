@@ -412,6 +412,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             handleGroupingChange={function (): void {
               throw new Error("Function not implemented.");
             }}
+            handleProfileCheck={handleProfileCheck}
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">
