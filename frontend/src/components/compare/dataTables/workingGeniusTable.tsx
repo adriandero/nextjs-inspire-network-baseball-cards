@@ -24,7 +24,7 @@ interface WorkingGeniusTableProps {
   profiles: SanityDocument[];
   showJobRole: boolean;
   optimizedImages?: boolean;
-  tableName: string;
+  tableName?: string;
 }
 
 const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({

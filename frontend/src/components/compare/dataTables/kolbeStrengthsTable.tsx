@@ -24,7 +24,7 @@ interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
   showJobRole: boolean;
-  tableName: string;
+  tableName?: string;
 }
 
 const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({

@@ -38,7 +38,7 @@ interface ValuesTableProps {
   profiles: SanityDocument[];
   showJobRole: boolean;
   optimizedImages?: boolean;
-  tableName: string;
+  tableName?: string;
 }
 
 interface ProfileColors {

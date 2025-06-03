@@ -8,7 +8,7 @@ import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
 interface KolbeGraphProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
-  tableName: string;
+  tableName?: string;
 }
 
 interface ProfileData {
