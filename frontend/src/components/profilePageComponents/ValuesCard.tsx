@@ -9,7 +9,7 @@ export default function ValuesCard({
 }: SanityDocument): React.JSX.Element {
   return (
     <ComponentShell className="flex flex-row">
-      <div className="flex w-fit h-fit items-center xs:flex-nowrap flex-wrap">
+      <div className="flex w-fit h-fit xs:flex-nowrap flex-wrap">
         {" "}
         <div className="h-full mr-6 flex">
           <GoNorthStar strokeWidth={0.5} size={24} className="flex" />
@@ -28,7 +28,7 @@ export default function ValuesCard({
             ))}
           </div>
         ) : (
-          <div className="flex w-full h-fit justify-center items-center italic text-dark3">
+          <div className="flex w-full h-fit italic items-center text-dark3 pt-1">
             {" "}
             <p>No Result.</p>
           </div>

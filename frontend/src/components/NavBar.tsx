@@ -51,7 +51,7 @@ export default function NavBar({
   return (
     <>
       <div className="w-full h-16 flex items-center justify-self-center px-2 sm:px-6">
-        <Link href="/browse" className="mr-auto">
+        <Link href="/" className="mr-auto">
           <Image
             src={INTMLogo}
             width={70}
