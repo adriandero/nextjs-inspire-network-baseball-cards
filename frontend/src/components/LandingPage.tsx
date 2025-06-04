@@ -44,21 +44,24 @@ export default function LandingPage({
 
             {/* Main Headline */}
             <h1 className="text-5xl lg:text-6xl font-black leading-tight">
-              <span>Build Champions League Teams with </span>
+              <span>Build teams that lead themselves with </span>
               <span className="bg-gradient-to-r from-tertiary to-secondary bg-clip-text text-transparent">
                 TUG Cards
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xl text-gray-400 leading-relaxed max-w-lg">
-              Just like a tugboat guides massive ships to safety, TUG Cards
-              helps you steer your team assessments into clear, actionable
-              insights that drive real results.
+            <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
+              Self-leading teams have great{" "}
+              <span className="font-bold text-dark3">people</span> and great{" "}
+              <span className="font-bold text-dark3">culture</span>. TUG Cards
+              are the simple tool to help leaders make reads and select the
+              right people: <br></br> put them in right seats to perform as a{" "}
+              <span className="font-bold text-dark3">team</span> under pressure.
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col xs:flex-row gap-4">
               <Button
                 className=" text-light1 text-xl h-fit w-fit py-2 px-6 rounded-xl group transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 hover:-translate-y-1 flex items-center justify-center gap-3"
                 onClick={handleBrowseRedirect}
@@ -89,19 +92,19 @@ export default function LandingPage({
                 <div className="text-2xl font-black bg-gradient-to-r from-orange-400 to-cyan-400 bg-clip-text text-transparent mb-2">
                   15
                 </div>
-                <div className="text-gray-400 text-sm">National Advisors</div>
+                <div className="text-gray-500 text-sm">National Advisors</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-black bg-gradient-to-r from-orange-400 to-cyan-400 bg-clip-text text-transparent mb-2">
                   98%
                 </div>
-                <div className="text-gray-400 text-sm">Success Rate</div>
+                <div className="text-gray-500 text-sm">Success Rate</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-black bg-gradient-to-r from-orange-400 to-cyan-400 bg-clip-text text-transparent mb-2">
                   10x
                 </div>
-                <div className="text-gray-400 text-sm">Faster Results</div>
+                <div className="text-gray-500 text-sm">Faster Results</div>
               </div>
             </div>
           </div>
@@ -143,7 +146,7 @@ export default function LandingPage({
       </div>
       {/* Inspire Network Badge */}
       <div className="text-center">
-        <div className="inline-block bg-purple-500/10 border border-purple-500/30 text-purple-300 px-6 py-3 rounded-2xl font-semibold">
+        <div className="inline-block bg-purple-500/10 border mb-8 border-purple-500/30 text-purple-300 px-6 py-3 rounded-2xl font-semibold">
           ⚓ Powered by Inspire Network
         </div>
       </div>
