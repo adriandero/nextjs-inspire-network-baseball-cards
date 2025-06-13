@@ -167,7 +167,7 @@ const RenderTable: React.FC<RenderTableProps> = ({
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border bg-light1">
+      <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -250,22 +250,6 @@ const RenderTable: React.FC<RenderTableProps> = ({
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
       </div>
     </div>
   );

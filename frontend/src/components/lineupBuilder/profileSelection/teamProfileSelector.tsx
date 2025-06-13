@@ -18,7 +18,6 @@ import {
   getCoreRowModel,
   useReactTable,
   RowSelectionState,
-  getPaginationRowModel,
   SortingState,
   ColumnFiltersState,
   getFilteredRowModel,
@@ -161,7 +160,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     setSorting([]);
     setColumnFilters([]);
     setColumnVisibility({});
-    setPagination({ pageIndex: 0, pageSize: 9 });
   };
 
   const fetchAllProfiles = async (): Promise<SanityDocument[]> => {
@@ -452,28 +450,20 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     React.useState<VisibilityState>({});
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 9,
-  });
-
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     enableRowSelection: true,
-    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      pagination,
       rowSelection:
         view === "profiles" || groupingMode === "profiles"
           ? data.reduce((acc, profile, index) => {

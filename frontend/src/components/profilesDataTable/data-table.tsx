@@ -9,7 +9,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -185,7 +184,6 @@ export function DataTable<TData, TValue>({
     columns: columns as ColumnDef<TData, TValue>[],
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
@@ -311,9 +309,9 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border bg-light1">
+      <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-light1 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -379,8 +377,8 @@ export function DataTable<TData, TValue>({
                               Missing Permissions
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                              You don&apos;t have permissions to view any
-                              TUG Cards at the moment. Ask an administrator for
+                              You don&apos;t have permissions to view any TUG
+                              Cards at the moment. Ask an administrator for
                               access.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
@@ -396,28 +394,6 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
       </div>
     </div>
   );
