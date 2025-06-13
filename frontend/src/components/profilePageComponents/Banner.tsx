@@ -11,7 +11,8 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
 
-  const profileTeamName = profile?.team[0]?.name;
+  const profileTeamName = profile?.team?.[0]?.name;
+
   useEffect(() => {
     if (h1Ref.current) {
       const lineHeight = parseInt(

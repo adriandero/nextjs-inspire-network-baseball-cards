@@ -11,7 +11,7 @@ export default function PDFBanner({
 }: SanityDocument): React.JSX.Element {
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
-  const profilesTeamName = profile?.team[0]?.name;
+  const profilesTeamName = profile?.team?.[0]?.name;
   // Add a print-specific style to the document
   useEffect(() => {
     // This style will only apply when generating PDFs
