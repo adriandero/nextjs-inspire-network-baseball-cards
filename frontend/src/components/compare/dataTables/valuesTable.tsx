@@ -370,13 +370,16 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                       }`}
                       style={selectedColor ? { backgroundColor } : {}}
                     >
-                      <div className="absolute right-2 bottom-2 group-hover:opacity-100 transition-opacity duration-200 opacity-0">
-                        <ColorDropdown
-                          profileId={profileId}
-                          cellId={cellId}
-                          value={cellValue}
-                        />
-                      </div>
+                      {cell.column.id === "name" ? null : (
+                        <div className="absolute right-2 bottom-2 group-hover:opacity-100 transition-opacity duration-200 opacity-0">
+                          <ColorDropdown
+                            profileId={profileId}
+                            cellId={cellId}
+                            value={cellValue}
+                          />
+                        </div>
+                      )}
+
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
