@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
@@ -168,10 +168,18 @@ function ProfileComparisonContent() {
   );
 }
 
+function PDFProfileComparison() {
+  return (
+    <Suspense fallback={<div>Loading Kolbe Graph...</div>}>
+      <ProfileComparisonContent />
+    </Suspense>
+  );
+}
+
 export default function KolbeStrengthsPDFPage() {
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
-      <ProfileComparisonContent />
+      <PDFProfileComparison />
     </div>
   );
 }
