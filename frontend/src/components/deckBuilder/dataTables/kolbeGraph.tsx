@@ -9,7 +9,8 @@ interface KolbeGraphProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
   tableName?: string;
-  baseFontSize: string;
+  baseFontSize?: string;
+  headingFontSize?: string;
 }
 
 interface ProfileData {
@@ -26,7 +27,8 @@ interface CellData {
 const KolbeGraph: React.FC<KolbeGraphProps> = ({
   profiles,
   tableName,
-  baseFontSize,
+  baseFontSize = "text-base",
+  headingFontSize = "text-3xl",
 }) => {
   if (profiles.length === 0) {
     return (
@@ -126,7 +128,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
   const gridData = processProfiles();
 
   return (
-    <div className="space-y-4 mb-4 page-break-after">
+    <div className="space-y-4 mb-4 break-after-page">
       <h2 className="text-base font-semibold">{tableName}</h2>
       <div className="w-full mx-auto">
         <div className="flex mb-2">
@@ -180,7 +182,9 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
                   key={`cell-${rowIndex}-${colIndex}`}
                   className={`border-4 rounded-lg p-3 ${columnColors[colIndex]}`}
                 >
-                  <div className="text-3xl font-bold text-center mb-2">
+                  <div
+                    className={`${headingFontSize} font-bold text-center mb-2`}
+                  >
                     {cell.percent}
                   </div>
 

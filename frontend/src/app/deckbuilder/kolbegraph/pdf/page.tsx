@@ -16,8 +16,10 @@ function ProfileComparisonContent() {
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
   >([]);
-  // const { containerRef, fontSize } = useAutoFitOnLoad(1123);
-  const [fontSize, setFontSize] = useState("text-base");
+  // TODO: hook?
+  const [baseFontSize, setBaseFontSize] = useState("text-base");
+  const [headingFontSize, setHeadingFontSize] = useState("text-3xl");
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,17 +32,23 @@ function ProfileComparisonContent() {
           if (height > 1123) {
             const overflow = height - 1123;
             console.log(overflow > 300);
-            if (overflow > 300) {
-              setFontSize("text-xs"); // 12px
+            if (overflow > 600) {
+              setBaseFontSize("text-xs");
+              setHeadingFontSize("text-lg");
+            } else if (overflow > 300) {
+              setBaseFontSize("text-sm");
+              setHeadingFontSize("text-xl");
             } else if (overflow > 150) {
-              setFontSize("text-sm"); // 14px
+              setBaseFontSize("text-sm");
+              setHeadingFontSize("text-2xl");
             } else {
-              setFontSize("text-sm"); // 14px for small overflows
+              setBaseFontSize("text-sm");
+              setHeadingFontSize("text-xl");
             }
           }
         }
       };
-      setTimeout(checkHeight, 2000);
+      setTimeout(checkHeight, 1000);
     }
   }, [isLoading, completeProfileTables]);
 
@@ -50,12 +58,9 @@ function ProfileComparisonContent() {
         setIsLoading(true);
 
         if (groupedProfiles) {
-          // First, parse the URL to get the ProfileTable structure
           const tables = decodeURLToProfileTables(groupedProfiles);
 
-          // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
-            // Only fetch if there are profiles in this group
             if (group.profiles.length > 0) {
               const profileObjects = await getProfilesByUuids(group.profiles);
               return {
@@ -65,7 +70,6 @@ function ProfileComparisonContent() {
               };
             }
 
-            // Return group with empty profiles array if no profiles
             return {
               id: group.id,
               name: group.name,
@@ -73,7 +77,6 @@ function ProfileComparisonContent() {
             };
           });
 
-          // Wait for all groups to be processed
           const completeTables = await Promise.all(completeTablesPromises);
           setCompleteProfileTables(completeTables);
         }
@@ -153,13 +156,13 @@ function ProfileComparisonContent() {
         completeProfileTables.every((table) => table.profiles.length === 0) ? (
         <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
-        // Map through all tables instead of just accessing index 0
         completeProfileTables.map((table) => (
           <div key={table.id} className="flex flex-col gap-4">
             <KolbeGraph
               profiles={shortNamesOfProfiles(table.profiles)}
               tableName={table.name}
-              baseFontSize={fontSize}
+              baseFontSize={baseFontSize}
+              headingFontSize={headingFontSize}
             />
           </div>
         ))
