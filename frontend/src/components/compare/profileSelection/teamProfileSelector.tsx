@@ -413,6 +413,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
               throw new Error("Function not implemented.");
             }}
             handleProfileCheck={handleProfileCheck}
+            handleOneWayProfileCheck={handleProfileCheck}
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">
