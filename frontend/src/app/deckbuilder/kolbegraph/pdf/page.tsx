@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
