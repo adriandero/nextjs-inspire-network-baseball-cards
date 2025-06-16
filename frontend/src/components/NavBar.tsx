@@ -72,10 +72,10 @@ export default function NavBar({
         />
         <div className=" hidden sm:flex space-x-12 text-lg h-full items-center font-medium">
           <Link
-            href={`/lineupbuilder`}
+            href={`/deckbuilder`}
             className="hover:text-primary duration-200"
           >
-            Lineup Builder
+            Deck Builder
           </Link>
           {/* <Link href={`/compare`} className="hover:text-primary duration-200">
             Compare

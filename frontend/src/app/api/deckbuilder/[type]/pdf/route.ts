@@ -40,10 +40,10 @@ export async function GET(
 
   await page.goto(
     process.env.BASE_URL +
-      `/lineupbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
+      `/deckbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
     {
       waitUntil: "networkidle2",
-    },
+    }
   );
 
   await page.evaluate(() => {

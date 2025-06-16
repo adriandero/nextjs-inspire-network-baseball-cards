@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/../public/IN-TM-Logo.png";
-import { ProfileTable } from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
-import { CompleteProfileTable } from "@/components/lineupBuilder/profileComparison";
+import { ProfileTable } from "@/components/deckBuilder/profileSelection/ProfileTableManager";
+import { CompleteProfileTable } from "@/components/deckBuilder/profileComparison";
 import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
 
 function ProfileComparisonContent() {

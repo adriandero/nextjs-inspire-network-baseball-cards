@@ -3,14 +3,14 @@ import NavBar from "@/components/NavBar";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import TeamProfileSelector from "@/components/lineupBuilder/profileSelection/teamProfileSelector";
+import TeamProfileSelector from "@/components/deckBuilder/profileSelection/teamProfileSelector";
 
 export interface Team {
   name: string;
   slug: string;
 }
 
-export default async function LineupBuilderPage(): Promise<JSX.Element> {
+export default async function DeckBuilderPage(): Promise<JSX.Element> {
   const session = await auth0.getSession();
 
   if (!session) {

@@ -1,10 +1,11 @@
+
 export enum CompareType {
   WORKING_GENIUS = "workinggenius",
   KOLBE_STRENGTHS = "kolbestrengths",
   KOLBE_GRAPH = "kolbegraph",
   VALUES = "values",
 }
-export class LineupBuilderStore {
+export class DeckBuilderStore {
   // Proper class naming convention (PascalCase)
   private currentCompareType: CompareType | null = null;
 
@@ -39,4 +40,4 @@ export class LineupBuilderStore {
 }
 
 // Create a singleton instance
-export const lineupBuilderStoreInstance = new LineupBuilderStore();
+export const deckBuilderStoreInstance = new DeckBuilderStore();

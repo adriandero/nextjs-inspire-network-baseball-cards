@@ -41,14 +41,14 @@ import { nanoid } from "nanoid";
 import RenderTable from "@/components/compare/profileSelection/RenderTable";
 import ProfileTablesManager, {
   ProfileTable,
-} from "@/components/lineupBuilder/profileSelection/ProfileTableManager";
+} from "@/components/deckBuilder/profileSelection/ProfileTableManager";
 import DraggedProfilePreview from "@/components/compare/profileSelection/DraggableProfilePreview";
 import { Button } from "@/components/ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import {
   CompareType,
-  lineupBuilderStoreInstance,
-} from "@/components/lineupBuilder/lineupBuilderStore";
+  deckBuilderStoreInstance,
+} from "@/components/deckBuilder/deckBuilderStore";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 
@@ -91,7 +91,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
   const router = useRouter();
 
-  const store = lineupBuilderStoreInstance;
+  const store = deckBuilderStoreInstance;
 
   // Profile tables for grouping
   const [profileTables, setProfileTables] = useState<ProfileTable[]>([
@@ -617,7 +617,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleContinue = () => {
     const urlParam = encodeProfileTablesToURL(profileTables);
     router.push(
-      `/lineupbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`
+      `/deckbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`
     );
   };
 

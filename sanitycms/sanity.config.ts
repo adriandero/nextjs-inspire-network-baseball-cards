@@ -6,7 +6,7 @@ import {structure} from './deskStructure'
 
 export default defineConfig({
   name: 'default',
-  title: 'Inspire Network Baseball Cards',
+  title: 'Inspire Network Tug Cards',
 
   projectId: '8hl62j77',
   dataset: 'production',

@@ -1,7 +1,7 @@
 import ProfileNavBar from "@/components/ProfileNavBar";
 import ValuesTable from "@/components/compare/dataTables/valuesTable";
-import { CompareType } from "@/components/lineupBuilder/lineupBuilderStore";
-import { ProfileComparison } from "@/components/lineupBuilder/profileComparison";
+import { CompareType } from "@/components/deckBuilder/deckBuilderStore";
+import { ProfileComparison } from "@/components/deckBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
 import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
@@ -23,7 +23,7 @@ export default async function WorkingGeniusPage(): Promise<JSX.Element> {
     <div className="w-full max-w-screen-lg">
       <ProfileNavBar
         userProfileData={userProfileData}
-        backwardsNavigationUrl={"/lineupbuilder/"}
+        backwardsNavigationUrl={"/deckbuilder/"}
         _id={""}
         _rev={""}
         _type={""}

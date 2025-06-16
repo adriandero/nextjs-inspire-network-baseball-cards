@@ -23,7 +23,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import React from "react";
-import { CompareType, lineupBuilderStoreInstance } from "./lineupBuilderStore";
+import { CompareType, deckBuilderStoreInstance } from "./deckBuilderStore";
 import {
   Tooltip,
   TooltipContent,
@@ -74,7 +74,7 @@ export function ProfileComparison({
     null
   );
 
-  const store = lineupBuilderStoreInstance;
+  const store = deckBuilderStoreInstance;
 
   useEffect(() => {
     async function fetchProfiles() {
@@ -149,7 +149,7 @@ export function ProfileComparison({
   const handlePDFDownloadCall = async () => {
     try {
       setLoading(true);
-      const fetchURL = `/api/lineupbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
+      const fetchURL = `/api/deckbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
       console.log(fetchURL);
 
       await fetch(fetchURL + `&warm=true`).catch(() =>
