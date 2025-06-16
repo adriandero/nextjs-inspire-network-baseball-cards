@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
@@ -16,18 +16,51 @@ function ProfileComparisonContent() {
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
   >([]);
+  // TODO: hook?
+  const [baseFontSize, setBaseFontSize] = useState("text-base");
+  const [headingFontSize, setHeadingFontSize] = useState("text-3xl");
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isLoading && completeProfileTables.length > 0) {
+      console.log("effect");
+      const checkHeight = () => {
+        if (containerRef.current) {
+          const height = containerRef.current.scrollHeight;
+          console.log(height);
+          if (height > 1123) {
+            const overflow = height - 1123;
+            console.log(overflow > 300);
+            if (overflow > 600) {
+              setBaseFontSize("text-xs");
+              setHeadingFontSize("text-lg");
+            } else if (overflow > 300) {
+              setBaseFontSize("text-sm");
+              setHeadingFontSize("text-xl");
+            } else if (overflow > 150) {
+              setBaseFontSize("text-sm");
+              setHeadingFontSize("text-2xl");
+            } else {
+              setBaseFontSize("text-sm");
+              setHeadingFontSize("text-xl");
+            }
+          }
+        }
+      };
+      setTimeout(checkHeight, 1000);
+    }
+  }, [isLoading, completeProfileTables]);
+
   useEffect(() => {
     async function fetchProfiles() {
       try {
         setIsLoading(true);
 
         if (groupedProfiles) {
-          // First, parse the URL to get the ProfileTable structure
           const tables = decodeURLToProfileTables(groupedProfiles);
 
-          // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
-            // Only fetch if there are profiles in this group
             if (group.profiles.length > 0) {
               const profileObjects = await getProfilesByUuids(group.profiles);
               return {
@@ -37,7 +70,6 @@ function ProfileComparisonContent() {
               };
             }
 
-            // Return group with empty profiles array if no profiles
             return {
               id: group.id,
               name: group.name,
@@ -45,7 +77,6 @@ function ProfileComparisonContent() {
             };
           });
 
-          // Wait for all groups to be processed
           const completeTables = await Promise.all(completeTablesPromises);
           setCompleteProfileTables(completeTables);
         }
@@ -107,7 +138,10 @@ function ProfileComparisonContent() {
   }
 
   return (
-    <div className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]">
+    <div
+      ref={containerRef}
+      className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]"
+    >
       <div className="flex items-center text-center gap-4">
         <h1 className="text-2xl font-bold">Kolbe Strengths</h1>
         <span className="text-base ml-auto text-accent-foreground font-bold">
@@ -122,12 +156,13 @@ function ProfileComparisonContent() {
         completeProfileTables.every((table) => table.profiles.length === 0) ? (
         <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
-        // Map through all tables instead of just accessing index 0
         completeProfileTables.map((table) => (
-          <div key={table.id} className="flex flex-col gap-4 ">
-            <h2 className="text-base font-semibold">{table.name}</h2>
+          <div key={table.id} className="flex flex-col gap-4">
             <KolbeGraph
               profiles={shortNamesOfProfiles(table.profiles)}
+              tableName={table.name}
+              baseFontSize={baseFontSize}
+              headingFontSize={headingFontSize}
             />
           </div>
         ))
@@ -138,7 +173,7 @@ function ProfileComparisonContent() {
 
 function PDFProfileComparison() {
   return (
-    <Suspense fallback={<div>Loading Tug Cards...</div>}>
+    <Suspense fallback={<div>Loading Kolbe Graph...</div>}>
       <ProfileComparisonContent />
     </Suspense>
   );
