@@ -166,11 +166,9 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     try {
       setIsLoadingProfiles(true);
 
-      // Get all available teams
       const availableTeams = await fillDataTableTeamData();
       let allProfiles: SanityDocument[] = [];
 
-      // If we already have profilesByTeam data, use it
       if (allProfilesData.length <= 0) {
         const profilesData = await getAllProfiles();
         allProfiles = profilesData;
@@ -205,11 +203,9 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
       try {
         setIsLoading(true);
 
-        // Load teams
         const teamsData = await fillDataTableTeamData();
         setTeams(teamsData);
 
-        // Load profiles grouped by team
         const profilesData = await getAllProfilesGroupedByTeam();
         setProfilesByTeam(profilesData);
 
@@ -227,6 +223,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     }
 
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fillDataTableTeamData]);
 
   const handleTeamClick = (teamSlug: string, teamName: string): void => {
@@ -248,10 +245,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   };
 
   const handleProfileCheck = (profileId: string): void => {
-    // Add/remove profile from the first table (for backward compatibility)
     setProfileTables((prev) => {
       const updatedTables = [...prev];
-      console.log(updatedTables);
       if (updatedTables.length > 0) {
         const firstTable = updatedTables[0];
         if (firstTable.profiles.includes(profileId)) {
@@ -266,7 +261,17 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     });
   };
 
-  // Table management functions
+  const handleOneWayProfileCheck = (profileId: string): void => {
+    setProfileTables((prev) => {
+      const updatedTables = [...prev];
+      if (updatedTables.length > 0) {
+        const firstTable = updatedTables[0];
+        firstTable.profiles = [...firstTable.profiles, profileId];
+      }
+      return updatedTables;
+    });
+  };
+
   const handleAddTable = () => {
     setProfileTables((prev) => [
       ...prev,
@@ -599,7 +604,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         }
       } catch (e) {
         console.error("Error restoring saved TUG Card selection:", e);
-        // If there's an error parsing, remove the invalid data
         localStorage.removeItem(STORAGE_KEY);
       }
     }
@@ -693,6 +697,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             handleGroupingChange={handleGroupingChange}
             columns={columns}
             isLoadingProfiles={isLoadingProfiles}
+            handleOneWayProfileCheck={handleOneWayProfileCheck}
             handleProfileCheck={handleProfileCheck}
           />
         </div>
