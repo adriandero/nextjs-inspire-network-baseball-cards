@@ -102,6 +102,10 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     },
   ]);
 
+  const [selectedTableId, setSelectedTableId] = useState<string>(
+    profileTables[0].id
+  );
+
   const [teams, setTeams] = useState<SanityDocument[]>([]);
   const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam>({
     teams: {},
@@ -247,16 +251,21 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleProfileCheck = (profileId: string): void => {
     setProfileTables((prev) => {
       const updatedTables = [...prev];
-      if (updatedTables.length > 0) {
-        const firstTable = updatedTables[0];
-        if (firstTable.profiles.includes(profileId)) {
-          firstTable.profiles = firstTable.profiles.filter(
-            (id: any) => id !== profileId
+      const selectedTableIndex = updatedTables.findIndex(
+        (table) => table.id === selectedTableId
+      );
+
+      if (selectedTableIndex !== -1) {
+        const selectedTable = updatedTables[selectedTableIndex];
+        if (selectedTable.profiles.includes(profileId)) {
+          selectedTable.profiles = selectedTable.profiles.filter(
+            (id) => id !== profileId
           );
         } else {
-          firstTable.profiles = [...firstTable.profiles, profileId];
+          selectedTable.profiles = [...selectedTable.profiles, profileId];
         }
       }
+
       return updatedTables;
     });
   };
@@ -264,12 +273,21 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleOneWayProfileCheck = (profileId: string): void => {
     setProfileTables((prev) => {
       const updatedTables = [...prev];
-      if (updatedTables.length > 0) {
-        const firstTable = updatedTables[0];
-        firstTable.profiles = [...firstTable.profiles, profileId];
+      const selectedTableIndex = updatedTables.findIndex(
+        (table) => table.id === selectedTableId
+      );
+
+      if (selectedTableIndex !== -1) {
+        const selectedTable = updatedTables[selectedTableIndex];
+        selectedTable.profiles = [...selectedTable.profiles, profileId];
       }
+
       return updatedTables;
     });
+  };
+
+  const setSelectedTableIdState = (profileId: string): void => {
+    setSelectedTableId(profileId);
   };
 
   const handleAddTable = () => {
@@ -765,6 +783,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
             onUpdateTableProfiles={handleUpdateTableProfiles}
             onUpdateTableName={handleUpdateTableName} // Add this new prop
             onCreateTableWithProfile={handleCreateTableWithProfile}
+            setSelectedTableId={setSelectedTableIdState}
+            selectedTableId={selectedTableId}
             allProfiles={allProfilesData}
           />
 
