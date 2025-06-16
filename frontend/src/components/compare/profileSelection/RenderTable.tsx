@@ -125,7 +125,7 @@ const RenderTable: React.FC<RenderTableProps> = ({
 
   return (
     <div className="w-full">
-      <div className="flex w-full items-center py-4 gap-2">
+      <div className="flex w-full items-center py-4 gap-2 items-start">
         <Breadcrumb className="justify-self-start">
           <BreadcrumbList>{getBreadcrumbContent()}</BreadcrumbList>
         </Breadcrumb>

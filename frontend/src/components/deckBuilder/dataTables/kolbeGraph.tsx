@@ -9,6 +9,7 @@ interface KolbeGraphProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
   tableName?: string;
+  baseFontSize: string;
 }
 
 interface ProfileData {
@@ -22,7 +23,11 @@ interface CellData {
   people: ProfileData[];
 }
 
-const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles, tableName }) => {
+const KolbeGraph: React.FC<KolbeGraphProps> = ({
+  profiles,
+  tableName,
+  baseFontSize,
+}) => {
   if (profiles.length === 0) {
     return (
       <div className="p-4 text-center">
@@ -121,7 +126,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles, tableName }) => {
   const gridData = processProfiles();
 
   return (
-    <div className="space-y-4 mb-4 ">
+    <div className="space-y-4 mb-4 page-break-after">
       <h2 className="text-base font-semibold">{tableName}</h2>
       <div className="w-full mx-auto">
         <div className="flex mb-2">
@@ -186,7 +191,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({ profiles, tableName }) => {
                       (profile: ProfileData, profileIndex: number) => (
                         <div
                           key={`profile-${rowIndex}-${colIndex}-${profileIndex}`}
-                          className="flex justify-between"
+                          className={`flex justify-between ${baseFontSize}`}
                         >
                           <span>{profile.name}</span>
                           <span
