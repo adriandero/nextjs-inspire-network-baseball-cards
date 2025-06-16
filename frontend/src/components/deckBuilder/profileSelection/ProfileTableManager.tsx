@@ -17,6 +17,8 @@ interface ProfileTablesManagerProps {
   onUpdateTableProfiles: (tableId: string, profiles: string[]) => void;
   onUpdateTableName: (tableId: string, name: string) => void; // New prop for updating the table name
   onCreateTableWithProfile: (profileId: string) => void;
+  setSelectedTableId: (tableId: string) => void;
+  selectedTableId: string;
   allProfiles: SanityDocument[];
 }
 
@@ -27,6 +29,8 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   onUpdateTableName,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCreateTableWithProfile,
+  setSelectedTableId,
+  selectedTableId,
   allProfiles,
 }) => {
   const getProfilesForTable = (tableId: string) => {
@@ -79,7 +83,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full ">
       {profileTables.map((table) => (
         <React.Fragment key={table.id}>
           <div className="flex h-12 justify-end items-center">
@@ -122,6 +126,9 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
               const profileIds = profiles.map((p: SanityDocument) => p.uuid);
               onUpdateTableProfiles(table.id, profileIds);
             }}
+            setSelectedTableId={setSelectedTableId}
+            table={table}
+            isSelectedTable={selectedTableId === table.id}
           />
         </React.Fragment>
       ))}

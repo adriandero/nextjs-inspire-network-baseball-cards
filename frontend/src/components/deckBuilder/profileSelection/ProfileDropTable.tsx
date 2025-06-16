@@ -12,17 +12,24 @@ import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
 import { GoX } from "react-icons/go";
+import { ProfileTable } from "./ProfileTableManager";
 
 interface ProfileDropTableProps {
   selectedProfilesData: SanityDocument[];
   droppableId: string;
   onProfilesChange?: (profiles: SanityDocument[]) => void;
+  setSelectedTableId: (profileId: string) => void;
+  table: ProfileTable;
+  isSelectedTable: boolean;
 }
 
 const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
   selectedProfilesData,
   droppableId,
   onProfilesChange,
+  setSelectedTableId,
+  table,
+  isSelectedTable,
 }) => {
   const { setNodeRef: dropRef, isOver } = useDroppable({
     id: droppableId,
@@ -44,7 +51,11 @@ const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
       {selectedProfilesData.length === 0 ? (
         <div
           ref={dropRef}
-          className={`rounded-md flex justify-center border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md p-4 transition-colors min-h-24`}
+          className={`rounded-md flex justify-center border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md p-4 transition-colors min-h-24 hover:border-primary ${isSelectedTable ? "border-primary" : null}`}
+          onClick={() => {
+            console.log("here:" + isSelectedTable);
+            setSelectedTableId(table.id);
+          }}
         >
           <p className="text-dark3 self-center">
             {isOver ? "Drop TUG Cards in here" : "Drag TUG Cards in here"}
@@ -53,7 +64,11 @@ const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
       ) : (
         <div
           ref={dropRef}
-          className={`rounded-md border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md max-h-[400px] overflow-y-auto transition-colors`}
+          className={`rounded-md border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md max-h-[400px] overflow-y-auto transition-colors hover:border-primary ${isSelectedTable ? "border-primary" : null}`}
+          onClick={() => {
+            console.log("here:" + isSelectedTable);
+            setSelectedTableId(table.id);
+          }}
         >
           <Table>
             <TableHeader>
