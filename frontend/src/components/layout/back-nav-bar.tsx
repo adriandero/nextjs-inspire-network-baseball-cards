@@ -32,7 +32,7 @@ import {
   AlertDialogFooter,
 } from "@/src/components/ui/alert-dialog";
 
-export default function ProfileNavBar({
+export default function BackNavBar({
   userProfileData,
   backwardsNavigationUrl,
 }: SanityDocument): React.JSX.Element {

@@ -4,7 +4,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { GoArrowLeft } from "react-icons/go";
 
 import { SanityDocument } from "next-sanity";
-import MobileNavMenu from "@/src/components/layout/MobileNavMenu";
+import MobileNavMenu from "@/src/components/layout/mobile-nav-menu";
 import { useRouter } from "next/navigation";
 
 export default function MobileNavBanner({

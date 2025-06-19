@@ -2,7 +2,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
-import WorkingGeniusTable from "@/src/features/compare/dataTables/workingGeniusTable";
+import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";
 import INTMLogo from "@/src/public/IN-TM-Logo.png";

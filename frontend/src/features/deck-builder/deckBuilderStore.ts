@@ -1,9 +1,5 @@
-export enum CompareType {
-  WORKING_GENIUS = "workinggenius",
-  KOLBE_STRENGTHS = "kolbestrengths",
-  KOLBE_GRAPH = "kolbegraph",
-  VALUES = "values",
-}
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+
 
 export class DeckBuilderStore {
   // Proper class naming convention (PascalCase)

@@ -4,9 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/src/../public/IN-TM-Logo.png";
-import { ProfileTable } from "@/src/features/deckBuilder/profileSelection/ProfileTableManager";
-import { CompleteProfileTable } from "@/src/features/deckBuilder/profileComparison";
-import ValuesTable from "@/src/features/compare/dataTables/valuesTable";
+import { ProfileTable } from "@/src/features/deck-builder/profileSelection/ProfileTableManager";
+import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
+import ValuesTable from "@/src/features/deck-builder/data-tables/values-table";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();

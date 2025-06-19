@@ -18,7 +18,7 @@ import {
 } from "@/src/components/ui/table";
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
-import { CompareType } from "@/src/features/deckBuilder/deckBuilderStore";
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
 interface SelectedProfilesTableProps {
   selectedProfilesData: SanityDocument[];

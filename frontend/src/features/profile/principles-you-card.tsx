@@ -8,7 +8,7 @@ import principlesYouJson from "@/src/../public/principlesYou.json";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
-import ComponentShell from "./ComponentShell";
+import ComponentShell from "./component-shell";
 
 function getImage(archetype: string): string {
   return `/archetypeImages/${archetype}.png`;

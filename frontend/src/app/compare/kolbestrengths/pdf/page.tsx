@@ -5,7 +5,7 @@ import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";
 import INTMLogo from "@/src/public/IN-TM-Logo.png";
-import KolbeStrengthsTable from "@/src/features/compare/dataTables/kolbeStrengthsTable";
+import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
 
 // Content component that uses useSearchParams
 function ProfileComparisonContent() {

@@ -1,9 +1,9 @@
 import { GoLightBulb } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
-import WidgetCogsSVG from "@/src/features/profilePageComponents/WidgetCogsSVG";
+import WidgetCogsSVG from "@/src/features/profile/widget-cogs-svg";
 import workingGeniusJson from "@/src/../public/workingGenius.json";
 
-export default function PDFWorkingGeniusCard({
+export default function PdfWorkingGeniusCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {

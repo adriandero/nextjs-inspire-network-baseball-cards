@@ -12,7 +12,7 @@ import { getKolbeMethod } from "@/src/lib/utils";
 //   description: string;
 // };
 
-export default function PDFKolbeStrengthsCard({
+export default function PdfKolbeStrengthsCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {

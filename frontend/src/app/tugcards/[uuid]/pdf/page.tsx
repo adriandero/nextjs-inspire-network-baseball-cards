@@ -2,11 +2,11 @@ import { getProfileByUuid } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/src/../public/IN-TM-Logo.png";
 
-import PDFBanner from "@/src/features/profilePDFComponents/PDFBanner";
-import PDFKolbeStrengthsCard from "@/src/features/profilePDFComponents/PDFKolbeStrengthsCard";
-import PDFPrinciplesYouCard from "@/src/features/profilePDFComponents/PDFPrinciplesYouCard";
-import PDFValuesCard from "@/src/features/profilePDFComponents/PDFValuesCard";
-import PDFWorkingGeniusCard from "@/src/features/profilePDFComponents/PDFWorkingGeniusCard";
+import PdfBanner from "@/src/features/profile-pdf/pdf-banner";
+import PdfKolbeStrengthsCard from "@/src/features/profile-pdf/pdf-kolbe-strengths-card";
+import PdfPrinciplesYouCard from "@/src/features/profile-pdf/pdf-principles-you-card";
+import PdfValuesCard from "@/src/features/profile-pdf/pdf-values-card";
+import PdfWorkingGeniusCard from "@/src/features/profile-pdf/pdf-working-genius-card";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -32,7 +32,7 @@ export default async function TugCardPDF({
       className={`h-fit max-h-[762px] min-h-[762px] max-w-[1123px] w-[1123px] bg-mainbackground mt-4 mr-4 ml-4 flex gap-4 overflow-hidden relative`}
     >
       <div className="flex gap-4 w-2/3 h-full flex-col">
-        <PDFBanner
+        <PdfBanner
           className={
             "w-full min-h-24 max-h-24 bg-secondary rounded-xl flex py-2 px-4"
           }
@@ -43,7 +43,7 @@ export default async function TugCardPDF({
           _createdAt={""}
           _updatedAt={""}
         />
-        <PDFWorkingGeniusCard
+        <PdfWorkingGeniusCard
           className="w-full h-fit border border-light3 bg-background rounded-xl flex p-6"
           profile={profile}
           _id={""}
@@ -52,7 +52,7 @@ export default async function TugCardPDF({
           _createdAt={""}
           _updatedAt={""}
         />
-        <PDFPrinciplesYouCard
+        <PdfPrinciplesYouCard
           className="w-full h-fit border border-light3 bg-background rounded-xl p-6"
           profile={profile}
           _id={""}
@@ -63,7 +63,7 @@ export default async function TugCardPDF({
         />
       </div>
       <div className="flex flex-col gap-4 h-full w-1/3">
-        <PDFValuesCard
+        <PdfValuesCard
           className="w-full min-h-[96] border border-light3 bg-background rounded-xl pl-4 py-3"
           profile={profile}
           _id={""}
@@ -73,7 +73,7 @@ export default async function TugCardPDF({
           _updatedAt={""}
         />
 
-        <PDFKolbeStrengthsCard
+        <PdfKolbeStrengthsCard
           className="w-full h-fit border border-light3 bg-background rounded-xl p-6 "
           profile={profile}
           _id={""}

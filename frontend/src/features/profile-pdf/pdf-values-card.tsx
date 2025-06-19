@@ -3,7 +3,7 @@ import { SanityDocument } from "next-sanity";
 import { GoNorthStar } from "react-icons/go";
 import { Badge } from "@/src/components/ui/badge";
 
-export default function PDFValuesCard({
+export default function PdfValuesCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {

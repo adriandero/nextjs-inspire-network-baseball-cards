@@ -2,11 +2,11 @@
 
 import { GoLightBulb } from "react-icons/go";
 
-import WidgetCogsSVG from "@/src/features/profilePageComponents/WidgetCogsSVG";
+import WidgetCogsSVG from "@/src/features/profile/widget-cogs-svg";
 import workingGeniusJson from "@/src/../public/workingGenius.json";
 
 import { SanityDocument } from "next-sanity";
-import ComponentShell from "./ComponentShell";
+import ComponentShell from "./component-shell";
 
 export default function WorkingGeniusCard({
   profile,

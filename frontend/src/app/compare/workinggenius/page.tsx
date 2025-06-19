@@ -1,7 +1,7 @@
-import NavBar from "@/src/components/layout/NavBar";
-import WorkingGeniusTable from "@/src/features/compare/dataTables/workingGeniusTable";
+import NavBar from "@/src/components/layout/nav-bar";
+import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
 import { ProfileComparison } from "@/src/features/compare/profileComparison";
-import { CompareType } from "@/src/features/deckBuilder/deckBuilderStore";
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";

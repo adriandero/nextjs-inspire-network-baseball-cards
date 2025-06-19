@@ -4,7 +4,7 @@ import {
   TeamsFromUser,
 } from "@/src/lib/utils/sanityApi/profileRequests";
 import { DataTable } from "@/src/components/profilesDataTable/data-table";
-import NavBar from "@/src/components/layout/NavBar";
+import NavBar from "@/src/components/layout/nav-bar";
 import { SanityDocument } from "next-sanity";
 
 import { auth0 } from "@/src/lib/auth0";

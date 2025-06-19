@@ -1,4 +1,4 @@
-import LandingPage from "@/src/components/layout/LandingPage";
+import LandingPage from "@/src/components/layout/landing-page";
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";
 

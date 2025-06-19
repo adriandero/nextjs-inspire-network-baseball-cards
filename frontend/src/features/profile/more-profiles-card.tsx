@@ -3,7 +3,7 @@ import { GoInfo, GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 import { SanityDocument } from "next-sanity";
-import ComponentShell from "./ComponentShell";
+import ComponentShell from "./component-shell";
 import { useState } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
 import { redirect } from "next/navigation";

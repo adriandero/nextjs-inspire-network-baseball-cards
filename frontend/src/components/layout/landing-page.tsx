@@ -2,7 +2,7 @@
 
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
-import NavBar from "@/src/components/layout/NavBar";
+import NavBar from "@/src/components/layout/nav-bar";
 import { Button } from "@/src/components/ui/button";
 import { GoArrowRight } from "react-icons/go";
 import BrittanySamplePDF from "@/src/../public/BrittanySamplePDF.png";

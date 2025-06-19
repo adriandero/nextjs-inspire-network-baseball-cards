@@ -4,9 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/src/../public/IN-TM-Logo.png";
-import { ProfileTable } from "@/src/features/deckBuilder/profileSelection/ProfileTableManager";
-import { CompleteProfileTable } from "@/src/features/deckBuilder/profileComparison";
-import KolbeStrengthsTable from "@/src/features/compare/dataTables/kolbeStrengthsTable";
+import { ProfileTable } from "@/src/features/deck-builder/profileSelection/ProfileTableManager";
+import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
+import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();

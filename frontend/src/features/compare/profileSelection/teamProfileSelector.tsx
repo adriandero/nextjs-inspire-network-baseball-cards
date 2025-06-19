@@ -40,7 +40,7 @@ import {
 import RenderTable from "@/src/features/compare/profileSelection/RenderTable"; // Import the TeamTable component
 import SelectedRenderTable from "@/src/features/compare/profileSelection/SelectedRenderTable"; // Import the new component
 import DraggedProfilePreview from "@/src/features/compare/profileSelection/DraggableProfilePreview"; // Import the drag overlay component
-import { CompareType } from "@/src/features/deckBuilder/deckBuilderStore";
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;

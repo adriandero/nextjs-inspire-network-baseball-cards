@@ -17,7 +17,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import WidgetCogsSVG from "@/src/../public/WidgetCogsSimple";
+import WidgetCogsSVG from "@/public/WidgetCogsSimple";
 import { urlFor } from "@/src/lib/sanity/client";
 
 export interface WorkingGeniusTableProps {

@@ -5,7 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function PDFBanner({
+export default function PdfBanner({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {

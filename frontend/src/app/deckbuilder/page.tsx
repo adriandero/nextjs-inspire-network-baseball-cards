@@ -1,9 +1,9 @@
-import NavBar from "@/src/components/layout/NavBar";
+import NavBar from "@/src/components/layout/nav-bar";
 
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import TeamProfileSelector from "@/src/features/deckBuilder/profileSelection/teamProfileSelector";
+import TeamProfileSelector from "@/src/features/deck-builder/profileSelection/teamProfileSelector";
 
 export interface Team {
   name: string;

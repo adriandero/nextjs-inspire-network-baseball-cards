@@ -11,7 +11,7 @@ function getImage(archetype: string): string {
 }
 import principlesYouJson from "@/src/../public/principlesYou.json";
 
-export default function PDFPrinciplesYouCard({
+export default function PdfPrinciplesYouCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {

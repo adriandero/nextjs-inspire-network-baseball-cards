@@ -18,7 +18,7 @@ import { Skeleton } from "@/src/components/ui/skeleton";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
-import MobileNavMenu from "./MobileNavMenu";
+import MobileNavMenu from "./mobile-nav-menu";
 import {
   AlertDialog,
   AlertDialogCancel,

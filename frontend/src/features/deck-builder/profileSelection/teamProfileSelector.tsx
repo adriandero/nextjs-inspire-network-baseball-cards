@@ -41,14 +41,13 @@ import { nanoid } from "nanoid";
 import RenderTable from "@/src/features/compare/profileSelection/RenderTable";
 import ProfileTablesManager, {
   ProfileTable,
-} from "@/src/features/deckBuilder/profileSelection/ProfileTableManager";
+} from "@/src/features/deck-builder/profileSelection/ProfileTableManager";
 import DraggedProfilePreview from "@/src/features/compare/profileSelection/DraggableProfilePreview";
 import { Button } from "@/src/components/ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import {
-  CompareType,
   deckBuilderStoreInstance,
-} from "@/src/features/deckBuilder/deckBuilderStore";
+} from "@/src/features/deck-builder/deckBuilderStore";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 
@@ -71,6 +70,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/src/components/ui/command";
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;

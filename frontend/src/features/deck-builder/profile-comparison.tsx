@@ -23,17 +23,18 @@ import {
   CommandItem,
 } from "@/src/components/ui/command";
 import React from "react";
-import { CompareType, deckBuilderStoreInstance } from "./deckBuilderStore";
+import { deckBuilderStoreInstance } from "./deckBuilderStore";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/src/components/ui/tooltip";
-import WorkingGeniusTable from "@/src/features/compare/dataTables/workingGeniusTable";
-import KolbeStrengthsTable from "@/src/features/compare/dataTables/kolbeStrengthsTable";
-import KolbeGraph from "./dataTables/kolbeGraph";
-import ValuesTable from "@/src/features/compare/dataTables/valuesTable";
+import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
+import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
+import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
+import ValuesTable from "@/src/features/deck-builder/data-tables/values-table";
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
 interface ProfileTable {
   //TODO: own file

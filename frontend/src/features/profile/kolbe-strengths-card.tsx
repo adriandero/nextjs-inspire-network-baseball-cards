@@ -17,7 +17,7 @@ import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // I
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
-import ComponentShell from "./ComponentShell";
+import ComponentShell from "./component-shell";
 import { getKolbeMethod } from "@/src/lib/utils";
 
 // type principle = {

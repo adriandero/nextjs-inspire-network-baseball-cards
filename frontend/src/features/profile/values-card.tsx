@@ -1,7 +1,7 @@
 import { SanityDocument } from "next-sanity";
 
 import { GoNorthStar } from "react-icons/go";
-import ComponentShell from "./ComponentShell";
+import ComponentShell from "./component-shell";
 import { Badge } from "@/src/components/ui/badge";
 
 export default function ValuesCard({
