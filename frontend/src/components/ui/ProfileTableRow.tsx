@@ -3,8 +3,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { SanityDocument } from "next-sanity";
-import { TableRow, TableCell } from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
+import { TableRow, TableCell } from "@/src/components/ui/table";
+import { Skeleton } from "@/src/components/ui/skeleton";
 import { useState } from "react";
 
 export default function ProfileTableRow({

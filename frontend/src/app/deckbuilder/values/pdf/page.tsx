@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
+import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
-import INTMLogo from "@/../public/IN-TM-Logo.png";
-import { ProfileTable } from "@/components/deckBuilder/profileSelection/ProfileTableManager";
-import { CompleteProfileTable } from "@/components/deckBuilder/profileComparison";
-import ValuesTable from "@/components/compare/dataTables/valuesTable";
+import INTMLogo from "@/src/../public/IN-TM-Logo.png";
+import { ProfileTable } from "@/src/features/deckBuilder/profileSelection/ProfileTableManager";
+import { CompleteProfileTable } from "@/src/features/deckBuilder/profileComparison";
+import ValuesTable from "@/src/features/compare/dataTables/valuesTable";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();

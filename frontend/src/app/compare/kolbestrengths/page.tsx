@@ -1,9 +1,9 @@
-import NavBar from "@/components/NavBar";
-import KolbeStrengthsTable from "@/components/compare/dataTables/kolbeStrengthsTable";
-import { ProfileComparison } from "@/components/compare/profileComparison";
-import { CompareType } from "@/components/deckBuilder/deckBuilderStore";
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import NavBar from "@/src/components/layout/NavBar";
+import KolbeStrengthsTable from "@/src/features/compare/dataTables/kolbeStrengthsTable";
+import { ProfileComparison } from "@/src/features/compare/profileComparison";
+import { CompareType } from "@/src/features/deckBuilder/deckBuilderStore";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 

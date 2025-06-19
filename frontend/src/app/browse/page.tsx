@@ -2,16 +2,16 @@ import {
   getAllTeams,
   getUserTeams,
   TeamsFromUser,
-} from "@/lib/utils/sanityApi/profileRequests";
-import { DataTable } from "@/components/profilesDataTable/data-table";
-import NavBar from "@/components/NavBar";
+} from "@/src/lib/utils/sanityApi/profileRequests";
+import { DataTable } from "@/src/components/profilesDataTable/data-table";
+import NavBar from "@/src/components/layout/NavBar";
 import { SanityDocument } from "next-sanity";
 
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import { teamColumns } from "@/components/profilesDataTable/team-columns";
-import { profileColumns } from "@/components/profilesDataTable/profile-columns";
+import { teamColumns } from "@/src/components/profilesDataTable/team-columns";
+import { profileColumns } from "@/src/components/profilesDataTable/profile-columns";
 
 export interface Team {
   name: string;

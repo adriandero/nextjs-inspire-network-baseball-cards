@@ -1,12 +1,12 @@
-import { getProfileByUuid } from "@/lib/utils/sanityApi/profileRequests";
+import { getProfileByUuid } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
-import INTMLogo from "@/../public/IN-TM-Logo.png";
+import INTMLogo from "@/src/../public/IN-TM-Logo.png";
 
-import PDFBanner from "@/components/profilePDFComponents/PDFBanner";
-import PDFKolbeStrengthsCard from "@/components/profilePDFComponents/PDFKolbeStrengthsCard";
-import PDFPrinciplesYouCard from "@/components/profilePDFComponents/PDFPrinciplesYouCard";
-import PDFValuesCard from "@/components/profilePDFComponents/PDFValuesCard";
-import PDFWorkingGeniusCard from "@/components/profilePDFComponents/PDFWorkingGeniusCard";
+import PDFBanner from "@/src/features/profilePDFComponents/PDFBanner";
+import PDFKolbeStrengthsCard from "@/src/features/profilePDFComponents/PDFKolbeStrengthsCard";
+import PDFPrinciplesYouCard from "@/src/features/profilePDFComponents/PDFPrinciplesYouCard";
+import PDFValuesCard from "@/src/features/profilePDFComponents/PDFValuesCard";
+import PDFWorkingGeniusCard from "@/src/features/profilePDFComponents/PDFWorkingGeniusCard";
 
 type tParams = Promise<{ uuid: string }>;
 

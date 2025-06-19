@@ -1,6 +1,6 @@
-import LandingPage from "@/components/LandingPage";
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import LandingPage from "@/src/components/layout/LandingPage";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 
 import { redirect } from "next/navigation";
 

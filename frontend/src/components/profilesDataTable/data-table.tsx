@@ -18,10 +18,10 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumbs";
+} from "@/src/components/ui/breadcrumbs";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
 import { GoInfo, GoVersions } from "react-icons/go";
 import { GoMultiSelect } from "react-icons/go";
 
@@ -32,14 +32,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/src/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+} from "@/src/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -49,13 +49,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
+} from "@/src/components/ui/alert-dialog";
 import { GoSearch } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
 import {
   getAllProfiles,
   getProfilesFromUserTeams,
-} from "@/lib/utils/sanityApi/profileRequests";
+} from "@/src/lib/utils/sanityApi/profileRequests";
 
 interface DataTableProps<TData, TValue> {
   teamColumns: ColumnDef<TData, TValue>[];

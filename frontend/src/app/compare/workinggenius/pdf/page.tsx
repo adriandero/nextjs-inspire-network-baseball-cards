@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
-import WorkingGeniusTable from "@/components/compare/dataTables/workingGeniusTable";
+import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
+import WorkingGeniusTable from "@/src/features/compare/dataTables/workingGeniusTable";
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";
-import INTMLogo from "@/../public/IN-TM-Logo.png";
+import INTMLogo from "@/src/public/IN-TM-Logo.png";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();

@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/src/lib/utils";
 import { GoLightBulb } from "react-icons/go";
 
 const ButtonGroup = React.forwardRef<

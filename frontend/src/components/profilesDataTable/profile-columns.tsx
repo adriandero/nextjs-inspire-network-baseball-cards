@@ -5,7 +5,7 @@ import { ArrowUpDown } from "lucide-react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +13,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/src/components/ui/dropdown-menu";
 
 import { SanityDocument } from "next-sanity";
 // import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-// import { Skeleton } from "../ui/skeleton";
+// import { Skeleton } from "@/src/components/ui/skeleton";
 
 export const profileColumns: ColumnDef<SanityDocument>[] = [
   {

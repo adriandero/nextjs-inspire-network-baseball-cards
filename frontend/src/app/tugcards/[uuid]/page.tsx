@@ -1,21 +1,21 @@
 import {
   getProfileByUuid,
   getProfilesByTeamsWithoutSpecifiedProfile,
-} from "@/lib/utils/sanityApi/profileRequests";
+} from "@/src/lib/utils/sanityApi/profileRequests";
 
-import ProfileNavBar from "@/components/ProfileNavBar";
-import Banner from "@/components/profilePageComponents/Banner";
-import ValuesCard from "@/components/profilePageComponents/ValuesCard";
-import MoreProfilesCard from "@/components/profilePageComponents/MoreProfilesCard";
-import WorkingGeniusCard from "@/components/profilePageComponents/WorkingGeniusCard";
-import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouCard";
-import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
-import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
+import ProfileNavBar from "@/src/components/layout/ProfileNavBar";
+import Banner from "@/src/features/profilePageComponents/Banner";
+import ValuesCard from "@/src/features/profilePageComponents/ValuesCard";
+import MoreProfilesCard from "@/src/features/profilePageComponents/MoreProfilesCard";
+import WorkingGeniusCard from "@/src/features/profilePageComponents/WorkingGeniusCard";
+import PrinciplesYouCard from "@/src/features/profilePageComponents/PrinciplesYouCard";
+import KolbeStrengthsCard from "@/src/features/profilePageComponents/KolbeStrengthsCard";
+import MobileNavBanner from "@/src/features/profilePageComponents/MobileNavBanner";
 
-import DownloadButton from "@/components/profilePageComponents/DownloadPDFButton";
+import DownloadButton from "@/src/features/profilePageComponents/DownloadPDFButton";
 import { SanityDocument } from "next-sanity";
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 
 type tParams = Promise<{ uuid: string }>;
