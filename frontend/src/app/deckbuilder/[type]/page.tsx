@@ -1,5 +1,4 @@
 import ProfileNavBar from "@/components/ProfileNavBar";
-import KolbeGraph from "@/components/deckBuilder/dataTables/kolbeGraph";
 import { CompareType } from "@/components/deckBuilder/deckBuilderStore";
 import { ProfileComparison } from "@/components/deckBuilder/profileComparison";
 import { auth0 } from "@/lib/auth0";
@@ -7,8 +6,15 @@ import { getUserData } from "@/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+type tParams = Promise<{ type: CompareType }>;
+
 // Main page component with Suspense boundary
-export default async function KolbeGraphPage(): Promise<JSX.Element> {
+export default async function ComparisonPage({
+  params,
+}: {
+  params: tParams;
+}): Promise<JSX.Element> {
+  const { type } = await params;
   const session = await auth0.getSession();
 
   if (!session) {
@@ -31,11 +37,7 @@ export default async function KolbeGraphPage(): Promise<JSX.Element> {
         _updatedAt={""}
       />
       <Suspense fallback={<div>Loading...</div>}>
-        <ProfileComparison
-          TableComponent={KolbeGraph}
-          tableTitle={CompareType.KOLBE_GRAPH}
-          tableSlug="kolbegraph"
-        />
+        <ProfileComparison initialType={type} />
       </Suspense>
     </div>
   );

@@ -34,7 +34,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-interface ValuesTableProps {
+export interface ValuesTableProps {
   profiles: SanityDocument[];
   showJobRole: boolean;
   optimizedImages?: boolean;

@@ -89,6 +89,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
   const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
+  const [selectedType, setSelectedType] = useState(CompareType.WORKING_GENIUS);
+
   const router = useRouter();
 
   const store = deckBuilderStoreInstance;
@@ -560,10 +562,6 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     }
   };
 
-  const [currentCompareType, setCompareType] = useState<CompareType | null>(
-    CompareType.WORKING_GENIUS
-  );
-
   useEffect(() => {
     // Only save if we have meaningful data to save
     if (
@@ -574,7 +572,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         profileTables,
         selectedTeam,
         selectedTeamName,
-        currentCompareType,
+        selectedType,
         groupingMode,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
@@ -583,7 +581,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
     profileTables,
     selectedTeam,
     selectedTeamName,
-    currentCompareType,
+    selectedType,
     groupingMode,
   ]);
 
@@ -611,7 +609,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         }
 
         if (parsedData.compareType) {
-          setCompareType(parsedData.compareType);
+          setSelectedType(parsedData.compareType);
         }
 
         if (parsedData.groupingMode) {
@@ -639,7 +637,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleContinue = () => {
     const urlParam = encodeProfileTablesToURL(profileTables);
     router.push(
-      `/deckbuilder/${currentCompareType}/?groupedProfiles=${urlParam}`
+      `/deckbuilder/${store.comparisonAttributesMap[selectedType].slug}/?groupedProfiles=${urlParam}`
     );
   };
 
@@ -675,8 +673,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   }
 
   const handleCompareTypeSelect = (type: CompareType) => {
-    store.setCompareType(type);
-    setCompareType(type);
+    setSelectedType(type);
     setOpen(false);
   };
 
@@ -731,7 +728,8 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                   aria-expanded={open}
                   className="w-fit justify-between"
                 >
-                  {store.getCompareTypeLabel() || "Compare Type"}
+                  {store.comparisonAttributesMap[selectedType].title ||
+                    "Compare Type"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -743,18 +741,18 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
                     {store.compareTypes.map((item) => (
                       <CommandItem
                         key={item.value}
-                        value={item.label}
+                        value={item.data.title}
                         onSelect={() => handleCompareTypeSelect(item.value)}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            currentCompareType === item.value
+                            selectedType === item.value
                               ? "opacity-100"
                               : "opacity-0"
                           )}
                         />
-                        {item.label}
+                        {item.data.title}
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -800,7 +798,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
 
             <Button
               variant="outline"
-              disabled={!currentCompareType || !profileTables[0].profiles[0]}
+              disabled={!selectedType || !profileTables[0].profiles[0]}
               className="hover:border-primary"
               onClick={handleContinue}
             >

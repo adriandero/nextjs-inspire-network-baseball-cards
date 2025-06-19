@@ -5,7 +5,7 @@ import { SanityDocument } from "next-sanity";
 import { getKolbeMethod, KolbeStrength } from "@/lib/utils";
 import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
 
-interface KolbeGraphProps {
+export interface KolbeGraphProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
   tableName?: string;

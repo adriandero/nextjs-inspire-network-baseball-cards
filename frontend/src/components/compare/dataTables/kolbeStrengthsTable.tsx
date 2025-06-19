@@ -20,7 +20,7 @@ import {
 import { urlFor } from "@/lib/sanity/client";
 import { Progress } from "@/components/ui/progress";
 
-interface KolbeStrengthsTableProps {
+export interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
   showJobRole: boolean;

@@ -1,25 +1,37 @@
-
 export enum CompareType {
   WORKING_GENIUS = "workinggenius",
   KOLBE_STRENGTHS = "kolbestrengths",
   KOLBE_GRAPH = "kolbegraph",
   VALUES = "values",
 }
+
 export class DeckBuilderStore {
   // Proper class naming convention (PascalCase)
   private currentCompareType: CompareType | null = null;
 
-  COMPARE_TYPE_LABELS: Record<CompareType, string> = {
-    [CompareType.WORKING_GENIUS]: "Working Genius",
-    [CompareType.KOLBE_STRENGTHS]: "Kolbe Strengths",
-    [CompareType.KOLBE_GRAPH]: "Kolbe Graph",
-    [CompareType.VALUES]: "Values",
+  comparisonAttributesMap = {
+    [CompareType.WORKING_GENIUS]: {
+      title: "Working Genius",
+      slug: "workinggenius",
+    },
+    [CompareType.KOLBE_STRENGTHS]: {
+      title: "Kolbe Strengths",
+      slug: "kolbestrengths",
+    },
+    [CompareType.KOLBE_GRAPH]: {
+      title: "Kolbe Graph",
+      slug: "kolbegraph",
+    },
+    [CompareType.VALUES]: {
+      title: "Values",
+      slug: "values",
+    },
   };
 
-  compareTypes = Object.entries(this.COMPARE_TYPE_LABELS).map(
-    ([value, label]) => ({
+  compareTypes = Object.entries(this.comparisonAttributesMap).map(
+    ([value, data]) => ({
       value: value as CompareType,
-      label,
+      data,
     })
   );
 
@@ -30,12 +42,6 @@ export class DeckBuilderStore {
 
   getCompareType(): CompareType | null {
     return this.currentCompareType;
-  }
-
-  getCompareTypeLabel(): string | null {
-    return this.currentCompareType
-      ? this.COMPARE_TYPE_LABELS[this.currentCompareType]
-      : null;
   }
 }
 

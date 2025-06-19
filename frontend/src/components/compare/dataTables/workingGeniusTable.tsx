@@ -20,7 +20,7 @@ import {
 import WidgetCogsSVG from "../../../../public/WidgetCogsSimple";
 import { urlFor } from "@/lib/sanity/client";
 
-interface WorkingGeniusTableProps {
+export interface WorkingGeniusTableProps {
   profiles: SanityDocument[];
   showJobRole: boolean;
   optimizedImages?: boolean;

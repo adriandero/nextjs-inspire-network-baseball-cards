@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import WorkingGeniusTable from "../compare/dataTables/workingGeniusTable";
+import KolbeStrengthsTable from "../compare/dataTables/kolbeStrengthsTable";
+import KolbeGraph from "./dataTables/kolbeGraph";
+import ValuesTable from "../compare/dataTables/valuesTable";
 
 interface ProfileTable {
   //TODO: own file
@@ -47,18 +51,14 @@ export interface CompleteProfileTable {
 
 // Define the props interface
 export interface ProfileComparisonProps {
-  TableComponent: React.ComponentType<any>;
-  tableTitle: string;
-  tableSlug: string;
+  initialType: CompareType;
   tableProps?: Record<string, any>;
 }
 
 //TODO: make this one compare mode where changing the graph is only acomponent change and not a page update
 
 export function ProfileComparison({
-  TableComponent,
-  tableTitle,
-  tableSlug,
+  initialType,
   tableProps = {},
 }: ProfileComparisonProps) {
   const [error, setError] = useState<string | null>(null);
@@ -69,10 +69,6 @@ export function ProfileComparison({
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [open, setOpen] = React.useState(false);
-
-  const [currentCompareType, setCompareType] = useState<CompareType | null>(
-    null
-  );
 
   const store = deckBuilderStoreInstance;
 
@@ -149,7 +145,7 @@ export function ProfileComparison({
   const handlePDFDownloadCall = async () => {
     try {
       setLoading(true);
-      const fetchURL = `/api/deckbuilder/${tableSlug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
+      const fetchURL = `/api/deckbuilder/${store.comparisonAttributesMap[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
       console.log(fetchURL);
 
       await fetch(fetchURL + `&warm=true`).catch(() =>
@@ -165,7 +161,7 @@ export function ProfileComparison({
       const blobUrl = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `Compare-IN-${tableTitle}-Cards.pdf`;
+      link.download = `Compare-IN-${store.comparisonAttributesMap[selectedType].title}-Cards.pdf`;
       document.body.appendChild(link);
       link.click();
       URL.revokeObjectURL(blobUrl);
@@ -177,17 +173,16 @@ export function ProfileComparison({
     }
   };
 
-  const handleCompareTypeSelect = (type: CompareType) => {
-    store.setCompareType(type);
-    setCompareType(type);
-    setOpen(false);
-    const currentUrl = new URL(window.location.href);
-    const pathParts = currentUrl.pathname.split("/");
-    pathParts[pathParts.length - 1] = type;
-    const newUrl = `${currentUrl.origin}${pathParts.join("/")}${currentUrl.search}`;
+  const [selectedType, setSelectedType] = useState(initialType);
 
-    redirect(newUrl);
+  const comparisonTableMap = {
+    [CompareType.WORKING_GENIUS]: WorkingGeniusTable,
+    [CompareType.KOLBE_STRENGTHS]: KolbeStrengthsTable,
+    [CompareType.KOLBE_GRAPH]: KolbeGraph,
+    [CompareType.VALUES]: ValuesTable,
   };
+
+  const TableComponent = comparisonTableMap[selectedType];
 
   return (
     <div className="px-6">
@@ -203,7 +198,8 @@ export function ProfileComparison({
           <div className="flex w-full items-center h-8 py-4 gap-2">
             <h1 className="text-lg font-bold">
               {" "}
-              {store.getCompareTypeLabel() || "Compare Type"}{" "}
+              {store.comparisonAttributesMap[selectedType].title ||
+                "Compare Type"}{" "}
               {/* TODO: check compare type label twice -> make a variable*/}
             </h1>
             <Button
@@ -234,7 +230,8 @@ export function ProfileComparison({
                   aria-expanded={open}
                   className="w-fit justify-between"
                 >
-                  {store.getCompareTypeLabel() || "Compare Type"}
+                  {store.comparisonAttributesMap[selectedType].title ||
+                    "Compare Type"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -246,18 +243,18 @@ export function ProfileComparison({
                     {store.compareTypes.map((item) => (
                       <CommandItem
                         key={item.value}
-                        value={item.label}
-                        onSelect={() => handleCompareTypeSelect(item.value)}
+                        value={item.data.title}
+                        onSelect={() => setSelectedType(item.value)}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            currentCompareType === item.value
+                            selectedType === item.value
                               ? "opacity-100"
                               : "opacity-0"
                           )}
                         />
-                        {item.label}
+                        {item.data.title}
                       </CommandItem>
                     ))}
                   </CommandGroup>
