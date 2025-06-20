@@ -5,7 +5,7 @@ import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";
-import INTMLogo from "@/src/public/IN-TM-Logo.png";
+import INTMLogo from "@/public/images/in-tug-card-logo.png";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();

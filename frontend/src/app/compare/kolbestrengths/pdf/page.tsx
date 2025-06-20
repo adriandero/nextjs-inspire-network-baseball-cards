@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";
-import INTMLogo from "@/src/public/IN-TM-Logo.png";
+import INTMLogo from "@/public/images/in-tug-card-logo.png";
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
 
 // Content component that uses useSearchParams
