@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import NavBar from "@/src/components/layout/nav-bar";
 import { Button } from "@/src/components/ui/button";
 import { GoArrowRight } from "react-icons/go";
-import BrittanySamplePDF from "@/src/../public/BrittanySamplePDF.png";
-import AllisonSamplePhone from "@/src/../public/AllisonSamplePhone.png";
+import BrittanySamplePDF from "@/public/images/desktop-sample.png";
+import AllisonSamplePhone from "@/public/images/phone-sample.png";
 import Image from "next/image";
 
 export default function LandingPage({

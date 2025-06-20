@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import defaultAvatar from "@/public/images/default-avatar.png";
 import { SanityDocument } from "next-sanity";
 
 interface DraggedProfilePreviewProps {
@@ -19,7 +20,7 @@ const DraggedProfilePreview: React.FC<DraggedProfilePreviewProps> = ({
             src={
               profile.profileImage
                 ? profile.profileImage.asset.url
-                : "/defaultAvatar.png"
+                : defaultAvatar.src
             }
             alt={profile.name}
             fill

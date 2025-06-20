@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+
 import { SanityDocument } from "next-sanity";
 import {
   Table,
@@ -17,8 +18,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import WidgetCogsSVG from "@/public/WidgetCogsSimple";
+import WidgetCogsSVG from "@/public/illustrations/widget-cogs-simple-svg";
 import { urlFor } from "@/src/lib/sanity/client";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 export interface WorkingGeniusTableProps {
   profiles: SanityDocument[];
@@ -57,7 +59,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                               .quality(40)
                               .url()
                           : profile.profileImage.asset.url
-                        : "/defaultAvatar.png"
+                        : defaultAvatar.src
                     }
                     alt={profile.name}
                     fill

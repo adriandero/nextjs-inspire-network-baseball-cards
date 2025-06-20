@@ -3,7 +3,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
-import INTMLogo from "@/src/../public/IN-TM-Logo.png";
+import INTMLogo from "@/public/images/in-tug-card-logo.png";
 import { ProfileTable } from "@/src/features/deck-builder/builder/drop-table-manager";
 import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";

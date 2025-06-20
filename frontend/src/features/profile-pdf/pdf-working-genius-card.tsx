@@ -1,7 +1,7 @@
 import { GoLightBulb } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
-import WidgetCogsSVG from "@/src/features/profile/widget-cogs-svg";
-import workingGeniusJson from "@/src/../public/workingGenius.json";
+import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
+import workingGeniusJson from "@/public/json/working-genius.json";
 
 export default function PdfWorkingGeniusCard({
   profile,

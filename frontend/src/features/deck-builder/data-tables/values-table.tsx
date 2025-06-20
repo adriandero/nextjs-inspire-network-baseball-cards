@@ -33,6 +33,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/src/components/ui/tooltip";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 export interface ValuesTableProps {
   profiles: SanityDocument[];
@@ -72,7 +73,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   const handleColorChange = (
     profileId: string,
     cellId: string,
-    color: string,
+    color: string
   ) => {
     setProfileColors((prev) => ({
       ...prev,
@@ -203,7 +204,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                             .quality(40)
                             .url()
                         : profile.profileImage.asset.url
-                      : "/defaultAvatar.png"
+                      : defaultAvatar.src
                   }
                   alt={profile.name}
                   fill
@@ -336,7 +337,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -382,7 +383,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
 
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   );

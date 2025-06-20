@@ -1,6 +1,7 @@
 "use client";
 import { GoInfo, GoPeople } from "react-icons/go";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./component-shell";
@@ -45,8 +46,7 @@ export default function MoreProfilesCard({
                     <Avatar className="block w-12 h-12 min-w-12 rounded-full ">
                       <AvatarImage
                         src={
-                          profile.profileImage?.asset?.url ??
-                          "/defaultAvatar.png"
+                          profile.profileImage?.asset?.url ?? defaultAvatar.src
                         }
                         onLoadingStatusChange={(status) => {
                           if (status === "loaded") {

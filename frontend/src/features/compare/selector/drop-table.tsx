@@ -21,6 +21,7 @@ import {
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 interface SelectedProfilesTableProps {
   selectedProfilesData: SanityDocument[];
@@ -85,7 +86,7 @@ const DropTable: React.FC<SelectedProfilesTableProps> = ({
                             src={
                               profile.profileImage
                                 ? profile.profileImage.asset.url
-                                : "/defaultAvatar.png"
+                                : defaultAvatar.src
                             }
                             alt={profile.name}
                             fill

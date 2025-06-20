@@ -5,6 +5,7 @@ import Image from "next/image";
 import { SanityDocument } from "next-sanity";
 import { Skeleton } from "@/src/components/ui/skeleton";
 import { useEffect, useRef, useState } from "react";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
@@ -30,7 +31,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
       <div className="w-24 h-24 min-w-24 min-h-24 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
-            src={profile.profileImage?.asset?.url ?? "/defaultAvatar.png"}
+            src={profile.profileImage?.asset?.url ?? defaultAvatar.src}
             onLoadingStatusChange={(status) => {
               if (status === "loaded") {
                 setIsAvatarLoaded(true);

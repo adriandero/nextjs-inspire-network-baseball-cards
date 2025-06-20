@@ -4,6 +4,7 @@ import { MoreHorizontal } from "lucide-react";
 import { ArrowUpDown } from "lucide-react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 import { Button } from "@/src/components/ui/button";
 import {
@@ -29,7 +30,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
       const profileUuid = row.original.uuid;
       const profileJobRole = row.original.jobRole;
       const profileImageSrc =
-        row.original.profileImage?.asset.url ?? "/defaultAvatar.png";
+        row.original.profileImage?.asset.url ?? defaultAvatar.src;
 
       return (
         <div

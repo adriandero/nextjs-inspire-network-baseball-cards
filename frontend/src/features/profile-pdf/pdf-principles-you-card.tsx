@@ -5,11 +5,8 @@ import { PiDiamondsFour } from "react-icons/pi";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
-
-function getImage(archetype: string): string {
-  return `/archetypeImages/${archetype}.png`;
-}
-import principlesYouJson from "@/src/../public/principlesYou.json";
+import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
+import principlesYouJson from "@/public/json/principles-you-archetypes.json";
 
 export default function PdfPrinciplesYouCard({
   profile,
@@ -63,8 +60,8 @@ export default function PdfPrinciplesYouCard({
               >
                 <div className="w-16 min-w-16">
                   <Image
-                    src={getImage(principle)}
-                    alt="Illustration of the WIDGET gears"
+                    src={getArchetypeImage(principle)}
+                    alt={`Illustration for ${principle}`}
                     width={100}
                     height={100}
                   />
@@ -73,12 +70,12 @@ export default function PdfPrinciplesYouCard({
                   <p className="font-normal text-base">
                     {formatPrincipleContent(
                       principlesYouJson[principle]?.title,
-                      principlesYouJson[principle]?.description
+                      principlesYouJson[principle]?.description,
                     )}
                   </p>
                 </div>
               </div>
-            )
+            ),
           )}
         </div>
       ) : (

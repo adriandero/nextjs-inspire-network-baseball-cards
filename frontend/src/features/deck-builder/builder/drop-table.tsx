@@ -12,6 +12,7 @@ import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/src/components/ui/button";
 import { GoX } from "react-icons/go";
+import defaultAvatar from "@/public/images/default-avatar.png";
 import { ProfileTable } from "./drop-table-manager";
 
 interface ProfileDropTableProps {
@@ -93,7 +94,7 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
                             src={
                               profile.profileImage
                                 ? profile.profileImage.asset.url
-                                : "/defaultAvatar.png"
+                                : defaultAvatar.src
                             }
                             alt={profile.name}
                             fill

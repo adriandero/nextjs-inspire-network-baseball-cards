@@ -6,6 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
 
 import { GoArrowLeft } from "react-icons/go";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 import {
   DropdownMenu,
@@ -40,7 +41,7 @@ export default function BackNavBar({
 
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
-  const userProfilePic = "/defaultAvatar.png";
+  const userProfilePic = defaultAvatar.src;
 
   function handleBack() {
     redirect(backwardsNavigationUrl);

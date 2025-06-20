@@ -6,6 +6,7 @@ import {
 } from "@radix-ui/react-collapsible";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 import { FiMenu } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -27,7 +28,7 @@ export default function MobileNavMenu({
   userProfileData,
   className,
 }: SanityDocument): React.JSX.Element {
-  const userProfilePic = "/defaultAvatar.png";
+  const userProfilePic = defaultAvatar.src;
 
   function handleProfileRedirect() {
     if (userProfileData) redirect("/tugcards/" + userProfileData.uuid);

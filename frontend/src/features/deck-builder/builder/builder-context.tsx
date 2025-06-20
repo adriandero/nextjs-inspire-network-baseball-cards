@@ -45,9 +45,8 @@ import ProfileTablesManager, {
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
 import { Button } from "@/src/components/ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
-import {
-  deckBuilderStoreInstance,
-} from "@/src/features/deck-builder/deckBuilderStore";
+import defaultAvatar from "@/public/images/default-avatar.png";
+import { deckBuilderStoreInstance } from "@/src/features/deck-builder/deckBuilderStore";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 
@@ -423,7 +422,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
                   src={
                     profile.profileImage
                       ? profile.profileImage.asset.url
-                      : "/defaultAvatar.png"
+                      : defaultAvatar.src
                   }
                   alt={profile.name}
                   fill

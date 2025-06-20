@@ -43,6 +43,7 @@ import DragTable from "@/src/features/deck-builder/builder/drag-table"; // Impor
 import DropTable from "@/src/features/compare/selector/drop-table"; // Import the new component
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview"; // Import the drag overlay component
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
@@ -242,7 +243,7 @@ const Selector = ({ userProfileData }: TeamProfileSelectorProps) => {
                   src={
                     profile.profileImage
                       ? profile.profileImage.asset.url
-                      : "/defaultAvatar.png"
+                      : defaultAvatar.src
                   }
                   alt={profile.name}
                   fill

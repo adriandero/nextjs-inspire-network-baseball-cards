@@ -1,6 +1,6 @@
 import { getProfileByUuid } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
-import INTMLogo from "@/src/../public/IN-TM-Logo.png";
+import INTMLogo from "@/public/images/in-tug-card-logo.png";
 
 import PdfBanner from "@/src/features/profile-pdf/pdf-banner";
 import PdfKolbeStrengthsCard from "@/src/features/profile-pdf/pdf-kolbe-strengths-card";

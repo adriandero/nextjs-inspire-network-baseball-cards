@@ -1,24 +1,21 @@
 "use client";
 import Image from "next/image";
 
-import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radioGroup";
+import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
 
 import { PiDiamondsFour } from "react-icons/pi";
-import principlesYouJson from "@/src/../public/principlesYou.json";
+import principlesYouJson from "@/public/json/principles-you-archetypes.json";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "./component-shell";
-
-function getImage(archetype: string): string {
-  return `/archetypeImages/${archetype}.png`;
-}
+import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 
 export default function PrinciplesYouCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   const [value, setValue] = React.useState<PrincipleKey>(
-    profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {}
+    profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {},
   );
 
   type PrincipleKey = keyof typeof principlesYouJson;
@@ -48,13 +45,13 @@ export default function PrinciplesYouCard({
                 (principle: string, index: number) => (
                   <RadioGroupItem key={index} value={principle}>
                     <Image
-                      src={getImage(principle)}
-                      alt={`${principle} illustration`}
+                      src={getArchetypeImage(principle)}
+                      alt={`Illustration for ${principle}`}
                       width={100}
                       height={100}
                     />
                   </RadioGroupItem>
-                )
+                ),
               )}
             </RadioGroup>
           </div>

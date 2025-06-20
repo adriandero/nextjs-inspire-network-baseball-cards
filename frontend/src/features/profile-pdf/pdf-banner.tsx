@@ -4,6 +4,7 @@ import { urlFor } from "@/src/lib/sanity/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import React, { useEffect, useRef, useState } from "react";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 export default function PdfBanner({
   profile,
@@ -50,7 +51,7 @@ export default function PdfBanner({
 
   const optimizedProfileImageUrl = profile.profileImage
     ? urlFor(profile.profileImage).auto("format").quality(80).url()
-    : "/defaultAvatar.png";
+    : defaultAvatar.src;
 
   const teamLogoUrl = profile?.team[0]?.teamLogo
     ? urlFor(profile?.team[0]?.teamLogo?.asset.url)

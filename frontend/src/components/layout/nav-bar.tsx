@@ -4,7 +4,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 import Link from "next/link";
 import Image from "next/image";
-import INTMLogo from "@/src/../public/IN-TM-Logo.png";
+import INTMLogo from "@/public/images/in-tug-card-logo.png";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 import {
   DropdownMenu,
@@ -35,7 +36,7 @@ export default function NavBar({
 }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
-  const userProfilePic = "/defaultAvatar.png";
+  const userProfilePic = defaultAvatar;
 
   function accountHasProfileAssigned() {
     if (userProfileData?.profile) return true;
@@ -90,7 +91,7 @@ export default function NavBar({
             <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200 overflow-hidden">
               <Avatar className="h-full">
                 <AvatarImage
-                  src={userProfilePic}
+                  src={userProfilePic.src}
                   className="rounded-full h-7 w-7 object-cover"
                   onLoadingStatusChange={(status) => {
                     if (status === "loaded") {

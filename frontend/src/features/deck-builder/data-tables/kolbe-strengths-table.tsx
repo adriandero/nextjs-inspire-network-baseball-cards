@@ -19,6 +19,7 @@ import {
 } from "@tanstack/react-table";
 import { urlFor } from "@/src/lib/sanity/client";
 import { Progress } from "@/src/components/ui/progress";
+import defaultAvatar from "@/public/images/default-avatar.png";
 
 export interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
@@ -57,7 +58,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                               .quality(40)
                               .url()
                           : profile.profileImage.asset.url
-                        : "/defaultAvatar.png"
+                        : defaultAvatar.src
                     }
                     alt={profile.name}
                     fill
