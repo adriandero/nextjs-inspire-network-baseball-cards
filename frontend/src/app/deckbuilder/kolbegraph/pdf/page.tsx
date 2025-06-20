@@ -1,12 +1,12 @@
 "use client";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProfilesByUuids } from "@/lib/utils/sanityApi/profileRequests";
+import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
-import INTMLogo from "@/../public/IN-TM-Logo.png";
-import { ProfileTable } from "@/components/deckBuilder/profileSelection/ProfileTableManager";
-import { CompleteProfileTable } from "@/components/deckBuilder/profileComparison";
-import KolbeGraph from "@/components/deckBuilder/dataTables/kolbeGraph";
+import INTMLogo from "@/public/images/in-tug-card-logo.png";
+import { ProfileTable } from "@/src/features/deck-builder/builder/drop-table-manager";
+import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
+import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import { SanityDocument } from "next-sanity";
 
 function ProfileComparisonContent() {

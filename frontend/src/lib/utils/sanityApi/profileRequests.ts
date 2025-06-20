@@ -1,6 +1,6 @@
 import { type SanityDocument } from "next-sanity";
 
-import { client } from "@/lib/sanity/client";
+import { client } from "@/src/lib/sanity/client";
 
 export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
   const query = `*[ _type == "profile" && uuid == $uuid && !(_id in path('drafts.**'))][0]{

@@ -1,8 +1,8 @@
-import ProfileNavBar from "@/components/ProfileNavBar";
-import { CompareType } from "@/components/deckBuilder/deckBuilderStore";
-import { ProfileComparison } from "@/components/deckBuilder/profileComparison";
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import BackNavBar from "@/src/components/layout/back-nav-bar";
+import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+import { ProfileComparison } from "@/src/features/deck-builder/profile-comparison";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -27,7 +27,7 @@ export default async function ComparisonPage({
 
   return (
     <div className="w-full max-w-screen-lg">
-      <ProfileNavBar
+      <BackNavBar
         userProfileData={userProfileData}
         backwardsNavigationUrl={"/deckbuilder/"}
         _id={""}
