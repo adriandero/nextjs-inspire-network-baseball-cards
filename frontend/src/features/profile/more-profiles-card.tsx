@@ -4,9 +4,9 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import defaultAvatar from "@/public/images/default-avatar.png";
 
 import { SanityDocument } from "next-sanity";
-import ComponentShell from "./component-shell";
+import ComponentShell from "../../components/custom-ui/component-shell";
 import { useState } from "react";
-import { Skeleton } from "@/src/components/ui/skeleton";
+import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { redirect } from "next/navigation";
 import {
   AlertDialog,
@@ -17,7 +17,7 @@ import {
   AlertDialogCancel,
   AlertDialogHeader,
   AlertDialogFooter,
-} from "@/src/components/ui/alert-dialog";
+} from "@/src/components/shadcn-ui/alert-dialog";
 
 export default function MoreProfilesCard({
   moreProfiles,

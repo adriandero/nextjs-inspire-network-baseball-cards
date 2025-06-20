@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import { SanityDocument } from "next-sanity";
 import DropTable from "./drop-table";
 import { GoX } from "react-icons/go";
-import { Input } from "@/src/components/ui/input";
+import { Input } from "@/src/components/shadcn-ui/input";
 
 export interface ProfileTable {
   id: string;

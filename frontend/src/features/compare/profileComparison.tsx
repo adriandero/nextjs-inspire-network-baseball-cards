@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import { SanityDocument } from "next-sanity";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import {
   GoChevronDown,
   GoMultiSelect,

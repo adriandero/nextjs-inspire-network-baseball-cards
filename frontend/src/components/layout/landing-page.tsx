@@ -3,7 +3,7 @@
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
 import NavBar from "@/src/components/layout/nav-bar";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import { GoArrowRight } from "react-icons/go";
 import BrittanySamplePDF from "@/public/images/desktop-sample.png";
 import AllisonSamplePhone from "@/public/images/phone-sample.png";

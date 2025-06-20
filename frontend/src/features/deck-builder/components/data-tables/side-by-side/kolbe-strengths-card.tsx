@@ -1,5 +1,25 @@
-"use client";
-import { Progress } from "@/src/components/shadcn-ui/progress";
+import { SanityDocument } from "next-sanity";
+
+import {
+  GoLaw,
+  GoLightBulb,
+  GoRocket,
+  GoSearch,
+  GoTab,
+  GoTools,
+} from "react-icons/go";
+import workingGeniusJson from "@/public/json/working-genius.json";
+import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
+import { PiDiamondsFour } from "react-icons/pi";
+import principlesYouJson from "@/public/json/principles-you-archetypes.json";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/src/components/shadcn-ui/radio-group";
+import Image from "next/image";
+import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
+import React from "react";
+import { getKolbeMethod } from "@/src/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -12,18 +32,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/src/components/shadcn-ui/tooltip";
-
-import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // Importing some icons for the radio items
-
-import React from "react";
-import { SanityDocument } from "next-sanity";
-import ComponentShell from "../../components/custom-ui/component-shell";
-import { getKolbeMethod } from "@/src/lib/utils";
-
-// type principle = {
-//   title: string;
-//   description: string;
-// };
+import { Progress } from "@/src/components/shadcn-ui/progress";
 
 export default function KolbeStrengthsCard({
   profile,
@@ -35,29 +44,26 @@ export default function KolbeStrengthsCard({
   const quickStartMethod = getKolbeMethod(kolbeObj?.quickStart, "quickStart");
   const implementerMethod = getKolbeMethod(
     kolbeObj?.implementer,
-    "implementer"
+    "implementer",
   );
 
   return (
-    <ComponentShell>
+    <div className="w-full h-fit border border-light3 bg-background rounded-2xl p-4">
       <div className="flex flex-row">
-        <div className="hidden md:flex flex-row items-center w-fit h-fit">
-          <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />{" "}
-        </div>
-        <div className="flex flex-col w-full h-fit items-start md:pl-6">
-          <div className="flex md:hidden flex-row">
-            <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />{" "}
-            <h2 className="text-xl font-bold ml-6">Kolbe Strengths</h2>
+
+        <div className="flex flex-col w-full ">
+          <div className="flex flex-row items-center">
+            <GoLaw strokeWidth={0.5} size={20} className="flex mr-4" />{" "}
+            <h2 className="text-lg font-bold">Kolbe Strengths</h2>
           </div>
-          <h2 className="hidden md:block text-xl font-bold">Kolbe Strengths</h2>
-          <Accordion type="multiple" className="w-full pt-4">
+          <Accordion type="multiple" className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
+                <div className="w-full flex flex-row items-center gap-4">
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoSearch strokeWidth={0.5} size={24} />
+                        <GoSearch strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Fact Finder</TooltipContent>
                     </Tooltip>
@@ -66,25 +72,25 @@ export default function KolbeStrengthsCard({
                     value={kolbeObj?.factFinder ? kolbeObj?.factFinder * 10 : 0}
                     color="bg-inspireRed"
                   />
-                  <div className="font-bold text-lg">
+                  <div className="font-bold text-base">
                     {kolbeObj?.factFinder}
                   </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-base font-bold">
                   {factFinderMethod?.method}
                 </h3>
-                <p className="text-base">{factFinderMethod?.description}</p>
+                <p className="text-sm">{factFinderMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
               <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
+                <div className="w-full flex flex-row items-center gap-4">
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoTab strokeWidth={0.5} size={24} />
+                        <GoTab strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Follow Thru</TooltipContent>
                     </Tooltip>
@@ -93,25 +99,25 @@ export default function KolbeStrengthsCard({
                     value={kolbeObj?.followThru ? kolbeObj?.followThru * 10 : 0}
                     color="bg-inspireBlue"
                   />
-                  <div className="font-bold text-lg">
+                  <div className="font-bold text-base">
                     {kolbeObj?.followThru}
                   </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-base font-bold">
                   {followThruMethod?.method}
                 </h3>
-                <p className="text-base">{followThruMethod?.description}</p>
+                <p className="text-sm">{followThruMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
               <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
+                <div className="w-full flex flex-row items-center gap-4">
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoRocket strokeWidth={0.5} size={24} />
+                        <GoRocket strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Quick Start</TooltipContent>
                     </Tooltip>
@@ -120,25 +126,25 @@ export default function KolbeStrengthsCard({
                     value={kolbeObj?.quickStart ? kolbeObj?.quickStart * 10 : 0}
                     color="bg-inspireGreen"
                   />
-                  <div className="font-bold text-lg">
+                  <div className="font-bold text-base">
                     {kolbeObj?.quickStart}
                   </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-base font-bold">
                   {quickStartMethod?.method}
                 </h3>
-                <p className="text-base">{quickStartMethod?.description}</p>
+                <p className="text-sm">{quickStartMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">
               <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
+                <div className="w-full flex flex-row items-center gap-4">
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoTools strokeWidth={0.5} size={24} />
+                        <GoTools strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Implementer</TooltipContent>
                     </Tooltip>
@@ -149,21 +155,21 @@ export default function KolbeStrengthsCard({
                     }
                     color="bg-inspireYellow"
                   />
-                  <div className="font-bold text-lg">
+                  <div className="font-bold text-base">
                     {kolbeObj?.implementer}
                   </div>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-base font-bold">
                   {implementerMethod?.method}
                 </h3>
-                <p className="text-base">{implementerMethod?.description}</p>
+                <p className="text-sm">{implementerMethod?.description}</p>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>
       </div>
-    </ComponentShell>
+    </div>
   );
 }

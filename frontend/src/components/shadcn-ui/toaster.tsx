@@ -1,6 +1,6 @@
 "use client"
 
-import { useToast } from "@/src/components/ui/use-toast";
+import { useToast } from "@/src/components/shadcn-ui/use-toast";
 import {
   Toast,
   ToastClose,
@@ -8,7 +8,7 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/src/components/ui/toast";
+} from "@/src/components/shadcn-ui/toast";
 
 export function Toaster() {
   const { toasts } = useToast()

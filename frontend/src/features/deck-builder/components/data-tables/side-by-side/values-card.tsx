@@ -1,27 +1,26 @@
 import { SanityDocument } from "next-sanity";
 
 import { GoNorthStar } from "react-icons/go";
-import ComponentShell from "../../components/custom-ui/component-shell";
 import { Badge } from "@/src/components/shadcn-ui/badge";
 
 export default function ValuesCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
-    <ComponentShell className="flex flex-row">
-      <div className="flex w-fit h-fit xs:flex-nowrap flex-wrap">
+    <div className="w-full h-fit border border-light3 bg-background rounded-2xl p-4">
+      <div className="flex w-full h-fit xs:flex-nowrap flex-wrap flex-col gap-2">
         {" "}
-        <div className="h-full mr-6 flex">
-          <GoNorthStar strokeWidth={0.5} size={24} className="flex" />
+        <div className="flex flex-row h-full mr-4  items-center">
+          <GoNorthStar strokeWidth={0.5} size={20} className="flex mr-4" />
+          <h1 className="text-lg font-bold flex-grow w-fit">Values</h1>
         </div>
-        <h1 className="text-xl font-bold flex-grow w-fit mr-6">Values</h1>
         {profile.values ? (
           <div className="flex flex-wrap gap-2 xs:mt-0 mt-4">
             {profile.values?.map((value: string, index: number) => (
               <Badge
                 variant="outline"
                 key={index}
-                className="text-base font-bold"
+                className="text-sm font-semibold"
               >
                 {value}
               </Badge>
@@ -30,10 +29,10 @@ export default function ValuesCard({
         ) : (
           <div className="flex w-full h-fit italic items-center text-dark3 pt-1">
             {" "}
-            <p>No Result.</p>
+            <p className="ml-10">No Result.</p>
           </div>
         )}
       </div>
-    </ComponentShell>
+    </div>
   );
 }

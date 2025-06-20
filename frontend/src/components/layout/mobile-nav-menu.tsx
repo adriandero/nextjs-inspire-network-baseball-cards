@@ -12,7 +12,7 @@ import { FiMenu } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
-import { Sheet, SheetContent, SheetTrigger } from "@/src/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/src/components/shadcn-ui/sheet";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -22,7 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/src/components/ui/alert-dialog";
+} from "@/src/components/shadcn-ui/alert-dialog";
 
 export default function MobileNavMenu({
   userProfileData,

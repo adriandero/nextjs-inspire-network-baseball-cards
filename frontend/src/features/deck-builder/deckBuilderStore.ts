@@ -1,6 +1,5 @@
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
-
 export class DeckBuilderStore {
   // Proper class naming convention (PascalCase)
   private currentCompareType: CompareType | null = null;
@@ -22,13 +21,17 @@ export class DeckBuilderStore {
       title: "Values",
       slug: "values",
     },
+    [CompareType.SIDE_BY_SIDE]: {
+      title: "Side by Side",
+      slug: "sidebyside",
+    },
   };
 
   compareTypes = Object.entries(this.comparisonAttributesMap).map(
     ([value, data]) => ({
       value: value as CompareType,
       data,
-    })
+    }),
   );
 
   // Add methods to manage state

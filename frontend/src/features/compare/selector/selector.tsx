@@ -3,7 +3,7 @@
 "use client";
 // NOTE: depricated
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Checkbox } from "@/src/components/ui/checkbox";
+import { Checkbox } from "@/src/components/shadcn-ui/checkbox";
 import Image from "next/image";
 import {
   getAllProfilesGroupedByTeam,

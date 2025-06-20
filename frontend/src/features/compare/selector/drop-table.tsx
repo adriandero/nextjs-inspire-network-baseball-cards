@@ -2,14 +2,14 @@
 
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import { GoArrowRight } from "react-icons/go";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/src/components/ui/dropdown-menu";
+} from "@/src/components/shadcn-ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
+} from "@/src/components/shadcn-ui/table";
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";

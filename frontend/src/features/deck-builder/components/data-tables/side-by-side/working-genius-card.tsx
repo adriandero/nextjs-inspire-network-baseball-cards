@@ -1,12 +1,8 @@
-"use client";
+import { SanityDocument } from "next-sanity";
 
 import { GoLightBulb } from "react-icons/go";
-
-import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 import workingGeniusJson from "@/public/json/working-genius.json";
-
-import { SanityDocument } from "next-sanity";
-import ComponentShell from "../../components/custom-ui/component-shell";
+import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 
 export default function WorkingGeniusCard({
   profile,
@@ -14,30 +10,25 @@ export default function WorkingGeniusCard({
   type workingGeniusKey = keyof typeof workingGeniusJson;
 
   const workingGenius: workingGeniusKey = profile.workingGenius?.title;
-
   return (
-    <ComponentShell>
+    <div className="w-full h-fit border border-light3 bg-background rounded-2xl p-4">
       {workingGeniusJson[workingGenius] ? (
-        <div className="flex flex-row">
-          <div className="h-full mr-6">
-            <GoLightBulb
-              strokeWidth={0.5}
-              size={24}
-              className="flex self-start"
-            />
+        <div className="flex flex-col">
+          <div className="flex items-center mr-4 h-full">
+            <GoLightBulb strokeWidth={0.5} size={20} className="mr-4" />
+            <h2 className="text-lg font-bold">Working Genius</h2>
           </div>
           <div className="flex flex-col w-fit h-fit items-start">
-            <h2 className="text-xl font-bold">Working Genius</h2>
-            <h3 className="font-bold mt-2">
+            <h3 className="font-bold text-base mt-2">
               {workingGeniusJson[workingGenius]?.title}
             </h3>
-            <p className="">{workingGeniusJson[workingGenius]?.description}</p>
+            <p className="text-sm">{workingGeniusJson[workingGenius]?.description}</p>
           </div>
         </div>
       ) : (
-        <div className="flex w-full h-fit items-center italic text-dark3">
+        <div className="flex w-full h-fit justify-center items-center italic text-dark3">
           {" "}
-          <p className="ml-10">No Result.</p>
+          <p>No Result.</p>
         </div>
       )}
       <div className="h-px w-full bg-light3 my-6"></div>
@@ -51,6 +42,6 @@ export default function WorkingGeniusCard({
           _updatedAt={""}
         />
       </div>
-    </ComponentShell>
+    </div>
   );
 }

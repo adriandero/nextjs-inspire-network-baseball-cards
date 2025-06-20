@@ -14,8 +14,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
-import { Skeleton } from "@/src/components/ui/skeleton";
+} from "@/src/components/shadcn-ui/dropdown-menu";
+import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/src/components/ui/alert-dialog";
+} from "@/src/components/shadcn-ui/alert-dialog";
 
 export default function NavBar({
   userProfileData,

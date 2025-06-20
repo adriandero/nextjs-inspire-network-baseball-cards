@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
+} from "@/src/components/shadcn-ui/table";
 import {
   ColumnDef,
   flexRender,

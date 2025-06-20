@@ -18,10 +18,10 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/src/components/ui/breadcrumbs";
+} from "@/src/components/shadcn-ui/breadcrumbs";
 
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
+import { Button } from "@/src/components/shadcn-ui/button";
+import { Input } from "@/src/components/shadcn-ui/input";
 import { GoInfo, GoVersions } from "react-icons/go";
 import { GoMultiSelect } from "react-icons/go";
 
@@ -32,14 +32,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
+} from "@/src/components/shadcn-ui/table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuItem,
-} from "@/src/components/ui/dropdown-menu";
+} from "@/src/components/shadcn-ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -49,7 +49,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/src/components/ui/alert-dialog";
+} from "@/src/components/shadcn-ui/alert-dialog";
 import { GoSearch } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
 import {

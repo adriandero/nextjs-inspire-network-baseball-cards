@@ -15,12 +15,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
+} from "@/src/components/shadcn-ui/dropdown-menu";
 
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { SanityDocument } from "next-sanity";
-import { Skeleton } from "@/src/components/ui/skeleton";
+import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 
 import {
   AlertDialog,
@@ -31,7 +31,7 @@ import {
   AlertDialogCancel,
   AlertDialogHeader,
   AlertDialogFooter,
-} from "@/src/components/ui/alert-dialog";
+} from "@/src/components/shadcn-ui/alert-dialog";
 
 export default function BackNavBar({
   userProfileData,
