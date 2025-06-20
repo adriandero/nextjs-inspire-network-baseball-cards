@@ -1,3 +1,5 @@
+// TODO: Depricated
+
 "use client";
 // NOTE: depricated
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -37,16 +39,16 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import RenderTable from "@/src/features/compare/profileSelection/RenderTable"; // Import the TeamTable component
-import SelectedRenderTable from "@/src/features/compare/profileSelection/SelectedRenderTable"; // Import the new component
-import DraggedProfilePreview from "@/src/features/compare/profileSelection/DraggableProfilePreview"; // Import the drag overlay component
+import DragTable from "@/src/features/deck-builder/builder/drag-table"; // Import the TeamTable component
+import DropTable from "@/src/features/compare/selector/drop-table"; // Import the new component
+import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview"; // Import the drag overlay component
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
 }
 
-const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
+const Selector = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
 
   const [compareType, setCompareType] = useState<CompareType | null>(null);
@@ -400,7 +402,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         collisionDetection={pointerWithin}
       >
         <div className="rounded-lg md:w-3/5 w-full">
-          <RenderTable
+          <DragTable
             view={view}
             selectedTeamName={selectedTeamName}
             table={table}
@@ -417,7 +419,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
           />
         </div>
         <div className="rounded-lg md:w-2/5 w-full">
-          <SelectedRenderTable
+          <DropTable
             selectedProfilesData={getSelectedProfilesData()}
             compareType={compareType}
             onCompareTypeSelect={handleCompareTypeSelect}
@@ -436,4 +438,4 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   );
 };
 
-export default TeamProfileSelector;
+export default Selector;

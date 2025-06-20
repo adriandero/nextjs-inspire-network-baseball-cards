@@ -75,7 +75,7 @@ const RenderRow: React.FC<any> = ({ row, handleOneWayProfileCheck }) => {
   );
 };
 
-const RenderTable: React.FC<RenderTableProps> = ({
+const DragTable: React.FC<RenderTableProps> = ({
   view,
   groupingMode,
   selectedTeamName,
@@ -256,4 +256,4 @@ const RenderTable: React.FC<RenderTableProps> = ({
   );
 };
 
-export default RenderTable;
+export default DragTable;

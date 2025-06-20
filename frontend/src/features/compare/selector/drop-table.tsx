@@ -1,3 +1,5 @@
+// TODO: Depricated
+
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/src/components/ui/button";
@@ -27,7 +29,7 @@ interface SelectedProfilesTableProps {
   onContinue: () => void;
 }
 
-const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
+const DropTable: React.FC<SelectedProfilesTableProps> = ({
   selectedProfilesData,
   compareType,
   onCompareTypeSelect,
@@ -156,4 +158,4 @@ const SelectedRenderTable: React.FC<SelectedProfilesTableProps> = ({
   );
 };
 
-export default SelectedRenderTable;
+export default DropTable;

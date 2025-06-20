@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/src/components/ui/button";
 import { SanityDocument } from "next-sanity";
-import ProfileDropTable from "./ProfileDropTable";
+import DropTable from "./drop-table";
 import { GoX } from "react-icons/go";
 import { Input } from "@/src/components/ui/input";
 
@@ -119,7 +119,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
             )}
           </div>
 
-          <ProfileDropTable
+          <DropTable
             selectedProfilesData={getProfilesForTable(table.id)}
             droppableId={`table-${table.id}`}
             onProfilesChange={(profiles: SanityDocument[]) => {

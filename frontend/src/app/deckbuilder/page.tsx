@@ -3,7 +3,7 @@ import NavBar from "@/src/components/layout/nav-bar";
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import TeamProfileSelector from "@/src/features/deck-builder/profileSelection/teamProfileSelector";
+import BuilderContext from "@/src/features/deck-builder/builder/builder-context";
 
 export interface Team {
   name: string;
@@ -33,7 +33,7 @@ export default async function DeckBuilderPage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-row justify-center">
-        <TeamProfileSelector userProfileData={userProfileData} />
+        <BuilderContext userProfileData={userProfileData} />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

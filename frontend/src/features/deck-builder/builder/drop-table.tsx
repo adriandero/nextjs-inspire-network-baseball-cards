@@ -12,7 +12,7 @@ import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/src/components/ui/button";
 import { GoX } from "react-icons/go";
-import { ProfileTable } from "./ProfileTableManager";
+import { ProfileTable } from "./drop-table-manager";
 
 interface ProfileDropTableProps {
   selectedProfilesData: SanityDocument[];
@@ -23,7 +23,7 @@ interface ProfileDropTableProps {
   isSelectedTable: boolean;
 }
 
-const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
+const DropTable: React.FC<ProfileDropTableProps> = ({
   selectedProfilesData,
   droppableId,
   onProfilesChange,
@@ -134,4 +134,4 @@ const ProfileDropTable: React.FC<ProfileDropTableProps> = ({
   );
 };
 
-export default ProfileDropTable;
+export default DropTable;

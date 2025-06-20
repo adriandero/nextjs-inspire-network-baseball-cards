@@ -3,15 +3,15 @@ import {
   getUserTeams,
   TeamsFromUser,
 } from "@/src/lib/utils/sanityApi/profileRequests";
-import { DataTable } from "@/src/components/profilesDataTable/data-table";
+import { DataTable } from "@/src/features/browse/data-table";
 import NavBar from "@/src/components/layout/nav-bar";
 import { SanityDocument } from "next-sanity";
 
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import { teamColumns } from "@/src/components/profilesDataTable/team-columns";
-import { profileColumns } from "@/src/components/profilesDataTable/profile-columns";
+import { teamColumns } from "@/src/features/browse/team-columns";
+import { profileColumns } from "@/src/features/browse/profile-columns";
 
 export interface Team {
   name: string;

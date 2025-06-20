@@ -38,11 +38,11 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { nanoid } from "nanoid";
-import RenderTable from "@/src/features/compare/profileSelection/RenderTable";
+import DragTable from "@/src/features/deck-builder/builder/drag-table";
 import ProfileTablesManager, {
   ProfileTable,
-} from "@/src/features/deck-builder/profileSelection/ProfileTableManager";
-import DraggedProfilePreview from "@/src/features/compare/profileSelection/DraggableProfilePreview";
+} from "@/src/features/deck-builder/builder/drop-table-manager";
+import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
 import { Button } from "@/src/components/ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import {
@@ -78,7 +78,7 @@ interface TeamProfileSelectorProps {
 
 const STORAGE_KEY = "profileSelector_data";
 
-const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
+const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   type ViewType = "teams" | "profiles";
 
   const [view, setView] = useState<ViewType>("teams");
@@ -701,7 +701,7 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
         collisionDetection={pointerWithin}
       >
         <div className="rounded-lg md:w-3/5 w-full">
-          <RenderTable
+          <DragTable
             view={view}
             groupingMode={groupingMode}
             selectedTeamName={selectedTeamName}
@@ -818,4 +818,4 @@ const TeamProfileSelector = ({ userProfileData }: TeamProfileSelectorProps) => {
   );
 };
 
-export default TeamProfileSelector;
+export default BuilderContext;
