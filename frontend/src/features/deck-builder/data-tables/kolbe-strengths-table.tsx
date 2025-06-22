@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
+} from "@/src/components/shadcn-ui/table";
 import {
   ColumnDef,
   flexRender,
@@ -18,7 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { urlFor } from "@/src/lib/sanity/client";
-import { Progress } from "@/src/components/ui/progress";
+import { Progress } from "@/src/components/shadcn-ui/progress";
 import defaultAvatar from "@/public/images/default-avatar.png";
 
 export interface KolbeStrengthsTableProps {

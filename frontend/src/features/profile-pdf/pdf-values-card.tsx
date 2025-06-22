@@ -1,7 +1,7 @@
 import { SanityDocument } from "next-sanity";
 
 import { GoNorthStar } from "react-icons/go";
-import { Badge } from "@/src/components/ui/badge";
+import { Badge } from "@/src/components/shadcn-ui/badge";
 
 export default function PdfValuesCard({
   profile,

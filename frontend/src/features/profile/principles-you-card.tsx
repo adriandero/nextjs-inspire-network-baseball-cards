@@ -1,14 +1,14 @@
 "use client";
 import Image from "next/image";
 
-import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "@/src/components/shadcn-ui/radio-group";
 
 import { PiDiamondsFour } from "react-icons/pi";
 import principlesYouJson from "@/public/json/principles-you-archetypes.json";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
-import ComponentShell from "./component-shell";
+import ComponentShell from "../../components/custom-ui/component-shell";
 import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 
 export default function PrinciplesYouCard({
@@ -67,8 +67,8 @@ export default function PrinciplesYouCard({
           </div>
         </div>
       ) : (
-        <div className="flex justify-center italic text-dark3 pt-6">
-          <p>No Result.</p>
+        <div className="flex w-full italic text-dark3 pt-6">
+          <p className="ml-10">No Result.</p>
         </div>
       )}
     </ComponentShell>

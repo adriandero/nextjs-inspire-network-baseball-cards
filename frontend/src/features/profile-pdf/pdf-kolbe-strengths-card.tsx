@@ -1,5 +1,5 @@
 "use client";
-import { Progress } from "@/src/components/ui/progress";
+import { Progress } from "@/src/components/shadcn-ui/progress";
 
 import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // Importing some icons for the radio items
 

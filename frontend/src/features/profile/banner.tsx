@@ -3,7 +3,7 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Image from "next/image";
 import { SanityDocument } from "next-sanity";
-import { Skeleton } from "@/src/components/ui/skeleton";
+import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
 

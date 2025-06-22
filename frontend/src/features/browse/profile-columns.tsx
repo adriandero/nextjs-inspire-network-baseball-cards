@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import defaultAvatar from "@/public/images/default-avatar.png";
 
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,11 +14,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
+} from "@/src/components/shadcn-ui/dropdown-menu";
 
 import { SanityDocument } from "next-sanity";
-// import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-// import { Skeleton } from "@/src/components/ui/skeleton";
+// import { Avatar, AvatarImage, AvatarFallback } from "@radix-shadcn-ui/react-avatar";
+// import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 
 export const profileColumns: ColumnDef<SanityDocument>[] = [
   {

@@ -7,10 +7,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
+} from "@/src/components/shadcn-ui/table";
 import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import { GoX } from "react-icons/go";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { ProfileTable } from "./drop-table-manager";

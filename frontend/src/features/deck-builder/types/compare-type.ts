@@ -3,4 +3,5 @@ export enum CompareType {
   KOLBE_STRENGTHS = "kolbestrengths",
   KOLBE_GRAPH = "kolbegraph",
   VALUES = "values",
+  SIDE_BY_SIDE = "sidebyside",
 }

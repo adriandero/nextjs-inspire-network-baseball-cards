@@ -7,9 +7,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
+} from "@/src/components/shadcn-ui/table";
+import { Button } from "@/src/components/shadcn-ui/button";
+import { Input } from "@/src/components/shadcn-ui/input";
 import { GoSearch, GoVersions } from "react-icons/go";
 import {
   Breadcrumb,
@@ -17,13 +17,13 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/src/components/ui/breadcrumbs";
+} from "@/src/components/shadcn-ui/breadcrumbs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
+} from "@/src/components/shadcn-ui/dropdown-menu";
 import {
   ColumnDef,
   flexRender,

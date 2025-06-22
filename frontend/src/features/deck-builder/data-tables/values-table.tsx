@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
+} from "@/src/components/shadcn-ui/table";
 import {
   ColumnDef,
   flexRender,
@@ -24,15 +24,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/src/components/ui/select";
-import { Button } from "@/src/components/ui/button";
+} from "@/src/components/shadcn-ui/select";
+import { Button } from "@/src/components/shadcn-ui/button";
 import { GoReply, GoTrash } from "react-icons/go";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/src/components/ui/tooltip";
+} from "@/src/components/shadcn-ui/tooltip";
 import defaultAvatar from "@/public/images/default-avatar.png";
 
 export interface ValuesTableProps {

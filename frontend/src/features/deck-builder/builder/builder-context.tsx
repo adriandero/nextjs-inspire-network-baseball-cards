@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Checkbox } from "@/src/components/ui/checkbox";
+import { Checkbox } from "@/src/components/shadcn-ui/checkbox";
 import Image from "next/image";
 import {
   getAllProfilesGroupedByTeam,
@@ -43,7 +43,7 @@ import ProfileTablesManager, {
   ProfileTable,
 } from "@/src/features/deck-builder/builder/drop-table-manager";
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/src/components/shadcn-ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { deckBuilderStoreInstance } from "@/src/features/deck-builder/deckBuilderStore";
@@ -54,21 +54,21 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/src/components/ui/popover";
+} from "@/src/components/shadcn-ui/popover";
 import { cn } from "@/src/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/src/components/ui/tooltip";
+} from "@/src/components/shadcn-ui/tooltip";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/src/components/ui/command";
+} from "@/src/components/shadcn-ui/command";
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 
 interface TeamProfileSelectorProps {
