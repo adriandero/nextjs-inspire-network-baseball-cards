@@ -2,22 +2,11 @@ import { SanityDocument } from "next-sanity";
 
 import {
   GoLaw,
-  GoLightBulb,
   GoRocket,
   GoSearch,
   GoTab,
   GoTools,
 } from "react-icons/go";
-import workingGeniusJson from "@/public/json/working-genius.json";
-import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
-import { PiDiamondsFour } from "react-icons/pi";
-import principlesYouJson from "@/public/json/principles-you-archetypes.json";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/src/components/shadcn-ui/radio-group";
-import Image from "next/image";
-import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 import React from "react";
 import { getKolbeMethod } from "@/src/lib/utils";
 import {

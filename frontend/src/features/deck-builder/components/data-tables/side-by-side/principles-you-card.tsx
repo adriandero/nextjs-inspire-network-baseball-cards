@@ -1,8 +1,5 @@
 import { SanityDocument } from "next-sanity";
 
-import { GoLightBulb } from "react-icons/go";
-import workingGeniusJson from "@/public/json/working-genius.json";
-import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 import { PiDiamondsFour } from "react-icons/pi";
 import principlesYouJson from "@/public/json/principles-you-archetypes.json";
 import {
