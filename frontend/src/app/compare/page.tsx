@@ -1,9 +1,9 @@
-import NavBar from "@/components/NavBar";
+import NavBar from "@/src/components/layout/nav-bar";
 
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
-import TeamProfileSelector from "@/components/compare/profileSelection/teamProfileSelector";
+import Selector from "@/src/features/compare/selector/selector";
 
 export interface Team {
   name: string;
@@ -33,7 +33,7 @@ export default async function ComparePage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-row justify-center">
-        <TeamProfileSelector userProfileData={userProfileData} />
+        <Selector userProfileData={userProfileData} />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

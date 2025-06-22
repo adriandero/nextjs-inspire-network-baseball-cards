@@ -1,4 +1,4 @@
-import { client } from "../sanity/client";
+import { client } from "@/src/lib/sanity/client";
 import { User } from "@auth0/nextjs-auth0/types";
 
 export async function getUserData(userOfSession: User | undefined) {

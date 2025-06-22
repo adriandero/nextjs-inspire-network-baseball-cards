@@ -1,21 +1,21 @@
 import {
   getProfileByUuid,
   getProfilesByTeamsWithoutSpecifiedProfile,
-} from "@/lib/utils/sanityApi/profileRequests";
+} from "@/src/lib/utils/sanityApi/profileRequests";
 
-import ProfileNavBar from "@/components/ProfileNavBar";
-import Banner from "@/components/profilePageComponents/Banner";
-import ValuesCard from "@/components/profilePageComponents/ValuesCard";
-import MoreProfilesCard from "@/components/profilePageComponents/MoreProfilesCard";
-import WorkingGeniusCard from "@/components/profilePageComponents/WorkingGeniusCard";
-import PrinciplesYouCard from "@/components/profilePageComponents/PrinciplesYouCard";
-import KolbeStrengthsCard from "@/components/profilePageComponents/KolbeStrengthsCard";
-import MobileNavBanner from "@/components/profilePageComponents/MobileNavBanner";
+import BackNavBar from "@/src/components/layout/back-nav-bar";
+import Banner from "@/src/features/profile/banner";
+import ValuesCard from "@/src/features/profile/values-card";
+import MoreProfilesCard from "@/src/features/profile/more-profiles-card";
+import WorkingGeniusCard from "@/src/features/profile/working-genius-card";
+import PrinciplesYouCard from "@/src/features/profile/principles-you-card";
+import KolbeStrengthsCard from "@/src/features/profile/kolbe-strengths-card";
+import MobileNavBanner from "@/src/features/profile/mobile-nav-banner";
 
-import DownloadButton from "@/components/profilePageComponents/DownloadPDFButton";
+import DownloadButton from "@/src/features/profile/download-pdf-button";
 import { SanityDocument } from "next-sanity";
-import { auth0 } from "@/lib/auth0";
-import { getUserData } from "@/lib/utils/sessionCheck";
+import { auth0 } from "@/src/lib/auth0";
+import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 
 type tParams = Promise<{ uuid: string }>;
@@ -56,7 +56,7 @@ export default async function TugPage({
         _createdAt={""}
         _updatedAt={""}
       />
-      <ProfileNavBar
+      <BackNavBar
         userProfileData={userData.profile}
         backwardsNavigationUrl={"/browse/"}
         _id={""}
