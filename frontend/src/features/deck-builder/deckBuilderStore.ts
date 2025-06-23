@@ -25,6 +25,10 @@ export class DeckBuilderStore {
       title: "Side by Side",
       slug: "sidebyside",
     },
+    [CompareType.PRINCIPLES_YOU_ARCHETYPES]: {
+      title: "PrinciplesYou Archetypes",
+      slug: "principlesyouarchetypes",
+    },
   };
 
   compareTypes = Object.entries(this.comparisonAttributesMap).map(
