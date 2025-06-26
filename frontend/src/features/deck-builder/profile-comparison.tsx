@@ -36,6 +36,7 @@ import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import ValuesTable from "@/src/features/deck-builder/data-tables/values-table";
 import { CompareType } from "@/src/features/deck-builder/types/compare-type";
 import SideBySide from "@/src/features/deck-builder/data-tables/side-by-side";
+import PrinciplesYouArchetypesTable from "@/src/features/deck-builder/data-tables/principles-you-archetypes-table";
 
 interface ProfileTable {
   //TODO: own file
@@ -183,6 +184,7 @@ export function ProfileComparison({
     [CompareType.KOLBE_GRAPH]: KolbeGraph,
     [CompareType.VALUES]: ValuesTable,
     [CompareType.SIDE_BY_SIDE]: SideBySide,
+    [CompareType.PRINCIPLES_YOU_ARCHETYPES]: PrinciplesYouArchetypesTable,
   };
 
   const TableComponent = comparisonTableMap[selectedType];

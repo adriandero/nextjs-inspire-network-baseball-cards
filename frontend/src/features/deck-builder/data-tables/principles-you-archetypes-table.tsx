@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-
 import { SanityDocument } from "next-sanity";
 import {
   Table,
@@ -18,23 +17,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import WidgetCogsSVG from "@/public/illustrations/widget-cogs-simple-svg";
 import { urlFor } from "@/src/lib/sanity/client";
 import defaultAvatar from "@/public/images/default-avatar.png";
+import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 
-export interface WorkingGeniusTableProps {
+export interface PrinciplesYouArchetypesTableProps {
   profiles: SanityDocument[];
-  showJobRole: boolean;
   optimizedImages?: boolean;
+  showJobRole: boolean;
   tableName?: string;
 }
 
-const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
-  profiles,
-  showJobRole,
-  optimizedImages = false,
-  tableName,
-}) => {
+const PrinciplesYouArchetypesTable: React.FC<
+  PrinciplesYouArchetypesTableProps
+> = ({ profiles, optimizedImages = false, showJobRole, tableName }) => {
   // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
     {
@@ -43,6 +39,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
       size: 300, // Set this to 1/3 of your expected table width
       cell: ({ row }) => {
         const profile = row.original;
+        console.log(profile);
         return (
           <div className="flex items-center gap-3">
             {
@@ -86,19 +83,28 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
       },
     },
     {
-      accessorKey: "widget",
-      header: "WIDGET",
+      accessorKey: "principleYouArchetypes",
+      header: "PrinciplesYou Archetypes",
       size: 600, // Set this to 1/3 of your expected table width
-      cell: ({ row }) => (
-        <WidgetCogsSVG
-          widget={row.original.workingGenius?.widget}
-          _id={""}
-          _rev={""}
-          _type={""}
-          _createdAt={""}
-          _updatedAt={""}
-        />
-      ),
+      cell: ({ row }) => {
+        const profile = row.original;
+        return (
+          <div className="flex gap-2">
+            {profile?.principleYouArchetype?.map(
+              (principle: string, index: number) => (
+                <div key={index} className="h-fit w-auto ">
+                  <Image
+                    src={getArchetypeImage(principle)}
+                    alt={`Illustration for ${principle}`}
+                    layout="intrinsic"
+                    className="max-h-16 h-full w-auto"
+                  />
+                </div>
+              ),
+            )}
+          </div>
+        );
+      },
     },
   ];
 
@@ -125,7 +131,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     <div className="space-y-4 mb-4 ">
       <h2 className="text-base font-semibold">{tableName}</h2>
       <div className="rounded-md border bg-light1 w-full">
-        <Table>
+        <Table className="table-fixed  w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -140,7 +146,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -164,9 +170,9 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
             ))}
           </TableBody>
         </Table>
-      </div>{" "}
+      </div>
     </div>
   );
 };
 
-export default WorkingGeniusTable;
+export default PrinciplesYouArchetypesTable;

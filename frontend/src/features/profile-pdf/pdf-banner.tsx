@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import React, { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
+import ameripriseCompass from "@/public/images/ameriprise-compass.png"
 
 export default function PdfBanner({
   profile,
@@ -89,7 +90,7 @@ export default function PdfBanner({
       {profile?.team && profile?.team[0]?.isameriprise ? (
         <div className="ml-auto flex flex-col items-center max-h-24 min-w-24 max-w-48">
           <img
-            src={"/ameriprise-compass.png"}
+            src={ameripriseCompass.src}
             width={90}
             height={90}
             alt="Team Logo"

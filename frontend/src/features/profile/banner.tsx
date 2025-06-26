@@ -6,6 +6,7 @@ import { SanityDocument } from "next-sanity";
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
+import ameripriseCompass from "@/public/images/ameriprise-compass.png"
 
 export default function Banner({ profile }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
@@ -24,7 +25,6 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
     }
   }, [profileTeamName]);
 
-  const ameripriseCompass = "/ameriprise-compass.png";
   console.log(profile);
   return (
     <div className="w-full min-w-full min-h-32 max-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
@@ -64,7 +64,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
       {profile?.team && profile?.team[0]?.isameriprise ? (
         <div className="ml-auto flex flex-col items-center max-h-32 max-w-64 min-w-24">
           <Image
-            src={ameripriseCompass}
+            src={ameripriseCompass.src}
             width={100}
             height={100}
             alt="Company Logo"

@@ -55,6 +55,17 @@ const SideBySide: React.FC<SideBySideProps> = ({
 }) => {
   const columns = useColumnCount(); // 1, 2, or 3
   const profileGroups = chunkProfiles(profiles, columns);
+  
+  if (profiles.length === 0) {
+    return (
+      <div>
+        <h2 className="text-base font-semibold">{tableName}</h2>
+        <div className="py-4">
+          <p className="text-gray-500">No TUG Cards to display</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="">
