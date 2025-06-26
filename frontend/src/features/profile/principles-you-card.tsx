@@ -36,10 +36,11 @@ export default function PrinciplesYouCard({
       </div>
       {principlesYouJson[value] ? (
         <div className="flex flex-row mt-4 gap-6">
-          <div className="flex flex-row mt-4 gap">
+          <div className="flex flex-row mt-4">
             <RadioGroup
               value={value}
               onValueChange={(val: PrincipleKey) => setValue(val)}
+              className={"flex flex-col gap-3"}
             >
               {profile.principleYouArchetype.map(
                 (principle: string, index: number) => (
@@ -47,8 +48,8 @@ export default function PrinciplesYouCard({
                     <Image
                       src={getArchetypeImage(principle)}
                       alt={`Illustration for ${principle}`}
-                      width={100}
-                      height={100}
+                      width={60}
+                      height={60}
                     />
                   </RadioGroupItem>
                 ),

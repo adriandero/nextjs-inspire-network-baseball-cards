@@ -62,8 +62,8 @@ export default function PdfPrinciplesYouCard({
                   <Image
                     src={getArchetypeImage(principle)}
                     alt={`Illustration for ${principle}`}
-                    width={100}
-                    height={100}
+                    width={60}
+                    height={60}
                   />
                 </div>
                 <div>

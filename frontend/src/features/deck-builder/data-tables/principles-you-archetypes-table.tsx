@@ -89,15 +89,15 @@ const PrinciplesYouArchetypesTable: React.FC<
       cell: ({ row }) => {
         const profile = row.original;
         return (
-          <div className="flex">
+          <div className="flex gap-2">
             {profile?.principleYouArchetype?.map(
               (principle: string, index: number) => (
-                <div key={index} className="h-fit w-auto">
+                <div key={index} className="h-fit w-auto ">
                   <Image
                     src={getArchetypeImage(principle)}
                     alt={`Illustration for ${principle}`}
                     layout="intrinsic"
-                    className="max-h-16 h-full w-auto "
+                    className="max-h-16 h-full w-auto"
                   />
                 </div>
               ),
@@ -118,8 +118,11 @@ const PrinciplesYouArchetypesTable: React.FC<
 
   if (profiles.length === 0) {
     return (
-      <div className="p-4 text-center">
-        <p className="text-gray-500">No TUG Cards to display</p>
+      <div>
+        <h2 className="text-base font-semibold">{tableName}</h2>
+        <div className="py-4">
+          <p className="text-gray-500">No TUG Cards to display</p>
+        </div>
       </div>
     );
   }

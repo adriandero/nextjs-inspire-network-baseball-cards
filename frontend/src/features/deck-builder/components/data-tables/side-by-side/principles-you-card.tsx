@@ -44,7 +44,7 @@ export default function PrinciplesYouCard({
                       src={getArchetypeImage(principle)}
                       alt={`Illustration for ${principle}`}
                       layout="intrinsic"
-                      className="h-full w-auto object-contain"
+                      className="h-full w-auto object-contain "
                     />
                   </div>
                 </RadioGroupItem>
