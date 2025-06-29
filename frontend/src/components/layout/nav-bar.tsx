@@ -78,10 +78,6 @@ export default function NavBar({
           >
             Deck Builder
           </Link>
-          {/* <Link href={`/compare`} className="hover:text-primary duration-200">
-            Compare
-          </Link> */}
-          <span className="text-gray-400 cursor-not-allowed">Compare</span>
           <Link href={`/browse`} className="hover:text-primary duration-200">
             Browse Cards
           </Link>
