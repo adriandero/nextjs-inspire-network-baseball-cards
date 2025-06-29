@@ -1,11 +1,15 @@
 import type { NextRequest } from "next/server";
-
 import { auth0 } from "./lib/auth0";
 
 export async function middleware(request: NextRequest) {
-  return await auth0.middleware(request);
-  
+  try {
+    return await auth0.middleware(request);
+  } catch (err) {
+    console.error("Auth0 middleware error:", err);
+    return new Response("Internal middleware error", { status: 500 });
+  }
 }
+
 export const config = {
   matcher: [
     /*
