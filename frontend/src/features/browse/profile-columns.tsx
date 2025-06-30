@@ -17,8 +17,6 @@ import {
 } from "@/src/components/shadcn-ui/dropdown-menu";
 
 import { SanityDocument } from "next-sanity";
-// import { Avatar, AvatarImage, AvatarFallback } from "@radix-shadcn-ui/react-avatar";
-// import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 
 export const profileColumns: ColumnDef<SanityDocument>[] = [
   {
@@ -97,6 +95,49 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
       );
     },
   },
+  // Hidden column for groups filtering - computes groups from teams
+  {
+    id: "groups",
+    header: "Groups",
+    enableHiding: false, // Prevents this column from appearing in the column visibility dropdown
+    meta: {
+      hidden: true, // Custom meta property to identify hidden columns
+    },
+    accessorFn: (row) => {
+      // Extract groups from all teams this profile belongs to
+      const teams = row.teams || [];
+      const groups = teams
+        .map((team: SanityDocument) => team.groups)
+        .filter((group: string) => group) // Remove undefined/null groups
+        .filter(
+          (group: string, index: number, arr: string[]) =>
+            arr.indexOf(group) === index, // Remove duplicates
+        );
+
+      // Return as a string for filtering (join multiple groups with comma)
+      return groups.join(",");
+    },
+    cell: ({ row }) => {
+      // This cell won't be rendered since the column is hidden
+      const teams = row.original.teams || [];
+      const groups = teams
+        .map((team: SanityDocument) => team.groups)
+        .filter((group: string) => group);
+      return groups.join(", ");
+    },
+    // Custom filter function to handle multiple groups
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+
+      const teams = row.original.teams || [];
+      const profileGroups = teams
+        .map((team: SanityDocument) => team.groups)
+        .filter((group: string) => group);
+
+      // Check if any of the profile's groups match the filter
+      return profileGroups.includes(filterValue);
+    },
+  },
   // {
   //   accessorKey: "team.company.name",
   //   footer: "Company" as const,
@@ -119,7 +160,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
           <DropdownMenuTrigger asChild className="ml-auto">
             <Button variant="ghost" className="h-8 w-8 p-0 flex">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontal className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

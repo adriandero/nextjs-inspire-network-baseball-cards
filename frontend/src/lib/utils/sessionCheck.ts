@@ -20,7 +20,8 @@ export async function getUserData(userOfSession: User | undefined) {
       },
       team[]->{
         name,
-        slug
+        slug,
+        groups
       }
     }
   `;

@@ -50,7 +50,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/src/components/shadcn-ui/alert-dialog";
-import { GoSearch } from "react-icons/go";
+import { GoSearch, GoFilter } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
 import {
   getAllProfiles,
@@ -64,20 +64,27 @@ interface DataTableProps<TData, TValue> {
   userProfileData: SanityDocument;
 }
 
+// Define the groups options
+const GROUPS_OPTIONS = [
+  { label: "Client", value: "client" },
+  { label: "EGF", value: "egf" },
+  { label: "Prospect", value: "prospect" },
+];
+
 export function DataTable<TData, TValue>({
   teamColumns,
   profileColumns,
   teamsData,
   userProfileData,
 }: DataTableProps<TData, TValue>) {
-  const [groupingMode, setGroupingMode] = React.useState<"teams" | "profiles">( // TODO - Enum
-    "teams"
+  const [groupingMode, setGroupingMode] = React.useState<"teams" | "profiles">(
+    "teams",
   );
   const [currentView, setCurrentView] = React.useState<"teams" | "profiles">(
-    "teams"
+    "teams",
   );
   const [selectedTeam, setSelectedTeam] = React.useState<SanityDocument | null>(
-    null
+    null,
   );
   const [profilesData, setProfilesData] = React.useState<SanityDocument[]>([]);
   const [allProfilesData, setAllProfilesData] = React.useState<
@@ -87,17 +94,19 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({
+      groups: false, // Hide the groups column by default for all views
+    });
 
   const [rowSelection, setRowSelection] = React.useState({});
 
   const resetTableState = () => {
     setSorting([]);
     setColumnFilters([]);
-    setColumnVisibility({});
+    setColumnVisibility({ groups: false }); // Keep groups hidden when resetting for all views
     setRowSelection({});
   };
 
@@ -159,6 +168,7 @@ export function DataTable<TData, TValue>({
         data: allProfilesData,
         showSearch: true,
         allowRowClick: false,
+        showGroupsFilter: true, // Enable groups filter for profiles
       };
     } else if (currentView === "teams") {
       return {
@@ -166,6 +176,7 @@ export function DataTable<TData, TValue>({
         data: teamsData,
         showSearch: true,
         allowRowClick: true,
+        showGroupsFilter: true, // Show groups filter for teams
       };
     } else {
       return {
@@ -173,11 +184,13 @@ export function DataTable<TData, TValue>({
         data: profilesData,
         showSearch: true,
         allowRowClick: false,
+        showGroupsFilter: true, // Enable groups filter for team profiles view
       };
     }
   };
 
-  const { columns, data, showSearch, allowRowClick } = getTableConfig();
+  const { columns, data, showSearch, allowRowClick, showGroupsFilter } =
+    getTableConfig();
 
   const table = useReactTable({
     data: data as TData[],
@@ -230,6 +243,24 @@ export function DataTable<TData, TValue>({
     }
   };
 
+  // Get current groups filter value
+  const currentGroupsFilter =
+    (table.getColumn("groups")?.getFilterValue() as string) ?? "";
+
+  // Handle groups filter change
+  const handleGroupsFilterChange = (value: string) => {
+    table.getColumn("groups")?.setFilterValue(value === "all" ? "" : value);
+  };
+
+  // Get the display label for current filter
+  const getGroupsFilterLabel = () => {
+    if (!currentGroupsFilter) return "All Groups";
+    const option = GROUPS_OPTIONS.find(
+      (opt) => opt.value === currentGroupsFilter,
+    );
+    return option?.label || "All Groups";
+  };
+
   return (
     <div className="sm:min-w-96 w-full max-w-screen-lg sm:px-6 px-2 ">
       <div className="flex items-center py-4 gap-2">
@@ -251,6 +282,38 @@ export function DataTable<TData, TValue>({
               className="pl-8 !text-base bg-light1"
             />
           </div>
+        )}
+
+        {showGroupsFilter && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <GoFilter />
+                <span className="hidden sm:inline">
+                  {getGroupsFilterLabel()}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => handleGroupsFilterChange("all")}
+                className={!currentGroupsFilter ? "bg-accent" : ""}
+              >
+                All Groups
+              </DropdownMenuItem>
+              {GROUPS_OPTIONS.map((option) => (
+                <DropdownMenuItem
+                  key={option.value}
+                  onClick={() => handleGroupsFilterChange(option.value)}
+                  className={
+                    currentGroupsFilter === option.value ? "bg-accent" : ""
+                  }
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
 
         <DropdownMenu>
@@ -321,7 +384,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -355,7 +418,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -28,6 +28,19 @@ export const teamColumns: ColumnDef<SanityDocument>[] = [
       );
     },
   },
+  // Hidden column for groups filtering
+  {
+    accessorKey: "groups",
+    header: "Groups",
+    enableHiding: false, // Prevents this column from appearing in the column visibility dropdown
+    meta: {
+      hidden: true, // Custom meta property to identify hidden columns
+    },
+    cell: ({ row }) => {
+      // This cell won't be rendered since the column is hidden
+      return row.original.groups;
+    },
+  },
   // {
   //   id: "actions",
   //   footer: "Action" as const,

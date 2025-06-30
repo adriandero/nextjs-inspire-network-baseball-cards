@@ -47,12 +47,10 @@ export default async function BrowsePage(): Promise<JSX.Element> {
     if (userProfileData.permission === "Admin") {
       return await getAllTeams();
     }
-    const data = userProfileData?.team
-      ? (await fillAllUserTeams()).teams
-      : emptyData;
-
-    return data;
+    return userProfileData?.team ? (await fillAllUserTeams()).teams : emptyData;
   }
+
+  console.log(await fillDataTableTeamData());
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">

@@ -37,7 +37,7 @@ export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
 }
 
 export async function getProfilesByUuids(
-  uuids: string[]
+  uuids: string[],
 ): Promise<SanityDocument[]> {
   const query = `*[ _type == "profile" && uuid in $uuids && !(_id in path('drafts.**'))]{
   ...,
@@ -70,14 +70,14 @@ export async function getProfilesByUuids(
   const profiles = await client.fetch<SanityDocument[]>(
     query,
     { uuids },
-    options
+    options,
   );
 
   return profiles;
 }
 
 export async function getProfilesByTeamsWithoutSpecifiedProfile(
-  uuid: string
+  uuid: string,
 ): Promise<SanityDocument[]> {
   const query = `
 
@@ -106,14 +106,14 @@ export async function getProfilesByTeamsWithoutSpecifiedProfile(
   const profiles = await client.fetch<SanityDocument[]>(
     query,
     { uuid },
-    options
+    options,
   );
 
   return profiles;
 }
 
 export async function getProfilesByTeamId(
-  teamId: string
+  teamId: string,
 ): Promise<SanityDocument[]> {
   const query = `
   *[_type == "profile" && !(_id in path('drafts.**')) && $teamId in team[]->_id] {
@@ -136,7 +136,7 @@ export async function getProfilesByTeamId(
   const profiles = await client.fetch<SanityDocument[]>(
     query,
     { teamId },
-    options
+    options,
   );
 
   return profiles;
@@ -148,7 +148,7 @@ export interface ProfilesFromUserTeams {
 
 export async function getProfilesFromUserTeams(
   userEmail: string | undefined,
-  userTeamSlugs: unknown
+  userTeamSlugs: unknown,
 ): Promise<ProfilesFromUserTeams> {
   const query = `
   *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
@@ -166,7 +166,8 @@ export async function getProfilesFromUserTeams(
         "company": company->{
           name,
           slug
-        }
+        },
+        groups
       }
     }
   }
@@ -175,7 +176,7 @@ export async function getProfilesFromUserTeams(
   const profiles = await client.fetch<ProfilesFromUserTeams>(
     query,
     { userEmail, userTeamSlugs },
-    options
+    options,
   );
   return profiles;
 }
@@ -218,7 +219,7 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
       acc[team.slug] = team.profiles;
       return acc;
     },
-    {}
+    {},
   );
 
   return { teams: profilesByTeam };
@@ -229,7 +230,7 @@ export interface TeamsFromUser {
 }
 
 export async function getUserTeams(
-  userEmail: string | undefined
+  userEmail: string | undefined,
 ): Promise<TeamsFromUser> {
   const query = `
   *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
@@ -240,7 +241,8 @@ export async function getUserTeams(
       "company": company->{
         name,
         "slug": slug.current
-      }
+      },
+      groups
     }
   }
 `;
@@ -248,7 +250,7 @@ export async function getUserTeams(
   const userTeams = await client.fetch<TeamsFromUser>(
     query,
     { userEmail },
-    options
+    options,
   );
   return userTeams;
 }
@@ -268,7 +270,8 @@ export async function getAllProfiles(): Promise<SanityDocument[]> {
       "company": company->{
           name,
           slug
-      }
+      },
+      groups
     }
   }`;
 
@@ -291,7 +294,7 @@ export async function getAllTeams(): Promise<SanityDocument[]> {
 }
 
 export async function getTeamBySlug(
-  slug: string
+  slug: string,
 ): Promise<SanityDocument | null> {
   const query = `*[ _type == "team" && slug.current == $slug && !(_id in path('drafts.**'))][0] {
     ...,
@@ -302,7 +305,7 @@ export async function getTeamBySlug(
   const team = await client.fetch<SanityDocument | null>(
     query,
     { slug },
-    options
+    options,
   );
 
   return team;
