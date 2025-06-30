@@ -48,7 +48,7 @@ import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { deckBuilderStoreInstance } from "@/src/features/deck-builder/deckBuilderStore";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { ArrowUpDown, Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 
 import {
   Popover,
@@ -82,7 +82,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const [view, setView] = useState<ViewType>("teams");
   const [groupingMode, setGroupingMode] = useState<"teams" | "profiles">(
-    "teams"
+    "teams",
   );
   const [open, setOpen] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
@@ -104,7 +104,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   ]);
 
   const [selectedTableId, setSelectedTableId] = useState<string>(
-    profileTables[0].id
+    profileTables[0].id,
   );
 
   const [teams, setTeams] = useState<SanityDocument[]>([]);
@@ -253,14 +253,14 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     setProfileTables((prev) => {
       const updatedTables = [...prev];
       const selectedTableIndex = updatedTables.findIndex(
-        (table) => table.id === selectedTableId
+        (table) => table.id === selectedTableId,
       );
 
       if (selectedTableIndex !== -1) {
         const selectedTable = updatedTables[selectedTableIndex];
         if (selectedTable.profiles.includes(profileId)) {
           selectedTable.profiles = selectedTable.profiles.filter(
-            (id) => id !== profileId
+            (id) => id !== profileId,
           );
         } else {
           selectedTable.profiles = [...selectedTable.profiles, profileId];
@@ -275,7 +275,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     setProfileTables((prev) => {
       const updatedTables = [...prev];
       const selectedTableIndex = updatedTables.findIndex(
-        (table) => table.id === selectedTableId
+        (table) => table.id === selectedTableId,
       );
 
       if (selectedTableIndex !== -1) {
@@ -333,7 +333,16 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   const teamColumns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",
-      header: "Team Name",
+      sortingFn: "alphanumeric",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Team Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => (
         <div className="font-bold text-base">{row.getValue("name")}</div>
       ),
@@ -352,7 +361,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
               // Check if this profile is in any table
               const profileId = row.original.uuid;
               return profileTables.some((table) =>
-                table.profiles.includes(profileId)
+                table.profiles.includes(profileId),
               );
             })
           }
@@ -387,7 +396,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
                 return prev.map((table) => ({
                   ...table,
                   profiles: table.profiles.filter(
-                    (id: any) => !allProfileIds.includes(id)
+                    (id: any) => !allProfileIds.includes(id),
                   ),
                 }));
               });
@@ -399,7 +408,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
       cell: ({ row }) => (
         <Checkbox
           checked={profileTables.some((table) =>
-            table.profiles.includes(row.original.uuid)
+            table.profiles.includes(row.original.uuid),
           )}
           onCheckedChange={() => handleProfileCheck(row.original.uuid)}
           aria-label="Select row"
@@ -411,7 +420,16 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     },
     {
       accessorKey: "name",
-      header: "Name",
+      sortingFn: "alphanumeric",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => {
         const profile = row.original;
         return (
@@ -468,7 +486,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -493,7 +511,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
           ? data.reduce((acc, profile, index) => {
               // Check if profile is in any table
               const isSelected = profileTables.some((table) =>
-                table.profiles.includes(profile.uuid)
+                table.profiles.includes(profile.uuid),
               );
               acc[index] = isSelected;
               return acc;
@@ -636,7 +654,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleContinue = () => {
     const urlParam = encodeProfileTablesToURL(profileTables);
     router.push(
-      `/deckbuilder/${store.comparisonAttributesMap[selectedType].slug}/?groupedProfiles=${urlParam}`
+      `/deckbuilder/${store.comparisonAttributesMap[selectedType].slug}/?groupedProfiles=${urlParam}`,
     );
   };
 
@@ -679,13 +697,13 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   const handleUpdateTableName = (tableId: string, newName: string) => {
     setProfileTables((prev) =>
       prev.map((table) =>
-        table.id === tableId ? { ...table, name: newName } : table
-      )
+        table.id === tableId ? { ...table, name: newName } : table,
+      ),
     );
 
     // If you're storing this in localStorage, update that as well
     const updatedTables = profileTables.map((table) =>
-      table.id === tableId ? { ...table, name: newName } : table
+      table.id === tableId ? { ...table, name: newName } : table,
     );
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTables));
   };
@@ -748,7 +766,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
                             "mr-2 h-4 w-4",
                             selectedType === item.value
                               ? "opacity-100"
-                              : "opacity-0"
+                              : "opacity-0",
                           )}
                         />
                         {item.data.title}

@@ -2,12 +2,23 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { SanityDocument } from "next-sanity";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/src/components/shadcn-ui/button";
 
 export const teamColumns: ColumnDef<SanityDocument>[] = [
   {
     accessorKey: "name",
     footer: "Name" as const,
-    header: "Name",
+    sortingFn: "alphanumeric", // optional but improves string sorting
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => {
       const teamName = row.original.name;
       return (

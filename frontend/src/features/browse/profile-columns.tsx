@@ -24,7 +24,18 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
   {
     accessorKey: "name",
     footer: "Name" as const,
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    sortingFn: "alphanumeric", // <-- Add this line
     cell: ({ row }) => {
       const profileName = row.original.name;
       const profileUuid = row.original.uuid;
@@ -39,19 +50,6 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
             return redirect(`/tugcards/${profileUuid}`);
           }}
         >
-          {/* {<Avatar className="block min-w-[40px]">
-            <AvatarImage
-              src={profileImageSrc}
-              width={40}
-              className="rounded-full min-w-[40px]!"
-            />
-            {!isAvatarLoaded ? (
-              <Skeleton
-                className={`min-h-[40px] min-w-[40px] rounded-full bg-light3`}
-              />
-            ) : null}
-            <AvatarFallback></AvatarFallback>
-          </Avatar>} */}
           <div className="relative min-w-10 min-h-10 rounded-full overflow-hidden">
             <Image
               src={profileImageSrc}
@@ -63,7 +61,6 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
           <div>
             <p className="font-bold text-base">{profileName}</p>
             <div className="table-cell ">
-              {" "}
               {profileJobRole
                 ? profileJobRole.map((role: string, index: number) => (
                     <span key={index}>
@@ -79,19 +76,8 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
     },
   },
   {
-    accessorKey: "jobRole",
-    footer: "Team" as const,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Team
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    accessorKey: "team",
+    header: "Team",
     cell: ({ row }) => {
       const profileTeams = row.original.teams;
 
