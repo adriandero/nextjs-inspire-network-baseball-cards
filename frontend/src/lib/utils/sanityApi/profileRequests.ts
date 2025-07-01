@@ -276,9 +276,7 @@ export async function getAllProfiles(): Promise<SanityDocument[]> {
   }`;
 
   const options = { next: { revalidate: 30 } };
-  const posts = await client.fetch<SanityDocument[]>(query, {}, options);
-
-  return posts;
+  return await client.fetch<SanityDocument[]>(query, {}, options);
 }
 
 export async function getAllTeams(): Promise<SanityDocument[]> {

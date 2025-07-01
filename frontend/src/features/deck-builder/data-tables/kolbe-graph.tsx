@@ -11,6 +11,7 @@ export interface KolbeGraphProps {
   tableName?: string;
   baseFontSize?: string;
   headingFontSize?: string;
+  breakUpGraph?: boolean;
 }
 
 interface ProfileData {
@@ -29,6 +30,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
   tableName,
   baseFontSize = "text-base",
   headingFontSize = "text-3xl",
+  breakUpGraph = false,
 }) => {
   if (profiles.length === 0) {
     return (
@@ -81,7 +83,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
       .map(() =>
         Array(4)
           .fill(null)
-          .map(() => ({ percent: "0%", people: [] }))
+          .map(() => ({ percent: "0%", people: [] })),
       );
 
     if (!profiles || profiles.length === 0) return data;
@@ -172,7 +174,10 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
         </div>
 
         {gridData.map((row: CellData[], rowIndex: number) => (
-          <div key={`row-${rowIndex + 1}`} className="flex mb-2">
+          <div
+            key={`row-${rowIndex + 1}`}
+            className={`${breakUpGraph ? `${rowIndex !== 0 ? "pt-8" : ""} break-after-page` : ""} flex mb-2 `}
+          >
             <div className="w-8 mr-4 flex items-center justify-center">
               <div className="transform -rotate-90 whitespace-nowrap flex items-center">
                 <span className="font-bold">{rowLabels[rowIndex]}</span>
@@ -207,7 +212,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
                             {profile.value}
                           </span>
                         </div>
-                      )
+                      ),
                     )}
                   </div>
                 </div>

@@ -19,6 +19,7 @@ function ProfileComparisonContent() {
   // TODO: hook?
   const [baseFontSize, setBaseFontSize] = useState("text-base");
   const [headingFontSize, setHeadingFontSize] = useState("text-3xl");
+  const [breakUpGraph, setBreakUpGraph] = useState<boolean>();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +36,7 @@ function ProfileComparisonContent() {
             if (overflow > 600) {
               setBaseFontSize("text-xs");
               setHeadingFontSize("text-lg");
+              setBreakUpGraph(true)
             } else if (overflow > 300) {
               setBaseFontSize("text-sm");
               setHeadingFontSize("text-xl");
@@ -163,6 +165,7 @@ function ProfileComparisonContent() {
               tableName={table.name}
               baseFontSize={baseFontSize}
               headingFontSize={headingFontSize}
+              breakUpGraph={breakUpGraph}
             />
           </div>
         ))
