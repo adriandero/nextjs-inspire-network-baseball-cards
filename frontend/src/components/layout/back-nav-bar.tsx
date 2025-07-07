@@ -54,7 +54,7 @@ export default function BackNavBar({
 
   function handleProfileRedirect() {
     if (accountHasProfileAssigned()) {
-      redirect("/tugcards/" + userProfileData.uuid);
+      redirect("/tugcards/" + userProfileData?.profile.uuid);
     }
   }
 

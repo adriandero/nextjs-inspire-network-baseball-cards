@@ -32,7 +32,7 @@ export async function getProfileByUuid(uuid: string): Promise<SanityDocument> {
   const options = { next: { revalidate: 30 } };
 
   const profile = await client.fetch<SanityDocument>(query, { uuid }, options);
-
+  console.log(profile);
   return profile;
 }
 

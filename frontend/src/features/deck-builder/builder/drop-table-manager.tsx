@@ -4,15 +4,10 @@ import { SanityDocument } from "next-sanity";
 import DropTable from "./drop-table";
 import { GoX } from "react-icons/go";
 import { Input } from "@/src/components/shadcn-ui/input";
-
-export interface ProfileTable {
-  id: string;
-  profiles: string[];
-  name: string;
-}
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
 interface ProfileTablesManagerProps {
-  profileTables: ProfileTable[];
+  profileIdentifierTables: ProfileIdentifierTable[];
   onRemoveTable: (tableId: string) => void;
   onUpdateTableProfiles: (tableId: string, profiles: string[]) => void;
   onUpdateTableName: (tableId: string, name: string) => void; // New prop for updating the table name
@@ -23,7 +18,7 @@ interface ProfileTablesManagerProps {
 }
 
 const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
-  profileTables,
+  profileIdentifierTables,
   onRemoveTable,
   onUpdateTableProfiles,
   onUpdateTableName,
@@ -34,11 +29,11 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   allProfiles,
 }) => {
   const getProfilesForTable = (tableId: string) => {
-    const table = profileTables.find((t) => t.id === tableId);
+    const table = profileIdentifierTables.find((t) => t.id === tableId);
     if (!table) return [];
 
     return allProfiles.filter((profile) =>
-      table.profiles.includes(profile.uuid)
+      table.profiles.includes(profile.uuid),
     );
   };
 
@@ -84,7 +79,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
 
   return (
     <div className="flex flex-col w-full ">
-      {profileTables.map((table) => (
+      {profileIdentifierTables.map((table) => (
         <React.Fragment key={table.id}>
           <div className="flex h-12 justify-end items-center">
             <div className="font-medium text-base flex">
@@ -107,7 +102,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
                 </span>
               )}
             </div>
-            {profileTables.length > 1 && (
+            {profileIdentifierTables.length > 1 && (
               <Button
                 variant="ghost"
                 size="sm"

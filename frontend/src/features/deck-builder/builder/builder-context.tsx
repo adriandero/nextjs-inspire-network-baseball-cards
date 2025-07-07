@@ -39,9 +39,6 @@ import {
 } from "@dnd-kit/core";
 import { nanoid } from "nanoid";
 import DragTable from "@/src/features/deck-builder/builder/drag-table";
-import ProfileTablesManager, {
-  ProfileTable,
-} from "@/src/features/deck-builder/builder/drop-table-manager";
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
@@ -69,7 +66,13 @@ import {
   CommandInput,
   CommandItem,
 } from "@/src/components/shadcn-ui/command";
-import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+import { CompareType } from "@/src/features/deck-builder/entities/compare-type";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import ProfileTablesManager from "@/src/features/deck-builder/builder/drop-table-manager";
+import {
+  addProfileToTable,
+  toggleProfileInTable,
+} from "@/src/lib/utils/profile-table-utils";
 
 interface TeamProfileSelectorProps {
   userProfileData: SanityDocument;
@@ -95,7 +98,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   const store = deckBuilderStoreInstance;
 
   // Profile tables for grouping
-  const [profileTables, setProfileTables] = useState<ProfileTable[]>([
+  const [profileTables, setProfileTables] = useState<ProfileIdentifierTable[]>([
     {
       id: nanoid(),
       profiles: [],
@@ -249,42 +252,24 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     }
   };
 
-  const handleProfileCheck = (profileId: string): void => {
-    setProfileTables((prev) => {
-      const updatedTables = [...prev];
-      const selectedTableIndex = updatedTables.findIndex(
-        (table) => table.id === selectedTableId,
-      );
-
-      if (selectedTableIndex !== -1) {
-        const selectedTable = updatedTables[selectedTableIndex];
-        if (selectedTable.profiles.includes(profileId)) {
-          selectedTable.profiles = selectedTable.profiles.filter(
-            (id) => id !== profileId,
-          );
-        } else {
-          selectedTable.profiles = [...selectedTable.profiles, profileId];
-        }
-      }
-
-      return updatedTables;
-    });
+  const handleOneWayProfileCheck = (profileId: string): void => {
+    setProfileTables((prev) =>
+      prev.map((table) =>
+        table.id === selectedTableId
+          ? addProfileToTable(table, profileId)
+          : table,
+      ),
+    );
   };
 
-  const handleOneWayProfileCheck = (profileId: string): void => {
-    setProfileTables((prev) => {
-      const updatedTables = [...prev];
-      const selectedTableIndex = updatedTables.findIndex(
-        (table) => table.id === selectedTableId,
-      );
-
-      if (selectedTableIndex !== -1) {
-        const selectedTable = updatedTables[selectedTableIndex];
-        selectedTable.profiles = [...selectedTable.profiles, profileId];
-      }
-
-      return updatedTables;
-    });
+  const handleProfileCheck = (profileId: string): void => {
+    setProfileTables((prev) =>
+      prev.map((table) =>
+        table.id === selectedTableId
+          ? toggleProfileInTable(table, profileId)
+          : table,
+      ),
+    );
   };
 
   const setSelectedTableIdState = (profileId: string): void => {
@@ -319,7 +304,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const handleCreateTableWithProfile = (profileId: string) => {
     // Create a new table with the dropped profile
-    const newTable: ProfileTable = {
+    const newTable: ProfileIdentifierTable = {
       id: nanoid(),
       profiles: [profileId],
       name: `Group ${profileTables.length + 1}`,
@@ -370,37 +355,29 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
               .getFilteredRowModel()
               .rows.map((row) => row.original.uuid);
 
-            if (value) {
-              // Add all filtered profiles to the first table
-              setProfileTables((prev) => {
-                const updatedTables = [...prev];
-                if (updatedTables.length > 0) {
-                  const firstTable = { ...updatedTables[0] };
+            setProfileTables((prev) => {
+              if (value) {
+                return prev.map((table, index) => {
+                  if (index !== 0) return table;
 
-                  // Add all filtered profiles that aren't already selected
-                  const newProfiles = [...firstTable.profiles];
-                  allProfileIds.forEach((id) => {
-                    if (!newProfiles.includes(id)) {
-                      newProfiles.push(id);
-                    }
-                  });
+                  const profilesToAdd = allProfileIds.filter(
+                    (id) => !table.profiles.includes(id),
+                  );
 
-                  firstTable.profiles = newProfiles;
-                  updatedTables[0] = firstTable;
-                }
-                return updatedTables;
-              });
-            } else {
-              // Remove all filtered profiles from all tables
-              setProfileTables((prev) => {
+                  return {
+                    ...table,
+                    profiles: [...table.profiles, ...profilesToAdd],
+                  };
+                });
+              } else {
                 return prev.map((table) => ({
                   ...table,
                   profiles: table.profiles.filter(
-                    (id: any) => !allProfileIds.includes(id),
+                    (id) => !allProfileIds.includes(id),
                   ),
                 }));
-              });
-            }
+              }
+            });
           }}
           aria-label="Select all"
         />
@@ -642,7 +619,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     }
   }, []);
 
-  function encodeProfileTablesToURL(profileTables: ProfileTable[]) {
+  function encodeProfileTablesToURL(profileTables: ProfileIdentifierTable[]) {
     return profileTables
       .map((group) => {
         const profileUuids = group.profiles.join(",");
@@ -793,7 +770,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
           </div>
 
           <ProfileTablesManager
-            profileTables={profileTables}
+            profileIdentifierTables={profileTables}
             onRemoveTable={handleRemoveTable}
             onUpdateTableProfiles={handleUpdateTableProfiles}
             onUpdateTableName={handleUpdateTableName} // Add this new prop

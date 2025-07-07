@@ -1,5 +1,5 @@
 import BackNavBar from "@/src/components/layout/back-nav-bar";
-import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+import { CompareType } from "@/src/features/deck-builder/entities/compare-type";
 import { ProfileComparison } from "@/src/features/deck-builder/profile-comparison";
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";

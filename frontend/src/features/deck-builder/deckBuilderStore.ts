@@ -1,4 +1,4 @@
-import { CompareType } from "@/src/features/deck-builder/types/compare-type";
+import { CompareType } from "@/src/features/deck-builder/entities/compare-type";
 
 export class DeckBuilderStore {
   // Proper class naming convention (PascalCase)

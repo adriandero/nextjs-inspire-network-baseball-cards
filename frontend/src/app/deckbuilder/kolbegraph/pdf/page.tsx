@@ -4,17 +4,18 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/public/images/in-tug-card-logo.png";
-import { ProfileTable } from "@/src/features/deck-builder/builder/drop-table-manager";
-import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
+
 import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import { SanityDocument } from "next-sanity";
+import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
-    CompleteProfileTable[]
+    ProfileTable[]
   >([]);
   // TODO: hook?
   const [baseFontSize, setBaseFontSize] = useState("text-base");
@@ -36,7 +37,7 @@ function ProfileComparisonContent() {
             if (overflow > 600) {
               setBaseFontSize("text-xs");
               setHeadingFontSize("text-lg");
-              setBreakUpGraph(true)
+              setBreakUpGraph(true);
             } else if (overflow > 300) {
               setBaseFontSize("text-sm");
               setHeadingFontSize("text-xl");
@@ -62,22 +63,24 @@ function ProfileComparisonContent() {
         if (groupedProfiles) {
           const tables = decodeURLToProfileTables(groupedProfiles);
 
-          const completeTablesPromises = tables.map(async (group) => {
-            if (group.profiles.length > 0) {
-              const profileObjects = await getProfilesByUuids(group.profiles);
+          const completeTablesPromises = tables.map(
+            async (group: ProfileIdentifierTable) => {
+              if (group.profiles.length > 0) {
+                const profileObjects = await getProfilesByUuids(group.profiles);
+                return {
+                  id: group.id,
+                  name: group.name,
+                  profiles: profileObjects,
+                };
+              }
+
               return {
                 id: group.id,
                 name: group.name,
-                profiles: profileObjects,
+                profiles: [],
               };
-            }
-
-            return {
-              id: group.id,
-              name: group.name,
-              profiles: [],
-            };
-          });
+            },
+          );
 
           const completeTables = await Promise.all(completeTablesPromises);
           setCompleteProfileTables(completeTables);
@@ -103,7 +106,9 @@ function ProfileComparisonContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupedProfiles]);
 
-  function decodeURLToProfileTables(paramString: string): ProfileTable[] {
+  function decodeURLToProfileTables(
+    paramString: string,
+  ): ProfileIdentifierTable[] {
     if (!paramString) return [];
 
     return paramString.split(";").map((groupString) => {
