@@ -20,7 +20,6 @@ import {
   CommandItem,
 } from "@/src/components/shadcn-ui/command";
 import React from "react";
-import { deckBuilderStoreInstance } from "./deckBuilderStore";
 import {
   Tooltip,
   TooltipContent,
@@ -31,14 +30,18 @@ import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
 import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import ValuesTable from "@/src/features/deck-builder/data-tables/values-table";
-import { CompareType } from "@/src/features/deck-builder/entities/compare-type";
+import {
+  COMPARE_TYPE_OPTIONS,
+  CompareTypes,
+  COMPARISON_ATTRIBUTES,
+} from "@/src/features/deck-builder/entities/compare-types";
 import SideBySide from "@/src/features/deck-builder/data-tables/side-by-side";
 import PrinciplesYouArchetypesTable from "@/src/features/deck-builder/data-tables/principles-you-archetypes-table";
 import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
 import { usePDFDownload } from "@/src/features/deck-builder/hooks/use-pdf-download.hook";
 
 export interface ProfileComparisonProps {
-  readonly initialType: CompareType;
+  readonly initialType: CompareTypes;
 }
 
 export function ProfileComparison({ initialType }: ProfileComparisonProps) {
@@ -53,8 +56,6 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   const [showJobRole, setShowJobRole] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
 
-  const store = deckBuilderStoreInstance;
-
   const handleCopyURLToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -65,8 +66,8 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
 
   const handlePDFDownloadCall = async () => {
     try {
-      const fetchURL = `/api/deckbuilder/${store.comparisonAttributesMap[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
-      const filename = `Compare-IN-${store.comparisonAttributesMap[selectedType].title}-Cards.pdf`;
+      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
+      const filename = `Compare-IN-${COMPARISON_ATTRIBUTES[selectedType].title}-Cards.pdf`;
 
       await downloadPDF(fetchURL, filename);
     } catch (error) {
@@ -75,12 +76,12 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   };
 
   const comparisonTableMap = {
-    [CompareType.WORKING_GENIUS]: WorkingGeniusTable,
-    [CompareType.KOLBE_STRENGTHS]: KolbeStrengthsTable,
-    [CompareType.KOLBE_GRAPH]: KolbeGraph,
-    [CompareType.VALUES]: ValuesTable,
-    [CompareType.SIDE_BY_SIDE]: SideBySide,
-    [CompareType.PRINCIPLES_YOU_ARCHETYPES]: PrinciplesYouArchetypesTable,
+    [CompareTypes.WORKING_GENIUS]: WorkingGeniusTable,
+    [CompareTypes.KOLBE_STRENGTHS]: KolbeStrengthsTable,
+    [CompareTypes.KOLBE_GRAPH]: KolbeGraph,
+    [CompareTypes.VALUES]: ValuesTable,
+    [CompareTypes.SIDE_BY_SIDE]: SideBySide,
+    [CompareTypes.PRINCIPLES_YOU_ARCHETYPES]: PrinciplesYouArchetypesTable,
   } as const;
 
   const TableComponent = comparisonTableMap[selectedType];
@@ -131,8 +132,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
       <div className="flex flex-col gap-4">
         <div className="flex w-full items-center h-8 py-4 gap-2">
           <h1 className="text-lg font-bold">
-            {store.comparisonAttributesMap[selectedType].title ||
-              "Compare Type"}
+            {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
           </h1>
 
           <Button variant="outline" className="flex items-center gap-2 ml-auto">
@@ -161,8 +161,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
                 aria-expanded={open}
                 className="w-fit justify-between"
               >
-                {store.comparisonAttributesMap[selectedType].title ||
-                  "Compare Type"}
+                {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -171,7 +170,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
                 <CommandInput placeholder="Search compare type..." />
                 <CommandEmpty>No compare type found.</CommandEmpty>
                 <CommandGroup>
-                  {store.compareTypes.map((item) => (
+                  {COMPARE_TYPE_OPTIONS.map((item) => (
                     <CommandItem
                       key={item.value}
                       value={item.data.title}

@@ -1,16 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useCallback } from "react";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { SanityDocument } from "next-sanity";
 import DropTable from "./drop-table";
 import { GoX } from "react-icons/go";
 import { Input } from "@/src/components/shadcn-ui/input";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { useProfileTableData } from "@/src/features/deck-builder/hooks/use-profile-table-data.hook";
+import { useTableNameEditor } from "@/src/features/deck-builder/hooks/use-table-name-editor.hook";
 
 interface ProfileTablesManagerProps {
   profileIdentifierTables: ProfileIdentifierTable[];
   onRemoveTable: (tableId: string) => void;
   onUpdateTableProfiles: (tableId: string, profiles: string[]) => void;
-  onUpdateTableName: (tableId: string, name: string) => void; // New prop for updating the table name
+  onUpdateTableName: (tableId: string, name: string) => void;
   onCreateTableWithProfile: (profileId: string) => void;
   setSelectedTableId: (tableId: string) => void;
   selectedTableId: string;
@@ -22,92 +24,103 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   onRemoveTable,
   onUpdateTableProfiles,
   onUpdateTableName,
+  // TODO: may get used later
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCreateTableWithProfile,
   setSelectedTableId,
   selectedTableId,
   allProfiles,
 }) => {
-  const getProfilesForTable = (tableId: string) => {
-    const table = profileIdentifierTables.find((t) => t.id === tableId);
-    if (!table) return [];
+  const { getProfilesForTable } = useProfileTableData(
+    profileIdentifierTables,
+    allProfiles,
+  );
 
-    return allProfiles.filter((profile) =>
-      table.profiles.includes(profile.uuid),
+  const {
+    editingName,
+    setEditingName,
+    inputRef,
+    startEditing,
+    cancelEditing,
+    saveEditing,
+    isEditing,
+  } = useTableNameEditor();
+
+  const handleProfilesChange = useCallback(
+    (tableId: string) => {
+      return (profiles: SanityDocument[]) => {
+        const profileIds = profiles.map((p) => p.uuid);
+        onUpdateTableProfiles(tableId, profileIds);
+      };
+    },
+    [onUpdateTableProfiles],
+  );
+
+  const handleSaveEdit = useCallback(() => {
+    saveEditing(onUpdateTableName);
+  }, [saveEditing, onUpdateTableName]);
+
+  const handleKeyPress = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        handleSaveEdit();
+      } else if (e.key === "Escape") {
+        cancelEditing();
+      }
+    },
+    [handleSaveEdit, cancelEditing],
+  );
+
+  if (profileIdentifierTables.length === 0) {
+    return (
+      <div className="flex justify-center items-center p-8 text-gray-500">
+        No tables created yet
+      </div>
     );
-  };
-
-  // State to track which table is being edited
-  const [editingTableId, setEditingTableId] = useState<string | null>(null);
-  const [editingName, setEditingName] = useState<string>("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Set focus on the input when editing starts
-  useEffect(() => {
-    if (editingTableId && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [editingTableId]);
-
-  // Handle starting to edit a table name
-  const handleStartEdit = (tableId: string, currentName: string) => {
-    setEditingTableId(tableId);
-    setEditingName(currentName);
-  };
-
-  // Handle saving the edited table name
-  const handleSaveEdit = () => {
-    if (editingTableId && editingName.trim()) {
-      onUpdateTableName(editingTableId, editingName.trim());
-      setEditingTableId(null);
-    }
-  };
-
-  // Handle key press events in the input
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSaveEdit();
-    } else if (e.key === "Escape") {
-      setEditingTableId(null);
-    }
-  };
-
-  // Handle clicking outside the input
-  const handleBlur = () => {
-    handleSaveEdit();
-  };
+  }
 
   return (
-    <div className="flex flex-col w-full ">
+    <div className="flex flex-col w-full">
       {profileIdentifierTables.map((table) => (
         <React.Fragment key={table.id}>
           <div className="flex h-12 justify-end items-center">
             <div className="font-medium text-base flex">
-              {editingTableId === table.id ? (
+              {isEditing(table.id) ? (
                 <Input
                   ref={inputRef}
                   type="text"
                   value={editingName}
                   onChange={(e) => setEditingName(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  onBlur={handleBlur}
+                  onBlur={handleSaveEdit}
                   className="h-8 text-right focus-visible:ring-0 focus-visible:ring-offset-0 border border-light3"
+                  aria-label="Edit table name"
                 />
               ) : (
                 <span
-                  onClick={() => handleStartEdit(table.id, table.name)}
-                  className="cursor-text hover:bg-gray-100 px-2 py-1 rounded"
+                  onClick={() => startEditing(table.id, table.name)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      startEditing(table.id, table.name);
+                    }
+                  }}
+                  className="cursor-text hover:bg-gray-100 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Edit table name: ${table.name}`}
                 >
                   {table.name}
                 </span>
               )}
             </div>
+
             {profileIdentifierTables.length > 1 && (
               <Button
                 variant="ghost"
                 size="sm"
                 className="hover:text-inspireRed w-6 h-6 flex items-center justify-center p-0"
                 onClick={() => onRemoveTable(table.id)}
+                aria-label={`Remove table: ${table.name}`}
               >
                 <GoX size={32} strokeWidth="1" />
               </Button>
@@ -117,10 +130,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
           <DropTable
             selectedProfilesData={getProfilesForTable(table.id)}
             droppableId={`table-${table.id}`}
-            onProfilesChange={(profiles: SanityDocument[]) => {
-              const profileIds = profiles.map((p: SanityDocument) => p.uuid);
-              onUpdateTableProfiles(table.id, profileIds);
-            }}
+            onProfilesChange={handleProfilesChange(table.id)}
             setSelectedTableId={setSelectedTableId}
             table={table}
             isSelectedTable={selectedTableId === table.id}

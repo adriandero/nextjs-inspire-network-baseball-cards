@@ -1,12 +1,12 @@
 import BackNavBar from "@/src/components/layout/back-nav-bar";
-import { CompareType } from "@/src/features/deck-builder/entities/compare-type";
+import { CompareTypes } from "@/src/features/deck-builder/entities/compare-types";
 import { ProfileComparison } from "@/src/features/deck-builder/profile-comparison";
 import { auth0 } from "@/src/lib/auth0";
 import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-type tParams = Promise<{ type: CompareType }>;
+type tParams = Promise<{ type: CompareTypes }>;
 
 // Main page component with Suspense boundary
 export default async function ComparisonPage({
