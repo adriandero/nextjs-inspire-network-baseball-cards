@@ -1,4 +1,3 @@
-// CreateCompanyField.jsx - MODIFIED VERSION
 import React from 'react'
 import {useClient, useFormValue} from 'sanity'
 import {Button, Card, Flex, Text} from '@sanity/ui'
@@ -8,10 +7,9 @@ export const CreateCompanyField = (props) => {
   const [isCreating, setIsCreating] = React.useState(false)
   const [error, setError] = React.useState(null)
 
-  // Get current values from the form
   const name = useFormValue(['name'])
   const slug = useFormValue(['slug', 'current'])
-  const teamLogo = useFormValue(['teamLogo']) // Get the teamLogo value
+  const teamLogo = useFormValue(['teamLogo'])
   const company = useFormValue(['company'])
   const documentId = useFormValue(['_id'])
 
@@ -25,7 +23,6 @@ export const CreateCompanyField = (props) => {
     setError(null)
 
     try {
-      // Create new company document with optional logo
       const companyDoc = {
         _type: 'company',
         name,
@@ -35,15 +32,12 @@ export const CreateCompanyField = (props) => {
         },
       }
 
-      // Add the logo if it exists
       if (teamLogo) {
         companyDoc.companyLogo = teamLogo
       }
 
-      // Create the company document
       const newCompany = await client.create(companyDoc)
 
-      // Update the document directly with the client
       await client
         .patch(documentId)
         .set({
@@ -85,4 +79,3 @@ export const CreateCompanyField = (props) => {
     </>
   )
 }
- 

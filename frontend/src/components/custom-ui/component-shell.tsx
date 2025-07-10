@@ -1,6 +1,6 @@
 type ShellProps = {
   children: React.ReactNode;
-  className?: string; // Optional for extra styling
+  className?: string;
 };
 
 export default function ComponentShell({

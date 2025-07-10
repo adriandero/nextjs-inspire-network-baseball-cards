@@ -15,7 +15,6 @@ function createWidgetField(name: string) {
         {title: 'Red', value: 'red'},
       ],
     },
-    // validation: (rule: {required: () => any}) => rule.required(),
   }
 }
 const wonderObj = createWidgetField('wonder')
@@ -162,7 +161,6 @@ export const profileType = defineType({
             enablementObj,
             tenacityObj,
           ],
-          // validation: (rule) => rule.required(),
         },
       ],
     }),

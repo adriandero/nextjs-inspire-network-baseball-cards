@@ -99,7 +99,6 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   const generateAutoColorMap = () => {
     if (!profiles || profiles.length === 0) return {};
 
-    // Count occurrences of each value
     const valueCounts: Record<string, number> = {};
 
     profiles.forEach((profile) => {
@@ -269,7 +268,6 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
     },
   ];
 
-  // Create table instance
   const table = useReactTable({
     data: profiles,
     columns,

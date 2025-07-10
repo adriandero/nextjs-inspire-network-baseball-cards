@@ -12,7 +12,7 @@ function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
   const showJobRoleParam = searchParams.get("showJobRole");
-  const showJobRole = showJobRoleParam === "true"; // Convert string to boolean
+  const showJobRole = showJobRoleParam === "true"; 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
     CompleteProfileTable[]
@@ -23,12 +23,9 @@ function ProfileComparisonContent() {
         setIsLoading(true);
 
         if (groupedProfiles) {
-          // First, parse the URL to get the ProfileTable structure
           const tables = decodeURLToProfileTables(groupedProfiles);
 
-          // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
-            // Only fetch if there are profiles in this group
             if (group.profiles.length > 0) {
               const profileObjects = await getProfilesByUuids(group.profiles);
               return {
@@ -38,7 +35,6 @@ function ProfileComparisonContent() {
               };
             }
 
-            // Return group with empty profiles array if no profiles
             return {
               id: group.id,
               name: group.name,
@@ -46,7 +42,6 @@ function ProfileComparisonContent() {
             };
           });
 
-          // Wait for all groups to be processed
           const completeTables = await Promise.all(completeTablesPromises);
           setCompleteProfileTables(completeTables);
         }
@@ -109,10 +104,8 @@ function ProfileComparisonContent() {
         completeProfileTables.every((table) => table.profiles.length === 0) ? (
         <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
-        // Map through all tables instead of just accessing index 0
         completeProfileTables.map((table) => (
           <div key={table.id} className="flex flex-col gap-4 ">
-            {/* Display the group name if there are multiple groups */}
             {completeProfileTables.length > 1 && (
               <h2 className="text-base font-semibold">{table.name}</h2>
             )}

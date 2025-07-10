@@ -83,7 +83,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
       .map(() =>
         Array(4)
           .fill(null)
-          .map(() => ({ percent: "0%", people: [] })),
+          .map(() => ({ percent: "0%", people: [] }))
       );
 
     if (!profiles || profiles.length === 0) return data;
@@ -141,7 +141,6 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
 
           <div className="flex-1 grid grid-cols-4 gap-2">
             {columnHeaders.map((header, colIndex) => {
-              // Get the correct icon for each header
               let HeaderIcon;
               switch (colIndex) {
                 case 0:
@@ -212,7 +211,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
                             {profile.value}
                           </span>
                         </div>
-                      ),
+                      )
                     )}
                   </div>
                 </div>

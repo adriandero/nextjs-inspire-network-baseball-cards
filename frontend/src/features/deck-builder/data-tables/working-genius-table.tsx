@@ -35,7 +35,6 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   optimizedImages = false,
   tableName,
 }) => {
-  // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",
@@ -88,7 +87,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     {
       accessorKey: "widget",
       header: "WIDGET",
-      size: 600, // Set this to 1/3 of your expected table width
+      size: 600, // Set this to 2/3 of your expected table width
       cell: ({ row }) => (
         <WidgetCogsSVG
           widget={row.original.workingGenius?.widget}
@@ -102,7 +101,6 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     },
   ];
 
-  // Create table instance
   const table = useReactTable({
     data: profiles,
     columns,

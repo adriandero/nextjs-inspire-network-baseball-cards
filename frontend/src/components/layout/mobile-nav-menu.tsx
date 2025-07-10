@@ -32,10 +32,10 @@ export default function MobileNavMenu({
 
   function handleProfileRedirect() {
     if (userProfileData) redirect("/tugcards/" + userProfileData.uuid);
-    // else
-    //   alert(
-    //     "You don't have a Baseball Card assigned - Ask an administrator for access"
-    //   );
+    else
+      alert(
+        "You don't have a Baseball Card assigned - Ask an administrator for access"
+      );
   }
   return (
     <Sheet>

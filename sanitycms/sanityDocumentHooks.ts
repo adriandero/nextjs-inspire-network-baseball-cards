@@ -4,7 +4,6 @@ export const documentHooks = {
   newDocument: {
     order: 1,
     execute: async (document:any) => {
-      // Only add UUID if it doesn't exist
       if (!document.uuid) {
         return {
           ...document,

@@ -31,7 +31,6 @@ export interface PrinciplesYouArchetypesTableProps {
 const PrinciplesYouArchetypesTable: React.FC<
   PrinciplesYouArchetypesTableProps
 > = ({ profiles, optimizedImages = false, showJobRole, tableName }) => {
-  // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",
@@ -85,7 +84,7 @@ const PrinciplesYouArchetypesTable: React.FC<
     {
       accessorKey: "principleYouArchetypes",
       header: "PrinciplesYou Archetypes",
-      size: 600, // Set this to 1/3 of your expected table width
+      size: 600, // Set this to 2/3 of your expected table width
       cell: ({ row }) => {
         const profile = row.original;
         return (
@@ -100,7 +99,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                     className="max-h-16 h-full w-auto"
                   />
                 </div>
-              ),
+              )
             )}
           </div>
         );
@@ -108,7 +107,6 @@ const PrinciplesYouArchetypesTable: React.FC<
     },
   ];
 
-  // Create table instance
   const table = useReactTable({
     data: profiles,
     columns,
@@ -146,7 +144,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}

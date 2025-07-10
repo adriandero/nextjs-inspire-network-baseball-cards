@@ -1,16 +1,11 @@
 "use client";
 import { Progress } from "@/src/components/shadcn-ui/progress";
 
-import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // Importing some icons for the radio items
+import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import { getKolbeMethod } from "@/src/lib/utils";
-
-// type principle = {
-//   title: string;
-//   description: string;
-// };
 
 export default function PdfKolbeStrengthsCard({
   profile,

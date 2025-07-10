@@ -5,7 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import React, { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
-import ameripriseCompass from "@/public/images/ameriprise-compass.png"
+import ameripriseCompass from "@/public/images/ameriprise-compass.png";
 
 export default function PdfBanner({
   profile,
@@ -14,7 +14,7 @@ export default function PdfBanner({
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
   const profilesTeamName = profile?.team?.[0]?.name;
-  // Add a print-specific style to the document
+
   useEffect(() => {
     // This style will only apply when generating PDFs
     const style = document.createElement("style");
@@ -68,7 +68,7 @@ export default function PdfBanner({
           <AvatarImage
             src={optimizedProfileImageUrl}
             className="rounded-full w-20 h-20 object-cover"
-            loading="eager" // Prioritize loading
+            loading="eager"
           />
           <AvatarFallback></AvatarFallback>
         </Avatar>

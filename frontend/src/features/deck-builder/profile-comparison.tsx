@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { GoMultiSelect, GoDownload, GoLink } from "react-icons/go";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { Checkbox } from "@/src/components/shadcn-ui/checkbox";
 import {
   Popover,
   PopoverContent,
@@ -39,6 +38,12 @@ import SideBySide from "@/src/features/deck-builder/data-tables/side-by-side";
 import PrinciplesYouArchetypesTable from "@/src/features/deck-builder/data-tables/principles-you-archetypes-table";
 import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
 import { usePDFDownload } from "@/src/features/deck-builder/hooks/use-pdf-download.hook";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+} from "@/src/components/shadcn-ui/dropdown-menu";
 
 export interface ProfileComparisonProps {
   readonly initialType: CompareTypes;
@@ -55,10 +60,16 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   const [selectedType, setSelectedType] = useState(initialType);
   const [showJobRole, setShowJobRole] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+  const [recentlyCopied, setRecentlyCopied] = useState<boolean>(false);
 
   const handleCopyURLToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
+      setRecentlyCopied(true);
+
+      setTimeout(() => {
+        setRecentlyCopied(false);
+      }, 3000);
     } catch (err) {
       console.error("Failed to copy URL:", err);
     }
@@ -131,27 +142,9 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     <div className="px-6">
       <div className="flex flex-col gap-4">
         <div className="flex w-full items-center h-8 py-4 gap-2">
-          <h1 className="text-lg font-bold">
+          <h1 className="text-lg font-bold mr-auto">
             {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
           </h1>
-
-          <Button variant="outline" className="flex items-center gap-2 ml-auto">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="show-job-role"
-                checked={showJobRole}
-                onCheckedChange={(checked) =>
-                  setShowJobRole(checked as boolean)
-                }
-              />
-              <label
-                htmlFor="show-job-role"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Show Title
-              </label>
-            </div>
-          </Button>
 
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -192,19 +185,41 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
             </PopoverContent>
           </Popover>
 
-          <Button variant="outline" disabled>
-            <GoMultiSelect />
-            <span className="hidden sm:inline">View</span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <GoMultiSelect />
+                <span className="hidden sm:inline">View</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuCheckboxItem
+                checked={showJobRole}
+                onCheckedChange={(checked) =>
+                  setShowJobRole(checked as boolean)
+                }
+              >
+                Show Title
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <TooltipProvider>
-            <Tooltip>
+            <Tooltip open={recentlyCopied ? true : undefined}>
               <TooltipTrigger>
                 <Button variant="outline" onClick={handleCopyURLToClipboard}>
-                  <GoLink />
+                  {recentlyCopied ? (
+                    <Check className="text-primary" />
+                  ) : (
+                    <GoLink />
+                  )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="bottom">Copy Link</TooltipContent>
+              <TooltipContent side="bottom">
+                {recentlyCopied
+                  ? "Copied!"
+                  : "Copy Link"}
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 

@@ -21,12 +21,10 @@ export function getKolbeMethod(
   number: number | undefined,
   strength: KolbeStrength
 ): MethodDescription | undefined {
-  // Ensure the number is between 1 and 10
   if (!number || number < 1 || number > 10) {
     return { method: "In Transition...", description: "" };
   }
 
-  // Find the correct range for the given number
   let range: KolbeRange;
   if (number >= 1 && number <= 3) {
     range = "1-3";
@@ -36,7 +34,6 @@ export function getKolbeMethod(
     range = "7-10";
   }
 
-  // Retrieve and return the method and description
   const strengthData = kolbeStrengthJson[strength];
   if (strengthData) {
     const methodDescription = strengthData[range];

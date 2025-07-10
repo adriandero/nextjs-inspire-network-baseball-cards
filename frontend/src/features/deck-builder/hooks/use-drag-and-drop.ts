@@ -6,7 +6,7 @@ import type { DragStartEvent, DragEndEvent } from "@dnd-kit/core";
 interface UseDragAndDropProps {
   onCreateTableWithProfile: (profileId: string) => void;
   onUpdateTableProfiles: (tableId: string, profiles: string[]) => void;
-  profileTables: any[]; // You can type this better
+  profileTables: any[];
 }
 
 export function useDragAndDrop({

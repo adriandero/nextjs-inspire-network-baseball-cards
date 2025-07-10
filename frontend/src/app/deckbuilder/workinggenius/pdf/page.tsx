@@ -12,7 +12,7 @@ function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
   const showJobRoleParam = searchParams.get("showJobRole");
-  const showJobRole = showJobRoleParam === "true"; // Convert string to boolean
+  const showJobRole = showJobRoleParam === "true";
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
     ProfileTable[]
@@ -106,10 +106,8 @@ function ProfileComparisonContent() {
         completeProfileTables.every((table) => table.profiles.length === 0) ? (
         <div>No TUG Cards found. Please select TUG Cards to compare.</div>
       ) : (
-        // Map through all tables instead of just accessing index 0
         completeProfileTables.map((table) => (
           <div key={table.id} className="flex flex-col gap-4 ">
-            {/* Display the group name if there are multiple groups */}
             {completeProfileTables.length > 1 && (
               <h2 className="text-base font-semibold">{table.name}</h2>
             )}

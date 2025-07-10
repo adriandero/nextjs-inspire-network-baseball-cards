@@ -22,14 +22,12 @@ const useColumnCount = () => {
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
-      if (width >= 1024)
-        setColumns(3); // lg breakpoint
-      else if (width >= 640)
-        setColumns(2); // sm breakpoint
+      if (width >= 1024) setColumns(3);
+      else if (width >= 640) setColumns(2);
       else setColumns(1);
     };
 
-    updateColumns(); // set initial
+    updateColumns();
     window.addEventListener("resize", updateColumns);
     return () => window.removeEventListener("resize", updateColumns);
   }, []);
@@ -39,7 +37,7 @@ const useColumnCount = () => {
 
 const chunkProfiles = (
   profiles: SanityDocument[],
-  size: number,
+  size: number
 ): SanityDocument[][] => {
   const chunks: SanityDocument[][] = [];
   for (let i = 0; i < profiles.length; i += size) {
@@ -53,9 +51,9 @@ const SideBySide: React.FC<SideBySideProps> = ({
   showJobRole,
   tableName,
 }) => {
-  const columns = useColumnCount(); // 1, 2, or 3
+  const columns = useColumnCount();
   const profileGroups = chunkProfiles(profiles, columns);
-  
+
   if (profiles.length === 0) {
     return (
       <div>

@@ -13,7 +13,7 @@ interface StorageData {
 export function useViewState() {
   const [view, setView] = useState<ViewType>("teams");
   const [groupingMode, setGroupingMode] = useState<"teams" | "profiles">(
-    "teams",
+    "teams"
   );
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
@@ -41,7 +41,7 @@ export function useViewState() {
         setView("profiles");
       }
     },
-    [groupingMode],
+    [groupingMode]
   );
 
   const handleBackToTeams = useCallback(() => {
@@ -81,6 +81,6 @@ export function useViewState() {
     handleGroupingChange,
     handleTeamClick,
     handleBackToTeams,
-    restoreViewState, // ✅ Expose restoration method
+    restoreViewState,
   };
 }

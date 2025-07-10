@@ -17,7 +17,7 @@ function ProfileComparisonContent() {
   const [completeProfileTables, setCompleteProfileTables] = useState<
     ProfileTable[]
   >([]);
-  // TODO: hook?
+
   const [baseFontSize, setBaseFontSize] = useState("text-base");
   const [headingFontSize, setHeadingFontSize] = useState("text-3xl");
   const [breakUpGraph, setBreakUpGraph] = useState<boolean>();

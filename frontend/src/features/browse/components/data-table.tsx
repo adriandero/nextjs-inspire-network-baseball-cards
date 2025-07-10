@@ -102,7 +102,7 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
-      groups: false, // Hide the groups column by default for all views
+      groups: false,
     });
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
   const resetTableState = () => {
     setSorting([]);
     setColumnFilters([]);
-    setColumnVisibility({ groups: false }); // Keep groups hidden when resetting for all views
+    setColumnVisibility({ groups: false });
     setRowSelection({});
   };
 
@@ -164,7 +164,7 @@ export function DataTable<TData, TValue>({
     }
   };
 
-  // Determine which data and columns to use
+
   const getTableConfig = () => {
     if (groupingMode === "profiles") {
       return {
@@ -172,7 +172,7 @@ export function DataTable<TData, TValue>({
         data: allProfilesData,
         showSearch: true,
         allowRowClick: false,
-        showGroupsFilter: true, // Enable groups filter for profiles
+        showGroupsFilter: true,
       };
     } else if (currentView === "teams") {
       return {
@@ -180,7 +180,7 @@ export function DataTable<TData, TValue>({
         data: teamsData,
         showSearch: true,
         allowRowClick: true,
-        showGroupsFilter: true, // Show groups filter for teams
+        showGroupsFilter: true,
       };
     } else {
       return {
@@ -188,7 +188,7 @@ export function DataTable<TData, TValue>({
         data: profilesData,
         showSearch: true,
         allowRowClick: false,
-        showGroupsFilter: true, // Enable groups filter for team profiles view
+        showGroupsFilter: true,
       };
     }
   };
@@ -247,16 +247,13 @@ export function DataTable<TData, TValue>({
     }
   };
 
-  // Get current groups filter value
   const currentGroupsFilter =
     (table.getColumn("groups")?.getFilterValue() as string) ?? "";
 
-  // Handle groups filter change
   const handleGroupsFilterChange = (value: string) => {
     table.getColumn("groups")?.setFilterValue(value === "all" ? "" : value);
   };
 
-  // Get the display label for current filter
   const getGroupsFilterLabel = () => {
     if (!currentGroupsFilter) return "All Groups";
     const option = GROUPS_OPTIONS.find(

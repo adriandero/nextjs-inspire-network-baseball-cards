@@ -33,7 +33,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
         </Button>
       );
     },
-    sortingFn: "alphanumeric", // <-- Add this line
+    sortingFn: "alphanumeric",
     cell: ({ row }) => {
       const profileName = row.original.name;
       const profileUuid = row.original.uuid;
@@ -95,37 +95,33 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
       );
     },
   },
-  // Hidden column for groups filtering - computes groups from teams
   {
     id: "groups",
     header: "Groups",
-    enableHiding: false, // Prevents this column from appearing in the column visibility dropdown
+    enableHiding: false,
     meta: {
-      hidden: true, // Custom meta property to identify hidden columns
+      hidden: true,
     },
     accessorFn: (row) => {
-      // Extract groups from all teams this profile belongs to
       const teams = row.teams || [];
       const groups = teams
         .map((team: SanityDocument) => team.groups)
-        .filter((group: string) => group) // Remove undefined/null groups
+        .filter((group: string) => group)
         .filter(
           (group: string, index: number, arr: string[]) =>
-            arr.indexOf(group) === index, // Remove duplicates
+            arr.indexOf(group) === index
         );
 
-      // Return as a string for filtering (join multiple groups with comma)
       return groups.join(",");
     },
     cell: ({ row }) => {
-      // This cell won't be rendered since the column is hidden
       const teams = row.original.teams || [];
       const groups = teams
         .map((team: SanityDocument) => team.groups)
         .filter((group: string) => group);
       return groups.join(", ");
     },
-    // Custom filter function to handle multiple groups
+
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue) return true;
 
@@ -134,21 +130,10 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
         .map((team: SanityDocument) => team.groups)
         .filter((group: string) => group);
 
-      // Check if any of the profile's groups match the filter
       return profileGroups.includes(filterValue);
     },
   },
-  // {
-  //   accessorKey: "team.company.name",
-  //   footer: "Company" as const,
-  //   header: () => <div className="text-right">Company</div>,
-  //   cell: ({ row }) => {
-  //     // console.log(row.original);
-  //     const companyName = row.original.team?.company?.name || "Unknown Company";
 
-  //     return <div className="text-right">{companyName}</div>;
-  //   },
-  // },
   {
     id: "actions",
     footer: "Action" as const,
