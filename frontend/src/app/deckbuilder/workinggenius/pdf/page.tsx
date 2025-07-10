@@ -4,9 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/public/images/in-tug-card-logo.png";
-import { ProfileTable } from "@/src/features/deck-builder/builder/drop-table-manager";
-import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
 import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
+import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ function ProfileComparisonContent() {
   const showJobRole = showJobRoleParam === "true"; // Convert string to boolean
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
-    CompleteProfileTable[]
+    ProfileTable[]
   >([]);
   useEffect(() => {
     async function fetchProfiles() {
@@ -23,12 +23,9 @@ function ProfileComparisonContent() {
         setIsLoading(true);
 
         if (groupedProfiles) {
-          // First, parse the URL to get the ProfileTable structure
           const tables = decodeURLToProfileTables(groupedProfiles);
 
-          // Now fetch the complete profiles for each group sequentially
           const completeTablesPromises = tables.map(async (group) => {
-            // Only fetch if there are profiles in this group
             if (group.profiles.length > 0) {
               const profileObjects = await getProfilesByUuids(group.profiles);
               return {
@@ -38,7 +35,6 @@ function ProfileComparisonContent() {
               };
             }
 
-            // Return group with empty profiles array if no profiles
             return {
               id: group.id,
               name: group.name,
@@ -46,7 +42,6 @@ function ProfileComparisonContent() {
             };
           });
 
-          // Wait for all groups to be processed
           const completeTables = await Promise.all(completeTablesPromises);
           setCompleteProfileTables(completeTables);
         }
@@ -71,7 +66,9 @@ function ProfileComparisonContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupedProfiles]);
 
-  function decodeURLToProfileTables(paramString: string): ProfileTable[] {
+  function decodeURLToProfileTables(
+    paramString: string,
+  ): ProfileIdentifierTable[] {
     if (!paramString) return [];
 
     return paramString.split(";").map((groupString) => {

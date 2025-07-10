@@ -2,13 +2,12 @@ import BackNavBar from "@/src/components/layout/back-nav-bar";
 import { CompareTypes } from "@/src/features/deck-builder/entities/compare-types";
 import { ProfileComparison } from "@/src/features/deck-builder/profile-comparison";
 import { auth0 } from "@/src/lib/auth0";
-import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { getUserSanity } from "@/src/lib/data/users";
 
 type tParams = Promise<{ type: CompareTypes }>;
 
-// Main page component with Suspense boundary
 export default async function ComparisonPage({
   params,
 }: {
@@ -23,7 +22,7 @@ export default async function ComparisonPage({
 
   const userData = session?.user;
 
-  const userProfileData = await getUserData(userData);
+  const userProfileData = await getUserSanity(userData);
 
   return (
     <div className="w-full max-w-screen-lg">

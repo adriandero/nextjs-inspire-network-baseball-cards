@@ -15,8 +15,8 @@ import MobileNavBanner from "@/src/features/profile/mobile-nav-banner";
 import DownloadButton from "@/src/features/profile/download-pdf-button";
 import { SanityDocument } from "next-sanity";
 import { auth0 } from "@/src/lib/auth0";
-import { getUserData } from "@/src/lib/utils/sessionCheck";
 import { redirect } from "next/navigation";
+import { getUserSanity } from "@/src/lib/data/users";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -33,23 +33,34 @@ export default async function TugPage({
   if (!session) {
     redirect("/auth/login");
   }
-  const userData = await getUserData(session?.user);
+  const userProfileData = await getUserSanity(session?.user);
 
   const moreProfiles: SanityDocument[] =
     await getProfilesByTeamsWithoutSpecifiedProfile(uuid);
 
-  // async function handleShare() {}
+  if (!userProfileData) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-2xl font-semibold mb-4 text-gray-900">
+            User Not Found
+          </h1>
+          <p className="text-gray-600 mb-2">
+            Your account is not found in our system.
+          </p>
+          <p className="text-gray-600">
+            Please contact the administrator for assistance.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-  // let profilesFromUserTeams: ProfilesFromUserTeams = { teamProfiles: [] };
-
-  //TODO propper sanitydocument typing
-
-  // console.log(moreProfiles);
   return (
     <div className="w-full h-screen max-w-screen-lg ">
       <MobileNavBanner
         profile={profile}
-        userProfileData={userData.profile}
+        userProfileData={userProfileData.profile}
         _id={""}
         _rev={""}
         _type={""}
@@ -57,7 +68,7 @@ export default async function TugPage({
         _updatedAt={""}
       />
       <BackNavBar
-        userProfileData={userData.profile}
+        userProfileData={userProfileData.profile}
         backwardsNavigationUrl={"/browse/"}
         _id={""}
         _rev={""}
@@ -119,16 +130,6 @@ export default async function TugPage({
             _updatedAt={""}
           />
           <DownloadButton uuid={uuid} />
-          {/* {  <Button
-            variant="outline"
-            className="mt-6 h-fit rounded-xl text-base p-3"
-            onClick={handleShare}
-          >
-            <>
-              <GoDownload size={30} strokeWidth="0.5" className="!w-5 !h-5" />{" "}
-              <span>Download Profile</span>
-            </>
-          </Button>{" "}} */}
         </div>
       </main>
       <footer className="flex item-center p-8"></footer>

@@ -7,6 +7,7 @@ import { Input } from "@/src/components/shadcn-ui/input";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { useProfileTableData } from "@/src/features/deck-builder/hooks/use-profile-table-data.hook";
 import { useTableNameEditor } from "@/src/features/deck-builder/hooks/use-table-name-editor.hook";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 interface ProfileTablesManagerProps {
   profileIdentifierTables: ProfileIdentifierTable[];
@@ -16,7 +17,7 @@ interface ProfileTablesManagerProps {
   onCreateTableWithProfile: (profileId: string) => void;
   setSelectedTableId: (tableId: string) => void;
   selectedTableId: string;
-  allProfiles: SanityDocument[];
+  allProfiles: ProfileWithDetailedTeams[];
 }
 
 const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({

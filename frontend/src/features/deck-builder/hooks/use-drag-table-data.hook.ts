@@ -1,40 +1,50 @@
 import { useState, useEffect, useCallback } from "react";
-import { SanityDocument } from "next-sanity";
+
 import {
   getAllProfiles,
   getAllProfilesGroupedByTeam,
-  getAllTeams,
-  getUserTeams,
+} from "@/src/lib/data/profiles";
+import { UserSanity } from "@/src/lib/entities/user";
+import {
   ProfilesByTeam,
-  TeamsFromUser,
-} from "@/src/lib/utils/sanityApi/profileRequests";
+  ProfileWithDetailedTeams,
+} from "@/src/lib/entities/profile";
+import { getAllTeams, getUserTeams } from "@/src/lib/data/teams";
+import {
+  TeamWithPopulatedCompany,
+  UserTeamsResponse,
+} from "@/src/lib/entities/team";
 
 interface UseDragTableDataProps {
-  userProfileData: SanityDocument;
+  userProfileData: UserSanity;
 }
 
 export function useDragTableData({ userProfileData }: UseDragTableDataProps) {
-  const [teams, setTeams] = useState<SanityDocument[]>([]);
+  const [teams, setTeams] = useState<TeamWithPopulatedCompany[]>([]);
   const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam>({
     teams: {},
   });
-  const [allProfilesData, setAllProfilesData] = useState<SanityDocument[]>([]);
+  const [allProfilesData, setAllProfilesData] = useState<
+    ProfileWithDetailedTeams[]
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fillAllUserTeams = useCallback(async () => {
-    let profilesFromUserTeams: TeamsFromUser = { teams: [] };
+    let profilesFromUserTeams: UserTeamsResponse = { teams: [] };
     if (userProfileData?.team) {
-      profilesFromUserTeams = await getUserTeams(userProfileData.email);
+      profilesFromUserTeams = (await getUserTeams(userProfileData.email)) ?? {
+        teams: [],
+      };
     }
     return profilesFromUserTeams;
   }, [userProfileData.email, userProfileData?.team]);
 
   const fillDataTableTeamData = useCallback(async (): Promise<
-    SanityDocument[]
+    TeamWithPopulatedCompany[]
   > => {
-    const emptyData: SanityDocument[] = [];
+    const emptyData: TeamWithPopulatedCompany[] = [];
     if (userProfileData.permission === "Admin") {
       return await getAllTeams();
     }
@@ -44,7 +54,9 @@ export function useDragTableData({ userProfileData }: UseDragTableDataProps) {
     return data;
   }, [userProfileData, fillAllUserTeams]);
 
-  const fetchAllProfiles = useCallback(async (): Promise<SanityDocument[]> => {
+  const fetchAllProfiles = useCallback(async (): Promise<
+    ProfileWithDetailedTeams[]
+  > => {
     try {
       setIsLoadingProfiles(true);
 

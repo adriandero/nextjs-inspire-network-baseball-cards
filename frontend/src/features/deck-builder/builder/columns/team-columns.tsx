@@ -1,9 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { SanityDocument } from "next-sanity";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
-export const teamColumns: ColumnDef<SanityDocument>[] = [
+export const teamColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
   {
     accessorKey: "name",
     sortingFn: "alphanumeric",

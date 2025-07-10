@@ -1,0 +1,21 @@
+export interface UserSanity {
+  email: string;
+  image?: string;
+  permission: "Admin" | "User" | "Guest";
+  profile?: {
+    name: string;
+    uuid: string;
+    slug: string;
+    jobRole: string;
+    profileImage?: {
+      asset: {
+        url: string;
+      };
+    };
+  };
+  team?: Array<{
+    name: string;
+    slug: string;
+    groups: string[];
+  }>;
+}

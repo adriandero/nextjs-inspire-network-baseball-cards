@@ -13,17 +13,12 @@ import {
   TooltipTrigger,
 } from "@/src/components/shadcn-ui/tooltip";
 
-import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go"; // Importing some icons for the radio items
+import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go";
 
 import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { getKolbeMethod } from "@/src/lib/utils";
-
-// type principle = {
-//   title: string;
-//   description: string;
-// };
 
 export default function KolbeStrengthsCard({
   profile,

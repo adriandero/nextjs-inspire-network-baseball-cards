@@ -40,16 +40,3 @@ export const COMPARE_TYPE_OPTIONS = Object.entries(COMPARISON_ATTRIBUTES).map(
     data,
   }),
 );
-
-// Helper functions if needed
-export const getComparisonConfig = (type: CompareTypes) => {
-  return COMPARISON_ATTRIBUTES[type];
-};
-
-export const getComparisonSlug = (type: CompareTypes) => {
-  return COMPARISON_ATTRIBUTES[type].slug;
-};
-
-export const getComparisonTitle = (type: CompareTypes) => {
-  return COMPARISON_ATTRIBUTES[type].title;
-};

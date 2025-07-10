@@ -1,16 +1,17 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { SanityDocument } from "next-sanity";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { Checkbox } from "@/src/components/shadcn-ui/checkbox";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import defaultAvatar from "@/public/images/default-avatar.png";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 export const createProfileColumns = (
-  profileTables: any[],
+  profileTables: ProfileIdentifierTable[],
   handleProfileCheck: (profileId: string) => void,
   onBulkSelect: (allProfileIds: string[], isSelected: boolean) => void,
-): ColumnDef<SanityDocument>[] => [
+): ColumnDef<ProfileWithDetailedTeams>[] => [
   {
     id: "select",
     header: ({ table }) => (

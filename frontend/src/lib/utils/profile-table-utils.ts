@@ -19,6 +19,10 @@ export function addProfileToTable(
   table: ProfileIdentifierTable,
   profileId: string,
 ): ProfileIdentifierTable {
+  if (table.profiles.includes(profileId)) {
+    return table;
+  }
+
   return {
     ...table,
     profiles: [...table.profiles, profileId],

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SanityDocument } from "next-sanity";
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
@@ -24,16 +23,16 @@ import {
   TooltipTrigger,
 } from "@/src/components/shadcn-ui/tooltip";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { GoTrash, GoPlus, GoArrowRight } from "react-icons/go";
+import { GoArrowRight, GoPlus, GoTrash } from "react-icons/go";
 import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  SortingState,
   ColumnFiltersState,
-  VisibilityState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   RowSelectionState,
+  SortingState,
+  useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import { cn } from "@/src/lib/utils";
@@ -47,29 +46,28 @@ import {
   CompareTypes,
   COMPARISON_ATTRIBUTES,
 } from "@/src/features/deck-builder/entities/compare-types";
-import { createProfileColumns } from "@/src/features/deck-builder/builder/profile-columns";
-import { teamColumns } from "@/src/features/deck-builder/builder/team-columns";
+import { createProfileColumns } from "@/src/features/deck-builder/builder/columns/profile-columns";
+import { teamColumns } from "@/src/features/deck-builder/builder/columns/team-columns";
 import DragTable from "@/src/features/deck-builder/builder/drag-table";
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
 import ProfileTablesManager from "@/src/features/deck-builder/builder/drop-table-manager";
+import { UserSanity } from "@/src/lib/entities/user";
+import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 interface TeamProfileSelectorProps {
-  userProfileData: SanityDocument;
+  userProfileData: UserSanity;
 }
 
 const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   const router = useRouter();
-
-  // UI state
   const [open, setOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Table state
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
-  // Custom hooks for business logic
   const {
     teams,
     profilesByTeam,
@@ -119,7 +117,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     profileTables: dropTables,
   });
 
-  // Storage management
   const { clearStorage } = useProfileStorage({
     profileTables: dropTables,
     selectedTeam,
@@ -135,23 +132,22 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     ),
   });
 
-  // Handle bulk profile selection
   const handleBulkProfileSelect = useCallback(
     (allProfileIds: string[], isSelected: boolean) => {
       if (isSelected) {
-        // Add all profiles to first table
-        const firstTable = dropTables[0];
-        if (firstTable) {
+        const selectedTable = dropTables.find(
+          (table) => table.id === selectedTableId,
+        );
+        if (selectedTable) {
           const profilesToAdd = allProfileIds.filter(
-            (id) => !firstTable.profiles.includes(id),
+            (id) => !selectedTable.profiles.includes(id),
           );
-          handleUpdateTableProfiles(firstTable.id, [
-            ...firstTable.profiles,
+          handleUpdateTableProfiles(selectedTableId, [
+            ...selectedTable.profiles,
             ...profilesToAdd,
           ]);
         }
       } else {
-        // Remove all profiles from all tables
         dropTables.forEach((table) => {
           const updatedProfiles = table.profiles.filter(
             (id) => !allProfileIds.includes(id),
@@ -160,10 +156,9 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
         });
       }
     },
-    [dropTables, handleUpdateTableProfiles],
+    [dropTables, selectedTableId, handleUpdateTableProfiles],
   );
 
-  // Navigation utilities
   const resetTableState = useCallback(() => {
     setSorting([]);
     setColumnFilters([]);
@@ -198,8 +193,9 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     clearStorage();
   }, [handleClearSelections, clearStorage]);
 
-  // Table configuration
-  const getTableData = useCallback(() => {
+  type TableData = ProfileWithDetailedTeams | TeamWithPopulatedCompany;
+
+  const getTableData = useCallback((): TableData[] => {
     if (groupingMode === "profiles") {
       return allProfilesData;
     } else if (view === "teams") {
@@ -218,19 +214,23 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     profilesByTeam,
   ]);
 
-  const data = getTableData();
-  const columns = React.useMemo(() => {
+  const { data, columns } = React.useMemo(() => {
     if (groupingMode === "profiles" || view === "profiles") {
-      return createProfileColumns(
+      const profileData = getTableData() as ProfileWithDetailedTeams[];
+      const profileColumns = createProfileColumns(
         dropTables,
         handleProfileCheck,
         handleBulkProfileSelect,
       );
+      return { data: profileData, columns: profileColumns };
+    } else {
+      const teamData = getTableData() as TeamWithPopulatedCompany[];
+      return { data: teamData, columns: teamColumns };
     }
-    return teamColumns;
   }, [
     groupingMode,
     view,
+    getTableData,
     dropTables,
     handleProfileCheck,
     handleBulkProfileSelect,
@@ -252,18 +252,19 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
       columnVisibility,
       rowSelection:
         view === "profiles" || groupingMode === "profiles"
-          ? data.reduce((acc, profile, index) => {
-              const isSelected = dropTables.some((table) =>
-                table.profiles.includes(profile.uuid),
-              );
-              acc[index] = isSelected;
-              return acc;
-            }, {} as RowSelectionState)
+          ? (data as ProfileWithDetailedTeams[]).reduce(
+              (acc, profile, index) => {
+                acc[index] = dropTables.some((table) =>
+                  table.profiles.includes(profile.uuid),
+                );
+                return acc;
+              },
+              {} as RowSelectionState,
+            )
           : {},
     },
   });
 
-  // Loading and error states
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-48">
@@ -289,7 +290,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
         onDragCancel={handleDragCancel}
         collisionDetection={pointerWithin}
       >
-        {/* Left Panel - Data Table */}
         <div className="rounded-lg md:w-3/5 w-full">
           <DragTable
             view={view}
@@ -313,9 +313,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
           />
         </div>
 
-        {/* Right Panel - Profile Tables Manager */}
         <div className="rounded-lg md:w-2/5 w-full">
-          {/* Header Controls */}
           <div className="flex w-full items-center justify-end py-4 gap-2">
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
@@ -372,7 +370,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
             </TooltipProvider>
           </div>
 
-          {/* Profile Tables */}
           <ProfileTablesManager
             profileIdentifierTables={dropTables}
             onRemoveTable={handleRemoveTable}
@@ -386,7 +383,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
             }}
           />
 
-          {/* Footer Controls */}
           <div className="flex justify-end pt-4 gap-2">
             <Button
               variant="outline"
@@ -408,7 +404,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
           </div>
         </div>
 
-        {/* Drag Overlay */}
         <DragOverlay>
           {activeDragProfile ? (
             <DraggedProfilePreview profile={activeDragProfile} />

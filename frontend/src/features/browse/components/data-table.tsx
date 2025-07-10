@@ -52,16 +52,18 @@ import {
 } from "@/src/components/shadcn-ui/alert-dialog";
 import { GoSearch, GoFilter } from "react-icons/go";
 import { SanityDocument } from "next-sanity";
+import { UserSanity } from "@/src/lib/entities/user";
 import {
   getAllProfiles,
   getProfilesFromUserTeams,
-} from "@/src/lib/utils/sanityApi/profileRequests";
+} from "@/src/lib/data/profiles";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 interface DataTableProps<TData, TValue> {
   teamColumns: ColumnDef<TData, TValue>[];
   profileColumns: ColumnDef<TData, TValue>[];
   teamsData: TData[];
-  userProfileData: SanityDocument;
+  userProfileData: UserSanity;
 }
 
 // Define the groups options
@@ -86,9 +88,11 @@ export function DataTable<TData, TValue>({
   const [selectedTeam, setSelectedTeam] = React.useState<SanityDocument | null>(
     null,
   );
-  const [profilesData, setProfilesData] = React.useState<SanityDocument[]>([]);
+  const [profilesData, setProfilesData] = React.useState<
+    ProfileWithDetailedTeams[]
+  >([]);
   const [allProfilesData, setAllProfilesData] = React.useState<
-    SanityDocument[]
+    ProfileWithDetailedTeams[]
   >([]);
   const [loadingProfiles, setLoadingProfiles] = React.useState(false);
 
@@ -116,7 +120,7 @@ export function DataTable<TData, TValue>({
         team.slug,
       ]);
       setSelectedTeam(team);
-      setProfilesData(profiles.teamProfiles);
+      setProfilesData(profiles?.teamProfiles ?? []);
       setCurrentView("profiles");
       resetTableState();
     } catch (error) {

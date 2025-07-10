@@ -8,19 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/shadcn-ui/table";
-import { SanityDocument } from "next-sanity";
 import { useDroppable } from "@dnd-kit/core";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { GoX } from "react-icons/go";
 import defaultAvatar from "@/public/images/default-avatar.png";
-import { ProfileTable } from "./drop-table-manager";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 interface ProfileDropTableProps {
-  selectedProfilesData: SanityDocument[];
+  selectedProfilesData: ProfileWithDetailedTeams[];
   droppableId: string;
-  onProfilesChange?: (profiles: SanityDocument[]) => void;
+  onProfilesChange?: (profiles: ProfileWithDetailedTeams[]) => void;
   setSelectedTableId: (profileId: string) => void;
-  table: ProfileTable;
+  table: ProfileIdentifierTable;
   isSelectedTable: boolean;
 }
 

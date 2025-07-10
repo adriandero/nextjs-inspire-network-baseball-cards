@@ -29,21 +29,21 @@ import {
   flexRender,
   type Table as ReactTable,
 } from "@tanstack/react-table";
-import { SanityDocument } from "next-sanity";
 import { useDraggable } from "@dnd-kit/core";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 interface RenderTableProps {
   view: "teams" | "profiles";
   groupingMode: "teams" | "profiles";
   selectedTeamName: string;
-  table: ReactTable<SanityDocument>;
+  table: ReactTable<ProfileWithDetailedTeams>;
   searchInputRef: RefObject<HTMLInputElement>;
   handleBackToTeams: () => void;
   handleTeamClick: (teamSlug: string, teamName: string) => void;
   handleGroupingChange: (mode: "teams" | "profiles") => void;
   handleOneWayProfileCheck: (uuid: string) => void;
   handleProfileCheck: (uuid: string) => void;
-  columns: ColumnDef<SanityDocument>[];
+  columns: ColumnDef<ProfileWithDetailedTeams>[];
   isLoadingProfiles?: boolean;
 }
 
@@ -179,7 +179,7 @@ const DragTable: React.FC<RenderTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -209,14 +209,13 @@ const DragTable: React.FC<RenderTableProps> = ({
                   );
                 }
 
-                // For teams view in teams mode, keep original clickable behavior
                 return (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
                       if (shouldAllowRowClick) {
-                        const team = row.original as SanityDocument;
+                        const team = row.original;
                         handleTeamClick(team.slug || team._id, team.name);
                       }
                     }}
@@ -226,7 +225,7 @@ const DragTable: React.FC<RenderTableProps> = ({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}

@@ -2,11 +2,11 @@ import { IconType } from "react-icons";
 
 export default function CardHeader({
   title,
-  icon: Icon, // Use a capitalized name for the icon to signify it’s a React component
+  icon: Icon,
   iconStrokeWidth,
 }: {
   title: string;
-  icon: IconType; // This ensures proper typing for the icon
+  icon: IconType;
   iconStrokeWidth: number;
 }): React.JSX.Element {
   return (
