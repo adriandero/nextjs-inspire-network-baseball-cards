@@ -45,7 +45,6 @@ const DragTable: React.FC<DragTableProps> = ({
 }) => {
   const isShowingProfiles = groupingMode === "profiles" || view === "profiles";
 
-  // Properly typed row renderers using useCallback
   const renderProfileRow = useCallback(
     (row: Row<ProfileWithDetailedTeams>) => (
       <DraggableProfileRow

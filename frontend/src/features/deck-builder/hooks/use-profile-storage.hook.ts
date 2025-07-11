@@ -6,16 +6,12 @@ const STORAGE_KEY = "profileSelector_data";
 
 export interface StorageData {
   profileTables?: ProfileIdentifierTable[];
-  selectedTeam?: string | null;
-  selectedTeamName?: string;
   selectedType?: CompareTypes;
   groupingMode?: "teams" | "profiles";
 }
 
 interface UseProfileStorageProps {
   profileTables: ProfileIdentifierTable[];
-  selectedTeam: string | null;
-  selectedTeamName: string;
   selectedType: CompareTypes;
   groupingMode: "teams" | "profiles";
   onRestore: (data: StorageData) => void;
@@ -23,43 +19,37 @@ interface UseProfileStorageProps {
 
 export function useProfileStorageHook({
   profileTables,
-  selectedTeam,
-  selectedTeamName,
   selectedType,
   groupingMode,
   onRestore,
 }: UseProfileStorageProps) {
   useEffect(() => {
-    if (
-      profileTables.some((table) => table.profiles.length > 0) ||
-      selectedTeam
-    ) {
+    if (profileTables.some((table) => table.profiles.length > 0)) {
       const dataToSave: StorageData = {
         profileTables,
-        selectedTeam,
-        selectedTeamName,
         selectedType,
         groupingMode,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }
-  }, [
-    profileTables,
-    selectedTeam,
-    selectedTeamName,
-    selectedType,
-    groupingMode,
-  ]);
+  }, [profileTables, selectedType, groupingMode]);
 
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
 
     if (savedData) {
       try {
-        const parsedData: StorageData = JSON.parse(savedData);
-        onRestore(parsedData);
+        const parsedData = JSON.parse(savedData);
+
+        const cleanedData: StorageData = {
+          profileTables: parsedData.profileTables,
+          selectedType: parsedData.selectedType,
+          groupingMode: parsedData.groupingMode,
+        };
+
+        onRestore(cleanedData);
       } catch (e) {
-        console.error("Error restoring saved TUG Card selection:", e);
+        console.error("Error restoring saved profile selection:", e);
         localStorage.removeItem(STORAGE_KEY);
       }
     }

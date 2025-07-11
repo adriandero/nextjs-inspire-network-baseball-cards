@@ -1,19 +1,18 @@
+
 import { useState, useCallback } from "react";
 import { CompareTypes } from "@/src/features/deck-builder/entities/compare-types";
 
 type ViewType = "teams" | "profiles";
 
 interface StorageData {
-  selectedTeam?: string | null;
-  selectedTeamName?: string;
   selectedType?: CompareTypes;
   groupingMode?: "teams" | "profiles";
 }
 
-export function useViewState() {
-  const [view, setView] = useState<ViewType>("teams");
+export function useDragTableView() {
+  const [view, setView] = useState<ViewType>("profiles");
   const [groupingMode, setGroupingMode] = useState<"teams" | "profiles">(
-    "teams"
+    "profiles",
   );
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [selectedTeamName, setSelectedTeamName] = useState<string>("");
@@ -41,7 +40,7 @@ export function useViewState() {
         setView("profiles");
       }
     },
-    [groupingMode]
+    [groupingMode],
   );
 
   const handleBackToTeams = useCallback(() => {
@@ -53,12 +52,6 @@ export function useViewState() {
   }, [groupingMode]);
 
   const restoreViewState = useCallback((data: StorageData) => {
-    if (data.selectedTeam) {
-      setSelectedTeam(data.selectedTeam);
-      setSelectedTeamName(data.selectedTeamName || "");
-      setView("profiles");
-    }
-
     if (data.selectedType) {
       setSelectedType(data.selectedType);
     }
@@ -67,8 +60,13 @@ export function useViewState() {
       setGroupingMode(data.groupingMode);
       if (data.groupingMode === "profiles") {
         setView("profiles");
+      } else {
+        setView("teams");
       }
     }
+
+    setSelectedTeam(null);
+    setSelectedTeamName("");
   }, []);
 
   return {

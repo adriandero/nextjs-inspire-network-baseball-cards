@@ -37,7 +37,6 @@ import {
 
 import { cn } from "@/src/lib/utils";
 import { useDragTableData } from "@/src/features/deck-builder/hooks/use-drag-table-data.hook";
-import { useViewState } from "../hooks/use-view-state.hook";
 import { useDropTables } from "@/src/features/deck-builder/hooks/use-drop-tables.hook";
 import { useDragAndDropHook } from "@/src/features/deck-builder/hooks/use-drag-and-drop.hook";
 import { useProfileStorageHook } from "@/src/features/deck-builder/hooks/use-profile-storage.hook";
@@ -55,6 +54,7 @@ import { UserSanity } from "@/src/lib/entities/user";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { useDragTableView } from "@/src/features/deck-builder/hooks/use-drag-table-view.hook";
 
 interface TeamProfileSelectorProps {
   userProfileData: UserSanity;
@@ -173,7 +173,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     handleTeamClick,
     handleBackToTeams,
     restoreViewState,
-  } = useViewState();
+  } = useDragTableView();
 
   const {
     dropTables,
@@ -204,8 +204,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
 
   const { clearStorage } = useProfileStorageHook({
     profileTables: dropTables,
-    selectedTeam,
-    selectedTeamName,
     selectedType,
     groupingMode,
     onRestore: useCallback(
