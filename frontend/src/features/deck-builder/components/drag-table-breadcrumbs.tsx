@@ -37,7 +37,7 @@ export const DragTableBreadcrumbs: React.FC<TableBreadcrumbsProps> = ({
       return (
         <>
           <BreadcrumbItem>
-            <BreadcrumbLink onClick={onBackToTeams} className="cursor-pointer">
+            <BreadcrumbLink onClick={onBackToTeams} className="">
               All Teams
             </BreadcrumbLink>
           </BreadcrumbItem>

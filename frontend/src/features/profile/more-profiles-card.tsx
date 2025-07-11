@@ -42,7 +42,7 @@ export default function MoreProfilesCard({
             return (
               <div className="pt-6" key={index}>
                 <div onClick={() => handleProfileRedirect(profile?.uuid)}>
-                  <div className="flex flex-row items-center gap-4 cursor-pointer overflow-hidden">
+                  <div className="flex flex-row items-center gap-4  overflow-hidden">
                     <Avatar className="block w-12 h-12 min-w-12 rounded-full ">
                       <AvatarImage
                         src={
@@ -86,7 +86,7 @@ export default function MoreProfilesCard({
           No Results.
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <GoInfo className="flex self-center cursor-pointer" />
+              <GoInfo className="flex self-center " />
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

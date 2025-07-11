@@ -37,10 +37,7 @@ export function Breadcrumbs({
       return (
         <>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              onClick={onReturnToTeams}
-              className="cursor-pointer"
-            >
+            <BreadcrumbLink onClick={onReturnToTeams} className="">
               All Teams
             </BreadcrumbLink>
           </BreadcrumbItem>

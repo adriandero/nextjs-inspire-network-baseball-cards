@@ -20,7 +20,7 @@ const NewGroupDropZone: React.FC<NewGroupDropZoneProps> = ({
         border-2 border-dashed rounded-md 
         ${isOver ? "border-primary bg-primary/10" : "border-gray-300"} 
         h-24 flex items-center justify-center transition-colors
-        cursor-pointer
+        
       `}
     ></div>
   );

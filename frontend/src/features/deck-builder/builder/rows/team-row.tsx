@@ -27,7 +27,7 @@ export const TeamRow: React.FC<TeamRowProps> = ({
       key={row.id}
       data-state={row.getIsSelected() && "selected"}
       onClick={handleClick}
-      className={isClickable ? "cursor-pointer hover:bg-primary/5" : ""}
+      className={isClickable ? " hover:bg-primary/5" : ""}
     >
       {row.getVisibleCells().map((cell) => (
         <TableCell key={cell.id}>

@@ -28,6 +28,7 @@ export function useProfileComparison(groupedProfiles: string | null) {
             return { ...group, profiles: profileObjects };
           }),
         );
+        console.log(completeTables)
         setCompleteProfileTables(completeTables);
       } catch (err) {
         setError(

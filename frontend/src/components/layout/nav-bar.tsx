@@ -58,7 +58,7 @@ export default function NavBar({
             width={70}
             height={150}
             alt="Company Logo"
-            className="cursor-pointer"
+            className=""
           />
         </Link>
 

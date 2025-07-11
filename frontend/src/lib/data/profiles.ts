@@ -79,6 +79,7 @@ export async function getProfilesByUuids(
   if (!uuids.length) return [];
 
   const query = `*[ _type == "profile" && uuid in $uuids && !(_id in path('drafts.**'))]{
+    ...,
     _id,
     _type,
     name,

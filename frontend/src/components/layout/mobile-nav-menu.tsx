@@ -43,7 +43,7 @@ export default function MobileNavMenu({
         <FiMenu
           size={32}
           strokeWidth="1.5"
-          className={`text-white w-fit ml-4 !min-h-8 !min-w-8   hover:text-primary duration-200 cursor-pointer ${className}`}
+          className={`text-white w-fit ml-4 !min-h-8 !min-w-8   hover:text-primary duration-200  ${className}`}
         />
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px]">

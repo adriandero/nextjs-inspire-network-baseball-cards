@@ -12,7 +12,26 @@ export interface Profile {
   uuid: string;
   slug: string;
   jobRole: string[];
+  values?: string[];
   profileImage?: SanityAsset;
+  workingGenius?: {
+    title?: string;
+    widget?: {
+      wonder?: string;
+      invention?: string;
+      discernment?: string;
+      galvanizing?: string;
+      enablement?: string;
+      tenacity?: string;
+    };
+  };
+  principleYouArchetype?: string[];
+  kolbeStrengths?: {
+    factFinder?: number;
+    followThru?: number;
+    quickStart?: number;
+    implementer?: number;
+  };
 }
 
 export interface ProfileWithBasicTeams extends Profile {

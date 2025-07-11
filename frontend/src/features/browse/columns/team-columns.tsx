@@ -22,7 +22,7 @@ export const teamColumns: ColumnDef<TeamWithPopulatedCompany>[] = [
     cell: ({ row }) => {
       const teamName = row.original.name;
       return (
-        <div className="flex flex-row items-center cursor-pointer ">
+        <div className="flex flex-row items-center  ">
           <p className="font-bold text-base">{teamName}</p>
         </div>
       );

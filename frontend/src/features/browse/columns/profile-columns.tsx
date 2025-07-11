@@ -44,7 +44,7 @@ export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
 
       return (
         <div
-          className="flex flex-row items-center gap-4 cursor-pointer"
+          className="flex flex-row items-center gap-4 "
           onClick={() => {
             return redirect(`/tugcards/${profileUuid}`);
           }}

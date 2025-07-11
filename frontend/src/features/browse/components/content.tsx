@@ -49,7 +49,7 @@ export function Content<TData>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 );
@@ -74,7 +74,7 @@ export function Content<TData>({
                     onRowClick(row.original);
                   }
                 }}
-                className={allowRowClick ? "cursor-pointer" : ""}
+                className={allowRowClick ? "" : ""}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -91,7 +91,7 @@ export function Content<TData>({
                   {!hasData ? (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <GoInfo className="flex self-center cursor-pointer" />
+                        <GoInfo className="flex self-center " />
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
