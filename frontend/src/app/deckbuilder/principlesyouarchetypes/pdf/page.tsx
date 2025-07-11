@@ -1,123 +1,39 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
-import Image from "next/image";
-import INTMLogo from "@/public/images/in-tug-card-logo.png";
 import PrinciplesYouArchetypeTable from "@/src/features/deck-builder/data-tables/principles-you-archetypes-table";
-import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
-import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
+import { PDFLayout } from "@/src/components/layout/pdf-layout";
+import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
   const showJobRoleParam = searchParams.get("showJobRole");
-  const showJobRole = showJobRoleParam === "true"; 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [completeProfileTables, setCompleteProfileTables] = useState<
-    ProfileTable[]
-  >([]);
-  useEffect(() => {
-    async function fetchProfiles() {
-      try {
-        setIsLoading(true);
+  const showJobRole = showJobRoleParam === "true";
 
-        if (groupedProfiles) {
-          const tables = decodeURLToProfileTables(groupedProfiles);
-
-          const completeTablesPromises = tables.map(async (group) => {
-            if (group.profiles.length > 0) {
-              const profileObjects = await getProfilesByUuids(group.profiles);
-              return {
-                id: group.id,
-                name: group.name,
-                profiles: profileObjects,
-              };
-            }
-
-            return {
-              id: group.id,
-              name: group.name,
-              profiles: [],
-            };
-          });
-
-          const completeTables = await Promise.all(completeTablesPromises);
-          setCompleteProfileTables(completeTables);
-        }
-
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-        console.error("Error loading TUG Cards:", err);
-      }
-    }
-
-    fetchProfiles();
-
-    const checkIfReady = setInterval(() => {
-      if (!isLoading) {
-        document.body.setAttribute("data-render-ready", "true");
-        clearInterval(checkIfReady);
-      }
-    }, 100);
-
-    return () => clearInterval(checkIfReady);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [groupedProfiles]);
-
-  function decodeURLToProfileTables(paramString: string): ProfileIdentifierTable[] {
-    if (!paramString) return [];
-
-    return paramString.split(";").map((groupString) => {
-      const [nameEncoded, id, profilesString] = groupString.split(":");
-      console.log(nameEncoded, id, profilesString);
-      const name = decodeURIComponent(nameEncoded);
-      const profiles = profilesString ? profilesString.split(",") : [];
-
-      return {
-        id,
-        name,
-        profiles,
-      };
-    });
-  }
-
-  const currentDate = new Date().toLocaleDateString("en-US", {
-    month: "numeric",
-    year: "numeric",
-  });
+  const { isLoading, completeProfileTables, error } =
+    useProfileComparison(groupedProfiles);
 
   return (
-    <div className="px-6 py-10 print:p-0 gap-4 flex flex-col max-w-[762px] w-[762px] max-h-[1123px] h-[1123px]">
-      <div className="flex items-center text-center gap-4">
-        <h1 className="text-2xl font-bold">PrinciplesYou Archetypes</h1>
-        <span className="text-base ml-auto text-accent-foreground font-bold">
-          {currentDate}
-        </span>
-        <Image src={INTMLogo} width={70} height={150} alt="Company Logo" />
-      </div>
-
-      {isLoading ? (
-        <div>Loading TUG Cards...</div>
-      ) : completeProfileTables.length === 0 ||
-      completeProfileTables.every((table) => table.profiles.length === 0) ? (
-        <div>No TUG Cards found. Please select TUG Cards to compare.</div>
-      ) : (
-        completeProfileTables.map((table) => (
-          <div key={table.id} className="flex flex-col gap-4 ">
-            {completeProfileTables.length > 1 && (
-              <h2 className="text-base font-semibold">{table.name}</h2>
-            )}
-            <PrinciplesYouArchetypeTable
-              profiles={table.profiles}
-              optimizedImages={true}
-              showJobRole={showJobRole}
-            />
-          </div>
-        ))
-      )}
-    </div>
+    <PDFLayout
+      title="PrinciplesYou Archetypes"
+      isLoading={isLoading}
+      error={error}
+      completeProfileTables={completeProfileTables}
+    >
+      {completeProfileTables.map((table) => (
+        <div key={table.id} className="flex flex-col gap-4">
+          {completeProfileTables.length > 1 && (
+            <h2 className="text-base font-semibold">{table.name}</h2>
+          )}
+          <PrinciplesYouArchetypeTable
+            profiles={table.profiles}
+            optimizedImages={true}
+            showJobRole={showJobRole}
+          />
+        </div>
+      ))}
+    </PDFLayout>
   );
 }
 

@@ -1,7 +1,7 @@
-import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import { useEffect, useState } from "react";
 import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
 import { parseProfileTablesFromURL } from "@/src/lib/utils/profile-table-utils";
+import { getProfilesByUuids } from "@/src/lib/data/profiles";
 
 export function useProfileComparison(groupedProfiles: string | null) {
   const [completeProfileTables, setCompleteProfileTables] = useState<

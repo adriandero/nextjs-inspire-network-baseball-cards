@@ -5,7 +5,6 @@ import { auth0 } from "@/src/lib/auth0";
 import { redirect } from "next/navigation";
 import { teamColumns } from "@/src/features/browse/columns/team-columns";
 import { profileColumns } from "@/src/features/browse/columns/profile-columns";
-import { getTeamsForUser } from "@/src/lib/data/teams";
 import { getUserSanity } from "@/src/lib/data/users";
 
 export interface Team {

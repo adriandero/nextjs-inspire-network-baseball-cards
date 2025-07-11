@@ -1,8 +1,3 @@
-import {
-  getProfileByUuid,
-  getProfilesByTeamsWithoutSpecifiedProfile,
-} from "@/src/lib/utils/sanityApi/profileRequests";
-
 import BackNavBar from "@/src/components/layout/back-nav-bar";
 import Banner from "@/src/features/profile/banner";
 import ValuesCard from "@/src/features/profile/values-card";
@@ -17,6 +12,7 @@ import { SanityDocument } from "next-sanity";
 import { auth0 } from "@/src/lib/auth0";
 import { redirect } from "next/navigation";
 import { getUserSanity } from "@/src/lib/data/users";
+import { getProfileByUuid, getTeammateProfiles } from "@/src/lib/data/profiles";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -36,7 +32,7 @@ export default async function TugPage({
   const userProfileData = await getUserSanity(session?.user);
 
   const moreProfiles: SanityDocument[] =
-    await getProfilesByTeamsWithoutSpecifiedProfile(uuid);
+    await getTeammateProfiles(uuid);
 
   if (!userProfileData) {
     return (

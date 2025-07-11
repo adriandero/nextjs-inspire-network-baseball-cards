@@ -1,4 +1,5 @@
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { SanityDocument } from "next-sanity";
 
 export function parseProfileTablesFromURL(
   paramString: string,
@@ -47,4 +48,28 @@ export function toggleProfileInTable(
   return hasProfile
     ? removeProfileFromTable(table, profileId)
     : addProfileToTable(table, profileId);
+}
+
+/**
+ * Transforms profile names to show first name + last initial
+ * e.g., "John Smith" becomes "John S."
+ */
+export function shortNamesOfProfiles(profiles: SanityDocument[]) {
+  return profiles.map((profile) => {
+    const nameParts = profile.name.split(" ");
+
+    if (nameParts.length === 1) {
+      // Handle single names
+      return profile;
+    }
+
+    const firstName = nameParts.slice(0, -1).join(" ");
+    const lastInitial = nameParts[nameParts.length - 1][0] + ".";
+    const transformedName = `${firstName} ${lastInitial}`;
+
+    return {
+      ...profile,
+      name: transformedName,
+    };
+  });
 }

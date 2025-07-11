@@ -1,4 +1,3 @@
-import { getProfileByUuid } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/public/images/in-tug-card-logo.png";
 
@@ -7,6 +6,7 @@ import PdfKolbeStrengthsCard from "@/src/features/profile-pdf/pdf-kolbe-strength
 import PdfPrinciplesYouCard from "@/src/features/profile-pdf/pdf-principles-you-card";
 import PdfValuesCard from "@/src/features/profile-pdf/pdf-values-card";
 import PdfWorkingGeniusCard from "@/src/features/profile-pdf/pdf-working-genius-card";
+import { getProfileByUuid } from "@/src/lib/data/profiles";
 
 type tParams = Promise<{ uuid: string }>;
 

@@ -19,7 +19,6 @@ import { Toolbar } from "@/src/features/browse/components/toolbar";
 import { Breadcrumbs } from "@/src/features/browse/components/breadcrumbs";
 import { Content } from "@/src/features/browse/components/content";
 import {
-  TeamWithDetails,
   TeamWithPopulatedCompany,
 } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
@@ -76,14 +75,13 @@ export function DataTable({
     useDataTableConfig({
       teamColumns,
       profileColumns,
-      teamsData, // This comes from the hook now
+      teamsData,
       profilesData: profilesData as ProfileWithDetailedTeams[],
       allProfilesData: allProfilesData as ProfileWithDetailedTeams[],
       groupingMode,
       currentView,
     });
 
-  // Create table - types are now properly handled by the hook
   const table = useReactTable({
     data,
     columns,
@@ -156,11 +154,9 @@ export function DataTable({
     fetchTeamsData,
   ]);
 
-  // Type-safe row click handler with proper type guards
   const handleRowClick = React.useCallback(
     (row: TableData) => {
       if (allowRowClick) {
-        // Type guard: teams have '_type: team' and 'slug', profiles have 'uuid'
         if (
           "_type" in row &&
           row._type === "team" &&
