@@ -7,7 +7,6 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ uuid: string }> }
 ) {
-  // const session = await auth0.getSession();
   const uuid = (await context.params).uuid;
   const browser = await puppeteer.launch({
     args: chromium.args,
@@ -16,9 +15,6 @@ export async function GET(
     headless: true,
   });
   const page = await browser.newPage();
-  // await page.setExtraHTTPHeaders({
-  //   Authorization: Bearer ${session?.tokenSet.accessToken},
-  // });
   await page.goto(process.env.BASE_URL + `/tugcards/${uuid}/pdf`, {
     waitUntil: "networkidle2",
   });
@@ -47,4 +43,3 @@ export async function GET(
     },
   });
 }
-// create a new browser where i need to log in...
