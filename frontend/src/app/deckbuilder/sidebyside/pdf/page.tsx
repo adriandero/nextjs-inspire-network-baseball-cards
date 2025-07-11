@@ -4,19 +4,18 @@ import { useSearchParams } from "next/navigation";
 import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
 import Image from "next/image";
 import INTMLogo from "@/public/images/in-tug-card-logo.png";
-import { ProfileTable } from "@/src/features/deck-builder/builder/drop-table-manager";
-import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
 import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import { SanityDocument } from "next-sanity";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
-    CompleteProfileTable[]
+    ProfileTable[]
   >([]);
-  // TODO: hook?
   const [baseFontSize, setBaseFontSize] = useState("text-base");
   const [headingFontSize, setHeadingFontSize] = useState("text-3xl");
 
@@ -101,7 +100,7 @@ function ProfileComparisonContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupedProfiles]);
 
-  function decodeURLToProfileTables(paramString: string): ProfileTable[] {
+  function decodeURLToProfileTables(paramString: string): ProfileIdentifierTable[] {
     if (!paramString) return [];
 
     return paramString.split(";").map((groupString) => {

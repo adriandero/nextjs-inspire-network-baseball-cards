@@ -9,7 +9,7 @@ interface UseDragAndDropProps {
   profileTables: any[];
 }
 
-export function useDragAndDrop({
+export function useDragAndDropHook({
   onCreateTableWithProfile,
   onUpdateTableProfiles,
   profileTables,

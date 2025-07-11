@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProfilesByUuids } from "@/src/lib/utils/sanityApi/profileRequests";
+
 import Image from "next/image";
 import INTMLogo from "@/public/images/in-tug-card-logo.png";
-import { ProfileTable } from "@/src/features/deck-builder/builder/drop-table-manager";
-import { CompleteProfileTable } from "@/src/features/deck-builder/profile-comparison";
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
+import { getProfilesByUuids } from "@/src/lib/data/profiles";
+import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
@@ -15,7 +16,7 @@ function ProfileComparisonContent() {
   const showJobRole = showJobRoleParam === "true";
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
-    CompleteProfileTable[]
+    ProfileTable[]
   >([]);
   useEffect(() => {
     async function fetchProfiles() {
@@ -66,7 +67,7 @@ function ProfileComparisonContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupedProfiles]);
 
-  function decodeURLToProfileTables(paramString: string): ProfileTable[] {
+  function decodeURLToProfileTables(paramString: string): ProfileIdentifierTable[] {
     if (!paramString) return [];
 
     return paramString.split(";").map((groupString) => {

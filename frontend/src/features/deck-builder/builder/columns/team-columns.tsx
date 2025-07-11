@@ -1,9 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { ArrowUpDown } from "lucide-react";
-import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
+import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 
-export const teamColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
+export const teamColumns: ColumnDef<TeamWithPopulatedCompany>[] = [
   {
     accessorKey: "name",
     sortingFn: "alphanumeric",

@@ -21,7 +21,7 @@ interface UseProfileStorageProps {
   onRestore: (data: StorageData) => void;
 }
 
-export function useProfileStorage({
+export function useProfileStorageHook({
   profileTables,
   selectedTeam,
   selectedTeamName,

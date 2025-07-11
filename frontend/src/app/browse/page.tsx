@@ -40,8 +40,6 @@ export default async function BrowsePage() {
     );
   }
 
-  const teamsData = await getTeamsForUser(userProfileData);
-
   return (
     <div className="w-full h-screen max-w-screen-lg">
       <NavBar
@@ -56,7 +54,6 @@ export default async function BrowsePage() {
         <DataTable
           teamColumns={teamColumns}
           profileColumns={profileColumns}
-          teamsData={teamsData}
           userProfileData={userProfileData}
         />
       </main>

@@ -1,11 +1,11 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { SanityDocument } from "next-sanity";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/src/components/shadcn-ui/button";
+import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 
-export const teamColumns: ColumnDef<SanityDocument>[] = [
+export const teamColumns: ColumnDef<TeamWithPopulatedCompany>[] = [
   {
     accessorKey: "name",
     footer: "Name" as const,

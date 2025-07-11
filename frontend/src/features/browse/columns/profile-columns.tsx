@@ -16,9 +16,10 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
 
-import { SanityDocument } from "next-sanity";
+import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
+import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 
-export const profileColumns: ColumnDef<SanityDocument>[] = [
+export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
   {
     accessorKey: "name",
     footer: "Name" as const,
@@ -82,12 +83,14 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
       return (
         <div className="">
           {profileTeams !== null ? (
-            profileTeams.map((team: SanityDocument, index: number) => (
-              <div key={index}>
-                {team.name}
-                {index < profileTeams.length - 1 && ", "}
-              </div>
-            ))
+            profileTeams?.map(
+              (team: TeamWithPopulatedCompany, index: number) => (
+                <div key={index}>
+                  {team.name}
+                  {index < profileTeams.length - 1 && ", "}
+                </div>
+              ),
+            )
           ) : (
             <p className="text-dark3 italic">no team</p>
           )}
@@ -105,20 +108,17 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
     accessorFn: (row) => {
       const teams = row.teams || [];
       const groups = teams
-        .map((team: SanityDocument) => team.groups)
-        .filter((group: string) => group)
-        .filter(
-          (group: string, index: number, arr: string[]) =>
-            arr.indexOf(group) === index
-        );
+        .map((team: TeamWithPopulatedCompany) => team.groups)
+        .filter((group): group is NonNullable<typeof group> => Boolean(group))
+        .filter((group, index, arr) => arr.indexOf(group) === index);
 
       return groups.join(",");
     },
     cell: ({ row }) => {
       const teams = row.original.teams || [];
       const groups = teams
-        .map((team: SanityDocument) => team.groups)
-        .filter((group: string) => group);
+        .map((team: TeamWithPopulatedCompany) => team.groups)
+        .filter((group): group is NonNullable<typeof group> => Boolean(group));
       return groups.join(", ");
     },
 
@@ -127,8 +127,8 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
 
       const teams = row.original.teams || [];
       const profileGroups = teams
-        .map((team: SanityDocument) => team.groups)
-        .filter((group: string) => group);
+        .map((team: TeamWithPopulatedCompany) => team.groups)
+        .filter((group): group is NonNullable<typeof group> => Boolean(group));
 
       return profileGroups.includes(filterValue);
     },
@@ -145,7 +145,7 @@ export const profileColumns: ColumnDef<SanityDocument>[] = [
           <DropdownMenuTrigger asChild className="ml-auto">
             <Button variant="ghost" className="h-8 w-8 p-0 flex">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="ml-2 h-4 w-4" />
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

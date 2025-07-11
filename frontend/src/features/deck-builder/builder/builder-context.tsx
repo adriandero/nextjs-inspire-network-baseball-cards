@@ -39,8 +39,8 @@ import { cn } from "@/src/lib/utils";
 import { useDragTableData } from "@/src/features/deck-builder/hooks/use-drag-table-data.hook";
 import { useViewState } from "../hooks/use-view-state.hook";
 import { useDropTables } from "@/src/features/deck-builder/hooks/use-drop-tables.hook";
-import { useDragAndDrop } from "@/src/features/deck-builder/hooks/use-drag-and-drop";
-import { useProfileStorage } from "@/src/features/deck-builder/hooks/use-profile-storage";
+import { useDragAndDropHook } from "@/src/features/deck-builder/hooks/use-drag-and-drop.hook";
+import { useProfileStorageHook } from "@/src/features/deck-builder/hooks/use-profile-storage.hook";
 import {
   COMPARE_TYPE_OPTIONS,
   CompareTypes,
@@ -54,19 +54,104 @@ import ProfileTablesManager from "@/src/features/deck-builder/builder/drop-table
 import { UserSanity } from "@/src/lib/entities/user";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
 interface TeamProfileSelectorProps {
   userProfileData: UserSanity;
 }
 
+const useProfileTable = (
+  profiles: ProfileWithDetailedTeams[],
+  dropTables: ProfileIdentifierTable[],
+  selectedTableId: string,
+  handleProfileCheck: (profileId: string, tableId: string) => void,
+  handleBulkProfileSelect: (
+    allProfileIds: string[],
+    isSelected: boolean,
+  ) => void,
+) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+  const columns = React.useMemo(
+    () =>
+      createProfileColumns(
+        dropTables,
+        selectedTableId,
+        handleProfileCheck,
+        handleBulkProfileSelect,
+      ),
+    [dropTables, selectedTableId, handleProfileCheck, handleBulkProfileSelect],
+  );
+
+  const table = useReactTable({
+    data: profiles,
+    columns,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    enableRowSelection: true,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection: profiles.reduce((acc, profile, index) => {
+        acc[index] = dropTables.some((table) =>
+          table.profiles.includes(profile.uuid),
+        );
+        return acc;
+      }, {} as RowSelectionState),
+    },
+  });
+
+  const resetState = useCallback(() => {
+    setSorting([]);
+    setColumnFilters([]);
+    setColumnVisibility({});
+  }, []);
+
+  return { table, columns, resetState };
+};
+
+const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+  const table = useReactTable({
+    data: teams,
+    columns: teamColumns,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    enableRowSelection: false,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+    },
+  });
+
+  const resetState = useCallback(() => {
+    setSorting([]);
+    setColumnFilters([]);
+    setColumnVisibility({});
+  }, []);
+
+  return { table, columns: teamColumns, resetState };
+};
+
 const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const {
     teams,
@@ -111,13 +196,13 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
-  } = useDragAndDrop({
+  } = useDragAndDropHook({
     onCreateTableWithProfile: handleCreateTableWithProfile,
     onUpdateTableProfiles: handleUpdateTableProfiles,
     profileTables: dropTables,
   });
 
-  const { clearStorage } = useProfileStorage({
+  const { clearStorage } = useProfileStorageHook({
     profileTables: dropTables,
     selectedTeam,
     selectedTeamName,
@@ -159,11 +244,34 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     [dropTables, selectedTableId, handleUpdateTableProfiles],
   );
 
-  const resetTableState = useCallback(() => {
-    setSorting([]);
-    setColumnFilters([]);
-    setColumnVisibility({});
-  }, []);
+  const getCurrentProfiles = useCallback((): ProfileWithDetailedTeams[] => {
+    if (groupingMode === "profiles") {
+      return allProfilesData;
+    } else if (view === "profiles" && selectedTeam && profilesByTeam?.teams) {
+      return profilesByTeam.teams[selectedTeam] || [];
+    }
+    return [];
+  }, [groupingMode, view, allProfilesData, selectedTeam, profilesByTeam]);
+
+  const getCurrentTeams = useCallback((): TeamWithPopulatedCompany[] => {
+    return view === "teams" ? teams : [];
+  }, [view, teams]);
+
+  const profileTable = useProfileTable(
+    getCurrentProfiles(),
+    dropTables,
+    selectedTableId,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (profileId: string, _tableId: string) => {
+      handleProfileCheck(profileId);
+    },
+    handleBulkProfileSelect,
+  );
+
+  const teamTable = useTeamTable(getCurrentTeams());
+
+  const isShowingProfiles = groupingMode === "profiles" || view === "profiles";
+  const currentTable = isShowingProfiles ? profileTable : teamTable;
 
   const encodeProfileTablesToURL = useCallback((tables: typeof dropTables) => {
     return tables
@@ -192,78 +300,6 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     handleClearSelections();
     clearStorage();
   }, [handleClearSelections, clearStorage]);
-
-  type TableData = ProfileWithDetailedTeams | TeamWithPopulatedCompany;
-
-  const getTableData = useCallback((): TableData[] => {
-    if (groupingMode === "profiles") {
-      return allProfilesData;
-    } else if (view === "teams") {
-      return teams;
-    } else {
-      return selectedTeam && profilesByTeam?.teams
-        ? profilesByTeam.teams[selectedTeam] || []
-        : [];
-    }
-  }, [
-    groupingMode,
-    view,
-    allProfilesData,
-    teams,
-    selectedTeam,
-    profilesByTeam,
-  ]);
-
-  const { data, columns } = React.useMemo(() => {
-    if (groupingMode === "profiles" || view === "profiles") {
-      const profileData = getTableData() as ProfileWithDetailedTeams[];
-      const profileColumns = createProfileColumns(
-        dropTables,
-        handleProfileCheck,
-        handleBulkProfileSelect,
-      );
-      return { data: profileData, columns: profileColumns };
-    } else {
-      const teamData = getTableData() as TeamWithPopulatedCompany[];
-      return { data: teamData, columns: teamColumns };
-    }
-  }, [
-    groupingMode,
-    view,
-    getTableData,
-    dropTables,
-    handleProfileCheck,
-    handleBulkProfileSelect,
-  ]);
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    enableRowSelection: true,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection:
-        view === "profiles" || groupingMode === "profiles"
-          ? (data as ProfileWithDetailedTeams[]).reduce(
-              (acc, profile, index) => {
-                acc[index] = dropTables.some((table) =>
-                  table.profiles.includes(profile.uuid),
-                );
-                return acc;
-              },
-              {} as RowSelectionState,
-            )
-          : {},
-    },
-  });
 
   if (isLoading) {
     return (
@@ -295,18 +331,18 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
             view={view}
             groupingMode={groupingMode}
             selectedTeamName={selectedTeamName}
-            table={table}
+            table={currentTable.table}
             searchInputRef={searchInputRef}
             handleBackToTeams={handleBackToTeams}
             handleTeamClick={(teamSlug: string, teamName: string) => {
               handleTeamClick(teamSlug, teamName);
-              resetTableState();
+              currentTable.resetState();
             }}
             handleGroupingChange={(mode: "teams" | "profiles") => {
               handleGroupingChange(mode);
-              resetTableState();
+              currentTable.resetState();
             }}
-            columns={columns}
+            columns={currentTable.columns}
             isLoadingProfiles={isLoadingProfiles}
             handleOneWayProfileCheck={handleOneWayProfileCheck}
             handleProfileCheck={handleProfileCheck}
@@ -378,9 +414,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
             setSelectedTableId={setSelectedTableId}
             selectedTableId={selectedTableId}
             allProfiles={allProfilesData}
-            onCreateTableWithProfile={function (profileId: string): void {
-              throw new Error("Function not implemented.");
-            }}
+            onCreateTableWithProfile={handleCreateTableWithProfile}
           />
 
           <div className="flex justify-end pt-4 gap-2">

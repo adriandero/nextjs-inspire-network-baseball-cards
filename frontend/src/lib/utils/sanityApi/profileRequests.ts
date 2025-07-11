@@ -213,7 +213,6 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
   const options = { next: { revalidate: 30 } };
   const result = await client.fetch(query, {}, options);
 
-  // Transform the data structure into the desired format
   const profilesByTeam = result.teams.reduce(
     (acc: SanityDocument, team: SanityDocument) => {
       acc[team.slug] = team.profiles;

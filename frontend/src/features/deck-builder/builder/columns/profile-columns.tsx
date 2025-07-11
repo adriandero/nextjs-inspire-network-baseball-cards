@@ -9,7 +9,8 @@ import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 export const createProfileColumns = (
   profileTables: ProfileIdentifierTable[],
-  handleProfileCheck: (profileId: string) => void,
+  selectedTableId: string,
+  handleProfileCheck: (profileId: string, tableId: string) => void,
   onBulkSelect: (allProfileIds: string[], isSelected: boolean) => void,
 ): ColumnDef<ProfileWithDetailedTeams>[] => [
   {
@@ -40,7 +41,9 @@ export const createProfileColumns = (
         checked={profileTables.some((table) =>
           table.profiles.includes(row.original.uuid),
         )}
-        onCheckedChange={() => handleProfileCheck(row.original.uuid)}
+        onCheckedChange={() =>
+          handleProfileCheck(row.original.uuid, selectedTableId)
+        }
         aria-label="Select row"
         onClick={(e) => e.stopPropagation()}
       />
