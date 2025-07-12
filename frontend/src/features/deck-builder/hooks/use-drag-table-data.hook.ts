@@ -81,7 +81,7 @@ export function useDragTableData() {
     };
 
     initializeData();
-  }, []);
+  }, [fetchAllProfiles, fetchGroupedProfiles, fetchTeams]);
 
   return {
     teams,

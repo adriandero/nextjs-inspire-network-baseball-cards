@@ -1,5 +1,5 @@
 import { getProfileByUuid } from "@/src/lib/data/profiles";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   canAccessProfile,
   getAuthorizedUser,
@@ -9,7 +9,7 @@ interface RouteParams {
   params: { uuid: string };
 }
 
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { uuid } = params;
 

@@ -1,8 +1,9 @@
 import { RefObject } from "react";
 import { type Table as ReactTable } from "@tanstack/react-table";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
 interface UseTableControlsProps {
-  table: ReactTable<any>;
+  table: ReactTable<ProfileIdentifierTable>;
   searchInputRef: RefObject<HTMLInputElement>;
 }
 

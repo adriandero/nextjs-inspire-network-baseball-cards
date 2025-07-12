@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useSensors, useSensor, MouseSensor, TouchSensor } from "@dnd-kit/core";
 import { SanityDocument } from "next-sanity";
 import type { DragStartEvent, DragEndEvent } from "@dnd-kit/core";
+import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
 interface UseDragAndDropProps {
   onCreateTableWithProfile: (profileId: string) => void;
   onUpdateTableProfiles: (tableId: string, profiles: string[]) => void;
-  profileTables: any[];
+  profileTables: ProfileIdentifierTable[];
 }
 
 export function useDragAndDropHook({
