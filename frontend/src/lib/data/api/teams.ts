@@ -1,0 +1,100 @@
+import {
+  TeamWithDetails,
+  TeamWithPopulatedCompany,
+  UserTeamsResponse,
+} from "@/src/lib/entities/team";
+
+export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
+  // No user data needed - API route gets it from Auth0 session
+  const response = await fetch("/api/cms/teams/for-user", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // Empty body - server gets user data from session
+    body: JSON.stringify({}),
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Unauthorized - please log in");
+    }
+    throw new Error(
+      `Failed to fetch teams for user: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  const teams = await response.json();
+  return teams || [];
+}
+
+export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
+  // Only admins can access this endpoint
+  const response = await fetch("/api/teams/all");
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Unauthorized - please log in");
+    }
+    if (response.status === 403) {
+      throw new Error("Forbidden - admin access required");
+    }
+    throw new Error(
+      `Failed to fetch all teams: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  const teams = await response.json();
+  return teams || [];
+}
+
+export async function getTeamBySlug(
+  slug: string,
+): Promise<TeamWithDetails | null> {
+  if (!slug) return null;
+
+  const response = await fetch(`/api/cms/teams/${encodeURIComponent(slug)}`);
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Unauthorized - please log in");
+    }
+    if (response.status === 403) {
+      throw new Error("Forbidden - you do not have access to this team");
+    }
+    if (response.status === 404) {
+      return null; // Team not found
+    }
+    throw new Error(
+      `Failed to fetch team by slug: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  const team = await response.json();
+  return team;
+}
+
+export async function getUserTeams(
+  userEmail: string,
+): Promise<UserTeamsResponse | null> {
+  if (!userEmail) return null;
+
+  const response = await fetch(
+    `/api/cms/teams/user/${encodeURIComponent(userEmail)}`,
+  );
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Unauthorized - please log in");
+    }
+    if (response.status === 403) {
+      throw new Error("Forbidden - you can only access your own teams");
+    }
+    throw new Error(
+      `Failed to fetch user teams: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  const userTeams = await response.json();
+  return userTeams;
+}

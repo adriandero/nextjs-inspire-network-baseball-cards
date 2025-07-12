@@ -3,13 +3,13 @@ import { useState, useEffect, useCallback } from "react";
 import {
   getAllProfiles,
   getAllProfilesGroupedByTeam,
-} from "@/src/lib/data/profiles";
+} from "@/src/lib/data/api/profiles";
 import { UserSanity } from "@/src/lib/entities/user";
 import {
   ProfilesByTeam,
   ProfileWithDetailedTeams,
 } from "@/src/lib/entities/profile";
-import { getAllTeams, getUserTeams } from "@/src/lib/data/teams";
+import { getAllTeams, getUserTeams } from "@/src/lib/data/api/teams";
 import {
   TeamWithPopulatedCompany,
   UserTeamsResponse,

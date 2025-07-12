@@ -1,14 +1,12 @@
+// src/features/browse/hooks/use-data-table-data.hook.ts
 import { useState, useCallback } from "react";
-import { UserSanity } from "@/src/lib/entities/user";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
-import {
-  getAllProfiles,
-  getProfilesFromUserTeams,
-} from "@/src/lib/data/profiles";
-import { getTeamsForUser } from "@/src/lib/data/teams";
 
-export function useDataTableData(userProfileData: UserSanity) {
+import { getTeamsForUser } from "@/src/lib/data/api/teams";
+import { getAllProfiles, getTeamProfiles } from "@/src/lib/data/api/profiles";
+
+export function useDataTableData() {
   const [teamsData, setTeamsData] = useState<TeamWithPopulatedCompany[]>([]);
   const [profilesData, setProfilesData] = useState<ProfileWithDetailedTeams[]>(
     [],
@@ -21,10 +19,11 @@ export function useDataTableData(userProfileData: UserSanity) {
 
   const fetchTeamsData = useCallback(async () => {
     if (teamsData.length > 0) return teamsData;
-    
+
     try {
       setLoadingTeams(true);
-      const teams = await getTeamsForUser(userProfileData);
+      const teams = await getTeamsForUser(); // ✅ From teams API
+      console.log(teams)
       setTeamsData(teams || []);
       return teams || [];
     } catch (error) {
@@ -33,15 +32,14 @@ export function useDataTableData(userProfileData: UserSanity) {
     } finally {
       setLoadingTeams(false);
     }
-  }, [userProfileData, teamsData]);
+  }, [teamsData]);
 
   const fetchTeamProfiles = useCallback(
     async (team: TeamWithPopulatedCompany) => {
       try {
         setLoadingProfiles(true);
-        const profiles = await getProfilesFromUserTeams(userProfileData.email, [
-          team.slug,
-        ]);
+        const profiles = await getTeamProfiles(team.slug);
+        console.log(profiles)
         setProfilesData(profiles?.teamProfiles ?? []);
         return profiles?.teamProfiles ?? [];
       } catch (error) {
@@ -51,7 +49,7 @@ export function useDataTableData(userProfileData: UserSanity) {
         setLoadingProfiles(false);
       }
     },
-    [userProfileData.email],
+    [],
   );
 
   const fetchAllProfiles = useCallback(async () => {
@@ -59,6 +57,7 @@ export function useDataTableData(userProfileData: UserSanity) {
 
     try {
       setLoadingProfiles(true);
+      // ✅ This handles admin vs user permissions automatically
       const profiles = await getAllProfiles();
       setAllProfilesData(profiles);
       return profiles;

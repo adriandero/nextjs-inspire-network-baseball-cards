@@ -117,6 +117,7 @@ export async function getTeamBySlug(
   }
 }
 
+// TODO: move this to data/users.ts
 export async function getUserTeams(
   userEmail: string,
 ): Promise<UserTeamsResponse | null> {

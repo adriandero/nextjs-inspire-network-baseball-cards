@@ -53,7 +53,6 @@ export default async function BrowsePage() {
         <DataTable
           teamColumns={teamColumns}
           profileColumns={profileColumns}
-          userProfileData={userProfileData}
         />
       </main>
     </div>

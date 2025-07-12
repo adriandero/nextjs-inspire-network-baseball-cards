@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
-import { getProfilesByUuids } from "@/src/lib/data/profiles";
+import { getProfilesByUuids } from "@/src/lib/data/api/profiles";
 
 interface UseProfileComparisonResult {
   isLoading: boolean;

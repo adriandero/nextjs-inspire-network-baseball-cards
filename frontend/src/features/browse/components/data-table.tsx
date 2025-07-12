@@ -11,7 +11,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { UserSanity } from "@/src/lib/entities/user";
 import { useDataTableConfig } from "@/src/features/browse/hooks/use-data-table-config.hook";
 import { useDataTableData } from "@/src/features/browse/hooks/use-data-table-data.hook";
 import { useDataTableView } from "@/src/features/browse/hooks/use-data-table-view.hook";
@@ -23,19 +22,16 @@ import {
 } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
-// Union type for all possible table data
 type TableData = TeamWithPopulatedCompany | ProfileWithDetailedTeams;
 
 interface DataTableProps {
   teamColumns: ColumnDef<TeamWithPopulatedCompany, unknown>[];
   profileColumns: ColumnDef<ProfileWithDetailedTeams, unknown>[];
-  userProfileData: UserSanity;
 }
 
 export function DataTable({
   teamColumns,
   profileColumns,
-  userProfileData,
 }: DataTableProps) {
   const {
     teamsData,
@@ -46,7 +42,7 @@ export function DataTable({
     fetchTeamsData,
     fetchTeamProfiles,
     fetchAllProfiles,
-  } = useDataTableData(userProfileData);
+  } = useDataTableData();
 
   React.useEffect(() => {
     fetchAllProfiles();
