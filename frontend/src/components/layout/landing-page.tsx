@@ -32,17 +32,13 @@ export default function LandingPage({
         _updatedAt={""}
       />
 
-      {/* Grid Pattern */}
       <div className="px-6 py-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
           <div className="space-y-8">
-            {/* Badge */}
             {/* <div className="inline-block border bg-light2 dark-1 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
               🚀 Powered by Inspire Network
             </div> */}
 
-            {/* Main Headline */}
             <h1 className="text-5xl lg:text-6xl font-black leading-tight">
               <span>Build teams that lead themselves with </span>
               <span className="bg-gradient-to-r from-tertiary to-secondary bg-clip-text text-transparent">
@@ -50,7 +46,6 @@ export default function LandingPage({
               </span>
             </h1>
 
-            {/* Subtitle */}
             <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
               Self-leading teams have great{" "}
               <span className="font-bold text-dark3">people</span> and great{" "}
@@ -60,7 +55,6 @@ export default function LandingPage({
               <span className="font-bold text-dark3">team</span> under pressure.
             </p>
 
-            {/* Action Buttons */}
             <div className="flex flex-col xs:flex-row gap-4">
               <Button
                 className=" text-light1 text-xl h-fit w-fit py-2 px-6 rounded-xl group transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 hover:-translate-y-1 flex items-center justify-center gap-3"
@@ -109,24 +103,23 @@ export default function LandingPage({
             </div>
           </div>
 
-          {/* Right Visual - Phone Mockup */}
           <div className="relative h-[600px] w-full flex items-center justify-center">
-            {/* Background PDF Image - Large */}
-            <div className="relative z-10 r-0 animate-[float_15s_ease-in-out_infinite]">
+            {/* Background PDF Image Container - Now relative */}
+            <div className="relative z-10 animate-[float_15s_ease-in-out_infinite]">
               <Image
                 src={BrittanySamplePDF}
                 alt="TUG Card PDF Sample"
                 className="w-[500px] h-auto object-contain rounded-lg shadow-lg"
               />
-            </div>
 
-            {/* Phone Mockup - Foreground */}
-            <div className="absolute z-20 right-20 bottom-24 animate-[float_8s_ease-in-out_infinite_3s]">
-              <Image
-                src={AllisonSamplePhone}
-                alt="TUG Card Mobile View"
-                className="w-[140px] h-auto rounded-2xl shadow-lg"
-              />
+              {/* Phone Mockup - Now positioned relative to PDF image */}
+              <div className="absolute z-10 right-24 -bottom-12 animate-[float_8s_ease-in-out_infinite_3s]">
+                <Image
+                  src={AllisonSamplePhone}
+                  alt="TUG Card Mobile View"
+                  className="w-[140px] h-auto rounded-2xl shadow-lg"
+                />
+              </div>
             </div>
 
             {/* Custom CSS for floating animation */}
@@ -146,9 +139,12 @@ export default function LandingPage({
       </div>
       {/* Inspire Network Badge */}
       <div className="text-center">
-        <div className="inline-block bg-purple-500/10 border mb-8 border-purple-500/30 text-purple-300 px-6 py-3 rounded-2xl font-semibold">
+        <a
+          href={"https://www.inspirenetworkllc.com/"}
+          className="inline-block bg-purple-500/10 border mb-8 border-purple-500/30 text-purple-300 px-6 py-3 rounded-2xl font-semibold"
+        >
           ⚓ Powered by Inspire Network
-        </div>
+        </a>
       </div>
     </div>
   );
