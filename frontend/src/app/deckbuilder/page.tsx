@@ -51,7 +51,7 @@ export default async function DeckBuilderPage(): Promise<JSX.Element> {
       />
 
       <main className="flex flex-row justify-center">
-        <BuilderContext userProfileData={userProfileData} />
+        <BuilderContext />
       </main>
       <footer className="flex item-center p-8"></footer>
     </div>

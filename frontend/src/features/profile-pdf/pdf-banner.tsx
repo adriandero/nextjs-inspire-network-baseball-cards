@@ -16,7 +16,6 @@ export default function PdfBanner({
   const profilesTeamName = profile?.team?.[0]?.name;
 
   useEffect(() => {
-    // This style will only apply when generating PDFs
     const style = document.createElement("style");
     style.innerHTML = `
       @media print {

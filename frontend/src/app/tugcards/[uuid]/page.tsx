@@ -6,13 +6,15 @@ import WorkingGeniusCard from "@/src/features/profile/working-genius-card";
 import PrinciplesYouCard from "@/src/features/profile/principles-you-card";
 import KolbeStrengthsCard from "@/src/features/profile/kolbe-strengths-card";
 import MobileNavBanner from "@/src/features/profile/mobile-nav-banner";
-
 import DownloadButton from "@/src/features/profile/download-pdf-button";
+
 import { SanityDocument } from "next-sanity";
-import { auth0 } from "@/src/lib/auth0";
 import { redirect } from "next/navigation";
-import { getUserSanity } from "@/src/lib/data/users";
 import { getProfileByUuid, getTeammateProfiles } from "@/src/lib/data/profiles";
+import {
+  getAuthorizedUser,
+  canAccessProfile,
+} from "@/src/lib/auth/permissions";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -22,35 +24,48 @@ export default async function TugPage({
   params: tParams;
 }): Promise<JSX.Element> {
   const { uuid } = await params;
-  const profile = await getProfileByUuid(uuid);
 
-  const session = await auth0.getSession();
-
-  if (!session) {
+  const userProfileData = await getAuthorizedUser();
+  if (!userProfileData) {
     redirect("/auth/login");
   }
-  const userProfileData = await getUserSanity(session?.user);
 
-  const moreProfiles: SanityDocument[] =
-    await getTeammateProfiles(uuid);
-
-  if (!userProfileData) {
+  const profile = await getProfileByUuid(uuid);
+  if (!profile) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
-            User Not Found
+            Profile Not Found
           </h1>
-          <p className="text-gray-600 mb-2">
-            Your account is not found in our system.
-          </p>
           <p className="text-gray-600">
-            Please contact the administrator for assistance.
+            The requested profile could not be found.
           </p>
         </div>
       </div>
     );
   }
+
+  const hasAccess = await canAccessProfile(userProfileData, profile);
+  if (!hasAccess) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-2xl font-semibold mb-4 text-gray-900">
+            Access Denied
+          </h1>
+          <p className="text-gray-600 mb-2">
+            You don&apos;t have permission to view this profile.
+          </p>
+          <p className="text-gray-600">
+            You can only view profiles from your teams.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const moreProfiles: SanityDocument[] = await getTeammateProfiles(uuid);
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">
@@ -64,7 +79,7 @@ export default async function TugPage({
         _updatedAt={""}
       />
       <BackNavBar
-        userProfileData={userProfileData.profile}
+        userProfileData={userProfileData}
         backwardsNavigationUrl={"/browse/"}
         _id={""}
         _rev={""}

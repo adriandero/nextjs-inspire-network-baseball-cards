@@ -9,7 +9,7 @@ interface FontSizeConfig {
 export function useHeightResponsiveFont(
   isDataReady: boolean,
   maxHeight: number = 1123,
-  checkDelay: number = 1000,
+  checkDelay: number = 1000
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [fontConfig, setFontConfig] = useState<FontSizeConfig>({
@@ -28,7 +28,6 @@ export function useHeightResponsiveFont(
       console.log("Container height:", height);
 
       if (height <= maxHeight) {
-        // Content fits, use default sizes
         setFontConfig({
           baseFontSize: "text-base",
           headingFontSize: "text-3xl",

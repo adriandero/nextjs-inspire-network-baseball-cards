@@ -10,13 +10,11 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { slug } = params;
 
-    // 1. Get authenticated user from Auth0 session
     const user = await getAuthorizedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Check if user can access this specific team
     const canAccess = await canAccessTeam(user, slug);
     if (!canAccess) {
       return NextResponse.json(
@@ -25,7 +23,6 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
-    // 3. Get profiles for this specific team using server-side user data
     const profiles = await getProfilesFromUserTeams(user.email, [slug]);
     return NextResponse.json(profiles);
   } catch (error) {

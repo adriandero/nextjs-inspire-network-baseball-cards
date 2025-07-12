@@ -50,15 +50,12 @@ import { teamColumns } from "@/src/features/deck-builder/builder/columns/team-co
 import DragTable from "@/src/features/deck-builder/builder/drag-table";
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
 import ProfileTablesManager from "@/src/features/deck-builder/builder/drop-table-manager";
-import { UserSanity } from "@/src/lib/entities/user";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { useDragTableView } from "@/src/features/deck-builder/hooks/use-drag-table-view.hook";
 
-interface TeamProfileSelectorProps {
-  userProfileData: UserSanity;
-}
+interface TeamProfileSelectorProps {}
 
 const useProfileTable = (
   profiles: ProfileWithDetailedTeams[],
@@ -148,7 +145,7 @@ const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
   return { table, columns: teamColumns, resetState };
 };
 
-const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
+const BuilderContext = ({}: TeamProfileSelectorProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -160,7 +157,7 @@ const BuilderContext = ({ userProfileData }: TeamProfileSelectorProps) => {
     isLoading,
     isLoadingProfiles,
     error,
-  } = useDragTableData({ userProfileData });
+  } = useDragTableData();
 
   const {
     view,

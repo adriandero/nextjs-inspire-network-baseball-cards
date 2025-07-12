@@ -13,19 +13,16 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { uuid } = params;
 
-    // 1. Get authenticated user
     const user = await getAuthorizedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get the profile first to check permissions
     const profile = await getProfileByUuid(uuid);
     if (!profile) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
-    // 3. Check if user can access this profile
     const canAccess = await canAccessProfile(user, profile);
     if (!canAccess) {
       return NextResponse.json(

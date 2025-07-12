@@ -13,13 +13,11 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { teamId } = params;
 
-    // 1. Get authenticated user
     const user = await getAuthorizedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Check if user can access this team
     const canAccess = await canAccessTeamById(user, teamId);
     if (!canAccess) {
       return NextResponse.json(
@@ -27,8 +25,6 @@ export async function GET(request: Request, { params }: RouteParams) {
         { status: 403 },
       );
     }
-
-    // 3. User is authorized - return the data
     const profiles = await getProfilesByTeamId(teamId);
     return NextResponse.json(profiles);
   } catch (error) {

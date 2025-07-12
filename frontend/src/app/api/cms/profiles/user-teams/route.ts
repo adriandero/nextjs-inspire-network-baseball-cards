@@ -14,7 +14,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Get authenticated user
     const user = await getAuthorizedUser();
     if (!user) {
       return NextResponse.json(
@@ -22,8 +21,6 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
-
-    // 2. Check if user can access this email's data
     const canAccess = await canAccessUserData(user, userEmail);
     if (!canAccess) {
       return NextResponse.json(
@@ -32,7 +29,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. User is authorized - return the data
     const profiles = await getProfilesFromUserTeams(userEmail, userTeamSlugs);
     return NextResponse.json(profiles);
   } catch (error) {

@@ -5,13 +5,12 @@ import {
 } from "@/src/lib/entities/team";
 
 export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
-  // No user data needed - API route gets it from Auth0 session
   const response = await fetch("/api/cms/teams/for-user", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    // Empty body - server gets user data from session
+
     body: JSON.stringify({}),
   });
 
@@ -20,7 +19,7 @@ export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
       throw new Error("Unauthorized - please log in");
     }
     throw new Error(
-      `Failed to fetch teams for user: ${response.status} ${response.statusText}`,
+      `Failed to fetch teams for user: ${response.status} ${response.statusText}`
     );
   }
 
@@ -29,7 +28,6 @@ export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
 }
 
 export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
-  // Only admins can access this endpoint
   const response = await fetch("/api/teams/all");
 
   if (!response.ok) {
@@ -40,7 +38,7 @@ export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
       throw new Error("Forbidden - admin access required");
     }
     throw new Error(
-      `Failed to fetch all teams: ${response.status} ${response.statusText}`,
+      `Failed to fetch all teams: ${response.status} ${response.statusText}`
     );
   }
 
@@ -49,7 +47,7 @@ export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
 }
 
 export async function getTeamBySlug(
-  slug: string,
+  slug: string
 ): Promise<TeamWithDetails | null> {
   if (!slug) return null;
 
@@ -63,10 +61,10 @@ export async function getTeamBySlug(
       throw new Error("Forbidden - you do not have access to this team");
     }
     if (response.status === 404) {
-      return null; // Team not found
+      return null;
     }
     throw new Error(
-      `Failed to fetch team by slug: ${response.status} ${response.statusText}`,
+      `Failed to fetch team by slug: ${response.status} ${response.statusText}`
     );
   }
 
@@ -75,12 +73,12 @@ export async function getTeamBySlug(
 }
 
 export async function getUserTeams(
-  userEmail: string,
+  userEmail: string
 ): Promise<UserTeamsResponse | null> {
   if (!userEmail) return null;
 
   const response = await fetch(
-    `/api/cms/teams/user/${encodeURIComponent(userEmail)}`,
+    `/api/cms/teams/user/${encodeURIComponent(userEmail)}`
   );
 
   if (!response.ok) {
@@ -91,7 +89,7 @@ export async function getUserTeams(
       throw new Error("Forbidden - you can only access your own teams");
     }
     throw new Error(
-      `Failed to fetch user teams: ${response.status} ${response.statusText}`,
+      `Failed to fetch user teams: ${response.status} ${response.statusText}`
     );
   }
 

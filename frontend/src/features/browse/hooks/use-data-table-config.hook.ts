@@ -3,7 +3,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
-// Union type for the data
 type TableData = TeamWithPopulatedCompany | ProfileWithDetailedTeams;
 
 interface UseDataTableConfigProps {
@@ -16,7 +15,6 @@ interface UseDataTableConfigProps {
   currentView: "teams" | "profiles";
 }
 
-// Return type that can represent either teams or profiles configuration
 type DataTableConfig = {
   columns: ColumnDef<TableData, unknown>[];
   data: TableData[];

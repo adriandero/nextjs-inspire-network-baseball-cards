@@ -10,7 +10,6 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { excludeUuid } = params;
 
-    // 1. Get authenticated user
     const user = await getAuthorizedUser();
     if (!user) {
       return NextResponse.json(
@@ -19,7 +18,6 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
-    // 2. Check if user can access the profile they're asking teammates for
     const excludeProfile = await getProfileByUuid(excludeUuid);
     if (!excludeProfile) {
       return NextResponse.json(
@@ -36,7 +34,6 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
-    // 3. User is authorized - return the data
     const profiles = await getTeammateProfiles(excludeUuid);
     return NextResponse.json(profiles);
   } catch (error) {

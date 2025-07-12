@@ -1,107 +1,87 @@
 import { useState, useEffect, useCallback } from "react";
+import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
+import {
+  ProfileWithDetailedTeams,
+  ProfilesByTeam,
+} from "@/src/lib/entities/profile";
 
 import {
   getAllProfiles,
   getAllProfilesGroupedByTeam,
 } from "@/src/lib/data/api/profiles";
-import { UserSanity } from "@/src/lib/entities/user";
-import {
-  ProfilesByTeam,
-  ProfileWithDetailedTeams,
-} from "@/src/lib/entities/profile";
-import { getAllTeams, getUserTeams } from "@/src/lib/data/api/teams";
-import {
-  TeamWithPopulatedCompany,
-  UserTeamsResponse,
-} from "@/src/lib/entities/team";
 
-interface UseDragTableDataProps {
-  userProfileData: UserSanity;
-}
+import { getTeamsForUser } from "@/src/lib/data/api/teams";
 
-export function useDragTableData({ userProfileData }: UseDragTableDataProps) {
+export function useDragTableData() {
   const [teams, setTeams] = useState<TeamWithPopulatedCompany[]>([]);
-  const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam>({
-    teams: {},
-  });
+  const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam | null>(
+    null
+  );
   const [allProfilesData, setAllProfilesData] = useState<
     ProfileWithDetailedTeams[]
   >([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fillAllUserTeams = useCallback(async () => {
-    let profilesFromUserTeams: UserTeamsResponse = { teams: [] };
-    if (userProfileData?.team) {
-      profilesFromUserTeams = (await getUserTeams(userProfileData.email)) ?? {
-        teams: [],
-      };
-    }
-    return profilesFromUserTeams;
-  }, [userProfileData.email, userProfileData?.team]);
+  const fetchTeams = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-  const fillDataTableTeamData = useCallback(async (): Promise<
-    TeamWithPopulatedCompany[]
-  > => {
-    const emptyData: TeamWithPopulatedCompany[] = [];
-    if (userProfileData.permission === "Admin") {
-      return await getAllTeams();
+      const teamsData = await getTeamsForUser();
+      setTeams(teamsData);
+    } catch (err) {
+      console.error("Error fetching teams:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch teams");
+    } finally {
+      setIsLoading(false);
     }
-    const data = userProfileData?.team
-      ? (await fillAllUserTeams()).teams
-      : emptyData;
-    return data;
-  }, [userProfileData, fillAllUserTeams]);
+  }, []);
 
-  const fetchAllProfiles = useCallback(async (): Promise<
-    ProfileWithDetailedTeams[]
-  > => {
+  const fetchAllProfiles = useCallback(async () => {
     try {
       setIsLoadingProfiles(true);
+      setError(null);
 
-      if (allProfilesData.length <= 0) {
-        const profilesData = await getAllProfiles();
-        setAllProfilesData(profilesData);
-        return profilesData;
-      }
-      return allProfilesData;
-    } catch (error) {
-      console.error("Error fetching all profiles:", error);
-      return [];
+      const profilesData = await getAllProfiles();
+      setAllProfilesData(profilesData);
+    } catch (err) {
+      console.error("Error fetching all profiles:", err);
+      setError(err instanceof Error ? err.message : "Failed to fetch profiles");
     } finally {
       setIsLoadingProfiles(false);
     }
-  }, [allProfilesData.length]);
+  }, []);
+
+  const fetchGroupedProfiles = useCallback(async () => {
+    try {
+      setIsLoadingProfiles(true);
+      setError(null);
+
+      const groupedData = await getAllProfilesGroupedByTeam();
+      setProfilesByTeam(groupedData);
+    } catch (err) {
+      console.error("Error fetching grouped profiles:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to fetch grouped profiles"
+      );
+    } finally {
+      setIsLoadingProfiles(false);
+    }
+  }, []);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        setIsLoading(true);
-        setError(null);
+    const initializeData = async () => {
+      await Promise.all([
+        fetchTeams(),
+        fetchAllProfiles(),
+        fetchGroupedProfiles(),
+      ]);
+    };
 
-        const [teamsData, profilesData, allProfiles] = await Promise.all([
-          fillDataTableTeamData(),
-          getAllProfilesGroupedByTeam(),
-          fetchAllProfiles(),
-        ]);
-
-        setTeams(teamsData);
-        setProfilesByTeam(profilesData);
-
-        if (allProfilesData.length === 0) {
-          setAllProfilesData(allProfiles);
-        }
-      } catch (err) {
-        setError("Failed to load data");
-        console.error("Error loading data:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadData();
-  }, [fillDataTableTeamData, fetchAllProfiles, allProfilesData.length]);
+    initializeData();
+  }, []);
 
   return {
     teams,
@@ -110,6 +90,9 @@ export function useDragTableData({ userProfileData }: UseDragTableDataProps) {
     isLoading,
     isLoadingProfiles,
     error,
+
+    refetchTeams: fetchTeams,
     refetchProfiles: fetchAllProfiles,
+    refetchGroupedProfiles: fetchGroupedProfiles,
   };
 }

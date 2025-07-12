@@ -13,16 +13,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Get authenticated user
     const user = await getAuthorizedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get all profiles first
     const allProfiles = await getProfilesByUuids(uuids);
 
-    // 3. Filter profiles based on user permissions
     const accessibleProfiles = [];
     for (const profile of allProfiles) {
       const canAccess = await canAccessProfile(user, profile);

@@ -1,4 +1,3 @@
-// src/features/browse/hooks/use-data-table-data.hook.ts
 import { useState, useCallback } from "react";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
@@ -22,7 +21,7 @@ export function useDataTableData() {
 
     try {
       setLoadingTeams(true);
-      const teams = await getTeamsForUser(); // ✅ From teams API
+      const teams = await getTeamsForUser();
       console.log(teams)
       setTeamsData(teams || []);
       return teams || [];
@@ -57,7 +56,6 @@ export function useDataTableData() {
 
     try {
       setLoadingProfiles(true);
-      // ✅ This handles admin vs user permissions automatically
       const profiles = await getAllProfiles();
       setAllProfilesData(profiles);
       return profiles;

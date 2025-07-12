@@ -10,7 +10,7 @@ interface UseProfileComparisonResult {
 }
 
 function decodeURLToProfileTables(
-  paramString: string,
+  paramString: string
 ): ProfileIdentifierTable[] {
   if (!paramString) return [];
 
@@ -28,7 +28,7 @@ function decodeURLToProfileTables(
 }
 
 export function useProfileComparisonHook(
-  groupedProfiles: string | null,
+  groupedProfiles: string | null
 ): UseProfileComparisonResult {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [completeProfileTables, setCompleteProfileTables] = useState<
@@ -71,7 +71,7 @@ export function useProfileComparisonHook(
       } catch (err) {
         console.error("Error loading TUG Cards:", err);
         setError(
-          err instanceof Error ? err.message : "Failed to load profiles",
+          err instanceof Error ? err.message : "Failed to load profiles"
         );
       } finally {
         setIsLoading(false);
@@ -81,7 +81,6 @@ export function useProfileComparisonHook(
     fetchProfiles();
   }, [groupedProfiles]);
 
-  // Separate effect for the render-ready attribute
   useEffect(() => {
     if (!isLoading) {
       document.body.setAttribute("data-render-ready", "true");

@@ -11,13 +11,11 @@ export async function GET(request: Request, { params }: RouteParams) {
   try {
     const { slug } = params;
 
-    // 1. Authenticate user
     const session = await auth0.getSession();
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get real user permissions from Sanity
     const userProfileData = await getUserSanity(session.user);
     if (!userProfileData) {
       return NextResponse.json(
@@ -26,9 +24,7 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
-    // 3. Check if user can access this specific team
     if (userProfileData.permission !== "Admin") {
-      // For non-admin users, check if this team is in their allowed teams
       const userTeams = await getUserTeams(userProfileData.email);
       const allowedSlugs = userTeams?.teams?.map((team) => team.slug) || [];
 
@@ -40,7 +36,6 @@ export async function GET(request: Request, { params }: RouteParams) {
       }
     }
 
-    // 4. User is authorized - return the data
     const team = await getTeamBySlug(slug);
     return NextResponse.json(team);
   } catch (error) {

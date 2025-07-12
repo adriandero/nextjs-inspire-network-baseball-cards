@@ -34,7 +34,6 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   showJobRole,
   tableName,
 }) => {
-  // Define columns for the table
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",

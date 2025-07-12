@@ -37,8 +37,6 @@ export default function BackNavBar({
   userProfileData,
   backwardsNavigationUrl,
 }: SanityDocument): React.JSX.Element {
-  // const { data: session, status } = useSession();
-
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const userProfilePic = defaultAvatar.src;
@@ -71,10 +69,6 @@ export default function BackNavBar({
         <Link href={`/deckbuilder`} className="hover:text-primary duration-200">
           Deck Builder
         </Link>
-        {/* <Link href={`/compare`} className="hover:text-primary duration-200">
-            Compare
-          </Link> */}
-        <span className="text-gray-400 cursor-not-allowed">Compare</span>
         <Link href={`/browse`} className="hover:text-primary duration-200">
           Browse Cards
         </Link>
