@@ -58,8 +58,8 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
             setSelectedTableId(table.id);
           }}
         >
-          <p className="text-dark3 self-center">
-            {isOver ? "Drop TUG Cards in here" : "Drag TUG Cards in here"}
+          <p className="text-dark3 self-center text-center">
+            {isOver ? "Drop TUG Cards in here" : "Select a group and click card to select"}
           </p>
         </div>
       ) : (
