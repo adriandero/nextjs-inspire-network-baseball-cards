@@ -113,7 +113,7 @@ export default async function TugPage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <PrinciplesYouCard
+          <KolbeStrengthsCard
             profile={profile}
             _id={""}
             _rev={""}
@@ -121,7 +121,7 @@ export default async function TugPage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <KolbeStrengthsCard
+          <PrinciplesYouCard
             profile={profile}
             _id={""}
             _rev={""}
