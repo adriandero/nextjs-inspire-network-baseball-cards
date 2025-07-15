@@ -66,6 +66,12 @@ export default function BackNavBar({
       />
 
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
+        <Link
+          href={`https://www.inspirenetworkllc.com/`}
+          className="hover:text-primary duration-200"
+        >
+          About us
+        </Link>
         <Link href={`/deckbuilder`} className="hover:text-primary duration-200">
           Deck Builder
         </Link>
