@@ -140,7 +140,7 @@ export default async function TugPage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <DownloadButton uuid={uuid} />
+          <DownloadButton uuid={uuid} pdfName={userProfileData.profile?.name} />
         </div>
       </main>
       <footer className="flex item-center p-8"></footer>

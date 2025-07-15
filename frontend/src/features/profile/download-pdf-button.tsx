@@ -5,7 +5,13 @@ import { Button } from "@/src/components/shadcn-ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-export default function DownloadButton({ uuid }: { uuid: string }) {
+export default function DownloadButton({
+  uuid,
+  pdfName,
+}: {
+  uuid: string;
+  pdfName?: string;
+}) {
   const [loading, setLoading] = useState(false);
 
   const handlePDFDownloadCall = async () => {
@@ -13,14 +19,14 @@ export default function DownloadButton({ uuid }: { uuid: string }) {
       setLoading(true);
 
       const pdfBlob = await fetch(`/api/tugcards/${uuid}/pdf`).then((res) =>
-        res.blob()
+        res.blob(),
       );
 
       const blobUrl = URL.createObjectURL(pdfBlob);
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `${uuid}.pdf`;
+      link.download = `${pdfName ? pdfName : uuid}.pdf`;
 
       document.body.appendChild(link);
       link.click();
