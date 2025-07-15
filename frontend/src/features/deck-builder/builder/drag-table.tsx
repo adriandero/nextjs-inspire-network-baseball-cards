@@ -74,7 +74,7 @@ const DragTable: React.FC<DragTableProps> = ({
   return (
     <div className="w-full">
       {isShowingProfiles ? (
-        <DragTableToolbar<ProfileWithDetailedTeams>
+        <DragTableToolbar
           table={table as ReactTable<ProfileWithDetailedTeams>}
           searchInputRef={searchInputRef}
           groupingMode={groupingMode}

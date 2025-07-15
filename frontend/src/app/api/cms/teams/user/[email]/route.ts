@@ -3,13 +3,12 @@ import { NextResponse } from "next/server";
 import { getUserTeams } from "@/src/lib/data/teams";
 import { auth0 } from "@/src/lib/auth0";
 
-interface RouteParams {
-  params: { email: string };
-}
-
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ email: string }> },
+) {
   try {
-    const { email } = params;
+    const { email } = await params;
     const decodedEmail = decodeURIComponent(email);
 
     const session = await auth0.getSession();
@@ -21,7 +20,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     if (!userProfileData) {
       return NextResponse.json(
         { error: "User profile not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -31,7 +30,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     ) {
       return NextResponse.json(
         { error: "Forbidden - you can only access your own teams" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -41,7 +40,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     console.error("API: Failed to fetch user teams:", error);
     return NextResponse.json(
       { error: "Unable to fetch user teams" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

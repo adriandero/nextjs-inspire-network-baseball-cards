@@ -3,13 +3,12 @@ import { NextResponse } from "next/server";
 import { getUserSanity } from "@/src/lib/data/users";
 import { auth0 } from "@/src/lib/auth0";
 
-interface RouteParams {
-  params: { slug: string };
-}
-
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     const session = await auth0.getSession();
     if (!session?.user) {

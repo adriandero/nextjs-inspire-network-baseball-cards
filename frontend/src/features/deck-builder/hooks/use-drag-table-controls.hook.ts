@@ -1,19 +1,26 @@
 import { RefObject } from "react";
 import { type Table as ReactTable } from "@tanstack/react-table";
-import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 
-interface UseTableControlsProps {
-  table: ReactTable<ProfileIdentifierTable>;
+interface TableRowWithName {
+  name: string;
+}
+
+interface UseTableControlsProps<T extends TableRowWithName> {
+  table: ReactTable<T>;
   searchInputRef: RefObject<HTMLInputElement>;
 }
 
-export const useTableControls = ({ table, searchInputRef }: UseTableControlsProps) => {
+export const useTableControls = <T extends TableRowWithName>({
+  table,
+  searchInputRef,
+}: UseTableControlsProps<T>) => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     table.getColumn("name")?.setFilterValue(event.target.value);
     setTimeout(() => searchInputRef.current?.focus(), 0);
   };
 
-  const searchValue = (table.getColumn("name")?.getFilterValue() as string) ?? "";
+  const searchValue =
+    (table.getColumn("name")?.getFilterValue() as string) ?? "";
 
   return {
     searchValue,

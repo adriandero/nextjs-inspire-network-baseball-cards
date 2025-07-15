@@ -15,7 +15,11 @@ import { type Table as ReactTable } from "@tanstack/react-table";
 import { useTableControls } from "@/src/features/deck-builder/hooks/use-drag-table-controls.hook";
 import { DragTableBreadcrumbs } from "@/src/features/deck-builder/components/drag-table-breadcrumbs";
 
-interface DragTableToolbarProps<T> {
+interface TableRowWithName {
+  name: string;
+}
+
+interface DragTableToolbarProps<T extends TableRowWithName> {
   table: ReactTable<T>;
   searchInputRef: RefObject<HTMLInputElement>;
   groupingMode: "teams" | "profiles";
@@ -25,7 +29,7 @@ interface DragTableToolbarProps<T> {
   onGroupingChange: (mode: "teams" | "profiles") => void;
 }
 
-export const DragTableToolbar = <T,>({
+export const DragTableToolbar = <T extends TableRowWithName>({
   table,
   searchInputRef,
   groupingMode,
@@ -72,7 +76,7 @@ export const DragTableToolbar = <T,>({
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <GoVersions className="mr-2 h-4 w-4" />
-              <span>Group By</span>
+              <span>View</span>
               <span className="ml-auto text-xs text-muted-foreground">
                 {groupingMode === "profiles" ? "TUG Cards" : "Teams"}
               </span>
