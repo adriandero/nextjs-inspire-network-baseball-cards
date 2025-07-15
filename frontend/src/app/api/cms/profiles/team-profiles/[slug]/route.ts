@@ -2,13 +2,12 @@ import { canAccessTeam, getAuthorizedUser } from "@/src/lib/auth/permissions";
 import { NextResponse } from "next/server";
 import { getProfilesFromUserTeams } from "@/src/lib/data/profiles";
 
-interface RouteParams {
-  params: { slug: string };
-}
-
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     const user = await getAuthorizedUser();
     if (!user) {

@@ -5,13 +5,12 @@ import {
   getAuthorizedUser,
 } from "@/src/lib/auth/permissions";
 
-interface RouteParams {
-  params: { teamId: string };
-}
-
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ teamId: string }> },
+) {
   try {
-    const { teamId } = params;
+    const { teamId } = await params;
 
     const user = await getAuthorizedUser();
     if (!user) {

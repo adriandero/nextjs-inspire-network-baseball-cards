@@ -5,13 +5,12 @@ import {
   getAuthorizedUser,
 } from "@/src/lib/auth/permissions";
 
-interface RouteParams {
-  params: { uuid: string };
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ uuid: string }> },
+) {
   try {
-    const { uuid } = params;
+    const { uuid } = await params;
 
     const user = await getAuthorizedUser();
     if (!user) {
