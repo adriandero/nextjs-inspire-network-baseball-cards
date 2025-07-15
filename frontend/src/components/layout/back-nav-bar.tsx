@@ -78,6 +78,9 @@ export default function BackNavBar({
         <Link href={`/browse`} className="hover:text-primary duration-200">
           Browse Cards
         </Link>
+        <Link href={`/`} className="hover:text-primary duration-200">
+          Home
+        </Link>
         {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
 

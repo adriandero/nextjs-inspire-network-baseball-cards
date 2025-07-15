@@ -67,7 +67,7 @@ const useProfileTable = (
     isSelected: boolean,
   ) => void,
 ) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([ { desc: false, id: "name" },]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -106,7 +106,7 @@ const useProfileTable = (
   });
 
   const resetState = useCallback(() => {
-    setSorting([]);
+    setSorting([ { desc: false, id: "name" }]);
     setColumnFilters([]);
     setColumnVisibility({});
   }, []);
@@ -115,7 +115,7 @@ const useProfileTable = (
 };
 
 const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([ { desc: false, id: "name" },]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -137,7 +137,7 @@ const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
   });
 
   const resetState = useCallback(() => {
-    setSorting([]);
+    setSorting([ { desc: false, id: "name" },]);
     setColumnFilters([]);
     setColumnVisibility({});
   }, []);

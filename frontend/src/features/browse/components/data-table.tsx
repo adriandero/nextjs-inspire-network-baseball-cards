@@ -17,9 +17,7 @@ import { useDataTableView } from "@/src/features/browse/hooks/use-data-table-vie
 import { Toolbar } from "@/src/features/browse/components/toolbar";
 import { Breadcrumbs } from "@/src/features/browse/components/breadcrumbs";
 import { Content } from "@/src/features/browse/components/content";
-import {
-  TeamWithPopulatedCompany,
-} from "@/src/lib/entities/team";
+import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 
 type TableData = TeamWithPopulatedCompany | ProfileWithDetailedTeams;
@@ -29,10 +27,7 @@ interface DataTableProps {
   profileColumns: ColumnDef<ProfileWithDetailedTeams, unknown>[];
 }
 
-export function DataTable({
-  teamColumns,
-  profileColumns,
-}: DataTableProps) {
+export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
   const {
     teamsData,
     profilesData,
@@ -57,7 +52,10 @@ export function DataTable({
     changeGroupingMode,
   } = useDataTableView();
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { desc: false, id: "name" },
+  ]);
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -97,7 +95,7 @@ export function DataTable({
   });
 
   const resetTableState = React.useCallback(() => {
-    setSorting([]);
+    setSorting([{ desc: false, id: "name" }]);
     setColumnFilters([]);
     setColumnVisibility({ groups: false });
     setRowSelection({});

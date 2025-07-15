@@ -12,7 +12,11 @@ import { FiMenu } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
-import { Sheet, SheetContent, SheetTrigger } from "@/src/components/shadcn-ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/src/components/shadcn-ui/sheet";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -34,9 +38,10 @@ export default function MobileNavMenu({
     if (userProfileData) redirect("/tugcards/" + userProfileData.uuid);
     else
       alert(
-        "You don't have a Baseball Card assigned - Ask an administrator for access"
+        "You don't have a Baseball Card assigned - Ask an administrator for access",
       );
   }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -105,6 +110,12 @@ export default function MobileNavMenu({
           </div>
           <div className="flex-1 overflow-auto py-2">
             <nav className="grid items-start px-4 text-base font-medium">
+              <Link
+                href={`/`}
+                className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+              >
+                Home
+              </Link>
               <Link
                 href="/browse"
                 className="flex w-full items-center rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"

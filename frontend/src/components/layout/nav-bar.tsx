@@ -64,20 +64,21 @@ export default function NavBar({
 
         <MobileNavMenu
           userProfileData={userProfileData?.profile}
-          className="sm:hidden !text-dark1"
+          className="md:hidden !text-dark1"
           _id={""}
           _rev={""}
           _type={""}
           _createdAt={""}
           _updatedAt={""}
         />
-        <div className=" hidden sm:flex space-x-12 text-lg h-full items-center font-medium">
+        <div className=" hidden md:flex space-x-12 text-lg h-full items-center font-medium">
           <Link
             href={`https://www.inspirenetworkllc.com/`}
             className="hover:text-primary duration-200"
           >
             About us
           </Link>
+
           <Link
             href={`/deckbuilder`}
             className="hover:text-primary duration-200"
@@ -86,6 +87,9 @@ export default function NavBar({
           </Link>
           <Link href={`/browse`} className="hover:text-primary duration-200">
             Browse Cards
+          </Link>
+          <Link href={`/`} className="hover:text-primary duration-200">
+            Home
           </Link>
           {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
         <h1 className="hover:text-primary duration-200">Assessment</h1> */}
