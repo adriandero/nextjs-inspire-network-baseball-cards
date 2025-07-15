@@ -4,7 +4,7 @@ import {v4 as uuidv4} from 'uuid'
 // import {client} from '../utils'
 
 export const client = createClient({
-  projectId: '8hl62j77',
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false,

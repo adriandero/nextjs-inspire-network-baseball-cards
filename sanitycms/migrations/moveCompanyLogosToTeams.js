@@ -3,12 +3,11 @@ import {createClient} from '@sanity/client'
 
 // Configure your Sanity client
 export const client = createClient({
-  projectId: '8hl62j77',
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
-  token:
-    'skUQIPyyKqwOcx5Zf3rc6UUzazDjujneCNWfH0Oqf0ExD4yiDY6NyyzSLkMBcRhzg6zPRd3h3beKk2iNU8QMaHUvxyklyCbIcLgW5NxjA2AlD0dP4VjbUyUDrBMels2TStlg7fmy5bgfWd8zMa25ycYu8XgT7Lz7ifz4R3nGzJd82aRNXKC8',
+  token: process.env.SANITY_API_TOKEN,
 })
 
 // Fetch all companies with logos
