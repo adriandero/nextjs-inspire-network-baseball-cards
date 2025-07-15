@@ -55,8 +55,6 @@ import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { useDragTableView } from "@/src/features/deck-builder/hooks/use-drag-table-view.hook";
 
-interface TeamProfileSelectorProps {}
-
 const useProfileTable = (
   profiles: ProfileWithDetailedTeams[],
   dropTables: ProfileIdentifierTable[],
@@ -67,7 +65,9 @@ const useProfileTable = (
     isSelected: boolean,
   ) => void,
 ) => {
-  const [sorting, setSorting] = useState<SortingState>([ { desc: false, id: "name" },]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { desc: false, id: "name" },
+  ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -106,7 +106,7 @@ const useProfileTable = (
   });
 
   const resetState = useCallback(() => {
-    setSorting([ { desc: false, id: "name" }]);
+    setSorting([{ desc: false, id: "name" }]);
     setColumnFilters([]);
     setColumnVisibility({});
   }, []);
@@ -115,7 +115,9 @@ const useProfileTable = (
 };
 
 const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
-  const [sorting, setSorting] = useState<SortingState>([ { desc: false, id: "name" },]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { desc: false, id: "name" },
+  ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
@@ -137,7 +139,7 @@ const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
   });
 
   const resetState = useCallback(() => {
-    setSorting([ { desc: false, id: "name" },]);
+    setSorting([{ desc: false, id: "name" }]);
     setColumnFilters([]);
     setColumnVisibility({});
   }, []);
@@ -145,7 +147,7 @@ const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
   return { table, columns: teamColumns, resetState };
 };
 
-const BuilderContext = ({}: TeamProfileSelectorProps) => {
+const BuilderContext = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
