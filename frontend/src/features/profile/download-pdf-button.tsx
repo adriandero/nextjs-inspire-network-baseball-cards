@@ -7,10 +7,10 @@ import { Loader2 } from "lucide-react";
 
 export default function DownloadButton({
   uuid,
-  pdfName,
+  fileName,
 }: {
   uuid: string;
-  pdfName?: string;
+  fileName?: string;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +26,7 @@ export default function DownloadButton({
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `${pdfName ? pdfName : uuid}.pdf`;
+      link.download = `${fileName ? fileName : uuid}.pdf`;
 
       document.body.appendChild(link);
       link.click();
