@@ -1,59 +1,26 @@
 "use client";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-//import { useSession } from "next-auth/react";
-
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 import { GoArrowLeft } from "react-icons/go";
-import defaultAvatar from "@/public/images/default-avatar.png";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/src/components/shadcn-ui/dropdown-menu";
+import { NAV_ITEMS } from "@/src/constants/navigation";
+import AccountDropdown from "@/src/components/custom-ui/account-dropdown";
+import { UserSanity } from "@/src/lib/entities/user";
 
-import { redirect } from "next/navigation";
-import { useState } from "react";
-import { SanityDocument } from "next-sanity";
-import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
-
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogHeader,
-  AlertDialogFooter,
-} from "@/src/components/shadcn-ui/alert-dialog";
+interface BackNavBarProps {
+  userProfileData?: UserSanity;
+  backwardsNavigationUrl: string;
+}
 
 export default function BackNavBar({
   userProfileData,
   backwardsNavigationUrl,
-}: SanityDocument): React.JSX.Element {
-  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
-
-  const userProfilePic = defaultAvatar.src;
+}: BackNavBarProps): React.JSX.Element {
+  const router = useRouter();
 
   function handleBack() {
-    redirect(backwardsNavigationUrl);
-  }
-
-  function accountHasProfileAssigned() {
-    if (userProfileData) return true;
-    return false;
-  }
-
-  function handleProfileRedirect() {
-    if (accountHasProfileAssigned()) {
-      redirect("/tugcards/" + userProfileData?.profile.uuid);
-    }
+    router.push(backwardsNavigationUrl);
   }
 
   return (
@@ -61,87 +28,28 @@ export default function BackNavBar({
       <GoArrowLeft
         size={28}
         strokeWidth="0.5"
-        onClick={() => handleBack()}
-        className="text-dark1 hover:text-primary hover:scale-110 duration-200"
+        onClick={handleBack}
+        className="text-dark1 hover:text-primary hover:scale-110 duration-200 cursor-pointer"
       />
 
       <div className="flex space-x-12 text-lg h-full items-center font-medium">
-        <Link
-          href={`https://www.inspirenetworkllc.com/`}
-          className="hover:text-primary duration-200"
-        >
-          About us
-        </Link>
-        <Link href={`/deckbuilder`} className="hover:text-primary duration-200">
-          Deck Builder
-        </Link>
-        <Link href={`/browse`} className="hover:text-primary duration-200">
-          Browse Cards
-        </Link>
-        <Link href={`/`} className="hover:text-primary duration-200">
-          Home
-        </Link>
-        {/* {<h1 className="hover:text-primary duration-200">Teams</h1>
-        <h1 className="hover:text-primary duration-200">Assessment</h1> */}
-
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex flex-row items-center hover:scale-110 duration-200">
-            <Avatar className="h-full">
-              <AvatarImage
-                src={userProfilePic}
-                className="rounded-full h-7"
-                onLoadingStatusChange={(status) => {
-                  if (status === "loaded") {
-                    setIsAvatarLoaded(true);
-                  }
-                }}
-              />
-              <AvatarFallback></AvatarFallback>
-            </Avatar>{" "}
-            {!isAvatarLoaded ? (
-              <Skeleton className={`min-h-7 min-w-7 rounded-full bg-light3`} />
-            ) : null}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-
-            {accountHasProfileAssigned() ? (
-              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <button onClick={() => handleProfileRedirect()}>
-                  My TUG Card
-                </button>
-              </DropdownMenuItem>
-            ) : (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    Profile
-                  </DropdownMenuItem>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Missing Baseballcard</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      You don&apos;t have a Baseball Card assigned - Ask an
-                      administrator for access
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>OK</AlertDialogCancel>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
-
-            <DropdownMenuItem
-              className="text-inspireRed hover:!text-inspireRed"
-              onClick={() => redirect("/auth/logout")}
+        {NAV_ITEMS.slice()
+          .reverse()
+          .map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="hover:text-primary duration-200"
+              {...(item.external && {
+                target: "_blank",
+                rel: "noopener noreferrer",
+              })}
             >
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {item.label}
+            </Link>
+          ))}
+
+        <AccountDropdown userProfileData={userProfileData} />
       </div>
     </div>
   );

@@ -44,14 +44,7 @@ export default function MobileNavBanner({
                 : null}
             </h1>
           </div>
-          <MobileNavMenu
-            userProfileData={userProfileData}
-            _id={""}
-            _rev={""}
-            _type={""}
-            _createdAt={""}
-            _updatedAt={""}
-          />
+          <MobileNavMenu userProfileData={userProfileData} />
         </div>
         <div className="flex flex-col items-center text-center px-4">
           <h1 className="text-2xl xs:text-3xl font-bold text-light1 xs:hidden">

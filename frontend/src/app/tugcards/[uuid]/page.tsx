@@ -81,11 +81,6 @@ export default async function TugPage({
       <BackNavBar
         userProfileData={userProfileData}
         backwardsNavigationUrl={"/browse/"}
-        _id={""}
-        _rev={""}
-        _type={""}
-        _createdAt={""}
-        _updatedAt={""}
       />
       <Banner
         profile={profile}
