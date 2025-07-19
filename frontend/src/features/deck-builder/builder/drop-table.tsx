@@ -41,7 +41,7 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
   const handleRemoveProfile = (profileId: string) => {
     if (onProfilesChange) {
       const updatedProfiles = selectedProfilesData.filter(
-        (profile) => profile.uuid !== profileId
+        (profile) => profile.uuid !== profileId,
       );
       onProfilesChange(updatedProfiles);
     }
@@ -59,7 +59,9 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
           }}
         >
           <p className="text-dark3 self-center text-center">
-            {isOver ? "Drop TUG Cards in here" : "Select a group and click card to select"}
+            {isOver
+              ? "Drop TUG Cards in here"
+              : "Select a group and click card to select"}
           </p>
         </div>
       ) : (

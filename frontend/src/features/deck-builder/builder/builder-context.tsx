@@ -426,7 +426,10 @@ const BuilderContext = () => {
 
             <Button
               variant="outline"
-              disabled={!selectedType || !dropTables[0]?.profiles[0]}
+              disabled={
+                !selectedType ||
+                dropTables.some((table) => table.profiles.length === 0)
+              }
               className="hover:border-primary"
               onClick={handleContinue}
             >

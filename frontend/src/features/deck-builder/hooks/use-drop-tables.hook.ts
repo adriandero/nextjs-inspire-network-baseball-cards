@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import {
@@ -20,8 +20,17 @@ export function useDropTables() {
   ]);
 
   const [selectedTableId, setSelectedTableId] = useState<string>(
-    dropTables[0].id
+    dropTables[0].id,
   );
+
+  useEffect(() => {
+    if (
+      dropTables.length > 0 &&
+      !dropTables.find((t) => t.id === selectedTableId)
+    ) {
+      setSelectedTableId(dropTables[0].id);
+    }
+  }, [dropTables, selectedTableId]);
 
   const handleOneWayProfileCheck = useCallback(
     (profileId: string) => {
@@ -29,11 +38,11 @@ export function useDropTables() {
         prev.map((table) =>
           table.id === selectedTableId
             ? addProfileToTable(table, profileId)
-            : table
-        )
+            : table,
+        ),
       );
     },
-    [selectedTableId]
+    [selectedTableId],
   );
 
   const handleProfileCheck = useCallback(
@@ -42,11 +51,11 @@ export function useDropTables() {
         prev.map((table) =>
           table.id === selectedTableId
             ? toggleProfileInTable(table, profileId)
-            : table
-        )
+            : table,
+        ),
       );
     },
-    [selectedTableId]
+    [selectedTableId],
   );
 
   const handleAddTable = useCallback(() => {
@@ -71,22 +80,22 @@ export function useDropTables() {
     (tableId: string, profiles: string[]) => {
       setDropTables((prev) =>
         prev.map((table) =>
-          table.id === tableId ? { ...table, profiles } : table
-        )
+          table.id === tableId ? { ...table, profiles } : table,
+        ),
       );
     },
-    []
+    [],
   );
 
   const handleUpdateTableName = useCallback(
     (tableId: string, newName: string) => {
       setDropTables((prev) =>
         prev.map((table) =>
-          table.id === tableId ? { ...table, name: newName } : table
-        )
+          table.id === tableId ? { ...table, name: newName } : table,
+        ),
       );
     },
-    []
+    [],
   );
 
   const handleCreateTableWithProfile = useCallback(
@@ -98,7 +107,7 @@ export function useDropTables() {
       };
       setDropTables((prev) => [...prev, newTable]);
     },
-    [dropTables.length]
+    [dropTables.length],
   );
 
   const handleClearSelections = useCallback(() => {

@@ -8,6 +8,7 @@ import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/pro
 import { useProfileTableData } from "@/src/features/deck-builder/hooks/use-profile-table-data.hook";
 import { useTableNameEditor } from "@/src/features/deck-builder/hooks/use-table-name-editor.hook";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
+import { cn } from "@/src/lib/utils";
 
 interface ProfileTablesManagerProps {
   profileIdentifierTables: ProfileIdentifierTable[];
@@ -84,8 +85,18 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
     <div className="flex flex-col w-full">
       {profileIdentifierTables.map((table) => (
         <React.Fragment key={table.id}>
-          <div className="flex h-12 justify-end items-center">
-            <div className="font-medium text-base flex">
+          <div
+            className={cn(
+              "flex h-12 items-center",
+              isEditing(table.id) ? "justify-between" : "justify-end",
+            )}
+          >
+            <div
+              className={cn(
+                "font-medium text-base min-w-0 justify-end flex",
+                isEditing(table.id) && "flex-1",
+              )}
+            >
               {isEditing(table.id) ? (
                 <Input
                   ref={inputRef}
@@ -94,32 +105,33 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
                   onChange={(e) => setEditingName(e.target.value)}
                   onKeyDown={handleKeyPress}
                   onBlur={handleSaveEdit}
-                  className="h-8 text-right focus-visible:ring-0 focus-visible:ring-offset-0 border border-light3"
+                  className="h-8 w-full text-right focus-visible:ring-0 focus-visible:ring-offset-0 border-none shadow-none p-2 border-light3"
                   aria-label="Edit table name"
                 />
               ) : (
-                <span
-                  onClick={() => startEditing(table.id, table.name)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      startEditing(table.id, table.name);
-                    }
-                  }}
-                  className="cursor-text hover:bg-gray-100 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Edit table name: ${table.name}`}
-                >
-                  {table.name}
-                </span>
+                <div className="hover:bg-gray-100 px-2 rounded overflow-x-auto overflow-y-hidden w-fit no-scrollbar">
+                  <p
+                    onClick={() => startEditing(table.id, table.name)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        startEditing(table.id, table.name);
+                      }
+                    }}
+                    className="cursor-text whitespace-nowrap text-right"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Edit table name: ${table.name}`}
+                  >
+                    {table.name}
+                  </p>
+                </div>
               )}
             </div>
-
             {profileIdentifierTables.length > 1 && (
               <Button
                 variant="ghost"
                 size="sm"
-                className="hover:text-inspireRed w-6 h-6 flex items-center justify-center p-0"
+                className="hover:text-inspireRed w-6 h-6 flex items-center justify-center p-0 flex-shrink-0"
                 onClick={() => onRemoveTable(table.id)}
                 aria-label={`Remove table: ${table.name}`}
               >
