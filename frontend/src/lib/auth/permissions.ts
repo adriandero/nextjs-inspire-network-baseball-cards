@@ -5,16 +5,16 @@ import { getUserSanity } from "@/src/lib/data/users";
 import { getUserTeams } from "@/src/lib/data/teams";
 import { auth0 } from "@/src/lib/auth0";
 
-export async function getAuthorizedUser(): Promise<UserSanity | null> {
+export async function getAuthorizedUser(): Promise<UserSanity | undefined> {
   const session = await auth0.getSession();
-  if (!session?.user) return null;
+  if (!session?.user) return undefined;
 
   return await getUserSanity(session.user);
 }
 
 export async function canAccessTeam(
   user: UserSanity,
-  teamSlug: string
+  teamSlug: string,
 ): Promise<boolean> {
   if (user.permission === "Admin") return true;
 
@@ -26,7 +26,7 @@ export async function canAccessTeam(
 
 export async function canAccessTeamById(
   user: UserSanity,
-  teamId: string
+  teamId: string,
 ): Promise<boolean> {
   if (user.permission === "Admin") return true;
 
@@ -38,7 +38,7 @@ export async function canAccessTeamById(
 
 export async function canAccessProfile(
   user: UserSanity,
-  profile: ProfileWithFullTeams
+  profile: ProfileWithFullTeams,
 ): Promise<boolean> {
   if (user.permission === "Admin") return true;
 
@@ -52,7 +52,7 @@ export async function canAccessProfile(
 
 export async function canAccessUserData(
   user: UserSanity,
-  targetEmail: string
+  targetEmail: string,
 ): Promise<boolean> {
   if (user.permission === "Admin") return true;
 
@@ -60,14 +60,14 @@ export async function canAccessUserData(
 }
 
 export async function getTeamsForUserWithPermissions(
-  user: UserSanity
+  user: UserSanity,
 ): Promise<TeamWithPopulatedCompany[]> {
   const { getTeamsForUser } = await import("@/src/lib/data/teams");
   return getTeamsForUser(user);
 }
 
 export async function getAllTeamsWithPermissions(
-  user: UserSanity
+  user: UserSanity,
 ): Promise<TeamWithPopulatedCompany[]> {
   if (user.permission !== "Admin") {
     throw new Error("Only administrators can access all teams");

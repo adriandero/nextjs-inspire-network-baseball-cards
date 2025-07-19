@@ -22,23 +22,11 @@ export default function LandingPage({
 
   return (
     <div className="min-h-screen overflow-hidden h-fit">
-      {/* Navigation */}
-      <NavBar
-        userProfileData={userProfileData}
-        _id={""}
-        _rev={""}
-        _type={""}
-        _createdAt={""}
-        _updatedAt={""}
-      />
+      <NavBar userProfileData={userProfileData} />
 
       <div className="px-6 py-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
-            {/* <div className="inline-block border bg-light2 dark-1 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
-              🚀 Powered by Inspire Network
-            </div> */}
-
             <h1 className="text-5xl lg:text-6xl font-black leading-tight">
               <span>Build teams that lead themselves with </span>
               <span className="bg-gradient-to-r from-tertiary to-secondary bg-clip-text text-transparent">
@@ -80,7 +68,6 @@ export default function LandingPage({
               ) : null}
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8">
               <div className="text-center">
                 <div className="text-2xl font-black bg-gradient-to-r from-orange-400 to-cyan-400 bg-clip-text text-transparent mb-2">
@@ -104,7 +91,6 @@ export default function LandingPage({
           </div>
 
           <div className="relative h-[600px] w-full flex items-center justify-center">
-            {/* Background PDF Image Container - Now relative */}
             <div className="relative z-10 animate-[float_15s_ease-in-out_infinite]">
               <Image
                 src={BrittanySamplePDF}
@@ -112,7 +98,6 @@ export default function LandingPage({
                 className="w-[500px] h-auto object-contain rounded-lg shadow-lg"
               />
 
-              {/* Phone Mockup - Now positioned relative to PDF image */}
               <div className="absolute z-10 right-24 -bottom-12 animate-[float_8s_ease-in-out_infinite_3s]">
                 <Image
                   src={AllisonSamplePhone}
@@ -122,7 +107,6 @@ export default function LandingPage({
               </div>
             </div>
 
-            {/* Custom CSS for floating animation */}
             <style jsx>{`
               @keyframes float {
                 0%,
@@ -137,7 +121,6 @@ export default function LandingPage({
           </div>
         </div>
       </div>
-      {/* Inspire Network Badge */}
       <div className="text-center">
         <a
           href={"https://www.inspirenetworkllc.com/"}

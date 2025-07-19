@@ -41,14 +41,7 @@ export default async function DeckBuilderPage(): Promise<JSX.Element> {
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">
-      <NavBar
-        userProfileData={userProfileData}
-        _id={""}
-        _rev={""}
-        _type={""}
-        _createdAt={""}
-        _updatedAt={""}
-      />
+      <NavBar userProfileData={userProfileData} />
 
       <main className="flex flex-row justify-center">
         <BuilderContext />

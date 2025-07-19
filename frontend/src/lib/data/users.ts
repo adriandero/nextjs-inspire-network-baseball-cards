@@ -4,10 +4,10 @@ import { UserSanity } from "@/src/lib/entities/user";
 
 export async function getUserSanity(
   authUser: User,
-): Promise<UserSanity | null> {
+): Promise<UserSanity | undefined> {
   if (!authUser?.email) {
     console.warn("getUserProfile called without valid email");
-    return null;
+    return undefined;
   }
 
   const query = `

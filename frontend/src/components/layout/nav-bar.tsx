@@ -18,7 +18,6 @@ export default function NavBar({
 }: NavBarProps): React.JSX.Element {
   return (
     <div className="w-full h-16 flex items-center justify-self-center px-2 sm:px-6">
-      {/* Logo */}
       <Link href="/" className="mr-auto">
         <Image
           src={INTMLogo}
@@ -30,7 +29,7 @@ export default function NavBar({
       </Link>
 
       <MobileNavMenu
-        userProfileData={userProfileData?.profile}
+        userProfileData={userProfileData}
         className="md:hidden !text-dark1"
       />
 

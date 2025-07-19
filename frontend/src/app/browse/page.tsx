@@ -43,11 +43,6 @@ export default async function BrowsePage() {
     <div className="w-full h-screen max-w-screen-lg">
       <NavBar
         userProfileData={userProfileData}
-        _id={""}
-        _rev={""}
-        _type={""}
-        _createdAt={""}
-        _updatedAt={""}
       />
       <main className="flex flex-wrap gap-8 justify-center">
         <DataTable

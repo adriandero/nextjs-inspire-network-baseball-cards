@@ -29,11 +29,6 @@ export default async function ComparisonPage({
       <BackNavBar
         userProfileData={userProfileData}
         backwardsNavigationUrl={"/deckbuilder/"}
-        _id={""}
-        _rev={""}
-        _type={""}
-        _createdAt={""}
-        _updatedAt={""}
       />
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileComparison initialType={type} />
