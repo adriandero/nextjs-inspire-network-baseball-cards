@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "IN TUG Cards",
   description: "TUG Cards by Inspire Network",
   icons: {
-    icon: "/favicon.ico",
+    icon: "images/favicon.ico",
   },
 };
 
