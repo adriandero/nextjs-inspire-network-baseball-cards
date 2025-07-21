@@ -152,14 +152,8 @@ const BuilderContext = () => {
   const [open, setOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const {
-    teams,
-    profilesByTeam,
-    allProfilesData,
-    isLoading,
-    isLoadingProfiles,
-    error,
-  } = useDragTableData();
+  const { teams, profilesByTeam, allProfilesData, isLoadingProfiles, error } =
+    useDragTableData();
 
   const {
     view,
@@ -298,14 +292,6 @@ const BuilderContext = () => {
     clearStorage();
   }, [handleClearSelections, clearStorage]);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-48">
-        <p className="text-gray-500">Loading...</p>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex justify-center items-center h-48">
@@ -410,6 +396,7 @@ const BuilderContext = () => {
             onUpdateTableName={handleUpdateTableName}
             setSelectedTableId={setSelectedTableId}
             selectedTableId={selectedTableId}
+            isLoadingProfiles={isLoadingProfiles}
             allProfiles={allProfilesData}
             onCreateTableWithProfile={handleCreateTableWithProfile}
           />

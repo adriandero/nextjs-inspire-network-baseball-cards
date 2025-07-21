@@ -13,14 +13,22 @@ import {
   type Table as ReactTable,
   Row,
 } from "@tanstack/react-table";
+import {
+  COMPARE_PROFILE_TABLE_SKELETON_COLUMNS,
+  SkeletonColumnDef,
+  TableSkeleton,
+} from "@/src/components/custom-ui/table-skeleton";
 
 interface TableBodyProps<T> {
   table: ReactTable<T>;
   columns: ColumnDef<T>[];
   isLoading?: boolean;
   emptyMessage?: string;
-  loadingMessage?: string;
   renderRow: (row: Row<T>) => JSX.Element;
+  skeletonColumns?: SkeletonColumnDef[];
+  skeletonRowCount?: number;
+  useSkeletonLoading?: boolean;
+  hasLoadedOnce?: boolean;
 }
 
 export function GenericTableBody<T>({
@@ -28,9 +36,30 @@ export function GenericTableBody<T>({
   columns,
   isLoading = false,
   emptyMessage = "No results found.",
-  loadingMessage = "Loading...",
   renderRow,
+  skeletonColumns = COMPARE_PROFILE_TABLE_SKELETON_COLUMNS,
+  skeletonRowCount = 5,
+  useSkeletonLoading = true,
+  hasLoadedOnce = false, // Default to false for initial loading
 }: TableBodyProps<T>) {
+  const rows = table.getRowModel().rows;
+  const hasData = rows && rows.length > 0;
+
+  const shouldShowSkeleton =
+    useSkeletonLoading && (isLoading || (!hasData && !hasLoadedOnce));
+
+  if (shouldShowSkeleton) {
+    return (
+      <>
+        <TableSkeleton
+          columns={skeletonColumns}
+          rowCount={skeletonRowCount}
+          className=""
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
@@ -52,17 +81,8 @@ export function GenericTableBody<T>({
             ))}
           </TableHeader>
           <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {loadingMessage}
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => renderRow(row))
+            {hasData ? (
+              rows.map((row) => renderRow(row))
             ) : (
               <TableRow>
                 <TableCell
@@ -78,8 +98,12 @@ export function GenericTableBody<T>({
       </div>
       <div className="flex items-center justify-end space-x-2 p-4 w-full h-full">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} TUG Cards selected.
+          {isLoading ? null : (
+            <>
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} TUG Cards selected.
+            </>
+          )}
         </div>
       </div>
     </>

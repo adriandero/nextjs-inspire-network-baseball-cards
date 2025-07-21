@@ -1,8 +1,7 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { ArrowUpDown } from "lucide-react";
-import { redirect } from "next/navigation";
+import { ColumnDef, Row } from "@tanstack/react-table";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import defaultAvatar from "@/public/images/default-avatar.png";
 
@@ -18,6 +17,77 @@ import {
 
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
+
+const ProfileNameCell = ({ row }: { row: Row<ProfileWithDetailedTeams> }) => {
+  const router = useRouter();
+  const profileName = row.original.name;
+  const profileUuid = row.original.uuid;
+  const profileJobRole = row.original.jobRole;
+  const profileImageSrc =
+    row.original.profileImage?.asset.url ?? defaultAvatar.src;
+
+  const handleClick = () => {
+    router.push(`/tugcards/${profileUuid}`);
+  };
+
+  return (
+    <div
+      className="flex flex-row items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+      onClick={handleClick}
+    >
+      <div className="relative min-w-10 min-h-10 rounded-full overflow-hidden">
+        <Image
+          src={profileImageSrc}
+          alt={profileName}
+          fill
+          style={{ objectFit: "cover" }}
+        />
+      </div>
+      <div>
+        <p className="font-bold text-base">{profileName}</p>
+        <div className="text-sm text-gray-600">
+          {profileJobRole?.map((role: string, index: number) => (
+            <span key={index}>
+              {role}
+              {index < profileJobRole.length - 1 && ", "}
+            </span>
+          )) || null}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProfileActionsCell = ({
+  row,
+}: {
+  row: Row<ProfileWithDetailedTeams>;
+}) => {
+  const router = useRouter();
+  const profileUuid = row.original.uuid;
+
+  const handleViewProfile = () => {
+    router.push(`/tugcards/${profileUuid}`);
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="ml-auto">
+        <Button variant="ghost" className="h-8 w-8 p-0 flex">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleViewProfile}>
+          View Profile
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
   {
@@ -35,44 +105,7 @@ export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
       );
     },
     sortingFn: "alphanumeric",
-    cell: ({ row }) => {
-      const profileName = row.original.name;
-      const profileUuid = row.original.uuid;
-      const profileJobRole = row.original.jobRole;
-      const profileImageSrc =
-        row.original.profileImage?.asset.url ?? defaultAvatar.src;
-
-      return (
-        <div
-          className="flex flex-row items-center gap-4 "
-          onClick={() => {
-            return redirect(`/tugcards/${profileUuid}`);
-          }}
-        >
-          <div className="relative min-w-10 min-h-10 rounded-full overflow-hidden">
-            <Image
-              src={profileImageSrc}
-              alt={profileName}
-              fill
-              style={{ objectFit: "cover" }}
-            />
-          </div>
-          <div>
-            <p className="font-bold text-base">{profileName}</p>
-            <div className="table-cell ">
-              {profileJobRole
-                ? profileJobRole.map((role: string, index: number) => (
-                    <span key={index}>
-                      {role}
-                      {index < profileJobRole.length - 1 && ", "}
-                    </span>
-                  ))
-                : null}
-            </div>
-          </div>
-        </div>
-      );
-    },
+    cell: ProfileNameCell,
   },
   {
     accessorKey: "team",
@@ -81,18 +114,18 @@ export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
       const profileTeams = row.original.teams;
 
       return (
-        <div className="">
-          {profileTeams !== null ? (
-            profileTeams?.map(
+        <div>
+          {profileTeams?.length ? (
+            profileTeams.map(
               (team: TeamWithPopulatedCompany, index: number) => (
-                <div key={index}>
+                <span key={team._id || index}>
                   {team.name}
                   {index < profileTeams.length - 1 && ", "}
-                </div>
+                </span>
               ),
             )
           ) : (
-            <p className="text-dark3 italic">no team</p>
+            <p className="text-gray-500 italic">no team</p>
           )}
         </div>
       );
@@ -121,7 +154,6 @@ export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
         .filter((group): group is NonNullable<typeof group> => Boolean(group));
       return groups.join(", ");
     },
-
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue) return true;
 
@@ -133,34 +165,9 @@ export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
       return profileGroups.includes(filterValue);
     },
   },
-
   {
     id: "actions",
     footer: "Action" as const,
-    cell: ({ row }) => {
-      const profileUuid = row.original.uuid;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="ml-auto">
-            <Button variant="ghost" className="h-8 w-8 p-0 flex">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                return redirect(`/tugcards/${profileUuid}`);
-              }}
-            >
-              View Profile
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ProfileActionsCell,
   },
 ];

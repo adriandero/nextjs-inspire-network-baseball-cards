@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/src/components/shadcn-ui/alert-dialog";
+import { ProfileTableSkeleton } from "@/src/components/custom-ui/table-skeleton";
 
 interface ContentProps<TData> {
   table: Table<TData>;
@@ -34,6 +35,10 @@ export function Content<TData>({
   onRowClick,
   hasData,
 }: ContentProps<TData>) {
+  if (loadingProfiles) {
+    return <ProfileTableSkeleton rowCount={8} />;
+  }
+
   const columns = table.getAllColumns();
 
   return (
@@ -49,7 +54,7 @@ export function Content<TData>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );
@@ -58,13 +63,7 @@ export function Content<TData>({
           ))}
         </TableHeader>
         <TableBody>
-          {loadingProfiles ? (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                Loading Tug Cards...
-              </TableCell>
-            </TableRow>
-          ) : table.getRowModel().rows?.length ? (
+          {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -74,7 +73,9 @@ export function Content<TData>({
                     onRowClick(row.original);
                   }
                 }}
-                className={allowRowClick ? "" : ""}
+                className={
+                  allowRowClick ? "cursor-pointer hover:bg-gray-50" : ""
+                }
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -91,7 +92,7 @@ export function Content<TData>({
                   {!hasData ? (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <GoInfo className="flex self-center " />
+                        <GoInfo className="flex self-center cursor-pointer" />
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>

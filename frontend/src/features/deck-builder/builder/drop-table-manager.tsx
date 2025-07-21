@@ -9,6 +9,11 @@ import { useProfileTableData } from "@/src/features/deck-builder/hooks/use-profi
 import { useTableNameEditor } from "@/src/features/deck-builder/hooks/use-table-name-editor.hook";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { cn } from "@/src/lib/utils";
+import {
+  CompareProfileTableSkeleton,
+  Skeleton,
+} from "@/src/components/custom-ui/table-skeleton";
+import { useTableLoadingState } from "@/src/features/deck-builder/hooks/use-async-table-state.hook";
 
 interface ProfileTablesManagerProps {
   profileIdentifierTables: ProfileIdentifierTable[];
@@ -18,8 +23,26 @@ interface ProfileTablesManagerProps {
   onCreateTableWithProfile: (profileId: string) => void;
   setSelectedTableId: (tableId: string) => void;
   selectedTableId: string;
+  isLoadingProfiles: boolean;
   allProfiles: ProfileWithDetailedTeams[];
 }
+
+const TableHeaderSkeleton = () => (
+  <div className="flex h-12 items-center justify-end">
+    <div className="font-medium text-base min-w-0 justify-end flex">
+      <div className="hover:bg-gray-100 px-2 rounded overflow-x-auto overflow-y-hidden w-fit">
+        <Skeleton className="h-4 w-32" />
+      </div>
+    </div>
+  </div>
+);
+
+const TableSkeleton = ({ className = "" }: { className?: string }) => (
+  <div className={className}>
+    <TableHeaderSkeleton />
+    <CompareProfileTableSkeleton rowCount={3} />
+  </div>
+);
 
 const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   profileIdentifierTables,
@@ -30,9 +53,15 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onCreateTableWithProfile,
   setSelectedTableId,
+  isLoadingProfiles,
   selectedTableId,
   allProfiles,
 }) => {
+  const { hasLoadedOnce } = useTableLoadingState(
+    allProfiles,
+    isLoadingProfiles,
+  );
+
   const { getProfilesForTable } = useProfileTableData(
     profileIdentifierTables,
     allProfiles,
@@ -73,7 +102,15 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
     [handleSaveEdit, cancelEditing],
   );
 
-  if (profileIdentifierTables.length === 0) {
+  if (isLoadingProfiles || (!hasLoadedOnce && allProfiles.length === 0)) {
+    return (
+      <div className="flex flex-col w-full">
+        <TableSkeleton />
+      </div>
+    );
+  }
+
+  if (profileIdentifierTables.length === 0 && hasLoadedOnce) {
     return (
       <div className="flex justify-center items-center p-8 text-gray-500">
         No tables created yet

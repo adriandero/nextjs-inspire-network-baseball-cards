@@ -41,7 +41,7 @@ const DragTable: React.FC<DragTableProps> = ({
   handleGroupingChange,
   handleOneWayProfileCheck,
   columns,
-  isLoadingProfiles = false,
+  isLoadingProfiles = true,
 }) => {
   const isShowingProfiles = groupingMode === "profiles" || view === "profiles";
 
@@ -100,7 +100,6 @@ const DragTable: React.FC<DragTableProps> = ({
           table={table as ReactTable<ProfileWithDetailedTeams>}
           columns={columns as ColumnDef<ProfileWithDetailedTeams>[]}
           isLoading={isLoadingProfiles}
-          loadingMessage="Loading TUG Cards..."
           emptyMessage="No TUG Cards found."
           renderRow={renderProfileRow}
         />
@@ -109,7 +108,6 @@ const DragTable: React.FC<DragTableProps> = ({
           table={table as ReactTable<TeamWithPopulatedCompany>}
           columns={columns as ColumnDef<TeamWithPopulatedCompany>[]}
           isLoading={isLoadingProfiles}
-          loadingMessage="Loading Teams..."
           emptyMessage="No teams found."
           renderRow={renderTeamRow}
         />
