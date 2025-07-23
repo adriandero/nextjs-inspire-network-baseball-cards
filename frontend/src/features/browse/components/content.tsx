@@ -69,7 +69,7 @@ export function Content<TData>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 onClick={() => {
-                  if (allowRowClick && onRowClick) {
+                  if (onRowClick) {
                     onRowClick(row.original);
                   }
                 }}

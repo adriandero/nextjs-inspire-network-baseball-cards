@@ -125,8 +125,33 @@ export async function getUserTeams(
 
   const query = `
     *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
-      "teams": team[]-> | order(name asc) {
-        _id,
+      "directTeams": team[]-> {
+        _id,    
+        _type,
+        name,
+        "slug": slug.current,
+        "company": company->{
+          name,
+          "slug": slug.current
+        },
+        isameriprise,
+        groups
+      },
+      "profileTeams": coalesce(profile->team[]-> {
+        _id,    
+        _type,
+        name,
+        "slug": slug.current,
+        "company": company->{
+          name,
+          "slug": slug.current
+        },
+        isameriprise,
+        groups
+      }, []),
+      "defaultTeam": *[_type == "team" && slug.current == "inspire-network" && !(_id in path('drafts.**'))][0] {
+        _id,    
+        _type,
         name,
         "slug": slug.current,
         "company": company->{
@@ -142,12 +167,34 @@ export async function getUserTeams(
   const options = { next: { revalidate: 30 } };
 
   try {
-    const result = await client.fetch<UserTeamsResponse>(
-      query,
-      { userEmail },
-      options,
+    const data = await client.fetch<{
+      directTeams: TeamWithPopulatedCompany[];
+      profileTeams: TeamWithPopulatedCompany[];
+      defaultTeam: TeamWithPopulatedCompany | null;
+    }>(query, { userEmail }, options);
+
+    if (!data) return null;
+
+    // Fast deduplication using Map for O(n) performance
+    const teamMap = new Map<string, TeamWithPopulatedCompany>();
+
+    // Add default team first (if it exists)
+    if (data.defaultTeam) {
+      teamMap.set(data.defaultTeam._id, data.defaultTeam);
+    }
+
+    // Add direct teams
+    data.directTeams?.forEach((team) => teamMap.set(team._id, team));
+
+    // Add profile teams
+    data.profileTeams?.forEach((team) => teamMap.set(team._id, team));
+
+    // Convert back to sorted array
+    const teams = Array.from(teamMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name),
     );
-    return result || null;
+
+    return { teams };
   } catch (error) {
     console.error("Failed to fetch user teams:", error);
     throw new Error(`Unable to fetch teams for user: ${userEmail}`);

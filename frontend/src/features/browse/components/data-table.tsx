@@ -150,15 +150,11 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
 
   const handleRowClick = React.useCallback(
     (row: TableData) => {
-      if (allowRowClick) {
-        if (
-          "_type" in row &&
-          row._type === "team" &&
-          "slug" in row &&
-          !("uuid" in row)
-        ) {
-          handleTeamSelect(row as TeamWithPopulatedCompany);
-        }
+      console.log("toilet", row);
+
+      if (allowRowClick && row._type === "team") {
+        console.log("skbidid");
+        handleTeamSelect(row);
       }
     },
     [allowRowClick, handleTeamSelect],

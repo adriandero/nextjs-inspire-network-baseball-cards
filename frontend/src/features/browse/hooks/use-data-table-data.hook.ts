@@ -38,7 +38,6 @@ export function useDataTableData() {
       try {
         setLoadingProfiles(true);
         const profiles = await getTeamProfiles(team.slug);
-        console.log(profiles)
         setProfilesData(profiles?.teamProfiles ?? []);
         return profiles?.teamProfiles ?? [];
       } catch (error) {
