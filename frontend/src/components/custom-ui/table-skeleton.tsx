@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/shadcn-ui/table";
+import React from "react";
 
 export const Skeleton = ({
   className = "",
@@ -125,6 +126,11 @@ export const COMPARE_PROFILE_TABLE_SKELETON_COLUMNS: SkeletonColumnDef[] = [
   { type: "text", header: "Role" },
 ];
 
+export const COMPARISON_TABLE_SKELETON_COLUMNS: SkeletonColumnDef[] = [
+  { type: "avatar-name", header: "Name", width: "w-1/3" },
+  { type: "text-wide", header: "WIDGET", width: "w-2/3" },
+];
+
 export const CompareProfileTableSkeleton = ({
   rowCount = 5,
   className = "",
@@ -151,4 +157,19 @@ export const ProfileTableSkeleton = ({
     rowCount={rowCount}
     className={className}
   />
+);
+
+export const ComparisonTableSkeleton = ({
+  className = "",
+}: {
+  className?: string;
+}) => (
+  <div className={`space-y-4 mb-4 ${className}`}>
+    <Skeleton className="h-6 w-48 mb-4" />
+    <TableSkeleton
+      columns={COMPARISON_TABLE_SKELETON_COLUMNS}
+      rowCount={3}
+      className="rounded-md border bg-light1 w-full"
+    />
+  </div>
 );

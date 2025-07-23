@@ -7,12 +7,17 @@ export function useProfileComparison(groupedProfiles: string | null) {
   const [completeProfileTables, setCompleteProfileTables] = useState<
     ProfileTable[]
   >([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(Boolean(groupedProfiles));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProfiles() {
-      if (!groupedProfiles) return;
+      if (!groupedProfiles) {
+        setCompleteProfileTables([]);
+        setIsLoading(false);
+        setError(null);
+        return;
+      }
 
       setIsLoading(true);
       setError(null);
@@ -28,12 +33,13 @@ export function useProfileComparison(groupedProfiles: string | null) {
             return { ...group, profiles: profileObjects };
           }),
         );
-        console.log(completeTables)
+        console.log(completeTables);
         setCompleteProfileTables(completeTables);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to load profile data",
         );
+        setCompleteProfileTables([]);
       } finally {
         setIsLoading(false);
       }

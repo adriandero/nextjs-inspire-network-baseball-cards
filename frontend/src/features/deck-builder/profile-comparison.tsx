@@ -44,10 +44,31 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
+import {
+  Skeleton,
+  ComparisonTableSkeleton,
+} from "@/src/components/custom-ui/table-skeleton"; // Adjust path as needed
 
 export interface ProfileComparisonProps {
   readonly initialType: CompareTypes;
 }
+
+const ComparisonLoadingSkeleton = () => (
+  <div className="px-6">
+    <div className="flex flex-col gap-4">
+      <div className="flex w-full items-center h-8 py-4 gap-2">
+        <Skeleton className="h-6 w-32 mr-auto" />
+        <Skeleton className="h-9 w-24" />
+        <Skeleton className="h-9 w-16" />
+        <Skeleton className="h-9 w-9" />
+        <Skeleton className="h-9 w-9" />
+      </div>
+
+      <ComparisonTableSkeleton />
+      <ComparisonTableSkeleton />
+    </div>
+  </div>
+);
 
 export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   const searchParams = useSearchParams();
@@ -97,15 +118,9 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
 
   const TableComponent = comparisonTableMap[selectedType];
 
+  // Show skeleton while loading
   if (isLoading) {
-    return (
-      <div className="px-6">
-        <div className="flex items-center justify-center p-8">
-          <Loader2 className="animate-spin mr-2" />
-          Loading TUG Cards...
-        </div>
-      </div>
-    );
+    return <ComparisonLoadingSkeleton />;
   }
 
   if (error) {
@@ -216,9 +231,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                {recentlyCopied
-                  ? "Copied!"
-                  : "Copy Link"}
+                {recentlyCopied ? "Copied!" : "Copy Link"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
