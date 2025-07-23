@@ -13,10 +13,6 @@ export async function getTeamsForUser(
     return getAllTeams();
   }
 
-  if (!userProfileData.team) {
-    return [];
-  }
-
   const userTeams = await getUserTeams(userProfileData.email);
   return userTeams?.teams || [];
 }
@@ -125,7 +121,7 @@ export async function getUserTeams(
 
   const query = `
     *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
-      "directTeams": team[]-> {
+      "directTeams": coalesce(team[]-> {
         _id,    
         _type,
         name,
@@ -136,7 +132,7 @@ export async function getUserTeams(
         },
         isameriprise,
         groups
-      },
+      }, []),
       "profileTeams": coalesce(profile->team[]-> {
         _id,    
         _type,
@@ -175,6 +171,13 @@ export async function getUserTeams(
 
     if (!data) return null;
 
+    // Add some debugging to see what's happening
+    console.log("Query result:", {
+      directTeams: data.directTeams?.length || 0,
+      profileTeams: data.profileTeams?.length || 0,
+      defaultTeam: data.defaultTeam ? "found" : "not found",
+    });
+
     // Fast deduplication using Map for O(n) performance
     const teamMap = new Map<string, TeamWithPopulatedCompany>();
 
@@ -193,6 +196,8 @@ export async function getUserTeams(
     const teams = Array.from(teamMap.values()).sort((a, b) =>
       a.name.localeCompare(b.name),
     );
+
+    console.log("Final teams count:", teams.length);
 
     return { teams };
   } catch (error) {
