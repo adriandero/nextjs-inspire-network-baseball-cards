@@ -26,7 +26,7 @@ export default function DownloadButton({
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `${fileName ? fileName : uuid}.pdf`;
+      link.download = `${fileName ? fileName : uuid}-TUG-Card.pdf`;
 
       document.body.appendChild(link);
       link.click();
