@@ -135,7 +135,10 @@ export default async function TugPage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <DownloadButton uuid={uuid} fileName={profile.name} />
+          <DownloadButton
+            uuid={uuid}
+            fileName={`${profile.name} - ${profile.team?.[0].name} - TUG Card`}
+          />
         </div>
       </main>
       <footer className="flex item-center p-8"></footer>

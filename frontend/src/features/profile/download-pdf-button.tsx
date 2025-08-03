@@ -19,14 +19,14 @@ export default function DownloadButton({
       setLoading(true);
 
       const pdfBlob = await fetch(`/api/tugcards/${uuid}/pdf`).then((res) =>
-        res.blob(),
+        res.blob()
       );
 
       const blobUrl = URL.createObjectURL(pdfBlob);
 
       const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `${fileName ? fileName : uuid}-TUG-Card.pdf`;
+      link.download = `${fileName ? fileName : uuid}.pdf`;
 
       document.body.appendChild(link);
       link.click();

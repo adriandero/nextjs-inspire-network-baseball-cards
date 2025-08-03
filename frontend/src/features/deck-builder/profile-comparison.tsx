@@ -98,8 +98,8 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
 
   const handlePDFDownloadCall = async () => {
     try {
-      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
-      const filename = `Compare-IN-${COMPARISON_ATTRIBUTES[selectedType].title}-Cards.pdf`;
+      const fetchURL = `/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
+      const filename = `Compare - ${COMPARISON_ATTRIBUTES[selectedType].title} - TUG Cards.pdf`;
 
       await downloadPDF(fetchURL, filename);
     } catch (error) {
@@ -189,7 +189,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
                           "mr-2 h-4 w-4",
                           selectedType === item.value
                             ? "opacity-100"
-                            : "opacity-0",
+                            : "opacity-0"
                         )}
                       />
                       {item.data.title}
