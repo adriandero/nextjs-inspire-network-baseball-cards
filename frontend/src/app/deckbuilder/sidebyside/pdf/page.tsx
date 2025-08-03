@@ -1,17 +1,17 @@
 "use client";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
 import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";
 import SideBySide from "@/src/features/deck-builder/data-tables/side-by-side";
 import { PDFLayout } from "@/src/components/layout/pdf-layout";
+import { useProfileComparisonServerSide } from "@/src/features/deck-builder/hooks/use-profile-comparison-server-side.hook";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
 
   const { isLoading, completeProfileTables, error } =
-    useProfileComparison(groupedProfiles);
+  useProfileComparisonServerSide(groupedProfiles);
 
   return (
     <PDFLayout

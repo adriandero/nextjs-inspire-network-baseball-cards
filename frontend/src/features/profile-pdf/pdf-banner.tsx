@@ -53,7 +53,7 @@ export default function PdfBanner({
     ? urlFor(profile.profileImage).auto("format").quality(80).url()
     : defaultAvatar.src;
 
-  const teamLogoUrl = profile?.team[0]?.teamLogo
+  const teamLogoUrl = profile?.team?.[0]?.teamLogo
     ? urlFor(profile?.team[0]?.teamLogo?.asset.url)
         .auto("format")
         .quality(90)

@@ -4,15 +4,16 @@ import { useSearchParams } from "next/navigation";
 import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import { ResponsivePDFLayout } from "@/src/components/layout/pdf-layout-responsive";
 import { useHeightResponsiveFont } from "@/src/hooks/deck-builder/use-height-responsive-font.hook";
-import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
+
 import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";
+import { useProfileComparisonServerSide } from "@/src/features/deck-builder/hooks/use-profile-comparison-server-side.hook";
 
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
 
   const { isLoading, completeProfileTables, error } =
-    useProfileComparison(groupedProfiles);
+    useProfileComparisonServerSide(groupedProfiles);
 
   const { containerRef, baseFontSize, headingFontSize, breakUpGraph } =
     useHeightResponsiveFont(!isLoading && completeProfileTables.length > 0);

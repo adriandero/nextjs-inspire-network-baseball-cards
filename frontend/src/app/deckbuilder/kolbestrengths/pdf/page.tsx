@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
 import { PDFLayout } from "@/src/components/layout/pdf-layout";
-import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
+import { useProfileComparisonServerSide } from "@/src/features/deck-builder/hooks/use-profile-comparison-server-side.hook";
 
 
 function ProfileComparisonContent() {
@@ -13,7 +13,7 @@ function ProfileComparisonContent() {
   const showJobRole = showJobRoleParam === "true";
 
   const { isLoading, completeProfileTables, error } =
-    useProfileComparison(groupedProfiles);
+  useProfileComparisonServerSide(groupedProfiles);
 
   return (
     <PDFLayout
