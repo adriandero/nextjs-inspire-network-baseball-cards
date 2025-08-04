@@ -98,7 +98,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
 
   const handlePDFDownloadCall = async () => {
     try {
-      const fetchURL = `api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
+      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
       const filename = `Compare - ${COMPARISON_ATTRIBUTES[selectedType].title} - TUG Cards.pdf`;
 
       await downloadPDF(fetchURL, filename);
