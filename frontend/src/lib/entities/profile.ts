@@ -1,6 +1,15 @@
 import { SanityAsset } from "./common";
 import { TeamWithPopulatedCompany } from "./team";
 
+export interface Widget {
+  wonder?: string;
+  invention?: string;
+  discernment?: string;
+  galvanizing?: string;
+  enablement?: string;
+  tenacity?: string;
+}
+
 export interface Profile {
   _id: string;
   _type: "profile";
@@ -16,14 +25,7 @@ export interface Profile {
   profileImage?: SanityAsset;
   workingGenius?: {
     title?: string;
-    widget?: {
-      wonder?: string;
-      invention?: string;
-      discernment?: string;
-      galvanizing?: string;
-      enablement?: string;
-      tenacity?: string;
-    };
+    widget?: Widget;
   };
   principleYouArchetype?: string[];
   kolbeStrengths?: {

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
+import { Profile } from "@/src/lib/entities/profile";
 
 import { SanityDocument } from "next-sanity";
 import {
@@ -21,9 +22,14 @@ import {
 import WidgetCogsSVG from "@/public/illustrations/widget-cogs-simple-svg";
 import { urlFor } from "@/src/lib/sanity/client";
 import defaultAvatar from "@/public/images/default-avatar.png";
+import {
+  countGreenCogsFromWidget,
+  createSummaryProfile,
+} from "@/src/features/deck-builder/utils/widget-aggregation";
+import WidgetCogIconSVG from "@/public/illustrations/widget-cog-icon-svg";
 
-export interface WorkingGeniusTableProps {
-  profiles: SanityDocument[];
+interface WorkingGeniusTableProps {
+  profiles: Profile[];
   showJobRole: boolean;
   optimizedImages?: boolean;
   tableName?: string;
@@ -35,38 +41,80 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   optimizedImages = false,
   tableName,
 }) => {
+  const summaryWidget = useMemo(() => {
+    if (profiles.length === 0) return null;
+    return createSummaryProfile(profiles);
+  }, [profiles]);
+
+  const greenCogCount = useMemo(() => {
+    return summaryWidget ? countGreenCogsFromWidget(summaryWidget) : 0;
+  }, [summaryWidget]);
+
+  const summaryRow: Profile | null = useMemo(() => {
+    if (!summaryWidget) return null;
+
+    return {
+      _id: "summary-row",
+      name: `Total - ${greenCogCount}/6`,
+      workingGenius: { widget: summaryWidget },
+      _type: "profile",
+      _rev: "",
+      _createdAt: "",
+      _updatedAt: "",
+      uuid: "",
+      slug: "",
+      jobRole: [],
+    };
+  }, [summaryWidget, greenCogCount]);
+
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",
       header: "Name",
-      size: 300, // Set this to 1/3 of your expected table width
+      size: 300,
       cell: ({ row }) => {
         const profile = row.original;
-        return (
-          <div className="flex items-center gap-3">
-            {
+        const isSummaryRow = profile._id === "summary-row";
+
+        if (isSummaryRow) {
+          return (
+            <div className="flex items-center gap-3">
               <div className="flex-shrink-0">
-                <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                  <Image
-                    src={
-                      profile.profileImage
-                        ? optimizedImages
-                          ? urlFor(profile.profileImage.asset.url)
-                              .width(80)
-                              .height(80)
-                              .auto("format")
-                              .quality(40)
-                              .url()
-                          : profile.profileImage.asset.url
-                        : defaultAvatar.src
-                    }
-                    alt={profile.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
+                <div className="w-10 h-10 rounded-full flex items-center justify-center">
+                  <WidgetCogIconSVG />
                 </div>
               </div>
-            }
+              <div>
+                <div className="font-bold text-base">{profile.name}</div>
+              </div>
+            </div>
+          );
+        }
+
+        // Regular profile row
+        return (
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0">
+              <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                <Image
+                  src={
+                    profile.profileImage
+                      ? optimizedImages
+                        ? urlFor(profile.profileImage.asset.url)
+                            .width(80)
+                            .height(80)
+                            .auto("format")
+                            .quality(40)
+                            .url()
+                        : profile.profileImage.asset.url
+                      : defaultAvatar.src
+                  }
+                  alt={profile.name}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            </div>
             <div>
               <div className="font-bold text-base">{profile.name}</div>
               <div className="text-base">
@@ -87,7 +135,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     {
       accessorKey: "widget",
       header: "WIDGET",
-      size: 600, // Set this to 2/3 of your expected table width
+      size: 600,
       cell: ({ row }) => (
         <WidgetCogsSVG
           widget={row.original.workingGenius?.widget}
@@ -101,8 +149,15 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     },
   ];
 
-  const table = useReactTable({
+  const mainTable = useReactTable({
     data: profiles,
+    columns,
+    columnResizeMode: "onChange",
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  const summaryTable = useReactTable({
+    data: summaryRow ? [summaryRow] : [],
     columns,
     columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
@@ -120,12 +175,13 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   }
 
   return (
-    <div className="space-y-4 mb-4 ">
-      <h2 className="text-base font-semibold">{tableName}</h2>
-      <div className="rounded-md border bg-light1 w-full">
+    <div className="mb-4">
+      <h2 className="text-base font-semibold mb-4">{tableName}</h2>
+
+      <div className="rounded-md border bg-light1 w-full overflow-hidden">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {mainTable.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
@@ -138,7 +194,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -146,7 +202,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.map((row) => (
+            {mainTable.getRowModel().rows.map((row) => (
               <TableRow key={row.id} className="px-4">
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
@@ -162,7 +218,36 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
             ))}
           </TableBody>
         </Table>
-      </div>{" "}
+      </div>
+
+      {summaryRow && (
+        <div className="bg-gray-50/50 rounded-md w-full overflow-hidden">
+          <Table>
+            <TableBody>
+              {summaryTable.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className="px-4 border-0 hover:bg-transparent" // Added hover:bg-transparent
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={`py-3 border-0 ${
+                        cell.column.id === "name" ? "w-1/3" : "w-2/3"
+                      }`}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };
