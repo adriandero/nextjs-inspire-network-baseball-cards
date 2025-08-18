@@ -17,6 +17,7 @@ function createWidgetField(name: string) {
     },
   }
 }
+
 const wonderObj = createWidgetField('wonder')
 const discernmentObj = createWidgetField('discernment')
 const inventionObj = createWidgetField('invention')
@@ -99,6 +100,11 @@ export const profileType = defineType({
       description: 'Unique identifier for this profile',
       initialValue: () => uuidv4(),
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'email',
+      type: 'string',
+      validation: (rule) => rule.email(),
     }),
     defineField({
       name: 'name',
