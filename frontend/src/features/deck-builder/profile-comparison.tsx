@@ -1,36 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { GoMultiSelect, GoDownload, GoLink } from "react-icons/go";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/src/components/shadcn-ui/popover";
-import { cn } from "@/src/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/src/components/shadcn-ui/command";
-import React from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/src/components/shadcn-ui/tooltip";
 import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
 import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
 import ValuesTable from "@/src/features/deck-builder/data-tables/values-table";
 import {
-  COMPARE_TYPE_OPTIONS,
   CompareTypes,
   COMPARISON_ATTRIBUTES,
 } from "@/src/features/deck-builder/entities/compare-types";
@@ -39,15 +16,11 @@ import PrinciplesYouArchetypesTable from "@/src/features/deck-builder/data-table
 import { useProfileComparison } from "@/src/features/deck-builder/hooks/use-profile-comparison.hook";
 import { usePDFDownload } from "@/src/features/deck-builder/hooks/use-pdf-download.hook";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-  DropdownMenuTrigger,
-} from "@/src/components/shadcn-ui/dropdown-menu";
-import {
   Skeleton,
   ComparisonTableSkeleton,
-} from "@/src/components/custom-ui/table-skeleton"; // Adjust path as needed
+} from "@/src/components/custom-ui/table-skeleton";
+import { filterProfilesByArchetype } from "@/src/features/deck-builder/utils/profile-filters";
+import { Toolbar } from "@/src/features/deck-builder/components/toolbar";
 
 export interface ProfileComparisonProps {
   readonly initialType: CompareTypes;
@@ -78,23 +51,17 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     useProfileComparison(groupedProfiles);
   const { downloadPDF, loading: pdfLoading } = usePDFDownload();
 
+  // Component state
   const [selectedType, setSelectedType] = useState(initialType);
   const [showJobRole, setShowJobRole] = useState<boolean>(false);
-  const [open, setOpen] = React.useState(false);
-  const [recentlyCopied, setRecentlyCopied] = useState<boolean>(false);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-  const handleCopyURLToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setRecentlyCopied(true);
-
-      setTimeout(() => {
-        setRecentlyCopied(false);
-      }, 3000);
-    } catch (err) {
-      console.error("Failed to copy URL:", err);
+  // Reset filters when switching away from PrinciplesYou Archetypes
+  useEffect(() => {
+    if (selectedType !== CompareTypes.PRINCIPLES_YOU_ARCHETYPES) {
+      setSelectedFilters([]);
     }
-  };
+  }, [selectedType]);
 
   const handlePDFDownloadCall = async () => {
     try {
@@ -118,11 +85,12 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
 
   const TableComponent = comparisonTableMap[selectedType];
 
-  // Show skeleton while loading
+  // Loading state
   if (isLoading) {
     return <ComparisonLoadingSkeleton />;
   }
 
+  // Error state
   if (error) {
     return (
       <div className="px-6">
@@ -140,6 +108,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     );
   }
 
+  // Empty state
   if (
     completeProfileTables.length === 0 ||
     completeProfileTables.every((table) => table.profiles.length === 0)
@@ -156,115 +125,37 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   return (
     <div className="px-6">
       <div className="flex flex-col gap-4">
-        <div className="flex w-full items-center h-8 py-4 gap-2">
-          <h1 className="text-lg font-bold mr-auto">
-            {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
-          </h1>
+        <Toolbar
+          selectedType={selectedType}
+          onTypeChange={setSelectedType}
+          showJobRole={showJobRole}
+          onShowJobRoleChange={setShowJobRole}
+          selectedFilters={selectedFilters}
+          onFiltersChange={setSelectedFilters}
+          groupedProfiles={groupedProfiles}
+          pdfLoading={pdfLoading}
+          onPDFDownload={handlePDFDownloadCall}
+        />
 
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={open}
-                className="w-fit justify-between"
-              >
-                {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-fit p-0">
-              <Command>
-                <CommandInput placeholder="Search compare type..." />
-                <CommandEmpty>No compare type found.</CommandEmpty>
-                <CommandGroup>
-                  {COMPARE_TYPE_OPTIONS.map((item) => (
-                    <CommandItem
-                      key={item.value}
-                      value={item.data.title}
-                      onSelect={() => setSelectedType(item.value)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedType === item.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                      {item.data.title}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
+        {completeProfileTables.map((table) => {
+          // Apply filtering for PrinciplesYou Archetypes
+          const filteredProfiles =
+            selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES
+              ? filterProfilesByArchetype(table.profiles, {
+                  selectedArchetypes: selectedFilters,
+                })
+              : table.profiles;
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <GoMultiSelect />
-                <span className="hidden sm:inline">View</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuCheckboxItem
-                checked={showJobRole}
-                onCheckedChange={(checked) =>
-                  setShowJobRole(checked as boolean)
-                }
-              >
-                Show Title
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <TooltipProvider>
-            <Tooltip open={recentlyCopied ? true : undefined}>
-              <TooltipTrigger>
-                <Button variant="outline" onClick={handleCopyURLToClipboard}>
-                  {recentlyCopied ? (
-                    <Check className="text-primary" />
-                  ) : (
-                    <GoLink />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {recentlyCopied ? "Copied!" : "Copy Link"}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  variant="outline"
-                  onClick={handlePDFDownloadCall}
-                  disabled={pdfLoading}
-                >
-                  {pdfLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <GoDownload />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">Download PDF</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
-        {completeProfileTables.map((table) => (
-          <div key={table.id} className="flex flex-col">
-            <TableComponent
-              profiles={table.profiles}
-              tableName={table.name}
-              showJobRole={showJobRole}
-            />
-          </div>
-        ))}
+          return (
+            <div key={table.id} className="flex flex-col">
+              <TableComponent
+                profiles={filteredProfiles}
+                tableName={table.name}
+                showJobRole={showJobRole}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
