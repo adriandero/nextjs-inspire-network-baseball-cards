@@ -28,6 +28,7 @@ export interface Profile {
     widget?: Widget;
   };
   principleYouArchetype?: string[];
+  principleYouArchetypeLeast?: string[];
   kolbeStrengths?: {
     factFinder?: number;
     followThru?: number;

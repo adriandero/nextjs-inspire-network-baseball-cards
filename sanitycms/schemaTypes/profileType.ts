@@ -166,6 +166,22 @@ export const profileType = defineType({
     }),
     defineField({
       name: 'principleYouArchetype',
+      title: 'Most like PrinciplesYou Archetypes',
+      type: 'array',
+      of: [
+        {
+          name: 'archetype',
+          type: 'string',
+          options: {
+            list: principleYouArchetypeList,
+          },
+        },
+      ],
+      validation: (rule) => rule.unique(),
+    }),
+    defineField({
+      name: 'principleYouArchetypeLeast',
+      title: 'Least like PrinciplesYou Archetypes',
       type: 'array',
       of: [
         {

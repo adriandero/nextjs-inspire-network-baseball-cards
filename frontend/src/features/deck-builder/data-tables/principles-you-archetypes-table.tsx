@@ -20,9 +20,10 @@ import {
 import { urlFor } from "@/src/lib/sanity/client";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
+import { Profile } from "@/src/lib/entities/profile";
 
 export interface PrinciplesYouArchetypesTableProps {
-  profiles: SanityDocument[];
+  profiles: Profile[];
   optimizedImages?: boolean;
   showJobRole: boolean;
   tableName?: string;
@@ -35,7 +36,6 @@ const PrinciplesYouArchetypesTable: React.FC<
     {
       accessorKey: "name",
       header: "Name",
-      size: 300, // Set this to 1/3 of your expected table width
       cell: ({ row }) => {
         const profile = row.original;
         console.log(profile);
@@ -83,8 +83,7 @@ const PrinciplesYouArchetypesTable: React.FC<
     },
     {
       accessorKey: "principleYouArchetypes",
-      header: "PrinciplesYou Archetypes",
-      size: 600, // Set this to 2/3 of your expected table width
+      header: "Most Like",
       cell: ({ row }) => {
         const profile = row.original;
         return (
@@ -99,7 +98,30 @@ const PrinciplesYouArchetypesTable: React.FC<
                     className="max-h-16 h-full w-auto"
                   />
                 </div>
-              )
+              ),
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "principleYouArchetypesLeast",
+      header: "Least Like",
+      cell: ({ row }) => {
+        const profile = row.original;
+        return (
+          <div className="flex gap-2">
+            {profile?.principleYouArchetypeLeast?.map(
+              (principle: string, index: number) => (
+                <div key={index} className="h-fit w-auto ">
+                  <Image
+                    src={getArchetypeImage(principle)}
+                    alt={`Illustration for ${principle}`}
+                    layout="intrinsic"
+                    className="max-h-16 h-full w-auto"
+                  />
+                </div>
+              ),
             )}
           </div>
         );
@@ -110,7 +132,6 @@ const PrinciplesYouArchetypesTable: React.FC<
   const table = useReactTable({
     data: profiles,
     columns,
-    columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -134,17 +155,12 @@ const PrinciplesYouArchetypesTable: React.FC<
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className={`py-2 ${
-                      header.column.id === "name" ? "w-1/3" : "w-2/3"
-                    }`}
-                  >
+                  <TableHead key={header.id} className={`py-2 `}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -155,12 +171,7 @@ const PrinciplesYouArchetypesTable: React.FC<
             {table.getRowModel().rows.map((row) => (
               <TableRow key={row.id} className="px-4">
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className={`py-2 ${
-                      cell.column.id === "name" ? "w-1/3" : "w-2/3"
-                    }`}
-                  >
+                  <TableCell key={cell.id} className={`py-2 `}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
