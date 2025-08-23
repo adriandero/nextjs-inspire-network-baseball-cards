@@ -5,7 +5,7 @@ export const maxDuration = 60;
 
 export async function GET(
   req: Request,
-  context: { params: Promise<{ uuid: string }> }
+  context: { params: Promise<{ uuid: string }> },
 ) {
   const uuid = (await context.params).uuid;
   const browser = await puppeteer.launch({
@@ -27,7 +27,7 @@ export async function GET(
           img.onerror = () =>
             reject(new Error(`Failed to load image: ${img.src}`));
         });
-      })
+      }),
     );
   });
   await page.emulateMediaType("screen");
@@ -36,10 +36,13 @@ export async function GET(
     printBackground: true,
     landscape: true,
   });
+
   await browser.close();
-  return new Response(pdfBuffer, {
+
+  return new Response(pdfBuffer as BodyInit, {
     headers: {
       "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment; filename=tugcard.pdf",
     },
   });
 }
