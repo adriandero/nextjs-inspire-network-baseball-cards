@@ -1,0 +1,132 @@
+### Variables
+@baseUrl = http://localhost:3000
+@auth0Secret = 1bedff48045269685575325fd9a417abcf122329a27cb32d743adf213ad73866
+
+@validToken = Bearer {{auth0Secret}}
+
+
+###
+# ✅ Test 1: Happy Path - Create new user
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {
+    "user_id": "auth0|test123456789",
+    "email": "john.doe@example.com",
+    "name": "John Doe"
+  }
+}
+
+###
+# ✅ Test 2: Duplicate user - Should return existing user
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {
+    "user_id": "auth0|test123456789",
+    "email": "john.doe@example.com",
+    "name": "John Doe"
+  }
+}
+
+###
+# ❌ Test 3: Unauthorized - Wrong Bearer token
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: Bearer wrong_secret
+
+{
+  "auth0User": {
+    "user_id": "auth0|test999",
+    "email": "unauthorized@example.com"
+  }
+}
+
+###
+# ❌ Test 4: Unauthorized - Missing Authorization header
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+
+{
+  "auth0User": {
+    "user_id": "auth0|test999",
+    "email": "noauth@example.com"
+  }
+}
+
+###
+# ❌ Test 5: Bad Request - Missing user_id
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {
+    "email": "missing-id@example.com"
+  }
+}
+
+###
+# ❌ Test 6: Bad Request - Missing email
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {
+    "user_id": "auth0|missingemail123"
+  }
+}
+
+###
+# ❌ Test 7: Bad Request - Empty auth0User
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {}
+}
+
+###
+# ❌ Test 8: Bad Request - Missing auth0User entirely
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "someOtherField": "invalid"
+}
+
+###
+# ❌ Test 9: Bad Request - Malformed JSON
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {
+    "user_id": "auth0|malformed",
+    "email": "test@example.com"
+    // missing comma here intentionally
+    "extra": "field"
+  }
+
+###
+# ✅ Test 10: Different user - Should create successfully
+POST {{baseUrl}}/api/auth/sync-user
+Content-Type: application/json
+Authorization: {{validToken}}
+
+{
+  "auth0User": {
+    "user_id": "auth0|differentuser456",
+    "email": "jane.smith@example.com",
+    "name": "Jane Smith",
+    "picture": "https://avatars.example.com/jane.jpg"
+  }
+}
