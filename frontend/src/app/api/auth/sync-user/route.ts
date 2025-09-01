@@ -1,5 +1,6 @@
 import { writeClient } from "@/src/lib/sanity/client";
 import { NextRequest, NextResponse } from "next/server";
+import { getProfileIdByEmail } from "@/src/lib/data/profiles";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,17 +31,21 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // 4. Create Sanity user
+    // 4. Check if profile exists with this email
+    const profileId = await getProfileIdByEmail(auth0User.email);
+
+    // 5. Create Sanity user with profile reference if found
     const sanityUser = await writeClient.create({
       _type: "user",
       email: auth0User.email,
-      permission: "User", // Default from your schema
-      // profile and team will be null initially
+      permission: "User",
+      ...(profileId && { profile: { _type: "reference", _ref: profileId } }),
     });
 
     return NextResponse.json({
       success: true,
       userId: sanityUser._id,
+      profileLinked: !!profileId, // Let the client know if profile was linked
     });
   } catch (error) {
     console.error("Sanity user sync failed:", error);
