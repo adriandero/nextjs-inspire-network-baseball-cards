@@ -1,19 +1,42 @@
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
+import { NextRequest } from "next/server";
+
 export const maxDuration = 60;
 
 export async function GET(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ uuid: string }> },
 ) {
+  const isProd = process.env.NODE_ENV === "production";
   const uuid = (await context.params).uuid;
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: true,
-  });
+
+  // Conditional puppeteer setup
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let puppeteer: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let launchOptions: any;
+
+  if (isProd) {
+    const chromium = (await import("@sparticuz/chromium")).default;
+    puppeteer = await import("puppeteer-core");
+
+    launchOptions = {
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    };
+  } else {
+    puppeteer = await import("puppeteer");
+    launchOptions = {
+      headless: true,
+    };
+  }
+
+  const browser = await puppeteer.launch(launchOptions);
+
   const page = await browser.newPage();
   await page.goto(process.env.BASE_URL + `/tugcards/${uuid}/pdf`, {
     waitUntil: "networkidle2",
