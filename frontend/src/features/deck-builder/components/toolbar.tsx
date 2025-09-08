@@ -79,13 +79,17 @@ export function Toolbar({
     }
   };
 
+  const getAllArchetypes = (): Array<{ id: string; label: string }> => {
+    return PRINCIPLES_YOU_ARCHETYPES.flatMap((group) => group.archetypes);
+  };
+
   const getFiltersLabel = () => {
     if (selectedFilters.length === 0) return "None";
     if (selectedFilters.length === 1) {
-      const filter = PRINCIPLES_YOU_ARCHETYPES.find(
-        (f: PrincipleYouArchetype) => f.id === selectedFilters[0],
+      const filter = getAllArchetypes().find(
+        (f) => f.id === selectedFilters[0],
       );
-      return filter?.label || "1 selected";
+      return filter?.label ?? "1 selected";
     }
     return `${selectedFilters.length} selected`;
   };
@@ -169,8 +173,8 @@ export function Toolbar({
                     />
                     <CommandEmpty>No archetype found.</CommandEmpty>
                     <CommandGroup className="max-h-64 overflow-auto p-1">
-                      {PRINCIPLES_YOU_ARCHETYPES.map(
-                        (filter: PrincipleYouArchetype) => (
+                      {PRINCIPLES_YOU_ARCHETYPES.flatMap((group) =>
+                        group.archetypes.map((filter) => (
                           <CommandItem
                             key={filter.id}
                             value={filter.label}
@@ -192,7 +196,7 @@ export function Toolbar({
                             />
                             {filter.label}
                           </CommandItem>
-                        ),
+                        )),
                       )}
                     </CommandGroup>
                   </Command>
