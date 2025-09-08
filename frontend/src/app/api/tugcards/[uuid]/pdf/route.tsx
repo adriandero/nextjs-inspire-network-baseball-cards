@@ -24,7 +24,6 @@ export async function GET(
 
     launchOptions = {
       args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
       headless: true,
     };
