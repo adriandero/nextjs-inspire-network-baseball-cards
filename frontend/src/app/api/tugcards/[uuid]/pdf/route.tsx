@@ -1,6 +1,3 @@
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
-
 import { NextRequest } from "next/server";
 
 export const maxDuration = 60;
@@ -12,7 +9,6 @@ export async function GET(
   const isProd = process.env.NODE_ENV === "production";
   const uuid = (await context.params).uuid;
 
-  // Conditional puppeteer setup
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let puppeteer: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,7 +19,17 @@ export async function GET(
     puppeteer = await import("puppeteer-core");
 
     launchOptions = {
-      args: chromium.args,
+      args: [
+        ...chromium.args,
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--single-process",
+        "--disable-gpu",
+      ],
       executablePath: await chromium.executablePath(),
       headless: true,
     };

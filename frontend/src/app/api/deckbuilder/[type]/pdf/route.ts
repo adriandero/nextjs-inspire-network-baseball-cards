@@ -2,7 +2,7 @@ export const maxDuration = 60;
 
 export async function GET(
   req: Request,
-  context: { params: Promise<{ type: string }> }
+  context: { params: Promise<{ type: string }> },
 ) {
   const isProd = process.env.NODE_ENV === "production";
 
@@ -23,7 +23,17 @@ export async function GET(
     puppeteer = await import("puppeteer-core");
 
     launchOptions = {
-      args: chromium.args,
+      args: [
+        ...chromium.args,
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--single-process",
+        "--disable-gpu",
+      ],
       executablePath: await chromium.executablePath(),
       headless: true,
     };
@@ -52,7 +62,7 @@ export async function GET(
       `/deckbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
     {
       waitUntil: "networkidle2",
-    }
+    },
   );
 
   await page.evaluate(() => {
@@ -64,7 +74,7 @@ export async function GET(
           img.onerror = () =>
             reject(new Error(`Failed to load image: ${img.src}`));
         });
-      })
+      }),
     );
   });
 
