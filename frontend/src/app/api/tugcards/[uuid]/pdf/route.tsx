@@ -9,7 +9,6 @@ export async function GET(
   const isProd = process.env.NODE_ENV === "production";
   const uuid = (await context.params).uuid;
 
-  // Conditional puppeteer setup
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let puppeteer: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,6 +20,7 @@ export async function GET(
 
     launchOptions = {
       args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
       headless: true,
     };
