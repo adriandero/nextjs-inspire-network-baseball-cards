@@ -1,6 +1,3 @@
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
-
 import { NextRequest } from "next/server";
 
 export const maxDuration = 60;
