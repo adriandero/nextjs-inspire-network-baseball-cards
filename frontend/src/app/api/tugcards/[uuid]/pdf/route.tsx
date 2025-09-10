@@ -27,10 +27,11 @@ export async function GET(
         "--disable-accelerated-2d-canvas",
         "--no-first-run",
         "--no-zygote",
+        "--single-process",
         "--disable-gpu",
       ],
       executablePath: await chromium.executablePath(),
-      headless: "new", // Use the new headless mode
+      headless: true,
     };
   } else {
     puppeteer = await import("puppeteer");
