@@ -23,10 +23,18 @@ export async function GET(
     puppeteer = await import("puppeteer-core");
 
     launchOptions = {
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
+      args: [
+        ...chromium.args,
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ],
       executablePath: await chromium.executablePath(),
-      headless: true,
+      headless: "new", // Use the new headless mode
     };
   } else {
     puppeteer = await import("puppeteer");
