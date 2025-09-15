@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogFooter,
 } from "@/src/components/shadcn-ui/alert-dialog";
+import { Profile } from "@/src/lib/entities/profile";
 
 export default function MoreProfilesCard({
   moreProfiles,
@@ -37,7 +38,7 @@ export default function MoreProfilesCard({
       </div>
 
       {moreProfiles?.length > 1 ? (
-        moreProfiles.map((profile: SanityDocument, index: number) => {
+        moreProfiles.map((profile: Profile, index: number) => {
           if (currentProfile?.uuid != profile.uuid) {
             return (
               <div className="pt-6" key={index}>

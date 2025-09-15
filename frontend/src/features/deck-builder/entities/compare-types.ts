@@ -5,6 +5,7 @@ export enum CompareTypes {
   VALUES = "values",
   SIDE_BY_SIDE = "sidebyside",
   PRINCIPLES_YOU_ARCHETYPES = "principlesyouarchetypes",
+  PRINCIPLES_YOU_ARCHETYPES_GRAPH = "principlesYouArchetypesGraph"
 }
 
 export const COMPARISON_ATTRIBUTES = {
@@ -32,6 +33,10 @@ export const COMPARISON_ATTRIBUTES = {
     title: "PrinciplesYou Archetypes",
     slug: "principlesyouarchetypes",
   },
+  [CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH]: {
+    title: "PrinciplesYou Graph",
+    slug: "principlesYouArchetypesGraph"
+  }
 } as const;
 
 export const COMPARE_TYPE_OPTIONS = Object.entries(COMPARISON_ATTRIBUTES).map(

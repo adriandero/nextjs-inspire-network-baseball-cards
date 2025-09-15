@@ -21,6 +21,7 @@ import {
 } from "@/src/components/custom-ui/table-skeleton";
 import { filterProfilesByArchetype } from "@/src/features/deck-builder/utils/profile-filters";
 import { Toolbar } from "@/src/features/deck-builder/components/toolbar";
+import PrinciplesYouArchetypesGraph from "@/src/features/deck-builder/data-tables/principles-you-archetypes-graph";
 
 export interface ProfileComparisonProps {
   readonly initialType: CompareTypes;
@@ -81,6 +82,8 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     [CompareTypes.VALUES]: ValuesTable,
     [CompareTypes.SIDE_BY_SIDE]: SideBySide,
     [CompareTypes.PRINCIPLES_YOU_ARCHETYPES]: PrinciplesYouArchetypesTable,
+    [CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH]:
+      PrinciplesYouArchetypesGraph,
   } as const;
 
   const TableComponent = comparisonTableMap[selectedType];

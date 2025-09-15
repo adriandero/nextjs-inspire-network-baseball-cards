@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { SanityDocument } from "next-sanity";
 import { getKolbeMethod, KolbeStrength } from "@/src/lib/utils";
 import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
+import { Profile } from "@/src/lib/entities/profile";
 
 export interface KolbeGraphProps {
-  profiles: SanityDocument[];
+  profiles:  Profile[];
   optimizedImages?: boolean;
   tableName?: string;
   baseFontSize?: string;

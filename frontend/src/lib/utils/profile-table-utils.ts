@@ -1,5 +1,5 @@
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
-import { SanityDocument } from "next-sanity";
+import { Profile } from "@/src/lib/entities/profile";
 
 export function parseProfileTablesFromURL(
   paramString: string,
@@ -54,7 +54,7 @@ export function toggleProfileInTable(
  * Transforms profile names to show first name + last initial
  * e.g., "John Smith" becomes "John S."
  */
-export function shortNamesOfProfiles(profiles: SanityDocument[]) {
+export function shortNamesOfProfiles(profiles: Profile[]) {
   return profiles.map((profile) => {
     const nameParts = profile.name.split(" ");
 
