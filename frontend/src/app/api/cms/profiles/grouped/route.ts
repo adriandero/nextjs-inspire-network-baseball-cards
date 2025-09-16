@@ -1,7 +1,8 @@
 import { getAllProfilesGroupedByTeam } from "@/src/lib/data/profiles";
 import { NextResponse } from "next/server";
-import { getAuthorizedUser, getUserTeams } from "@/src/lib/auth/permissions";
+import { getAuthorizedUser } from "@/src/lib/auth/permissions";
 import { Profile } from "@/src/lib/entities/profile";
+import { getUserTeams } from "@/src/lib/data/teams";
 
 export async function GET() {
   try {

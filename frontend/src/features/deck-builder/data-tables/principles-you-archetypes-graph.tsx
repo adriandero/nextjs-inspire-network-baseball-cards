@@ -5,6 +5,11 @@ import { Profile } from "@/src/lib/entities/profile";
 import { PRINCIPLES_YOU_ARCHETYPES } from "@/src/features/deck-builder/constants/principles-you-archetypes";
 import { Badge } from "@/src/components/shadcn-ui/badge";
 import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";
+import Image from "next/image";
+import {
+  getArchetypeImage,
+  getMetaArchetypeImage,
+} from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 
 export interface principlesYouArchetypesGraphProps {
   profiles: Profile[];
@@ -41,11 +46,19 @@ const principlesYouArchetypesGraph: React.FC<
           <div
             key={group.category}
             className={
-              "w-full h-full border border-light3 bg-background sm:rounded-2xl p-8 mt-6 "
+              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-2 pt-2 px-6 mt-6 "
             }
           >
-            <h3 className="font-bold mb-3 text-2xl">{group.category}</h3>
+            <div className="flex flex-row items-end gap-4">
+              <Image
+                src={getMetaArchetypeImage(group.category.toLowerCase())}
+                alt={`Illustration for ${group.category}`}
+                layout="intrinsic"
+                className="max-h-14 h-full w-auto"
+              />
 
+              <h3 className="font-bold text-2xl">{group.category}</h3>
+            </div>
             {group.category === "Individualist" ? (
               <div className="space-y-1">
                 {getProfilesForArchetype("individualist").map((profile) => (

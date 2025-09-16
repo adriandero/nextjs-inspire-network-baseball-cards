@@ -26,6 +26,17 @@ import shaper from "@/public/images/principles-you-archetypes/shaper.png";
 import strategist from "@/public/images/principles-you-archetypes/strategist.png";
 import technician from "@/public/images/principles-you-archetypes/technician.png";
 import thinker from "@/public/images/principles-you-archetypes/thinker.png";
+import enthusiasts from "@/public/images/meta-principles-you-archetypes/entusiasts.png";
+import architects from "@/public/images/meta-principles-you-archetypes/architects.png";
+import advocates from "@/public/images/meta-principles-you-archetypes/advocates.png";
+import creators from "@/public/images/meta-principles-you-archetypes/creators.png";
+import fighters from "@/public/images/meta-principles-you-archetypes/fighters.png";
+import givers from "@/public/images/meta-principles-you-archetypes/givers.png";
+import individualists1 from "@/public/images/meta-principles-you-archetypes/individualists.png";
+import leaders from "@/public/images/meta-principles-you-archetypes/leaders.png";
+import producers from "@/public/images/meta-principles-you-archetypes/producers.png";
+import seekers from "@/public/images/meta-principles-you-archetypes/seekers.png";
+
 import { StaticImageData } from "next/image";
 
 const archetypeImages: Record<string, StaticImageData> = {
@@ -59,6 +70,23 @@ const archetypeImages: Record<string, StaticImageData> = {
   thinker,
 };
 
+const metaArchetypeImages: Record<string, StaticImageData> = {
+  advocates,
+  enthusiasts,
+  architects,
+  creators,
+  fighters,
+  givers,
+  individualist: individualists1,
+  leaders,
+  producers,
+  seekers,
+};
+
 export function getArchetypeImage(archetype: string): StaticImageData {
   return archetypeImages[archetype];
+}
+
+export function getMetaArchetypeImage(archetype: string): StaticImageData {
+  return metaArchetypeImages[archetype];
 }
