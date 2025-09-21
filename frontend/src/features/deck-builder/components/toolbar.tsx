@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Add useEffect
+import { useGateValue } from "@statsig/react-bindings"; // Add this import
 import { Button } from "@/src/components/shadcn-ui/button";
 import { GoMultiSelect, GoDownload, GoLink, GoFilter } from "react-icons/go";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
@@ -38,7 +39,6 @@ import {
   CompareTypes,
   COMPARISON_ATTRIBUTES,
 } from "@/src/features/deck-builder/entities/compare-types";
-import { PrincipleYouArchetype } from "@/src/features/deck-builder/entities/principle-you-archetype";
 import { PRINCIPLES_YOU_ARCHETYPES } from "@/src/features/deck-builder/constants/principles-you-archetypes";
 
 export interface ToolbarProps {
@@ -65,6 +65,26 @@ export function Toolbar({
 }: ToolbarProps) {
   const [open, setOpen] = useState(false);
   const [recentlyCopied, setRecentlyCopied] = useState(false);
+
+  const principlesYouGraphEnabled = useGateValue("archetypes_grid");
+
+  useEffect(() => {
+    if (
+      selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH &&
+      !principlesYouGraphEnabled
+    ) {
+      onTypeChange(CompareTypes.WORKING_GENIUS); // fallback to safe default
+    }
+  }, [selectedType, principlesYouGraphEnabled, onTypeChange]);
+
+  // Filter comparison options based on feature flag
+  const availableCompareOptions = COMPARE_TYPE_OPTIONS.filter((item) => {
+    // Filter out PRINCIPLES_YOU_ARCHETYPES_GRAPH if flag is disabled
+    if (item.value === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH) {
+      return principlesYouGraphEnabled;
+    }
+    return true;
+  });
 
   const handleCopyURLToClipboard = async () => {
     try {
@@ -125,7 +145,8 @@ export function Toolbar({
             <CommandInput placeholder="Search compare type..." />
             <CommandEmpty>No compare type found.</CommandEmpty>
             <CommandGroup>
-              {COMPARE_TYPE_OPTIONS.map((item) => (
+              {/* Use filtered options instead of COMPARE_TYPE_OPTIONS */}
+              {availableCompareOptions.map((item) => (
                 <CommandItem
                   key={item.value}
                   value={item.data.title}

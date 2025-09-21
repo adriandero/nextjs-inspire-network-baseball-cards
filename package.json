@@ -22,8 +22,11 @@
     "rxjs": "^7.8.2"
   },
   "dependencies": {
+    "@flags-sdk/statsig": "^0.2.2",
     "@sanity/uuid": "^3.0.2",
+    "@statsig/react-bindings": "^3.25.3",
     "cmdk": "^1.1.1",
+    "flags": "^4.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "uuid": "^11.1.0"
