@@ -345,7 +345,7 @@ const BuilderContext = () => {
                   aria-expanded={open}
                   className="w-fit justify-between"
                 >
-                  {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
+                  {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>

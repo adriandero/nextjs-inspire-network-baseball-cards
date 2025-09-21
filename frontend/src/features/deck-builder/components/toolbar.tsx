@@ -73,13 +73,12 @@ export function Toolbar({
       selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH &&
       !principlesYouGraphEnabled
     ) {
-      onTypeChange(CompareTypes.WORKING_GENIUS); // fallback to safe default
+      onTypeChange(CompareTypes.WORKING_GENIUS);
     }
   }, [selectedType, principlesYouGraphEnabled, onTypeChange]);
 
-  // Filter comparison options based on feature flag
+
   const availableCompareOptions = COMPARE_TYPE_OPTIONS.filter((item) => {
-    // Filter out PRINCIPLES_YOU_ARCHETYPES_GRAPH if flag is disabled
     if (item.value === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH) {
       return principlesYouGraphEnabled;
     }
@@ -124,7 +123,7 @@ export function Toolbar({
   return (
     <div className="flex w-full items-center h-8 py-4 gap-2">
       <h1 className="text-lg font-bold mr-auto">
-        {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
+        {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
       </h1>
 
       {/* Comparison Type Selector */}
@@ -136,7 +135,7 @@ export function Toolbar({
             aria-expanded={open}
             className="w-fit justify-between"
           >
-            {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
+            {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>

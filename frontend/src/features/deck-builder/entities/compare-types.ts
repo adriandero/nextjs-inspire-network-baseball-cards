@@ -5,7 +5,7 @@ export enum CompareTypes {
   VALUES = "values",
   SIDE_BY_SIDE = "sidebyside",
   PRINCIPLES_YOU_ARCHETYPES = "principlesyouarchetypes",
-  PRINCIPLES_YOU_ARCHETYPES_GRAPH = "principlesYouArchetypesGraph"
+  PRINCIPLES_YOU_ARCHETYPES_GRAPH = "principlesyouarchetypesgraph"
 }
 
 export const COMPARISON_ATTRIBUTES = {
@@ -35,7 +35,7 @@ export const COMPARISON_ATTRIBUTES = {
   },
   [CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH]: {
     title: "PrinciplesYou Graph",
-    slug: "principlesYouArchetypesGraph"
+    slug: "principlesyouarchetypesgraph"
   }
 } as const;
 

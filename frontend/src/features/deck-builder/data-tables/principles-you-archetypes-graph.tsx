@@ -7,7 +7,6 @@ import { Badge } from "@/src/components/shadcn-ui/badge";
 import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";
 import Image from "next/image";
 import {
-  getArchetypeImage,
   getMetaArchetypeImage,
 } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 
@@ -18,7 +17,7 @@ export interface principlesYouArchetypesGraphProps {
   breakUpGraph?: boolean;
 }
 
-const principlesYouArchetypesGraph: React.FC<
+const PrinciplesYouArchetypesGraph: React.FC<
   principlesYouArchetypesGraphProps
 > = ({ profiles, tableName }) => {
   if (profiles.length === 0) {
@@ -41,12 +40,12 @@ const principlesYouArchetypesGraph: React.FC<
   return (
     <div className="space-y-4 mb-4">
       <h2 className="text-base font-semibold">{tableName}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {PRINCIPLES_YOU_ARCHETYPES.map((group) => (
           <div
             key={group.category}
             className={
-              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-2 pt-2 px-6 mt-6 "
+              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-2 pt-2 px-6 "
             }
           >
             <div className="flex flex-row items-end gap-4">
@@ -109,4 +108,4 @@ const principlesYouArchetypesGraph: React.FC<
   );
 };
 
-export default principlesYouArchetypesGraph;
+export default PrinciplesYouArchetypesGraph;
