@@ -80,4 +80,3 @@ export async function getAllTeamsWithPermissions(
   return getAllTeams();
 }
 
-export { getUserTeams } from "@/src/lib/data/teams";

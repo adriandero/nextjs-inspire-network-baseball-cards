@@ -4,7 +4,7 @@ export default {
   darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}", 
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/hooks/**/*.{js,ts,jsx,tsx,mdx}",
@@ -18,6 +18,7 @@ export default {
         primary: "#F0A16B",
         secondary: "#345569",
         tertiary: "#438692",
+        inspireMaroon: "#AF4B63",
         dark1: "#2A2A2A",
         dark2: "#393838",
         dark3: "#5D5D5D",

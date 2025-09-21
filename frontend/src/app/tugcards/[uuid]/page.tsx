@@ -7,14 +7,13 @@ import PrinciplesYouCard from "@/src/features/profile/principles-you-card";
 import KolbeStrengthsCard from "@/src/features/profile/kolbe-strengths-card";
 import MobileNavBanner from "@/src/features/profile/mobile-nav-banner";
 import DownloadButton from "@/src/features/profile/download-pdf-button";
-
-import { SanityDocument } from "next-sanity";
 import { redirect } from "next/navigation";
-import { getProfileByUuid, getTeammateProfiles } from "@/src/lib/data/profiles";
 import {
   getAuthorizedUser,
   canAccessProfile,
 } from "@/src/lib/auth/permissions";
+import { getProfileByUuid } from "@/src/lib/data/profiles";
+import { getAuthorizedTeammateProfiles } from "@/src/lib/services/profiles.service";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -65,7 +64,10 @@ export default async function TugPage({
     );
   }
 
-  const moreProfiles: SanityDocument[] = await getTeammateProfiles(uuid);
+  const moreProfiles = await getAuthorizedTeammateProfiles(
+    uuid,
+    userProfileData,
+  );
 
   return (
     <div className="w-full h-screen max-w-screen-lg ">

@@ -54,6 +54,7 @@ import { TeamWithPopulatedCompany } from "@/src/lib/entities/team";
 import { ProfileWithDetailedTeams } from "@/src/lib/entities/profile";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { useDragTableView } from "@/src/features/deck-builder/hooks/use-drag-table-view.hook";
+import { useGateValue } from "@statsig/react-bindings";
 
 const useProfileTable = (
   profiles: ProfileWithDetailedTeams[],
@@ -154,6 +155,8 @@ const BuilderContext = () => {
 
   const { teams, profilesByTeam, allProfilesData, isLoadingProfiles, error } =
     useDragTableData();
+
+  const principlesYouGraphEnabled = useGateValue("archetypes_grid");
 
   const {
     view,
@@ -342,7 +345,7 @@ const BuilderContext = () => {
                   aria-expanded={open}
                   className="w-fit justify-between"
                 >
-                  {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
+                  {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -351,7 +354,15 @@ const BuilderContext = () => {
                   <CommandInput placeholder="Search compare type..." />
                   <CommandEmpty>No compare type found.</CommandEmpty>
                   <CommandGroup>
-                    {COMPARE_TYPE_OPTIONS.map((item) => (
+                    {COMPARE_TYPE_OPTIONS.filter((item) => {
+                      if (
+                        item.value ===
+                        CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH
+                      ) {
+                        return principlesYouGraphEnabled;
+                      }
+                      return true;
+                    }).map((item) => (
                       <CommandItem
                         key={item.value}
                         value={item.data.title}

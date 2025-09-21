@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Add useEffect
+import { useGateValue } from "@statsig/react-bindings"; // Add this import
 import { Button } from "@/src/components/shadcn-ui/button";
 import { GoMultiSelect, GoDownload, GoLink, GoFilter } from "react-icons/go";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
@@ -38,7 +39,6 @@ import {
   CompareTypes,
   COMPARISON_ATTRIBUTES,
 } from "@/src/features/deck-builder/entities/compare-types";
-import { PrincipleYouArchetype } from "@/src/features/deck-builder/entities/principle-you-archetype";
 import { PRINCIPLES_YOU_ARCHETYPES } from "@/src/features/deck-builder/constants/principles-you-archetypes";
 
 export interface ToolbarProps {
@@ -66,6 +66,25 @@ export function Toolbar({
   const [open, setOpen] = useState(false);
   const [recentlyCopied, setRecentlyCopied] = useState(false);
 
+  const principlesYouGraphEnabled = useGateValue("archetypes_grid");
+
+  useEffect(() => {
+    if (
+      selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH &&
+      !principlesYouGraphEnabled
+    ) {
+      onTypeChange(CompareTypes.WORKING_GENIUS);
+    }
+  }, [selectedType, principlesYouGraphEnabled, onTypeChange]);
+
+
+  const availableCompareOptions = COMPARE_TYPE_OPTIONS.filter((item) => {
+    if (item.value === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH) {
+      return principlesYouGraphEnabled;
+    }
+    return true;
+  });
+
   const handleCopyURLToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -79,13 +98,17 @@ export function Toolbar({
     }
   };
 
+  const getAllArchetypes = (): Array<{ id: string; label: string }> => {
+    return PRINCIPLES_YOU_ARCHETYPES.flatMap((group) => group.archetypes);
+  };
+
   const getFiltersLabel = () => {
     if (selectedFilters.length === 0) return "None";
     if (selectedFilters.length === 1) {
-      const filter = PRINCIPLES_YOU_ARCHETYPES.find(
-        (f: PrincipleYouArchetype) => f.id === selectedFilters[0],
+      const filter = getAllArchetypes().find(
+        (f) => f.id === selectedFilters[0],
       );
-      return filter?.label || "1 selected";
+      return filter?.label ?? "1 selected";
     }
     return `${selectedFilters.length} selected`;
   };
@@ -100,7 +123,7 @@ export function Toolbar({
   return (
     <div className="flex w-full items-center h-8 py-4 gap-2">
       <h1 className="text-lg font-bold mr-auto">
-        {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
+        {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
       </h1>
 
       {/* Comparison Type Selector */}
@@ -112,7 +135,7 @@ export function Toolbar({
             aria-expanded={open}
             className="w-fit justify-between"
           >
-            {COMPARISON_ATTRIBUTES[selectedType].title || "Compare Type"}
+            {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -121,7 +144,8 @@ export function Toolbar({
             <CommandInput placeholder="Search compare type..." />
             <CommandEmpty>No compare type found.</CommandEmpty>
             <CommandGroup>
-              {COMPARE_TYPE_OPTIONS.map((item) => (
+              {/* Use filtered options instead of COMPARE_TYPE_OPTIONS */}
+              {availableCompareOptions.map((item) => (
                 <CommandItem
                   key={item.value}
                   value={item.data.title}
@@ -169,8 +193,8 @@ export function Toolbar({
                     />
                     <CommandEmpty>No archetype found.</CommandEmpty>
                     <CommandGroup className="max-h-64 overflow-auto p-1">
-                      {PRINCIPLES_YOU_ARCHETYPES.map(
-                        (filter: PrincipleYouArchetype) => (
+                      {PRINCIPLES_YOU_ARCHETYPES.flatMap((group) =>
+                        group.archetypes.map((filter) => (
                           <CommandItem
                             key={filter.id}
                             value={filter.label}
@@ -192,7 +216,7 @@ export function Toolbar({
                             />
                             {filter.label}
                           </CommandItem>
-                        ),
+                        )),
                       )}
                     </CommandGroup>
                   </Command>
