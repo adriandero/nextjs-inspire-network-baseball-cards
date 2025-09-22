@@ -8,8 +8,6 @@ import PrinciplesYouArchetypesGraph from "@/src/features/deck-builder/data-table
 function ProfileComparisonContent() {
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
-  const showJobRoleParam = searchParams.get("showJobRole");
-  const showJobRole = showJobRoleParam === "true";
 
   const { isLoading, completeProfileTables, error } =
     useProfileComparisonServerSide(groupedProfiles);
