@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react"; // Add useEffect
-import { useGateValue } from "@statsig/react-bindings"; // Add this import
+import React, { useState, useEffect } from "react";
+import { useGateValue } from "@statsig/react-bindings";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { GoMultiSelect, GoDownload, GoLink, GoFilter } from "react-icons/go";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
@@ -76,7 +76,6 @@ export function Toolbar({
       onTypeChange(CompareTypes.WORKING_GENIUS);
     }
   }, [selectedType, principlesYouGraphEnabled, onTypeChange]);
-
 
   const availableCompareOptions = COMPARE_TYPE_OPTIONS.filter((item) => {
     if (item.value === CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH) {
