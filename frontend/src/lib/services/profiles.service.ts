@@ -27,10 +27,19 @@ export async function getAuthorizedTeammateProfiles(
       throw new Error("Forbidden - you do not have access to this profile");
     }
 
+    // Admin bypass logic
+    if (user.permission === "Admin") {
+      return await getTeammateProfiles(excludeUuid, [], true); // isAdmin flag
+    }
+
     const userTeams = await getUserTeams(user.email);
     const allowedSlugs = userTeams?.teams?.map((t) => t.slug) || [];
 
-    const teammates = await getTeammateProfiles(excludeUuid, allowedSlugs);
+    const teammates = await getTeammateProfiles(
+      excludeUuid,
+      allowedSlugs,
+      false,
+    );
     return teammates;
   } catch (error) {
     console.error("Failed to get authorized teammate profiles:", error);

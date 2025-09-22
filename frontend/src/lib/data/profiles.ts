@@ -259,9 +259,13 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
 export async function getTeammateProfiles(
   excludeUuid: string,
   allowedSlugs: string[],
+  isAdmin: boolean = false,
 ): Promise<ProfileWithBasicTeams[]> {
-  if (!excludeUuid ||!allowedSlugs || allowedSlugs.length === 0) return [];
-  
+  if (!excludeUuid) return [];
+
+  // For non-admins, we still need allowedSlugs
+  if (!isAdmin && (!allowedSlugs || allowedSlugs.length === 0)) return [];
+
   const query = `
     *[_type == "profile" && uuid == $excludeUuid && !(_id in path('drafts.**'))][0] {
       "teamSlugs": team[]->slug.current
@@ -271,7 +275,7 @@ export async function getTeammateProfiles(
         && !(_id in path('drafts.**'))
         && uuid != $excludeUuid
         && count((team[]->slug.current)[@ in ^.^.teamSlugs]) > 0
-        && count((team[]->slug.current)[@ in $allowedSlugs]) > 0
+        ${!isAdmin ? "&& count((team[]->slug.current)[@ in $allowedSlugs]) > 0" : ""}
       ] {
         _id,
         _type,
@@ -294,12 +298,13 @@ export async function getTeammateProfiles(
     }.profiles
   `;
 
+  const params = isAdmin ? { excludeUuid } : { excludeUuid, allowedSlugs };
   const options = { next: { revalidate: 30 } };
 
   try {
     const profiles = await client.fetch<ProfileWithBasicTeams[]>(
       query,
-      { excludeUuid, allowedSlugs },
+      params,
       options,
     );
     return profiles || [];
