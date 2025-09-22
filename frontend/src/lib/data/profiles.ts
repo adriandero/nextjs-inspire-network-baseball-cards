@@ -270,9 +270,7 @@ export async function getTeammateProfiles(
         _type == "profile"
         && !(_id in path('drafts.**'))
         && uuid != $excludeUuid
-        // must share a team with the excluded profile
         && count((team[]->slug.current)[@ in ^.^.teamSlugs]) > 0
-        // must be in one of the user's allowed teams
         && count((team[]->slug.current)[@ in $allowedSlugs]) > 0
       ] {
         _id,

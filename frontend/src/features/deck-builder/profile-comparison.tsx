@@ -141,7 +141,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
         />
 
         {completeProfileTables.map((table) => {
-          // Apply filtering for PrinciplesYou Archetypes
+
           const filteredProfiles =
             selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES
               ? filterProfilesByArchetype(table.profiles, {
