@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useGateValue } from "@statsig/react-bindings";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { GoMultiSelect, GoDownload, GoLink, GoFilter } from "react-icons/go";
+import { GoDownload, GoFilter, GoLink, GoMultiSelect } from "react-icons/go";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   Popover,
@@ -26,15 +26,16 @@ import {
 } from "@/src/components/shadcn-ui/tooltip";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuCheckboxItem,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
+  DropdownMenuContent,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
 import {
+  AvailableFilter,
   COMPARE_TYPE_OPTIONS,
   CompareTypes,
   COMPARISON_ATTRIBUTES,
@@ -44,10 +45,18 @@ import { PRINCIPLES_YOU_ARCHETYPES } from "@/src/features/deck-builder/constants
 export interface ToolbarProps {
   selectedType: CompareTypes;
   onTypeChange: (type: CompareTypes) => void;
-  showJobRole: boolean;
-  onShowJobRoleChange: (show: boolean) => void;
-  selectedFilters: string[];
-  onFiltersChange: (filters: string[]) => void;
+
+  filters: {
+    showJobRole: boolean;
+    selectedArchetypes: string[];
+    showPrimaryOnly: boolean;
+  };
+  setters: {
+    setShowJobRole: (show: boolean) => void;
+    setSelectedArchetypes: (filters: string[]) => void;
+    setShowPrimaryOnly: (show: boolean) => void;
+  };
+  availableFilters: AvailableFilter[] | undefined;
   groupedProfiles: string | null;
   pdfLoading: boolean;
   onPDFDownload: () => void;
@@ -56,10 +65,9 @@ export interface ToolbarProps {
 export function Toolbar({
   selectedType,
   onTypeChange,
-  showJobRole,
-  onShowJobRoleChange,
-  selectedFilters,
-  onFiltersChange,
+  filters,
+  setters,
+  availableFilters,
   pdfLoading,
   onPDFDownload,
 }: ToolbarProps) {
@@ -102,21 +110,21 @@ export function Toolbar({
   };
 
   const getFiltersLabel = () => {
-    if (selectedFilters.length === 0) return "None";
-    if (selectedFilters.length === 1) {
+    if (filters.selectedArchetypes.length === 0) return "None";
+    if (filters.selectedArchetypes.length === 1) {
       const filter = getAllArchetypes().find(
-        (f) => f.id === selectedFilters[0],
+        (f) => f.id === filters.selectedArchetypes[0],
       );
       return filter?.label ?? "1 selected";
     }
-    return `${selectedFilters.length} selected`;
+    return `${filters.selectedArchetypes.length} selected`;
   };
 
   const handleFilterChange = (filterId: string, checked: boolean) => {
     const newFilters = checked
-      ? [...selectedFilters, filterId]
-      : selectedFilters.filter((id) => id !== filterId);
-    onFiltersChange(newFilters);
+      ? [...filters.selectedArchetypes, filterId]
+      : filters.selectedArchetypes.filter((id) => id !== filterId);
+    setters.setSelectedArchetypes(newFilters);
   };
 
   return (
@@ -174,7 +182,7 @@ export function Toolbar({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           {/* Filter Submenu - only for PrinciplesYou */}
-          {selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES && (
+          {availableFilters?.includes(AvailableFilter.Archetypes) && (
             <>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
@@ -198,9 +206,8 @@ export function Toolbar({
                             key={filter.id}
                             value={filter.label}
                             onSelect={() => {
-                              const isSelected = selectedFilters.includes(
-                                filter.id,
-                              );
+                              const isSelected =
+                                filters.selectedArchetypes.includes(filter.id);
                               handleFilterChange(filter.id, !isSelected);
                             }}
                             className="flex items-center px-2 py-1.5 cursor-pointer"
@@ -208,7 +215,7 @@ export function Toolbar({
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                selectedFilters.includes(filter.id)
+                                filters.selectedArchetypes.includes(filter.id)
                                   ? "opacity-100"
                                   : "opacity-0",
                               )}
@@ -225,19 +232,31 @@ export function Toolbar({
             </>
           )}
 
-          <DropdownMenuCheckboxItem
-            checked={showJobRole}
-            onCheckedChange={(checked) =>
-              onShowJobRoleChange(checked as boolean)
-            }
-            onSelect={(e) => e.preventDefault()}
-          >
-            Show Title
-          </DropdownMenuCheckboxItem>
+          {availableFilters?.includes(AvailableFilter.ShowPrimaryOnly) && (
+            <>
+              <DropdownMenuCheckboxItem
+                checked={filters.showPrimaryOnly}
+                onCheckedChange={setters.setShowPrimaryOnly}
+                onSelect={(e) => e.preventDefault()}
+              >
+                Show Primary Only
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+
+          {availableFilters?.includes(AvailableFilter.ShowJobRole) && (
+            <DropdownMenuCheckboxItem
+              checked={filters.showJobRole}
+              onCheckedChange={setters.setShowJobRole}
+              onSelect={(e) => e.preventDefault()}
+            >
+              Show Title
+            </DropdownMenuCheckboxItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Copy URL Button */}
       <TooltipProvider>
         <Tooltip open={recentlyCopied ? true : undefined}>
           <TooltipTrigger>

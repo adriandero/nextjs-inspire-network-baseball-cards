@@ -25,13 +25,13 @@ import { Profile } from "@/src/lib/entities/profile";
 export interface PrinciplesYouArchetypesTableProps {
   profiles: Profile[];
   optimizedImages?: boolean;
-  showJobRole: boolean;
   tableName?: string;
+  showJobRole?: boolean;
 }
 
 const PrinciplesYouArchetypesTable: React.FC<
   PrinciplesYouArchetypesTableProps
-> = ({ profiles, optimizedImages = false, showJobRole, tableName }) => {
+> = ({ profiles, optimizedImages = false, tableName, showJobRole }) => {
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",

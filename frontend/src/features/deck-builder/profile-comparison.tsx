@@ -19,13 +19,20 @@ import {
   Skeleton,
   ComparisonTableSkeleton,
 } from "@/src/components/custom-ui/table-skeleton";
-import { filterProfilesByArchetype } from "@/src/features/deck-builder/utils/profile-filters";
 import { Toolbar } from "@/src/features/deck-builder/components/toolbar";
 import PrinciplesYouArchetypesGraph from "@/src/features/deck-builder/data-tables/principles-you-archetypes-graph";
+import {
+  useComparisonFilters,
+  UsedFilters,
+} from "@/src/features/deck-builder/hooks/use-comparison-filters";
 
 export interface ProfileComparisonProps {
   readonly initialType: CompareTypes;
 }
+type ComponentProps = Partial<{
+  showJobRole: boolean;
+  showPrimaryOnly: boolean;
+}>;
 
 const ComparisonLoadingSkeleton = () => (
   <div className="px-6">
@@ -52,21 +59,21 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     useProfileComparison(groupedProfiles);
   const { downloadPDF, loading: pdfLoading } = usePDFDownload();
 
-  // Component state
   const [selectedType, setSelectedType] = useState(initialType);
-  const [showJobRole, setShowJobRole] = useState<boolean>(false);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
+  const { filters, setters, applyFilters, availableFilters } =
+    useComparisonFilters(selectedType);
 
   // Reset filters when switching away from PrinciplesYou Archetypes
   useEffect(() => {
     if (selectedType !== CompareTypes.PRINCIPLES_YOU_ARCHETYPES) {
-      setSelectedFilters([]);
+      setters.setSelectedArchetypes([]);
     }
-  }, [selectedType]);
+  }, [selectedType, setters]);
 
   const handlePDFDownloadCall = async () => {
     try {
-      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRole}`;
+      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${filters.showJobRole}`;
       const filename = `Compare - ${COMPARISON_ATTRIBUTES[selectedType].title} - TUG Cards.pdf`;
 
       await downloadPDF(fetchURL, filename);
@@ -125,37 +132,49 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     );
   }
 
+  const getComponentProps = (type: CompareTypes, filters: UsedFilters) => {
+    const config = COMPARISON_ATTRIBUTES[type];
+    const props: ComponentProps = {};
+
+    config.componentProps?.forEach((prop) => {
+      switch (prop) {
+        case "showJobRole":
+          props.showJobRole = filters.showJobRole ?? false;
+          break;
+        case "showPrimaryOnly":
+          props.showPrimaryOnly = filters.showPrimaryOnly ?? false;
+          break;
+      }
+    });
+
+    return props;
+  };
+
   return (
     <div className="px-6">
       <div className="flex flex-col gap-4">
         <Toolbar
           selectedType={selectedType}
           onTypeChange={setSelectedType}
-          showJobRole={showJobRole}
-          onShowJobRoleChange={setShowJobRole}
-          selectedFilters={selectedFilters}
-          onFiltersChange={setSelectedFilters}
           groupedProfiles={groupedProfiles}
           pdfLoading={pdfLoading}
           onPDFDownload={handlePDFDownloadCall}
+          availableFilters={availableFilters}
+          filters={filters}
+          setters={setters}
         />
 
         {completeProfileTables.map((table) => {
-          // Apply filtering for PrinciplesYou Archetypes
-          const filteredProfiles =
-            selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES
-              ? filterProfilesByArchetype(table.profiles, {
-                  selectedArchetypes: selectedFilters,
-                })
-              : table.profiles;
+          // Now filtering is just one clean function call
+          const filteredProfiles = applyFilters(table.profiles);
 
           return (
             <div key={table.id} className="flex flex-col">
               <TableComponent
                 profiles={filteredProfiles}
                 tableName={table.name}
-                showJobRole={showJobRole}
-              />
+                {...getComponentProps(selectedType, filters)}
+              ></TableComponent>
             </div>
           );
         })}

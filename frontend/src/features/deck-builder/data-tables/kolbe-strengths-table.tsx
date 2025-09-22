@@ -24,15 +24,15 @@ import defaultAvatar from "@/public/images/default-avatar.png";
 export interface KolbeStrengthsTableProps {
   profiles: SanityDocument[];
   optimizedImages?: boolean;
-  showJobRole: boolean;
   tableName?: string;
+  showJobRole?: boolean;
 }
 
 const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   profiles,
   optimizedImages = false,
-  showJobRole,
   tableName,
+  showJobRole,
 }) => {
   const columns: ColumnDef<SanityDocument>[] = [
     {
@@ -186,7 +186,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}

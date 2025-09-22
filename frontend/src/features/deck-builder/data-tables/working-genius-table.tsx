@@ -30,16 +30,16 @@ import WidgetCogIconSVG from "@/public/illustrations/widget-cog-icon-svg";
 
 interface WorkingGeniusTableProps {
   profiles: Profile[];
-  showJobRole: boolean;
   optimizedImages?: boolean;
   tableName?: string;
+  showJobRole?: boolean;
 }
 
 const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
   profiles,
-  showJobRole,
   optimizedImages = false,
   tableName,
+  showJobRole,
 }) => {
   const summaryWidget = useMemo(() => {
     if (profiles.length === 0) return null;

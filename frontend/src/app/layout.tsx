@@ -55,6 +55,8 @@ export default async function RootLayout({
     };
   }
 
+  console.log(userData)
+
   const Statsig = await statsigAdapter.initialize();
   const datafile = await Statsig.getClientInitializeResponse(userData, {
     hash: "djb2",

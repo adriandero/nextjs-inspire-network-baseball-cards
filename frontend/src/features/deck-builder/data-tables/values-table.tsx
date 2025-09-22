@@ -37,7 +37,7 @@ import defaultAvatar from "@/public/images/default-avatar.png";
 
 export interface ValuesTableProps {
   profiles: SanityDocument[];
-  showJobRole: boolean;
+  showJobRole?: boolean;
   optimizedImages?: boolean;
   tableName?: string;
 }

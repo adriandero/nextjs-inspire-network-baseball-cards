@@ -11,9 +11,8 @@ import KolbeStrengthsCard from "@/src/features/deck-builder/components/data-tabl
 
 export interface SideBySideProps {
   profiles: SanityDocument[];
-  optimizedImages?: boolean;
-  showJobRole: boolean;
   tableName?: string;
+  showJobRole?: boolean;
 }
 
 const useColumnCount = () => {
@@ -37,7 +36,7 @@ const useColumnCount = () => {
 
 const chunkProfiles = (
   profiles: SanityDocument[],
-  size: number
+  size: number,
 ): SanityDocument[][] => {
   const chunks: SanityDocument[][] = [];
   for (let i = 0; i < profiles.length; i += size) {
@@ -48,8 +47,8 @@ const chunkProfiles = (
 
 const SideBySide: React.FC<SideBySideProps> = ({
   profiles,
-  showJobRole,
   tableName,
+  showJobRole,
 }) => {
   const columns = useColumnCount();
   const profileGroups = chunkProfiles(profiles, columns);
