@@ -6,7 +6,7 @@ import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
 import { Profile } from "@/src/lib/entities/profile";
 
 export interface KolbeGraphProps {
-  profiles:  Profile[];
+  profiles: Profile[];
   optimizedImages?: boolean;
   tableName?: string;
   baseFontSize?: string;
@@ -83,7 +83,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
       .map(() =>
         Array(4)
           .fill(null)
-          .map(() => ({ percent: "0%", people: [] }))
+          .map(() => ({ percent: "0%", people: [] })),
       );
 
     if (!profiles || profiles.length === 0) return data;
@@ -113,6 +113,12 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
           value: value,
           method: getKolbeMethod(value, propertyName)?.method || "",
         });
+      });
+    });
+
+    data.forEach((row) => {
+      row.forEach((cell) => {
+        cell.people.sort((a, b) => b.value - a.value);
       });
     });
 
@@ -211,7 +217,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
                             {profile.value}
                           </span>
                         </div>
-                      )
+                      ),
                     )}
                   </div>
                 </div>
