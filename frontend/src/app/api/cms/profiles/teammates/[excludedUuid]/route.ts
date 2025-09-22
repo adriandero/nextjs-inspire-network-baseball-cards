@@ -3,11 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  context: { params: Promise<{ excludedUuid: string }> | { excludedUuid: string } },
+  { params }: { params: Promise<{ excludedUuid: string }> },
 ) {
   try {
-    const params = await Promise.resolve(context.params);
-    const { excludedUuid } = params;
+    const { excludedUuid } = await params;
     const teammates = await getAuthorizedTeammateProfiles(excludedUuid);
     return NextResponse.json(teammates);
   } catch (error) {
