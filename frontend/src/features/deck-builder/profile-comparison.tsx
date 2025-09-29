@@ -64,12 +64,6 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   const { filters, setters, applyFilters, availableFilters } =
     useComparisonFilters(selectedType);
 
-  // Reset filters when switching away from PrinciplesYou Archetypes
-  useEffect(() => {
-    if (selectedType !== CompareTypes.PRINCIPLES_YOU_ARCHETYPES) {
-      setters.setSelectedArchetypes([]);
-    }
-  }, [selectedType, setters]);
 
   const handlePDFDownloadCall = async () => {
     try {

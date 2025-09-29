@@ -6,20 +6,19 @@ import { PRINCIPLES_YOU_ARCHETYPES } from "@/src/features/deck-builder/constants
 import { Badge } from "@/src/components/shadcn-ui/badge";
 import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";
 import Image from "next/image";
-import {
-  getMetaArchetypeImage,
-} from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
+import { getMetaArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
 
 export interface principlesYouArchetypesGraphProps {
   profiles: Profile[];
   optimizedImages?: boolean;
   tableName?: string;
   breakUpGraph?: boolean;
+  showPrimaryOnly: boolean;
 }
 
 const PrinciplesYouArchetypesGraph: React.FC<
   principlesYouArchetypesGraphProps
-> = ({ profiles, tableName }) => {
+> = ({ profiles, tableName, showPrimaryOnly }) => {
   if (profiles.length === 0) {
     return (
       <div>
@@ -32,9 +31,20 @@ const PrinciplesYouArchetypesGraph: React.FC<
   }
 
   const getProfilesForArchetype = (archetypeId: string) => {
-    return shortNamesOfProfiles(profiles).filter((profile) =>
-      profile.principleYouArchetype?.includes(archetypeId),
+    const filteredProfiles = shortNamesOfProfiles(profiles).filter(
+      (profile) => {
+        const hasArchetype =
+          profile.principleYouArchetype?.includes(archetypeId);
+
+        if (showPrimaryOnly) {
+          return profile.principleYouArchetype?.[0] === archetypeId;
+        }
+
+        return hasArchetype;
+      },
     );
+
+    return filteredProfiles;
   };
 
   return (
@@ -75,7 +85,7 @@ const PrinciplesYouArchetypesGraph: React.FC<
 
                   return (
                     <div key={archetype.id}>
-                      <h4 className="text-gray-600 my-3 text-tertiary text-xl font-bold">
+                      <h4 className="my-3 text-tertiary text-xl font-bold">
                         {archetype.label}
                       </h4>
                       <div className="flex flex-wrap gap-2">
