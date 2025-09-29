@@ -27,6 +27,7 @@ function ProfileComparisonContent() {
           <PrinciplesYouArchetypesGraph
             profiles={table.profiles}
             optimizedImages={true}
+            showPrimaryOnly={false}
           />
         </div>
       ))}

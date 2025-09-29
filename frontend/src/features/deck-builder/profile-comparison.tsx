@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/src/components/shadcn-ui/button";
 import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";

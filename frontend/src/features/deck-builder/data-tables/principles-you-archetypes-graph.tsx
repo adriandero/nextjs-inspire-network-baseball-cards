@@ -13,7 +13,7 @@ export interface principlesYouArchetypesGraphProps {
   optimizedImages?: boolean;
   tableName?: string;
   breakUpGraph?: boolean;
-  showPrimaryOnly: boolean;
+  showPrimaryOnly?: boolean;
 }
 
 const PrinciplesYouArchetypesGraph: React.FC<
