@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/src/components/shadcn-ui/button";
 import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
@@ -64,7 +64,6 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   const { filters, setters, applyFilters, availableFilters } =
     useComparisonFilters(selectedType);
 
-
   const handlePDFDownloadCall = async () => {
     try {
       const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${filters.showJobRole}`;
@@ -88,6 +87,36 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   } as const;
 
   const TableComponent = comparisonTableMap[selectedType];
+
+  const filteredTables = useMemo(() => {
+    return completeProfileTables.map((table) => ({
+      ...table,
+      profiles: applyFilters(table.profiles),
+    }));
+  }, [completeProfileTables, applyFilters]);
+
+  const getComponentProps = (type: CompareTypes, filters: UsedFilters) => {
+    const config = COMPARISON_ATTRIBUTES[type];
+    const props: ComponentProps = {};
+
+    config.componentProps?.forEach((prop) => {
+      switch (prop) {
+        case "showJobRole":
+          props.showJobRole = filters.showJobRole ?? false;
+          break;
+        case "showPrimaryOnly":
+          props.showPrimaryOnly = filters.showPrimaryOnly ?? false;
+          break;
+      }
+    });
+
+    return props; // ← NEW OBJECT!
+  };
+
+  const componentProps = useMemo(() => {
+    return getComponentProps(selectedType, filters);
+  }, [selectedType, filters]);
+
 
   // Loading state
   if (isLoading) {
@@ -126,24 +155,6 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     );
   }
 
-  const getComponentProps = (type: CompareTypes, filters: UsedFilters) => {
-    const config = COMPARISON_ATTRIBUTES[type];
-    const props: ComponentProps = {};
-
-    config.componentProps?.forEach((prop) => {
-      switch (prop) {
-        case "showJobRole":
-          props.showJobRole = filters.showJobRole ?? false;
-          break;
-        case "showPrimaryOnly":
-          props.showPrimaryOnly = filters.showPrimaryOnly ?? false;
-          break;
-      }
-    });
-
-    return props;
-  };
-
   return (
     <div className="px-6">
       <div className="flex flex-col gap-4">
@@ -158,20 +169,15 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
           setters={setters}
         />
 
-        {completeProfileTables.map((table) => {
-          // Now filtering is just one clean function call
-          const filteredProfiles = applyFilters(table.profiles);
-
-          return (
-            <div key={table.id} className="flex flex-col">
-              <TableComponent
-                profiles={filteredProfiles}
-                tableName={table.name}
-                {...getComponentProps(selectedType, filters)}
-              ></TableComponent>
-            </div>
-          );
-        })}
+        {filteredTables.map((table) => (
+          <div key={table.id} className="flex flex-col">
+            <TableComponent
+              profiles={table.profiles}
+              tableName={table.name}
+              {...componentProps}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

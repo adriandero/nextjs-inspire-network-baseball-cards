@@ -4,7 +4,7 @@ import {
   COMPARISON_ATTRIBUTES,
 } from "@/src/features/deck-builder/entities/compare-types";
 import { Profile } from "@/src/lib/entities/profile";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { filterProfilesByArchetype } from "@/src/features/deck-builder/utils/profile-filters";
 
 export interface UsedFilters {
@@ -31,22 +31,42 @@ export function useComparisonFilters(selectedType: CompareTypes) {
     }
   }, [selectedType]);
 
-  // Apply filtering logic
-  const applyFilters = (profiles: Profile[]) => {
-    let filtered = profiles;
+  // ✅ Memoize the filters object
+  const filters = useMemo(
+    () => ({
+      showJobRole,
+      selectedArchetypes,
+      showPrimaryOnly,
+    }),
+    [showJobRole, selectedArchetypes, showPrimaryOnly],
+  );
 
-    if (selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES) {
-      filtered = filterProfilesByArchetype(filtered, { selectedArchetypes });
-    }
+  // ✅ Memoize the setters object
+  const setters = useMemo(
+    () => ({
+      setShowJobRole,
+      setSelectedArchetypes,
+      setShowPrimaryOnly,
+    }),
+    [],
+  ); // These never change
 
-    // Add your showPrimaryOnly logic here when ready
+  const applyFilters = useCallback(
+    (profiles: Profile[]) => {
+      let filtered = profiles;
 
-    return filtered;
-  };
+      if (selectedType === CompareTypes.PRINCIPLES_YOU_ARCHETYPES) {
+        filtered = filterProfilesByArchetype(filtered, { selectedArchetypes });
+      }
+
+      return filtered;
+    },
+    [selectedType, selectedArchetypes],
+  );
 
   return {
-    filters: { showJobRole, selectedArchetypes, showPrimaryOnly },
-    setters: { setShowJobRole, setSelectedArchetypes, setShowPrimaryOnly },
+    filters,
+    setters,
     applyFilters,
     availableFilters: COMPARISON_ATTRIBUTES[selectedType].availableFilters,
   };

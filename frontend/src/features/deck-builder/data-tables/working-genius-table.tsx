@@ -67,100 +67,109 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
     };
   }, [summaryWidget, greenCogCount]);
 
-  const columns: ColumnDef<SanityDocument>[] = [
-    {
-      accessorKey: "name",
-      header: "Name",
-      size: 300,
-      cell: ({ row }) => {
-        const profile = row.original;
-        const isSummaryRow = profile._id === "summary-row";
+  const columns = useMemo<ColumnDef<SanityDocument>[]>(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Name",
+        size: 300,
+        cell: ({ row }) => {
+          const profile = row.original;
+          const isSummaryRow = profile._id === "summary-row";
 
-        if (isSummaryRow) {
+          if (isSummaryRow) {
+            return (
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center">
+                    <WidgetCogIconSVG />
+                  </div>
+                </div>
+                <div>
+                  <div className="font-bold text-base">{profile.name}</div>
+                </div>
+              </div>
+            );
+          }
+
+          // Regular profile row
           return (
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center">
-                  <WidgetCogIconSVG />
+                <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                  <Image
+                    src={
+                      profile.profileImage
+                        ? optimizedImages
+                          ? urlFor(profile.profileImage.asset.url)
+                              .width(80)
+                              .height(80)
+                              .auto("format")
+                              .quality(40)
+                              .url()
+                          : profile.profileImage.asset.url
+                        : defaultAvatar.src
+                    }
+                    alt={profile.name}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
                 </div>
               </div>
               <div>
                 <div className="font-bold text-base">{profile.name}</div>
+                <div className="text-base">
+                  {showJobRole
+                    ? profile.jobRole?.map((role: string, index: number) => (
+                        <span key={index}>
+                          {role}
+                          {index < profile.jobRole.length - 1 && ", "}
+                        </span>
+                      ))
+                    : null}
+                </div>
               </div>
             </div>
           );
-        }
-
-        // Regular profile row
-        return (
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                <Image
-                  src={
-                    profile.profileImage
-                      ? optimizedImages
-                        ? urlFor(profile.profileImage.asset.url)
-                            .width(80)
-                            .height(80)
-                            .auto("format")
-                            .quality(40)
-                            .url()
-                        : profile.profileImage.asset.url
-                      : defaultAvatar.src
-                  }
-                  alt={profile.name}
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-            </div>
-            <div>
-              <div className="font-bold text-base">{profile.name}</div>
-              <div className="text-base">
-                {showJobRole
-                  ? profile.jobRole?.map((role: string, index: number) => (
-                      <span key={index}>
-                        {role}
-                        {index < profile.jobRole.length - 1 && ", "}
-                      </span>
-                    ))
-                  : null}
-              </div>
-            </div>
-          </div>
-        );
+        },
       },
-    },
-    {
-      accessorKey: "widget",
-      header: "WIDGET",
-      size: 600,
-      cell: ({ row }) => (
-        <WidgetCogsSVG
-          widget={row.original.workingGenius?.widget}
-          _id={""}
-          _rev={""}
-          _type={""}
-          _createdAt={""}
-          _updatedAt={""}
-        />
-      ),
-    },
-  ];
+      {
+        accessorKey: "widget",
+        header: "WIDGET",
+        size: 600,
+        cell: ({ row }) => (
+          <WidgetCogsSVG
+            widget={row.original.workingGenius?.widget}
+            _id={""}
+            _rev={""}
+            _type={""}
+            _createdAt={""}
+            _updatedAt={""}
+          />
+        ),
+      },
+    ],
+    [optimizedImages, showJobRole],
+  );
+
+  const summaryData = useMemo(() => {
+    return summaryRow ? [summaryRow] : [];
+  }, [summaryRow]);
+
+  const coreRowModel = useMemo(() => getCoreRowModel(), []);
 
   const mainTable = useReactTable({
     data: profiles,
     columns,
     columnResizeMode: "onChange",
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel: coreRowModel,
   });
 
   const summaryTable = useReactTable({
-    data: summaryRow ? [summaryRow] : [],
+    data: summaryData, // ← Use memoized array
     columns,
     columnResizeMode: "onChange",
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel: coreRowModel,
   });
 
   if (profiles.length === 0) {
