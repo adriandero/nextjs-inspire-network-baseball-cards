@@ -37,7 +37,7 @@ export default function MoreProfilesCard({
         <h1 className="text-xl font-bold flex-grow w-fit ml-6">The Team</h1>
       </div>
 
-      {moreProfiles?.length > 1 ? (
+      {moreProfiles?.length > 0 ? (
         moreProfiles.map((profile: Profile, index: number) => {
           if (currentProfile?.uuid != profile.uuid) {
             return (
