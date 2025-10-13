@@ -233,16 +233,13 @@ export function Toolbar({
           )}
 
           {availableFilters?.includes(AvailableFilter.ShowPrimaryOnly) && (
-            <>
-              <DropdownMenuCheckboxItem
-                checked={filters.showPrimaryOnly}
-                onCheckedChange={setters.setShowPrimaryOnly}
-                onSelect={(e) => e.preventDefault()}
-              >
-                Show Primary Only
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuSeparator />
-            </>
+            <DropdownMenuCheckboxItem
+              checked={filters.showPrimaryOnly}
+              onCheckedChange={setters.setShowPrimaryOnly}
+              onSelect={(e) => e.preventDefault()}
+            >
+              Show Primary Only
+            </DropdownMenuCheckboxItem>
           )}
 
           {availableFilters?.includes(AvailableFilter.ShowJobRole) && (
