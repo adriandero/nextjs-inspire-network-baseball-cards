@@ -200,7 +200,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                             .width(80)
                             .height(80)
                             .auto("format")
-                            .quality(40)
+                            .quality(80)
                             .url()
                         : profile.profileImage.asset.url
                       : defaultAvatar.src

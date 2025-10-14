@@ -1,4 +1,6 @@
 import { NextRequest } from "next/server";
+import type { Browser, Page } from "puppeteer-core";
+import { initPuppeteer, waitForImages } from "@/src/lib/utils/puppeteer-helper";
 
 export const maxDuration = 60;
 
@@ -6,68 +8,45 @@ export async function GET(
   req: NextRequest,
   context: { params: Promise<{ uuid: string }> },
 ) {
-  const isProd = process.env.NODE_ENV === "production";
   const uuid = (await context.params).uuid;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let puppeteer: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let launchOptions: any;
+  const { puppeteer, launchOptions } = await initPuppeteer();
 
-  if (isProd) {
-    const chromium = (await import("@sparticuz/chromium")).default;
-    puppeteer = await import("puppeteer-core");
+  console.time("browser-launch");
+  const browser: Browser = await puppeteer.launch(launchOptions);
+  console.timeEnd("browser-launch");
 
-    launchOptions = {
-      args: [
-        ...chromium.args,
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--single-process",
-        "--disable-gpu",
-      ],
-      executablePath: await chromium.executablePath(),
-      headless: true,
-    };
-  } else {
-    puppeteer = await import("puppeteer");
-    launchOptions = {
-      headless: true,
-    };
-  }
+  const page: Page = await browser.newPage();
 
-  const browser = await puppeteer.launch(launchOptions);
+  await page.setViewport({
+    width: 1200,
+    height: 1600,
+    deviceScaleFactor: 2,
+  });
 
-  const page = await browser.newPage();
+  console.time("page-navigation");
   await page.goto(process.env.BASE_URL + `/tugcards/${uuid}/pdf`, {
-    waitUntil: "networkidle2",
+    waitUntil: "load", // ← Changed from networkidle2
   });
-  await page.evaluate(() => {
-    return Promise.all(
-      Array.from(document.images).map((img) => {
-        if (img.complete) return Promise.resolve();
-        return new Promise<void>((resolve, reject) => {
-          img.onload = () => resolve();
-          img.onerror = () =>
-            reject(new Error(`Failed to load image: ${img.src}`));
-        });
-      }),
-    );
-  });
+  console.timeEnd("page-navigation");
+
+  console.time("image-wait");
+  await waitForImages(page);
+  console.timeEnd("image-wait");
+
   await page.emulateMediaType("screen");
+
+  console.time("pdf-generation");
   const pdfBuffer = await page.pdf({
     format: "A4",
     printBackground: true,
-    landscape: true,
+    landscape: true, // Keep landscape for TUG cards
   });
+  console.timeEnd("pdf-generation");
 
   await browser.close();
 
-  return new Response(pdfBuffer as BodyInit, {
+  return new Response(pdfBuffer, {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": "attachment; filename=tugcard.pdf",
