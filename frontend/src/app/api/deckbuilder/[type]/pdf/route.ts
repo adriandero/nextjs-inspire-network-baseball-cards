@@ -1,7 +1,6 @@
 import type { Browser, Page } from "puppeteer-core";
 import {
   initPuppeteer,
-  trackImageRequests,
   waitForImages,
 } from "@/src/lib/utils/puppeteer-helper";
 
