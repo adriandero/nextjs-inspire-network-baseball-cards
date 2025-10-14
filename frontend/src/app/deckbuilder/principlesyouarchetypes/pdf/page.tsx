@@ -1,23 +1,22 @@
-"use client";
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import PrinciplesYouArchetypeTable from "@/src/features/deck-builder/data-tables/principles-you-archetypes-table";
 import { PDFLayout } from "@/src/components/layout/pdf-layout";
-import { useProfileComparisonServerSide } from "@/src/features/deck-builder/hooks/use-profile-comparison-server-side.hook";
+import { fetchProfileTables } from "@/src/lib/utils/profile-table-utils";
 
-function ProfileComparisonContent() {
-  const searchParams = useSearchParams();
-  const groupedProfiles = searchParams.get("groupedProfiles");
-  const showJobRoleParam = searchParams.get("showJobRole");
-  const showJobRole = showJobRoleParam === "true";
-
-  const { isLoading, completeProfileTables, error } =
-  useProfileComparisonServerSide(groupedProfiles);
+async function ProfileComparisonContent({
+  groupedProfiles,
+  showJobRole,
+}: {
+  groupedProfiles: string | null;
+  showJobRole: boolean;
+}) {
+  const { completeProfileTables, error } =
+    await fetchProfileTables(groupedProfiles);
 
   return (
     <PDFLayout
       title="PrinciplesYou Archetypes"
-      isLoading={isLoading}
+      isLoading={false}
       error={error}
       completeProfileTables={completeProfileTables}
     >
@@ -37,18 +36,23 @@ function ProfileComparisonContent() {
   );
 }
 
-function PDFProfileComparison() {
-  return (
-    <Suspense fallback={<div>Loading TUG Cards...</div>}>
-      <ProfileComparisonContent />
-    </Suspense>
-  );
-}
+export default async function PrinciplesYouArchetypePDFPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ groupedProfiles?: string; showJobRole?: string }>;
+}) {
+  const params = await searchParams;
+  const groupedProfiles = params.groupedProfiles ?? null;
+  const showJobRole = params.showJobRole === "true";
 
-export default function PrinciplesYouArchetypePDFPage() {
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
-      <PDFProfileComparison />
+      <Suspense fallback={<div>Loading TUG Cards...</div>}>
+        <ProfileComparisonContent
+          groupedProfiles={groupedProfiles}
+          showJobRole={showJobRole}
+        />
+      </Suspense>
     </div>
   );
 }

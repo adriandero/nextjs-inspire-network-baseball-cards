@@ -9,7 +9,6 @@ export const identify = dedupe((async () => {
   const session = await auth0.getSession();
 
   if (!session) {
-    console.log("No session - returning anonymous user");
     return {
       userID: "anonymous",
       permission: "user",

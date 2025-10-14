@@ -1,60 +1,37 @@
-"use client";
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import KolbeGraph from "@/src/features/deck-builder/data-tables/kolbe-graph";
-import { ResponsivePDFLayout } from "@/src/components/layout/pdf-layout-responsive";
-import { useHeightResponsiveFont } from "@/src/hooks/deck-builder/use-height-responsive-font.hook";
+import KolbeGraphClient from "./kolbe-graph-client";
+import { fetchProfileTables } from "@/src/lib/utils/profile-table-utils";
 
-import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";
-import { useProfileComparisonServerSide } from "@/src/features/deck-builder/hooks/use-profile-comparison-server-side.hook";
-
-function ProfileComparisonContent() {
-  const searchParams = useSearchParams();
-  const groupedProfiles = searchParams.get("groupedProfiles");
-
-  const { isLoading, completeProfileTables, error } =
-    useProfileComparisonServerSide(groupedProfiles);
-
-  const { containerRef, baseFontSize, headingFontSize, breakUpGraph } =
-    useHeightResponsiveFont(!isLoading && completeProfileTables.length > 0);
+// Server Component - fetches data
+async function ProfileComparisonContent({
+  groupedProfiles,
+}: {
+  groupedProfiles: string | null;
+}) {
+  const { completeProfileTables, error } =
+    await fetchProfileTables(groupedProfiles);
 
   return (
-    <ResponsivePDFLayout
-      ref={containerRef}
-      title="Kolbe Strengths"
-      isLoading={isLoading}
-      error={error}
+    <KolbeGraphClient
       completeProfileTables={completeProfileTables}
-      baseFontSize={baseFontSize}
-      headingFontSize={headingFontSize}
-    >
-      {completeProfileTables.map((table) => (
-        <div key={table.id} className="flex flex-col gap-4">
-          <KolbeGraph
-            profiles={shortNamesOfProfiles(table.profiles)}
-            tableName={table.name}
-            baseFontSize={baseFontSize}
-            headingFontSize={headingFontSize}
-            breakUpGraph={breakUpGraph}
-          />
-        </div>
-      ))}
-    </ResponsivePDFLayout>
+      error={error}
+    />
   );
 }
 
-function PDFProfileComparison() {
-  return (
-    <Suspense fallback={<div>Loading Kolbe Graph...</div>}>
-      <ProfileComparisonContent />
-    </Suspense>
-  );
-}
+export default async function KolbeStrengthsPDFPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ groupedProfiles?: string }>;
+}) {
+  const params = await searchParams;
+  const groupedProfiles = params.groupedProfiles ?? null;
 
-export default function KolbeStrengthsPDFPage() {
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
-      <PDFProfileComparison />
+      <Suspense fallback={<div>Loading Kolbe Graph...</div>}>
+        <ProfileComparisonContent groupedProfiles={groupedProfiles} />
+      </Suspense>
     </div>
   );
 }

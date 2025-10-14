@@ -22,7 +22,6 @@ export function useDataTableData() {
     try {
       setLoadingTeams(true);
       const teams = await getTeamsForUser();
-      console.log(teams)
       setTeamsData(teams || []);
       return teams || [];
     } catch (error) {

@@ -115,15 +115,12 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
         });
       });
     });
-    console.log("before", data);
 
     data.forEach((row) => {
       row.forEach((cell) => {
         cell.people.sort((a, b) => b.value - a.value);
       });
     });
-
-    console.log("after", data);
 
     columnHeaders.forEach((_, colIndex) => {
       rowLabels.forEach((_, rowIndex) => {

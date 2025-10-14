@@ -25,7 +25,6 @@ export function useHeightResponsiveFont(
       if (!containerRef.current) return;
 
       const height = containerRef.current.scrollHeight;
-      console.log("Container height:", height);
 
       if (height <= maxHeight) {
         setFontConfig({
@@ -37,7 +36,6 @@ export function useHeightResponsiveFont(
       }
 
       const overflow = height - maxHeight;
-      console.log("Overflow:", overflow);
 
       if (overflow > 600) {
         setFontConfig({

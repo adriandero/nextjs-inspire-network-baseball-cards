@@ -50,22 +50,22 @@ const PrinciplesYouArchetypesGraph: React.FC<
   return (
     <div className="space-y-4 mb-4">
       <h2 className="text-base font-semibold">{tableName}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
         {PRINCIPLES_YOU_ARCHETYPES.map((group) => (
           <div
             key={group.category}
             className={
-              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-2 pt-2 px-6 "
+              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-4 pt-2 px-6 "
             }
           >
-            <div className="flex flex-row items-end gap-4">
+            <div className="flex flex-row items-end gap-4 ">
               <Image
                 src={getMetaArchetypeImage(group.category.toLowerCase())}
                 alt={`Illustration for ${group.category}`}
-                layout="intrinsic"
-                className="max-h-14 h-full w-auto"
+                width={64}
+                height={64}
+                className="h-auto w-auto max-h-18 object-contain"
               />
-
               <h3 className="font-bold text-2xl">{group.category}</h3>
             </div>
             {group.category === "Individualist" ? (
@@ -84,8 +84,8 @@ const PrinciplesYouArchetypesGraph: React.FC<
                   );
 
                   return (
-                    <div key={archetype.id}>
-                      <h4 className="my-3 text-tertiary text-xl font-bold">
+                    <div key={archetype.id} className={"mt-3"}>
+                      <h4 className="text-tertiary mb-2 text-xl font-bold">
                         {archetype.label}
                       </h4>
                       <div className="flex flex-wrap gap-2">

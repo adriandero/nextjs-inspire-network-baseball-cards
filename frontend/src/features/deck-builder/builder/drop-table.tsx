@@ -54,7 +54,6 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
           ref={dropRef}
           className={`rounded-md flex justify-center border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md p-4 transition-colors min-h-24 hover:border-primary ${isSelectedTable ? "border-primary" : null}`}
           onClick={() => {
-            console.log("here:" + isSelectedTable);
             setSelectedTableId(table.id);
           }}
         >
@@ -69,7 +68,6 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
           ref={dropRef}
           className={`rounded-md border ${isOver ? "bg-primary/10 border-primary" : "bg-light1"} border rounded-md max-h-[400px] overflow-y-auto transition-colors hover:border-primary ${isSelectedTable ? "border-primary" : null}`}
           onClick={() => {
-            console.log("here:" + isSelectedTable);
             setSelectedTableId(table.id);
           }}
         >

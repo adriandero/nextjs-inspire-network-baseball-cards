@@ -53,17 +53,31 @@ export async function GET(
       headers: { "Content-Type": "application/json" },
     });
   }
-
+  console.time("browser-launch");
   const browser = await puppeteer.launch(launchOptions);
+  console.timeEnd("browser-launch");
   const page = await browser.newPage();
+
+  let requestCount = 0;
+
+  page.on("request", (request: any) => {
+    if (request.resourceType() === "image") requestCount++;
+  });
+
+  console.time("page-navigation");
 
   await page.goto(
     process.env.BASE_URL +
       `/deckbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
     {
-      waitUntil: "networkidle2",
+      waitUntil: "load",
     },
   );
+
+  console.timeEnd("page-navigation");
+  console.log(`Total image requests: ${requestCount}`);
+
+  console.time("image-wait");
 
   await page.evaluate(() => {
     return Promise.all(
@@ -77,15 +91,17 @@ export async function GET(
       }),
     );
   });
-
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  console.timeEnd("image-wait");
 
   await page.emulateMediaType("screen");
+  console.time("pdf-generation");
+
   const pdfBuffer = await page.pdf({
     format: "A4",
     printBackground: true,
     landscape: false,
   });
+  console.timeEnd("pdf-generation");
 
   await browser.close();
 

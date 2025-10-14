@@ -1,5 +1,7 @@
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { Profile } from "@/src/lib/entities/profile";
+import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
+import { getProfilesByUuids } from "@/src/lib/data/profiles";
 
 export function parseProfileTablesFromURL(
   paramString: string,
@@ -72,4 +74,34 @@ export function shortNamesOfProfiles(profiles: Profile[]) {
       name: transformedName,
     };
   });
+}
+
+
+export async function fetchProfileTables(
+  groupedProfiles: string | null
+): Promise<{
+  completeProfileTables: ProfileTable[];
+  error: string | null;
+}> {
+  let completeProfileTables: ProfileTable[] = [];
+  let error: string | null = null;
+
+  if (groupedProfiles) {
+    try {
+      const tables = parseProfileTablesFromURL(groupedProfiles);
+      completeProfileTables = await Promise.all(
+        tables.map(async (group) => {
+          if (group.profiles.length === 0) {
+            return { ...group, profiles: [] };
+          }
+          const profileObjects = await getProfilesByUuids(group.profiles);
+          return { ...group, profiles: profileObjects };
+        })
+      );
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Failed to load profile data";
+    }
+  }
+
+  return { completeProfileTables, error };
 }

@@ -150,7 +150,6 @@ export async function getProfileIdByEmail(
       email: email.toLowerCase(),
     });
 
-    console.log(profileId);
     return profileId || null;
   } catch (error) {
     console.error("Failed to fetch profile by email:", error);

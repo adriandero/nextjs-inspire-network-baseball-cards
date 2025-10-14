@@ -46,7 +46,6 @@ export async function canAccessProfile(
   const allowedTeamSlugs = userTeams?.teams?.map((team) => team.slug) || [];
 
   const profileTeamSlugs = profile.team?.map((team) => team.slug) || [];
-  console.log(profileTeamSlugs);
   return (
     profileTeamSlugs.some((slug) => allowedTeamSlugs.includes(slug)) ||
     user.profile?.slug === profile?.slug

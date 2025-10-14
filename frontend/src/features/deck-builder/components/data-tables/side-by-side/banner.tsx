@@ -12,7 +12,6 @@ export default function Banner({
 }: SanityDocument): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
-  console.log(profile);
   return (
     <div className="w-full flex bg-secondary items-center px-4 py-3 rounded-2xl gap-2">
       <div className="w-16 h-16 min-w-16 min-h-16 rounded-full flex justify-center overflow-hidden ">
