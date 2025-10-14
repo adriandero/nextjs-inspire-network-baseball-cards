@@ -1,3 +1,10 @@
+import type {
+  Browser,
+  Page,
+  LaunchOptions,
+  HTTPRequest,
+} from "puppeteer-core";
+
 export const maxDuration = 60;
 
 export async function GET(
@@ -13,10 +20,12 @@ export async function GET(
   const warmup = url.searchParams.get("warm") === "true";
 
   // Dynamically import puppeteer + chromium based on env
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let puppeteer: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let launchOptions: any;
+  type PuppeteerModule = {
+    launch: (options: LaunchOptions) => Promise<Browser>;
+  };
+
+  let puppeteer: PuppeteerModule;
+  let launchOptions: LaunchOptions;
 
   if (isProd) {
     const chromium = (await import("@sparticuz/chromium")).default;
@@ -53,14 +62,16 @@ export async function GET(
       headers: { "Content-Type": "application/json" },
     });
   }
+
   console.time("browser-launch");
-  const browser = await puppeteer.launch(launchOptions);
+  const browser: Browser = await puppeteer.launch(launchOptions);
   console.timeEnd("browser-launch");
-  const page = await browser.newPage();
+
+  const page: Page = await browser.newPage();
 
   let requestCount = 0;
 
-  page.on("request", (request: any) => {
+  page.on("request", (request: HTTPRequest) => {
     if (request.resourceType() === "image") requestCount++;
   });
 
