@@ -1,9 +1,5 @@
 import type { Browser, Page } from "puppeteer-core";
-import {
-  initPuppeteer,
-  waitForImages,
-} from "@/src/lib/utils/puppeteer-helper";
-
+import { initPuppeteer, waitForImages } from "@/src/lib/utils/puppeteer-helper";
 
 export const maxDuration = 60;
 
@@ -34,8 +30,8 @@ export async function GET(
   const page: Page = await browser.newPage();
 
   await page.setViewport({
-    width: 1200,   // ← Browser window width
-    height: 1600,  // ← Browser window height
+    width: 1200, // ← Browser window width
+    height: 1600, // ← Browser window height
     deviceScaleFactor: 2,
   });
 
@@ -57,13 +53,13 @@ export async function GET(
   const pdfBuffer = await page.pdf({
     format: "A4",
     printBackground: true,
-    landscape: false, // Portrait for deck builder
+    landscape: false,
   });
   console.timeEnd("pdf-generation");
 
   await browser.close();
 
-  return new Response(pdfBuffer, {
+  return new Response(Buffer.from(pdfBuffer), {
     headers: {
       "Content-Type": "application/pdf",
     },
