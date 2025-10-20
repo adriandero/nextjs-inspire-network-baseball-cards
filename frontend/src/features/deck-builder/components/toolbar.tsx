@@ -28,6 +28,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
@@ -60,6 +61,7 @@ export interface ToolbarProps {
   groupedProfiles: string | null;
   pdfLoading: boolean;
   onPDFDownload: () => void;
+  onPDFDownloadAll: () => void;
 }
 
 export function Toolbar({
@@ -70,6 +72,7 @@ export function Toolbar({
   availableFilters,
   pdfLoading,
   onPDFDownload,
+  onPDFDownloadAll,
 }: ToolbarProps) {
   const [open, setOpen] = useState(false);
   const [recentlyCopied, setRecentlyCopied] = useState(false);
@@ -132,7 +135,6 @@ export function Toolbar({
       <h1 className="text-lg font-bold mr-auto">
         {COMPARISON_ATTRIBUTES[selectedType]?.title || "Compare Type"}
       </h1>
-
       {/* Comparison Type Selector */}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -171,7 +173,6 @@ export function Toolbar({
           </Command>
         </PopoverContent>
       </Popover>
-
       {/* Display Options Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -253,7 +254,6 @@ export function Toolbar({
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-
       <TooltipProvider>
         <Tooltip open={recentlyCopied ? true : undefined}>
           <TooltipTrigger>
@@ -267,25 +267,39 @@ export function Toolbar({
         </Tooltip>
       </TooltipProvider>
 
-      {/* PDF Download Button */}
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Button
-              variant="outline"
-              onClick={onPDFDownload}
-              disabled={pdfLoading}
-            >
-              {pdfLoading ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                <GoDownload />
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Download PDF</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {/* PDF Download Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" disabled={pdfLoading}>
+            {pdfLoading ? <Loader2 className="animate-spin" /> : <GoDownload />}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuItem onClick={onPDFDownload} disabled={pdfLoading}>
+            <div className="flex flex-col gap-0.5 flex-1">
+              <div className="flex items-center">
+                <GoDownload className="mr-2 h-4 w-4" />
+                <span className="font-medium">Current View</span>
+              </div>
+              <span className="text-xs text-muted-foreground ml-6">
+                {COMPARISON_ATTRIBUTES[selectedType]?.title}
+              </span>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={onPDFDownloadAll} disabled={pdfLoading}>
+            <div className="flex flex-col gap-0.5 flex-1">
+              <div className="flex items-center">
+                <GoDownload className="mr-2 h-4 w-4" />
+                <span className="font-medium">All Comparisons</span>
+              </div>
+              <span className="text-xs text-muted-foreground ml-6">
+                7 comparison types
+              </span>
+            </div>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
