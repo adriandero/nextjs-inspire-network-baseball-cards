@@ -72,12 +72,11 @@ export async function GET(req: Request) {
   }
 
   await browser.close();
-
   console.time("pdf-merge");
   const mergedPdf = await mergePDFs(pdfBuffers);
   console.timeEnd("pdf-merge");
 
-  return new Response(mergedPdf, {
+  return new Response(Buffer.from(mergedPdf), {
     headers: {
       "Content-Type": "application/pdf",
     },
