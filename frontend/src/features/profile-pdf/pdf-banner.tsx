@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { urlFor } from "@/src/lib/sanity/client";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { SanityDocument } from "next-sanity";
 import React, { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
@@ -43,7 +42,7 @@ export default function PdfBanner({
     if (h1Ref.current) {
       const lineHeight = parseInt(
         getComputedStyle(h1Ref.current).lineHeight,
-        10
+        10,
       );
       setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
     }
@@ -63,14 +62,14 @@ export default function PdfBanner({
   return (
     <div className={`${className} w-full items-center gap-4`}>
       <div className="min-w-20 min-h-20 max-h-20 rounded-full flex justify-center overflow-hidden">
-        <Avatar className="">
-          <AvatarImage
+        <div className="min-w-20 min-h-20 max-h-20 rounded-full flex justify-center overflow-hidden">
+          <img
             src={optimizedProfileImageUrl}
+            alt={profile.name}
             className="rounded-full w-20 h-20 object-cover"
             loading="eager"
           />
-          <AvatarFallback></AvatarFallback>
-        </Avatar>
+        </div>
       </div>
       <div>
         <h1 className="text-2xl font-bold text-light1">

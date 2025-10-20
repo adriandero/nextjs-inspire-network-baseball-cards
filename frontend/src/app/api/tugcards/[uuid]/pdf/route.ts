@@ -26,7 +26,7 @@ export async function GET(
 
   console.time("page-navigation");
   await page.goto(process.env.BASE_URL + `/tugcards/${uuid}/pdf`, {
-    waitUntil: "load", // ← Changed from networkidle2
+    waitUntil: "load",
   });
   console.timeEnd("page-navigation");
 
