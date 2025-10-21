@@ -61,10 +61,12 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   const colors: Record<string, string> = {
     none: "",
     purple: "#69336F",
+    blue: "#243566",
     teal: "#007E8C",
     cyan: "#3FAFBA",
     rose: "#AF4B63",
     orange: "#F25F3E",
+    yellow: "#f6a02a",
   };
 
   const [profileColors, setProfileColors] = useState<ProfileColors>({});
@@ -73,7 +75,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   const handleColorChange = (
     profileId: string,
     cellId: string,
-    color: string
+    color: string,
   ) => {
     setProfileColors((prev) => ({
       ...prev,
@@ -338,7 +340,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -384,7 +386,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
 
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   );
