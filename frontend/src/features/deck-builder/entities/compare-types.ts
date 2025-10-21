@@ -55,7 +55,8 @@ export const COMPARISON_ATTRIBUTES: Record<
   [CompareTypes.PRINCIPLES_YOU_ARCHETYPES]: {
     title: "PrinciplesYou Archetypes",
     slug: "principlesyouarchetypes",
-    availableFilters: [AvailableFilter.Archetypes],
+    availableFilters: [AvailableFilter.Archetypes, AvailableFilter.ShowJobRole],
+    componentProps: [AvailableFilter.ShowJobRole],
   },
   [CompareTypes.PRINCIPLES_YOU_ARCHETYPES_GRAPH]: {
     title: "PrinciplesYou Graph",

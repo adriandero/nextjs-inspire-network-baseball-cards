@@ -57,7 +57,11 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
 
   const { completeProfileTables, isLoading, error } =
     useProfileComparison(groupedProfiles);
-  const { downloadPDF, loading: pdfLoading } = usePDFDownload();
+  const {
+    downloadPDF,
+    downloadAllPDFs,
+    loading: pdfLoading,
+  } = usePDFDownload();
 
   const [selectedType, setSelectedType] = useState(initialType);
 
@@ -72,6 +76,14 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
       await downloadPDF(fetchURL, filename);
     } catch (error) {
       console.error("Failed to download PDF:", error);
+    }
+  };
+
+  const handlePDFDownloadAllCall = async () => {
+    try {
+      await downloadAllPDFs(groupedProfiles, filters.showJobRole);
+    } catch (error) {
+      console.error("Failed to download all PDFs:", error);
     }
   };
 
@@ -116,7 +128,6 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   const componentProps = useMemo(() => {
     return getComponentProps(selectedType, filters);
   }, [selectedType, filters]);
-
 
   // Loading state
   if (isLoading) {
@@ -164,6 +175,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
           groupedProfiles={groupedProfiles}
           pdfLoading={pdfLoading}
           onPDFDownload={handlePDFDownloadCall}
+          onPDFDownloadAll={handlePDFDownloadAllCall} // ← NEW
           availableFilters={availableFilters}
           filters={filters}
           setters={setters}
