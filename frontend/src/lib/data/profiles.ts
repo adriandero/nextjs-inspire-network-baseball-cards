@@ -12,8 +12,8 @@ import {
 
 export async function getProfileByUuid(
   uuid: string,
-): Promise<ProfileWithFullTeams | null> {
-  if (!uuid) return null;
+): Promise<ProfileWithFullTeams | undefined> {
+  if (!uuid) return undefined;
 
   const query = `*[ _type == "profile" && uuid == $uuid && !(_id in path('drafts.**'))][0]{
     ...,

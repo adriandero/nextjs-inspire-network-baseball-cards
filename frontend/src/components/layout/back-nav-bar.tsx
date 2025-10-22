@@ -3,20 +3,22 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GoArrowLeft } from "react-icons/go";
-
 import { NAV_ITEMS } from "@/src/constants/navigation";
 import AccountDropdown from "@/src/components/custom-ui/account-dropdown";
 import { UserSanity } from "@/src/lib/entities/user";
+import React from "react";
 
 interface BackNavBarProps {
-  userProfileData?: UserSanity;
-  backwardsNavigationUrl: string;
+  readonly userProfileData?: UserSanity;
+  readonly backwardsNavigationUrl: string;
+  readonly className?: string;
 }
 
 export default function BackNavBar({
   userProfileData,
   backwardsNavigationUrl,
-}: BackNavBarProps): React.JSX.Element {
+  className,
+}: Readonly<BackNavBarProps>): React.JSX.Element {
   const router = useRouter();
 
   function handleBack() {
@@ -24,7 +26,9 @@ export default function BackNavBar({
   }
 
   return (
-    <div className="w-full h-16 hidden md:flex justify-between items-center justify-self-center px-6">
+    <div
+      className={`${className} flex w-full h-16 justify-between items-center justify-self-center px-6`}
+    >
       <GoArrowLeft
         size={28}
         strokeWidth="0.5"

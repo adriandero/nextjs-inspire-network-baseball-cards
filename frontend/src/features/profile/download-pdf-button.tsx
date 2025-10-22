@@ -2,7 +2,7 @@
 
 import { GoDownload } from "react-icons/go";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 export default function DownloadButton({
@@ -19,7 +19,7 @@ export default function DownloadButton({
       setLoading(true);
 
       const pdfBlob = await fetch(`/api/tugcards/${uuid}/pdf`).then((res) =>
-        res.blob()
+        res.blob(),
       );
 
       const blobUrl = URL.createObjectURL(pdfBlob);
@@ -43,7 +43,7 @@ export default function DownloadButton({
   return (
     <Button
       variant="outline"
-      className="mt-6 h-fit rounded-xl text-base p-3"
+      className="hover:border-primary rounded-lg border bg-light1"
       onClick={handlePDFDownloadCall}
     >
       {loading ? (
@@ -52,8 +52,7 @@ export default function DownloadButton({
         </>
       ) : (
         <>
-          <GoDownload size={30} strokeWidth="0.5" className="!w-5 !h-5" />{" "}
-          <span>Download TUG Card</span>
+          <GoDownload size={24} /> <span>Download</span>
         </>
       )}
     </Button>

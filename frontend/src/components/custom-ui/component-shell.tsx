@@ -9,7 +9,7 @@ export default function ComponentShell({
 }: ShellProps): React.JSX.Element {
   return (
     <div
-      className={`w-full h-fit border border-light3 bg-background sm:rounded-2xl p-8 mt-6 ${className}`}
+      className={`w-full h-fit border bg-background sm:rounded-xl p-8 mt-4 ${className}`}
     >
       {children}
     </div>

@@ -14,6 +14,11 @@ import {
 } from "@/src/lib/auth/permissions";
 import { getProfileByUuid } from "@/src/lib/data/profiles";
 import { getAuthorizedTeammateProfiles } from "@/src/lib/services/profiles.service";
+import Link from "next/link";
+import { Button } from "@/src/components/shadcn-ui/button";
+import { GoEye } from "react-icons/go";
+
+import React from "react";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -81,6 +86,7 @@ export default async function TugPage({
         _updatedAt={""}
       />
       <BackNavBar
+        className={"hidden md:flex"}
         userProfileData={userProfileData}
         backwardsNavigationUrl={"/browse/"}
       />
@@ -92,7 +98,7 @@ export default async function TugPage({
         _createdAt={""}
         _updatedAt={""}
       />
-      <main className="flex flex-wrap gap-8">
+      <main className="flex flex-wrap gap-4">
         <div className="flex flex-col grow shrink-0 basis-1/2">
           <ValuesCard
             profile={profile}
@@ -127,7 +133,7 @@ export default async function TugPage({
             _updatedAt={""}
           />
         </div>
-        <div className="w-full md:max-w-80 h-fit max-h-screen flex flex-col items-center md:items-start">
+        <div className="w-full md:max-w-80 h-fit max-h-screen flex flex-col items-center md:items-start gap-4">
           <MoreProfilesCard
             moreProfiles={moreProfiles}
             currentProfile={profile}
@@ -137,10 +143,22 @@ export default async function TugPage({
             _createdAt={""}
             _updatedAt={""}
           />
-          <DownloadButton
-            uuid={uuid}
-            fileName={`${profile.name} - ${profile.team?.[0].name} - TUG Card`}
-          />
+
+          <div className="flex gap-4">
+            <Link href={`/tugcards/${uuid}/pdf/preview`}>
+              <Button
+                variant="outline"
+                className="hover:border-primary rounded-lg border bg-light1"
+              >
+                <GoEye size={30} /> Preview
+              </Button>
+            </Link>
+
+            <DownloadButton
+              uuid={uuid}
+              fileName={`${profile.name} - ${profile.team?.[0].name} - TUG Card`}
+            />
+          </div>
         </div>
       </main>
       <footer className="flex item-center p-8"></footer>

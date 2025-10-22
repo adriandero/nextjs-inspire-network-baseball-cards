@@ -25,7 +25,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
     }
   }, [profileTeamName]);
   return (
-    <div className="w-full min-w-full min-h-32 max-h-32 bg-secondary rounded-2xl hidden md:flex items-center gap-8 px-8 py-4">
+    <div className="w-full min-w-full min-h-32 max-h-32 bg-secondary rounded-xl hidden md:flex items-center gap-8 px-8 py-4">
       <div className="w-24 h-24 min-w-24 min-h-24 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
