@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     // 3. Check if user already exists (prevent duplicates)
     const existingUser = await writeClient.fetch(
-      `*[_type == "user" && email == $email][0]`,
+      `*[_type == "user" && lower(email) == lower($email)][0]`,
       { email: auth0User.email },
     );
 

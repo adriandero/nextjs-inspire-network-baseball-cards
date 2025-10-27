@@ -143,11 +143,11 @@ export async function getProfileIdByEmail(
 ): Promise<string | null> {
   if (!email) return null;
 
-  const query = `*[_type == "profile" && email == $email && !(_id in path('drafts.**'))][0]._id`;
+  const query = `*[_type == "profile" && lower(email) == lower($email) && !(_id in path('drafts.**'))][0]._id`;
 
   try {
     const profileId = await client.fetch<string | null>(query, {
-      email: email.toLowerCase(),
+      email, // no need to lowercase here, GROQ handles it
     });
 
     return profileId || null;
