@@ -13,12 +13,22 @@ export interface principlesYouArchetypesGraphProps {
   optimizedImages?: boolean;
   tableName?: string;
   breakUpGraph?: boolean;
+  baseFontSize?: string;
+  headingFontSize?: string;
+  titleFonteSize?: string;
   showPrimaryOnly?: boolean;
 }
 
 const PrinciplesYouArchetypesGraph: React.FC<
   principlesYouArchetypesGraphProps
-> = ({ profiles, tableName, showPrimaryOnly }) => {
+> = ({
+  profiles,
+  tableName,
+  showPrimaryOnly,
+  baseFontSize = "text-base",
+  headingFontSize = "text-xl",
+  titleFonteSize = "text-2xl",
+}) => {
   if (profiles.length === 0) {
     return (
       <div>
@@ -41,7 +51,7 @@ const PrinciplesYouArchetypesGraph: React.FC<
         }
 
         return hasArchetype;
-      },
+      }
     );
 
     return filteredProfiles;
@@ -50,7 +60,7 @@ const PrinciplesYouArchetypesGraph: React.FC<
   return (
     <div className="space-y-4 mb-4">
       <h2 className="text-base font-semibold">{tableName}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
         {PRINCIPLES_YOU_ARCHETYPES.map((group) => (
           <div
             key={group.category}
@@ -66,7 +76,9 @@ const PrinciplesYouArchetypesGraph: React.FC<
                 height={64}
                 className="h-auto w-auto max-h-18 object-contain"
               />
-              <h3 className="font-bold text-2xl">{group.category}</h3>
+              <h3 className={`font-bold ${titleFonteSize}`}>
+                {group.category}
+              </h3>
             </div>
             {group.category === "Individualist" ? (
               <div className="space-y-1">
@@ -80,12 +92,14 @@ const PrinciplesYouArchetypesGraph: React.FC<
               <div className="">
                 {group.archetypes.map((archetype) => {
                   const archetypeProfiles = getProfilesForArchetype(
-                    archetype.id,
+                    archetype.id
                   );
 
                   return (
                     <div key={archetype.id} className={"mt-3"}>
-                      <h4 className="text-tertiary mb-2 text-xl font-bold">
+                      <h4
+                        className={`text-tertiary mb-2 ${headingFontSize} font-bold`}
+                      >
                         {archetype.label}
                       </h4>
                       <div className="flex flex-wrap gap-2">
@@ -97,7 +111,7 @@ const PrinciplesYouArchetypesGraph: React.FC<
                             <Badge
                               variant="outline"
                               key={profile._id}
-                              className={`text-base font-bold ${
+                              className={`${baseFontSize} font-bold ${
                                 isPrimaryArchetype ? "text-inspireMaroon " : ""
                               }`}
                             >

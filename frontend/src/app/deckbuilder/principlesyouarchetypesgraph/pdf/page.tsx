@@ -1,9 +1,7 @@
 // Remove "use client" directive!
 import { Suspense } from "react";
 import { PDFLayout } from "@/src/components/layout/pdf-layout";
-import {
-  fetchProfileTables,
-} from "@/src/lib/utils/profile-table-utils";
+import { fetchProfileTables } from "@/src/lib/utils/profile-table-utils";
 import PrinciplesYouArchetypesGraph from "@/src/features/deck-builder/data-tables/principles-you-archetypes-graph";
 
 async function ProfileComparisonContent({
@@ -13,7 +11,6 @@ async function ProfileComparisonContent({
 }) {
   const { completeProfileTables, error } =
     await fetchProfileTables(groupedProfiles);
-
 
   return (
     <PDFLayout
@@ -31,6 +28,9 @@ async function ProfileComparisonContent({
             profiles={table.profiles}
             optimizedImages={true}
             showPrimaryOnly={false}
+            baseFontSize="text-sm"
+            headingFontSize="text-md"
+            titleFonteSize="text-lg"
           />
         </div>
       ))}
