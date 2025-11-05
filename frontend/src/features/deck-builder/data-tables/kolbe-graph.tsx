@@ -11,7 +11,6 @@ export interface KolbeGraphProps {
   tableName?: string;
   baseFontSize?: string;
   headingFontSize?: string;
-  breakUpGraph?: boolean;
 }
 
 interface ProfileData {
@@ -30,7 +29,6 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
   tableName,
   baseFontSize = "text-base",
   headingFontSize = "text-3xl",
-  breakUpGraph = false,
 }) => {
   if (profiles.length === 0) {
     return (
@@ -83,7 +81,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
       .map(() =>
         Array(4)
           .fill(null)
-          .map(() => ({ percent: "0%", people: [] })),
+          .map(() => ({ percent: "0%", people: [] }))
       );
 
     if (!profiles || profiles.length === 0) return data;
@@ -139,7 +137,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
   const gridData = processProfiles();
 
   return (
-    <div className="space-y-4 mb-4 break-after-page">
+    <div className="space-y-4 mb-4 break-inside-avoid">
       <h2 className="text-base font-semibold">{tableName}</h2>
       <div className="w-full mx-auto">
         <div className="flex mb-2">
@@ -181,7 +179,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
         {gridData.map((row: CellData[], rowIndex: number) => (
           <div
             key={`row-${rowIndex + 1}`}
-            className={`${breakUpGraph ? `${rowIndex !== 0 ? "pt-8" : ""} break-after-page` : ""} flex mb-2 `}
+            className={`break-inside-avoid flex mb-2 `}
           >
             <div className="w-8 mr-4 flex items-center justify-center">
               <div className="transform -rotate-90 whitespace-nowrap flex items-center">
@@ -217,7 +215,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
                             {profile.value}
                           </span>
                         </div>
-                      ),
+                      )
                     )}
                   </div>
                 </div>

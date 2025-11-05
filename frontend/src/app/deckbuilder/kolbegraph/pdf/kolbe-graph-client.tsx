@@ -15,7 +15,7 @@ export default function KolbeGraphClient({
   completeProfileTables,
   error,
 }: KolbeGraphClientProps) {
-  const { containerRef, baseFontSize, headingFontSize, breakUpGraph } =
+  const { containerRef, baseFontSize, headingFontSize } =
     useHeightResponsiveFont(completeProfileTables.length > 0);
 
   return (
@@ -35,7 +35,6 @@ export default function KolbeGraphClient({
             tableName={table.name}
             baseFontSize={baseFontSize}
             headingFontSize={headingFontSize}
-            breakUpGraph={breakUpGraph}
           />
         </div>
       ))}

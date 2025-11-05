@@ -12,7 +12,6 @@ export interface principlesYouArchetypesGraphProps {
   profiles: Profile[];
   optimizedImages?: boolean;
   tableName?: string;
-  breakUpGraph?: boolean;
   baseFontSize?: string;
   headingFontSize?: string;
   titleFonteSize?: string;
@@ -65,7 +64,7 @@ const PrinciplesYouArchetypesGraph: React.FC<
           <div
             key={group.category}
             className={
-              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-4 pt-2 px-6 "
+              "w-full h-full border border-light3 bg-background sm:rounded-2xl pb-4 pt-2 px-6 break-inside-avoid"
             }
           >
             <div className="flex flex-row items-end gap-4 ">
