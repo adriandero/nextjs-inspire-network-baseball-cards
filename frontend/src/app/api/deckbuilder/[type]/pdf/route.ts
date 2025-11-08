@@ -39,7 +39,7 @@ export async function GET(
   await page.goto(
     process.env.BASE_URL +
       `/deckbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
-    { waitUntil: "load" }
+    { waitUntil: "networkidle2" }
   );
   console.timeEnd("page-navigation");
 

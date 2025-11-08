@@ -72,7 +72,7 @@ export default function KolbeStrengthsCard({
                   <div className="w-full flex flex-row items-center gap-4">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <GoSearch strokeWidth={0.5} size={18} />
+                        <GoSearch strokeWidth={0.5} size={22} />
                       </TooltipTrigger>
                       <TooltipContent>Fact Finder</TooltipContent>
                     </Tooltip>
@@ -101,7 +101,7 @@ export default function KolbeStrengthsCard({
                   <div className="w-full flex flex-row items-center gap-4">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <GoTab strokeWidth={0.5} size={18} />
+                        <GoTab strokeWidth={0.5} size={22} />
                       </TooltipTrigger>
                       <TooltipContent>Follow Thru</TooltipContent>
                     </Tooltip>
@@ -130,7 +130,7 @@ export default function KolbeStrengthsCard({
                   <div className="w-full flex flex-row items-center gap-4">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <GoRocket strokeWidth={0.5} size={18} />
+                        <GoRocket strokeWidth={0.5} size={22} />
                       </TooltipTrigger>
                       <TooltipContent>Quick Start</TooltipContent>
                     </Tooltip>
@@ -159,7 +159,7 @@ export default function KolbeStrengthsCard({
                   <div className="w-full flex flex-row items-center gap-4">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <GoTools strokeWidth={0.5} size={18} />
+                        <GoTools strokeWidth={0.5} size={22} />
                       </TooltipTrigger>
                       <TooltipContent>Implementer</TooltipContent>
                     </Tooltip>
