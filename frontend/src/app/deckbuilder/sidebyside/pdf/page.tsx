@@ -28,6 +28,7 @@ async function ProfileComparisonContent({
             profiles={shortNamesOfProfiles(table.profiles)}
             tableName={table.name}
             showJobRole={false}
+            columnCount={3}
           />
         </div>
       ))}

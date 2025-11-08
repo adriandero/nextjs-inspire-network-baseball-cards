@@ -75,7 +75,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
   const handleColorChange = (
     profileId: string,
     cellId: string,
-    color: string,
+    color: string
   ) => {
     setProfileColors((prev) => ({
       ...prev,
@@ -291,11 +291,10 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
     <div className="space-y-4 mb-4 ">
       <div className="flex justify-between items-center mb-4 ">
         <h2 className="text-base font-semibold">{tableName}</h2>
-
-        <div className="flex gap-2 ">
-          <TooltipProvider>
+        <TooltipProvider>
+          <div className="flex gap-2 ">
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   className="self-center hover:text-tertiary"
@@ -307,11 +306,9 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
               </TooltipTrigger>
               <TooltipContent>Automatically Assign Colors</TooltipContent>
             </Tooltip>
-          </TooltipProvider>
 
-          <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   className="self-center hover:text-inspireRed"
@@ -323,8 +320,8 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
               </TooltipTrigger>
               <TooltipContent>Clear All Colors</TooltipContent>
             </Tooltip>
-          </TooltipProvider>
-        </div>
+          </div>
+        </TooltipProvider>
       </div>
       <div className="rounded-md border bg-light1 w-full">
         <Table className="table-fixed w-full border-collapse">
@@ -340,7 +337,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -386,7 +383,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
 
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   );

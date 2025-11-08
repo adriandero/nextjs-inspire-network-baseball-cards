@@ -5,7 +5,6 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 
 import { cn } from "@/src/lib/utils";
-import { Button } from "./button";
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -17,6 +16,8 @@ const AccordionItem = React.forwardRef<
 ));
 AccordionItem.displayName = "AccordionItem";
 
+import { buttonVariants } from "@/src/components/shadcn-ui/button";
+
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
@@ -25,15 +26,20 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-2 font-medium transition-all [&[data-state=open]>button_svg]:rotate-180",
+        "flex flex-1 items-center justify-between py-2 font-medium transition-all [&[data-state=open]>div>svg]:rotate-180",
         className
       )}
       {...props}
     >
       {children}
-      <Button variant="ghost" size="xsIcon" className="ml-4">
+      <div
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "xsIcon" }),
+          "ml-4"
+        )}
+      >
         <ChevronDown className="transition-transform duration-200" />
-      </Button>
+      </div>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -45,7 +51,7 @@ const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
     <div className={cn("pb-4 pt-0", className)}>{children}</div>

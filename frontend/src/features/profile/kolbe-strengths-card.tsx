@@ -77,7 +77,7 @@ export default function KolbeStrengthsCard({
                 <AccordionTrigger>
                   <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger asChild>
                         <GoSearch strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Fact Finder</TooltipContent>
@@ -95,6 +95,7 @@ export default function KolbeStrengthsCard({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="ml-12">
+                  <p className="text-xs text-dark3">Fact Finder</p>
                   <h3 className="text-lg font-bold">
                     {factFinderMethod?.method}
                   </h3>
@@ -105,7 +106,7 @@ export default function KolbeStrengthsCard({
                 <AccordionTrigger>
                   <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger asChild>
                         <GoTab strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Follow Thru</TooltipContent>
@@ -123,6 +124,7 @@ export default function KolbeStrengthsCard({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="ml-12">
+                  <p className="text-xs text-dark3">Follow Thru</p>
                   <h3 className="text-lg font-bold">
                     {followThruMethod?.method}
                   </h3>
@@ -133,7 +135,7 @@ export default function KolbeStrengthsCard({
                 <AccordionTrigger>
                   <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger asChild>
                         <GoRocket strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Quick Start</TooltipContent>
@@ -151,6 +153,7 @@ export default function KolbeStrengthsCard({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="ml-12">
+                  <p className="text-xs text-dark3">Quick Start</p>
                   <h3 className="text-lg font-bold">
                     {quickStartMethod?.method}
                   </h3>
@@ -161,7 +164,7 @@ export default function KolbeStrengthsCard({
                 <AccordionTrigger>
                   <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger asChild>
                         <GoTools strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Implementer</TooltipContent>
@@ -179,6 +182,7 @@ export default function KolbeStrengthsCard({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="ml-12">
+                  <p className="text-xs text-dark3">Implementer</p>
                   <h3 className="text-lg font-bold">
                     {implementerMethod?.method}
                   </h3>

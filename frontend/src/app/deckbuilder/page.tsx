@@ -23,7 +23,7 @@ export default async function DeckBuilderPage(): Promise<JSX.Element> {
 
   if (!userProfileData) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             User Not Found
@@ -40,12 +40,12 @@ export default async function DeckBuilderPage(): Promise<JSX.Element> {
   }
 
   return (
-    <div className="w-full h-screen max-w-screen-lg ">
+    <div className=" max-w-screen-lg ">
       <NavBar userProfileData={userProfileData} />
 
-      <main className="flex flex-row justify-center">
+      <div className="flex flex-row justify-center">
         <BuilderContext />
-      </main>
+      </div>
       <footer className="flex item-center p-8"></footer>
     </div>
   );

@@ -10,9 +10,10 @@ import PrinciplesYouCard from "@/src/features/deck-builder/components/data-table
 import KolbeStrengthsCard from "@/src/features/deck-builder/components/data-tables/side-by-side/kolbe-strengths-card";
 
 export interface SideBySideProps {
-  profiles: SanityDocument[];
-  tableName?: string;
-  showJobRole?: boolean;
+  readonly profiles: SanityDocument[];
+  readonly tableName?: string;
+  readonly showJobRole?: boolean;
+  readonly columnCount?: number;
 }
 
 const useColumnCount = () => {
@@ -36,7 +37,7 @@ const useColumnCount = () => {
 
 const chunkProfiles = (
   profiles: SanityDocument[],
-  size: number,
+  size: number
 ): SanityDocument[][] => {
   const chunks: SanityDocument[][] = [];
   for (let i = 0; i < profiles.length; i += size) {
@@ -49,8 +50,11 @@ const SideBySide: React.FC<SideBySideProps> = ({
   profiles,
   tableName,
   showJobRole,
+  columnCount,
 }) => {
-  const columns = useColumnCount();
+  const responsiveColumns = useColumnCount();
+  const columns = columnCount ?? responsiveColumns;
+
   const profileGroups = chunkProfiles(profiles, columns);
 
   if (profiles.length === 0) {
@@ -69,7 +73,10 @@ const SideBySide: React.FC<SideBySideProps> = ({
       <h2 className="text-base font-semibold mb-4">{tableName}</h2>
 
       {profileGroups.map((group, groupIdx) => (
-        <div key={groupIdx} className="space-y-4 mb-12">
+        <div
+          key={groupIdx}
+          className={`${groupIdx !== 0 ? "break-inside-avoid" : ""} space-y-4 mb-12`}
+        >
           <div className="flex flex-col sm:flex-row gap-4">
             {group.map((profile) => (
               <div key={profile._id} className="flex-1">
@@ -89,7 +96,7 @@ const SideBySide: React.FC<SideBySideProps> = ({
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 break-inside-avoid">
             {group.map((profile) => (
               <div key={profile._id} className="flex-1">
                 <ValuesCard
@@ -107,7 +114,7 @@ const SideBySide: React.FC<SideBySideProps> = ({
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 break-inside-avoid">
             {group.map((profile) => (
               <div key={profile._id} className="flex-1">
                 <WorkingGeniusCard
@@ -125,7 +132,7 @@ const SideBySide: React.FC<SideBySideProps> = ({
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 break-inside-avoid">
             {group.map((profile) => (
               <div key={profile._id} className="flex-1">
                 <PrinciplesYouCard
@@ -143,7 +150,7 @@ const SideBySide: React.FC<SideBySideProps> = ({
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 break-inside-avoid">
             {group.map((profile) => (
               <div key={profile._id} className="flex-1">
                 <KolbeStrengthsCard

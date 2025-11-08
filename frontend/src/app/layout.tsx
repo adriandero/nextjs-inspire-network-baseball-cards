@@ -11,11 +11,13 @@ const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
+  display: "swap",
 });
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -61,15 +63,13 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang="en" className="font-sans bg-mainbackground">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-mainbackground antialiased text-dark1 justify-center flex`}
-      >
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}  bg-mainbackground text-dark1`}
+    >
+      <body className="font-sans bg-mainbackground antialiased text-dark1 flex justify-center">
         <DynamicStatsigProvider datafile={datafile}>
-          <header></header>
-          <main className="w-full flex justify-center h-screen max-w-screen-lg ">
-            {children}
-          </main>
+          <main className="w-full max-w-screen-lg">{children}</main>
           <Toaster />
         </DynamicStatsigProvider>
       </body>

@@ -1,5 +1,6 @@
 import { SanityAsset } from "./common";
 import { TeamWithPopulatedCompany } from "./team";
+import workingGeniusJson from "@/public/json/working-genius.json";
 
 export interface Widget {
   wonder?: string;
@@ -24,7 +25,7 @@ export interface Profile {
   values?: string[];
   profileImage?: SanityAsset;
   workingGenius?: {
-    title?: string;
+    title?: keyof typeof workingGeniusJson;
     widget?: Widget;
   };
   principleYouArchetype?: string[];

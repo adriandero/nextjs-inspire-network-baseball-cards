@@ -28,13 +28,14 @@ export default function KolbeGraphClient({
       baseFontSize={baseFontSize}
       headingFontSize={headingFontSize}
     >
-      {completeProfileTables.map((table) => (
-        <div key={table.id} className="flex flex-col gap-4">
+      {completeProfileTables.map((table, index) => (
+        <div key={index} className="flex flex-col gap-4">
           <KolbeGraph
             profiles={shortNamesOfProfiles(table.profiles)}
             tableName={table.name}
             baseFontSize={baseFontSize}
             headingFontSize={headingFontSize}
+            className={`${index !== 0 ? "break-inside-avoid" : ""}`}
           />
         </div>
       ))}

@@ -5,19 +5,21 @@ import { GoLightBulb } from "react-icons/go";
 import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 import workingGeniusJson from "@/public/json/working-genius.json";
 
-import { SanityDocument } from "next-sanity";
 import ComponentShell from "../../components/custom-ui/component-shell";
+import { Profile } from "@/src/lib/entities/profile";
+
+interface WorkingGeniusCardProps {
+  readonly profile: Profile;
+}
 
 export default function WorkingGeniusCard({
   profile,
-}: SanityDocument): React.JSX.Element {
-  type workingGeniusKey = keyof typeof workingGeniusJson;
-
-  const workingGenius: workingGeniusKey = profile.workingGenius?.title;
+}: WorkingGeniusCardProps): React.JSX.Element {
+  const workingGenius = profile.workingGenius?.title;
 
   return (
     <ComponentShell>
-      {workingGeniusJson[workingGenius] ? (
+      {workingGenius && workingGeniusJson[workingGenius] ? (
         <div className="flex flex-row">
           <div className="h-full mr-6">
             <GoLightBulb

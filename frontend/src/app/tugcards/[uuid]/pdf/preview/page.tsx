@@ -20,7 +20,7 @@ export default async function PreviewPage({ params }: { params: tParams }) {
   const profile = await getProfileByUuid(uuid);
   if (!profile) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             Profile Not Found
@@ -36,7 +36,7 @@ export default async function PreviewPage({ params }: { params: tParams }) {
   const hasAccess = await canAccessProfile(userProfileData, profile);
   if (!hasAccess) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             Access Denied

@@ -6,17 +6,18 @@ import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
 import { Profile } from "@/src/lib/entities/profile";
 
 export interface KolbeGraphProps {
-  profiles: Profile[];
-  optimizedImages?: boolean;
-  tableName?: string;
-  baseFontSize?: string;
-  headingFontSize?: string;
+  readonly profiles: Profile[];
+  readonly optimizedImages?: boolean;
+  readonly tableName?: string;
+  readonly baseFontSize?: string;
+  readonly headingFontSize?: string;
+  readonly className?: string;
 }
 
 interface ProfileData {
-  name: string;
-  value: number;
-  method?: string;
+  readonly name: string;
+  readonly value: number;
+  readonly method?: string;
 }
 
 interface CellData {
@@ -29,6 +30,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
   tableName,
   baseFontSize = "text-base",
   headingFontSize = "text-3xl",
+  className,
 }) => {
   if (profiles.length === 0) {
     return (
@@ -137,7 +139,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
   const gridData = processProfiles();
 
   return (
-    <div className="space-y-4 mb-4 break-inside-avoid">
+    <div className={`${className} space-y-4 mb-4`}>
       <h2 className="text-base font-semibold">{tableName}</h2>
       <div className="w-full mx-auto">
         <div className="flex mb-2">

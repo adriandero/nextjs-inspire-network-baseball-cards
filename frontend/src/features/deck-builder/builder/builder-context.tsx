@@ -63,8 +63,8 @@ const useProfileTable = (
   handleProfileCheck: (profileId: string, tableId: string) => void,
   handleBulkProfileSelect: (
     allProfileIds: string[],
-    isSelected: boolean,
-  ) => void,
+    isSelected: boolean
+  ) => void
 ) => {
   const [sorting, setSorting] = useState<SortingState>([
     { desc: false, id: "name" },
@@ -78,9 +78,9 @@ const useProfileTable = (
         dropTables,
         selectedTableId,
         handleProfileCheck,
-        handleBulkProfileSelect,
+        handleBulkProfileSelect
       ),
-    [dropTables, selectedTableId, handleProfileCheck, handleBulkProfileSelect],
+    [dropTables, selectedTableId, handleProfileCheck, handleBulkProfileSelect]
   );
 
   const table = useReactTable({
@@ -99,7 +99,7 @@ const useProfileTable = (
       columnVisibility,
       rowSelection: profiles.reduce((acc, profile, index) => {
         acc[index] = dropTables.some((table) =>
-          table.profiles.includes(profile.uuid),
+          table.profiles.includes(profile.uuid)
         );
         return acc;
       }, {} as RowSelectionState),
@@ -207,7 +207,7 @@ const BuilderContext = () => {
         restoreViewState(data);
         restoreDropTables(data);
       },
-      [restoreViewState, restoreDropTables],
+      [restoreViewState, restoreDropTables]
     ),
   });
 
@@ -215,11 +215,11 @@ const BuilderContext = () => {
     (allProfileIds: string[], isSelected: boolean) => {
       if (isSelected) {
         const selectedTable = dropTables.find(
-          (table) => table.id === selectedTableId,
+          (table) => table.id === selectedTableId
         );
         if (selectedTable) {
           const profilesToAdd = allProfileIds.filter(
-            (id) => !selectedTable.profiles.includes(id),
+            (id) => !selectedTable.profiles.includes(id)
           );
           handleUpdateTableProfiles(selectedTableId, [
             ...selectedTable.profiles,
@@ -229,13 +229,13 @@ const BuilderContext = () => {
       } else {
         dropTables.forEach((table) => {
           const updatedProfiles = table.profiles.filter(
-            (id) => !allProfileIds.includes(id),
+            (id) => !allProfileIds.includes(id)
           );
           handleUpdateTableProfiles(table.id, updatedProfiles);
         });
       }
     },
-    [dropTables, selectedTableId, handleUpdateTableProfiles],
+    [dropTables, selectedTableId, handleUpdateTableProfiles]
   );
 
   const getCurrentProfiles = useCallback((): ProfileWithDetailedTeams[] => {
@@ -259,7 +259,7 @@ const BuilderContext = () => {
     (profileId: string, _tableId: string) => {
       handleProfileCheck(profileId);
     },
-    handleBulkProfileSelect,
+    handleBulkProfileSelect
   );
 
   const teamTable = useTeamTable(getCurrentTeams());
@@ -287,7 +287,7 @@ const BuilderContext = () => {
       setSelectedType(type);
       setOpen(false);
     },
-    [setSelectedType],
+    [setSelectedType]
   );
 
   const handleClearAllSelections = useCallback(() => {
@@ -373,7 +373,7 @@ const BuilderContext = () => {
                             "mr-2 h-4 w-4",
                             selectedType === item.value
                               ? "opacity-100"
-                              : "opacity-0",
+                              : "opacity-0"
                           )}
                         />
                         {item.data.title}
@@ -386,7 +386,7 @@ const BuilderContext = () => {
 
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     className="self-center hover:text-inspireRed"

@@ -23,7 +23,7 @@ export default async function BrowsePage() {
 
   if (!userProfileData) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             User Not Found
@@ -40,16 +40,16 @@ export default async function BrowsePage() {
   }
 
   return (
-    <div className="w-full h-screen max-w-screen-lg">
+    <div className=" max-w-screen-lg">
       <NavBar
         userProfileData={userProfileData}
       />
-      <main className="flex flex-wrap gap-8 justify-center">
+      <div className="flex flex-wrap gap-8 justify-center">
         <DataTable
           teamColumns={teamColumns}
           profileColumns={profileColumns}
         />
-      </main>
+      </div>
     </div>
   );
 }

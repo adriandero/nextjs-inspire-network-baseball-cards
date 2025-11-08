@@ -13,7 +13,7 @@ export default function Banner({
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   return (
-    <div className="w-full flex bg-secondary items-center px-4 py-3 rounded-2xl gap-2">
+    <div className="w-full flex bg-secondary items-center px-4 py-3 rounded-lg gap-2">
       <div className="w-16 h-16 min-w-16 min-h-16 rounded-full flex justify-center overflow-hidden ">
         <Avatar className="">
           <AvatarImage

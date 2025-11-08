@@ -11,7 +11,7 @@ export default function WorkingGeniusCard({
 
   const workingGenius: workingGeniusKey = profile.workingGenius?.title;
   return (
-    <div className="w-full h-fit border border-light3 bg-background rounded-2xl p-4">
+    <div className="w-full h-fit border border-light3 bg-background rounded-lg p-4">
       {workingGeniusJson[workingGenius] ? (
         <div className="flex flex-col">
           <div className="flex items-center mr-4 h-full">

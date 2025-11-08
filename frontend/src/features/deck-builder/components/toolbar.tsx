@@ -116,7 +116,7 @@ export function Toolbar({
     if (filters.selectedArchetypes.length === 0) return "None";
     if (filters.selectedArchetypes.length === 1) {
       const filter = getAllArchetypes().find(
-        (f) => f.id === filters.selectedArchetypes[0],
+        (f) => f.id === filters.selectedArchetypes[0]
       );
       return filter?.label ?? "1 selected";
     }
@@ -163,7 +163,7 @@ export function Toolbar({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      selectedType === item.value ? "opacity-100" : "opacity-0",
+                      selectedType === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {item.data.title}
@@ -218,12 +218,12 @@ export function Toolbar({
                                 "mr-2 h-4 w-4",
                                 filters.selectedArchetypes.includes(filter.id)
                                   ? "opacity-100"
-                                  : "opacity-0",
+                                  : "opacity-0"
                               )}
                             />
                             {filter.label}
                           </CommandItem>
-                        )),
+                        ))
                       )}
                     </CommandGroup>
                   </Command>
@@ -256,7 +256,7 @@ export function Toolbar({
       </DropdownMenu>
       <TooltipProvider>
         <Tooltip open={recentlyCopied ? true : undefined}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button variant="outline" onClick={handleCopyURLToClipboard}>
               {recentlyCopied ? <Check className="text-primary" /> : <GoLink />}
             </Button>

@@ -1,12 +1,14 @@
-import { SanityDocument } from "next-sanity";
-
 import { GoNorthStar } from "react-icons/go";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { Badge } from "@/src/components/shadcn-ui/badge";
+import { Profile } from "@/src/lib/entities/profile";
 
+interface ValuesCardProps {
+  readonly profile: Profile;
+}
 export default function ValuesCard({
   profile,
-}: SanityDocument): React.JSX.Element {
+}: ValuesCardProps): React.JSX.Element {
   return (
     <ComponentShell className="flex flex-row">
       <div className="flex w-fit h-fit xs:flex-nowrap flex-wrap">

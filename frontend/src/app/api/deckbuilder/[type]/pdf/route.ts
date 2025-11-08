@@ -5,7 +5,7 @@ export const maxDuration = 60;
 
 export async function GET(
   req: Request,
-  context: { params: Promise<{ type: string }> },
+  context: { params: Promise<{ type: string }> }
 ) {
   const type = (await context.params).type;
   const url = new URL(req.url);
@@ -39,7 +39,7 @@ export async function GET(
   await page.goto(
     process.env.BASE_URL +
       `/deckbuilder/${type}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${showJobRoleParam}`,
-    { waitUntil: "load" },
+    { waitUntil: "load" }
   );
   console.timeEnd("page-navigation");
 

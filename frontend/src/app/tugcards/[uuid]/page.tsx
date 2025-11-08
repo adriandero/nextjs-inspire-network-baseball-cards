@@ -37,7 +37,7 @@ export default async function TugPage({
   const profile = await getProfileByUuid(uuid);
   if (!profile) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             Profile Not Found
@@ -53,7 +53,7 @@ export default async function TugPage({
   const hasAccess = await canAccessProfile(userProfileData, profile);
   if (!hasAccess) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center p-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             Access Denied
@@ -71,11 +71,11 @@ export default async function TugPage({
 
   const moreProfiles = await getAuthorizedTeammateProfiles(
     uuid,
-    userProfileData,
+    userProfileData
   );
 
   return (
-    <div className="w-full h-screen max-w-screen-lg ">
+    <>
       <MobileNavBanner
         profile={profile}
         userProfileData={userProfileData.profile}
@@ -98,32 +98,11 @@ export default async function TugPage({
         _createdAt={""}
         _updatedAt={""}
       />
-      <main className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4">
         <div className="flex flex-col grow shrink-0 basis-1/2">
-          <ValuesCard
-            profile={profile}
-            _id={""}
-            _rev={""}
-            _type={""}
-            _createdAt={""}
-            _updatedAt={""}
-          />
-          <WorkingGeniusCard
-            profile={profile}
-            _id={""}
-            _rev={""}
-            _type={""}
-            _createdAt={""}
-            _updatedAt={""}
-          />
-          <KolbeStrengthsCard
-            profile={profile}
-            _id={""}
-            _rev={""}
-            _type={""}
-            _createdAt={""}
-            _updatedAt={""}
-          />
+          <ValuesCard profile={profile} />
+          <WorkingGeniusCard profile={profile} />
+          <KolbeStrengthsCard profile={profile} />
           <PrinciplesYouCard
             profile={profile}
             _id={""}
@@ -160,8 +139,8 @@ export default async function TugPage({
             />
           </div>
         </div>
-      </main>
+      </div>
       <footer className="flex item-center p-8"></footer>
-    </div>
+    </>
   );
 }

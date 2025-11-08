@@ -24,12 +24,15 @@ export default function MoreProfilesCard({
   moreProfiles,
   currentProfile,
 }: SanityDocument): React.JSX.Element {
-  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
+  const [loadedAvatars, setLoadedAvatars] = useState<Set<string>>(new Set());
+
+  const handleAvatarLoad = (uuid: string) => {
+    setLoadedAvatars((prev) => new Set(prev).add(uuid));
+  };
 
   function handleProfileRedirect(uuid: string): void {
     redirect(`/tugcards/${uuid}`);
   }
-
   return (
     <ComponentShell className="w-full mt-0 overflow-y-auto">
       <div className="flex flex-row items-center w-full h-fit bg-background">
@@ -39,41 +42,46 @@ export default function MoreProfilesCard({
 
       {moreProfiles?.length > 0 ? (
         moreProfiles.map((profile: Profile, index: number) => {
-          if (currentProfile?.uuid != profile.uuid) {
+          if (currentProfile?.uuid !== profile.uuid) {
+            const isLoaded = loadedAvatars.has(profile.uuid);
+
             return (
               <div className="pt-6" key={index}>
-                <div onClick={() => handleProfileRedirect(profile?.uuid)}>
-                  <div className="flex flex-row items-center gap-4  overflow-hidden">
-                    <Avatar className="block w-12 h-12 min-w-12 rounded-full ">
-                      <AvatarImage
-                        src={
-                          profile.profileImage?.asset?.url ?? defaultAvatar.src
-                        }
-                        onLoadingStatusChange={(status) => {
-                          if (status === "loaded") {
-                            setIsAvatarLoaded(true);
+                <div
+                  onClick={() => handleProfileRedirect(profile?.uuid)}
+                  className="cursor-pointer hover:opacity-80 transition-opacity"
+                >
+                  <div className="flex flex-row items-center gap-4">
+                    {/* Fixed size container to prevent layout shift */}
+                    <div className="relative w-12 h-12 min-w-12 rounded-full">
+                      {!isLoaded && (
+                        <Skeleton className="absolute inset-0 rounded-full bg-light3" />
+                      )}
+                      <Avatar
+                        className={`w-12 h-12 rounded-full ${!isLoaded ? "opacity-0" : "opacity-100"} transition-opacity`}
+                      >
+                        <AvatarImage
+                          src={
+                            profile.profileImage?.asset?.url ??
+                            defaultAvatar.src
                           }
-                        }}
-                        className="rounded-full w-12 h-12 object-cover"
-                      />
-                      <AvatarFallback></AvatarFallback>
-                    </Avatar>
-                    {!isAvatarLoaded ? (
-                      <Skeleton
-                        className={`min-h-[50px] min-w-[50px] rounded-full bg-light3`}
-                      />
-                    ) : null}
-                    <div>
-                      <p className="font-bold ">{profile?.name}</p>
-                      <p>
-                        {profile?.jobRole?.map(
-                          (role: string, index: number) => (
-                            <span key={index}>
-                              {role ?? null}
-                              {index < profile.jobRole.length - 1 && ", "}
-                            </span>
-                          )
-                        )}
+                          onLoadingStatusChange={(status) => {
+                            if (status === "loaded") {
+                              handleAvatarLoad(profile.uuid);
+                            }
+                          }}
+                          className="rounded-full w-12 h-12 object-cover"
+                        />
+                        <AvatarFallback>
+                          {profile.name?.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold truncate">{profile?.name}</p>
+                      <p className="text-sm text-gray-600 truncate">
+                        {profile?.jobRole?.join(", ")}
                       </p>
                     </div>
                   </div>
@@ -81,13 +89,16 @@ export default function MoreProfilesCard({
               </div>
             );
           }
+          return null;
         })
       ) : (
         <p className="flex italic pt-6 justify-center text-dark3 gap-2">
           No Results.
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <GoInfo className="flex self-center " />
+              <button className="inline-flex" aria-label="More information">
+                <GoInfo className="flex self-center" />
+              </button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

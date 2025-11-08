@@ -7,7 +7,7 @@ export default function ValuesCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   return (
-    <div className="w-full h-fit border border-light3 bg-background rounded-2xl p-4">
+    <div className="w-full h-fit border border-light3 bg-background rounded-lg p-4">
       <div className="flex w-full h-fit xs:flex-nowrap flex-wrap flex-col gap-2">
         {" "}
         <div className="flex flex-row h-full mr-4  items-center">
@@ -20,7 +20,7 @@ export default function ValuesCard({
               <Badge
                 variant="outline"
                 key={index}
-                className="text-sm font-semibold"
+                className="text-sm font-semibold py-1 px-2"
               >
                 {value}
               </Badge>
