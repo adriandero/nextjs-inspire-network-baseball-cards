@@ -15,15 +15,29 @@ import {
 
 import { GoLaw, GoSearch, GoTab, GoRocket, GoTools } from "react-icons/go";
 
-import React from "react";
-import { SanityDocument } from "next-sanity";
+import React, { useState } from "react";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { getKolbeMethod } from "@/src/lib/utils";
+import { CollapseAll } from "@/src/shared/assets/icons/collapse-all";
+import { ExpandAll } from "@/src/shared/assets/icons/expand-all";
+import { Button } from "@/src/components/shadcn-ui/button";
+import { Profile } from "@/src/lib/entities/profile";
+
+interface KolbeStrengthsCardProps {
+  readonly profile: Profile;
+}
 
 export default function KolbeStrengthsCard({
   profile,
-}: SanityDocument): React.JSX.Element {
+}: KolbeStrengthsCardProps): React.JSX.Element {
   const kolbeObj = profile.kolbeStrengths;
+
+  const [openItems, setOpenItems] = useState<string[]>([]);
+  const allItems = ["item-1", "item-2", "item-3", "item-4"];
+  const allOpen = openItems.length === allItems.length;
+  const handleToggle = () => {
+    setOpenItems(allOpen ? [] : allItems);
+  };
 
   const factFinderMethod = getKolbeMethod(kolbeObj?.factFinder, "factFinder");
   const followThruMethod = getKolbeMethod(kolbeObj?.followThru, "followThru");
@@ -36,127 +50,143 @@ export default function KolbeStrengthsCard({
   return (
     <ComponentShell>
       <div className="flex flex-row">
-        <div className="hidden md:flex flex-row items-center w-fit h-fit">
-          <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />{" "}
-        </div>
         <div className="flex flex-col w-full h-fit items-start md:pl-6">
-          <div className="flex md:hidden flex-row">
-            <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />{" "}
+          <div className="flex flex-row w-full">
+            <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />
             <h2 className="text-xl font-bold ml-6">Kolbe Strengths</h2>
+            <Button
+              variant="ghost"
+              onClick={handleToggle}
+              size="xsIcon"
+              className="ml-auto"
+              aria-label={
+                allOpen ? "Collapse all sections" : "Expand all sections"
+              }
+            >
+              {allOpen ? <CollapseAll size={16} /> : <ExpandAll size={16} />}
+            </Button>
           </div>
-          <h2 className="hidden md:block text-xl font-bold">Kolbe Strengths</h2>
-          <Accordion type="multiple" className="w-full pt-4">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
-                  <TooltipProvider>
+          <TooltipProvider>
+            <Accordion
+              type="multiple"
+              className="w-full pt-4 pl-1"
+              value={openItems}
+              onValueChange={setOpenItems}
+            >
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoSearch strokeWidth={0.5} size={24} />
+                        <GoSearch strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Fact Finder</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
-                  <Progress
-                    value={kolbeObj?.factFinder ? kolbeObj?.factFinder * 10 : 0}
-                    color="bg-inspireRed"
-                  />
-                  <div className="font-bold text-lg">
-                    {kolbeObj?.factFinder}
+
+                    <Progress
+                      value={
+                        kolbeObj?.factFinder ? kolbeObj?.factFinder * 10 : 0
+                      }
+                      color="bg-inspireRed"
+                    />
+                    <div className="font-bold text-lg">
+                      {kolbeObj?.factFinder ?? "*"}
+                    </div>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <h3 className="text-lg font-bold">
-                  {factFinderMethod?.method}
-                </h3>
-                <p className="text-base">{factFinderMethod?.description}</p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
-                  <TooltipProvider>
+                </AccordionTrigger>
+                <AccordionContent className="ml-12">
+                  <h3 className="text-lg font-bold">
+                    {factFinderMethod?.method}
+                  </h3>
+                  <p className="text-base">{factFinderMethod?.description}</p>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger>
+                  <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoTab strokeWidth={0.5} size={24} />
+                        <GoTab strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Follow Thru</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
-                  <Progress
-                    value={kolbeObj?.followThru ? kolbeObj?.followThru * 10 : 0}
-                    color="bg-inspireBlue"
-                  />
-                  <div className="font-bold text-lg">
-                    {kolbeObj?.followThru}
+
+                    <Progress
+                      value={
+                        kolbeObj?.followThru ? kolbeObj?.followThru * 10 : 0
+                      }
+                      color="bg-inspireBlue"
+                    />
+                    <div className="font-bold text-lg">
+                      {kolbeObj?.followThru ?? "*"}
+                    </div>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <h3 className="text-lg font-bold">
-                  {followThruMethod?.method}
-                </h3>
-                <p className="text-base">{followThruMethod?.description}</p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
-                  <TooltipProvider>
+                </AccordionTrigger>
+                <AccordionContent className="ml-12">
+                  <h3 className="text-lg font-bold">
+                    {followThruMethod?.method}
+                  </h3>
+                  <p className="text-base">{followThruMethod?.description}</p>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger>
+                  <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoRocket strokeWidth={0.5} size={24} />
+                        <GoRocket strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Quick Start</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
-                  <Progress
-                    value={kolbeObj?.quickStart ? kolbeObj?.quickStart * 10 : 0}
-                    color="bg-inspireGreen"
-                  />
-                  <div className="font-bold text-lg">
-                    {kolbeObj?.quickStart}
+
+                    <Progress
+                      value={
+                        kolbeObj?.quickStart ? kolbeObj?.quickStart * 10 : 0
+                      }
+                      color="bg-inspireGreen"
+                    />
+                    <div className="font-bold text-lg">
+                      {kolbeObj?.quickStart ?? "*"}
+                    </div>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <h3 className="text-lg font-bold">
-                  {quickStartMethod?.method}
-                </h3>
-                <p className="text-base">{quickStartMethod?.description}</p>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-4">
-              <AccordionTrigger>
-                <div className="w-full flex flex-row items-center gap-6">
-                  <TooltipProvider>
+                </AccordionTrigger>
+                <AccordionContent className="ml-12">
+                  <h3 className="text-lg font-bold">
+                    {quickStartMethod?.method}
+                  </h3>
+                  <p className="text-base">{quickStartMethod?.description}</p>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4">
+                <AccordionTrigger>
+                  <div className="w-full flex flex-row items-center gap-6">
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoTools strokeWidth={0.5} size={24} />
+                        <GoTools strokeWidth={0.5} size={20} />
                       </TooltipTrigger>
                       <TooltipContent>Implementer</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
-                  <Progress
-                    value={
-                      kolbeObj?.implementer ? kolbeObj?.implementer * 10 : 0
-                    }
-                    color="bg-inspireYellow"
-                  />
-                  <div className="font-bold text-lg">
-                    {kolbeObj?.implementer}
+
+                    <Progress
+                      value={
+                        kolbeObj?.implementer ? kolbeObj?.implementer * 10 : 0
+                      }
+                      color="bg-inspireYellow"
+                    />
+                    <div className="font-bold text-lg">
+                      {kolbeObj?.implementer ?? "*"}
+                    </div>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <h3 className="text-lg font-bold">
-                  {implementerMethod?.method}
-                </h3>
-                <p className="text-base">{implementerMethod?.description}</p>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                </AccordionTrigger>
+                <AccordionContent className="ml-12">
+                  <h3 className="text-lg font-bold">
+                    {implementerMethod?.method}
+                  </h3>
+                  <p className="text-base">{implementerMethod?.description}</p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TooltipProvider>
         </div>
       </div>
     </ComponentShell>

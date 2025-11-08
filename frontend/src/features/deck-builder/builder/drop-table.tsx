@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import {
   Table,
@@ -36,19 +36,17 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
     id: droppableId,
   });
 
-  const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
-
   const handleRemoveProfile = (profileId: string) => {
     if (onProfilesChange) {
       const updatedProfiles = selectedProfilesData.filter(
-        (profile) => profile.uuid !== profileId,
+        (profile) => profile.uuid !== profileId
       );
       onProfilesChange(updatedProfiles);
     }
   };
 
   return (
-    <div>
+    <div className="w-full ">
       {selectedProfilesData.length === 0 ? (
         <div
           ref={dropRef}
@@ -83,8 +81,7 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
               {selectedProfilesData.map((profile) => (
                 <TableRow
                   key={profile.uuid}
-                  onMouseEnter={() => setHoveredRowId(profile.uuid)}
-                  onMouseLeave={() => setHoveredRowId(null)}
+                  className="group"
                 >
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -117,12 +114,10 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-inspireRed"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-inspireRed transition-opacity duration-200 ease-in-out group-hover:opacity-100 opacity-0"
                       onClick={() => handleRemoveProfile(profile.uuid)}
                     >
-                      {hoveredRowId === profile.uuid && (
-                        <GoX size={32} strokeWidth="1" />
-                      )}
+                      <GoX size={32} strokeWidth="1" />
                     </Button>
                   </TableCell>
                 </TableRow>
