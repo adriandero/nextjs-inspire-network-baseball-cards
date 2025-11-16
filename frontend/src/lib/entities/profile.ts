@@ -11,6 +11,27 @@ export interface Widget {
   tenacity?: string;
 }
 
+export type KolbeStrength =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "inTransition"
+  | undefined;
+
+type KolbeStrengths = {
+  factFinder: KolbeStrength;
+  followThru: KolbeStrength;
+  quickStart: KolbeStrength;
+  implementer: KolbeStrength;
+};
+
 export interface Profile {
   _id: string;
   _type: "profile";
@@ -30,12 +51,7 @@ export interface Profile {
   };
   principleYouArchetype?: string[];
   principleYouArchetypeLeast?: string[];
-  kolbeStrengths?: {
-    factFinder?: number;
-    followThru?: number;
-    quickStart?: number;
-    implementer?: number;
-  };
+  kolbeStrengths?: KolbeStrengths;
 }
 
 export interface ProfileWithBasicTeams extends Profile {
