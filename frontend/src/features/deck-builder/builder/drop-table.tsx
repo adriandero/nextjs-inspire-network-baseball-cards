@@ -79,19 +79,17 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
             </TableHeader>
             <TableBody>
               {selectedProfilesData.map((profile) => (
-                <TableRow
-                  key={profile.uuid}
-                  className="group"
-                >
+                <TableRow key={profile.uuid} className="group">
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="flex-shrink-0">
                         <div className="relative w-8 h-8 rounded-full overflow-hidden">
                           <Image
                             src={
-                              profile.profileImage
-                                ? profile.profileImage.asset.url
-                                : defaultAvatar.src
+                              profile.avatar?.asset?.url
+                                ? profile.avatar?.asset?.url
+                                : (profile.profileImage?.asset?.url ??
+                                  defaultAvatar.src)
                             }
                             alt={profile.name}
                             fill

@@ -62,8 +62,10 @@ export default function MoreProfilesCard({
                       >
                         <AvatarImage
                           src={
-                            profile.profileImage?.asset?.url ??
-                            defaultAvatar.src
+                            profile.avatar?.asset?.url
+                              ? profile.avatar?.asset?.url
+                              : (profile.profileImage?.asset?.url ??
+                                defaultAvatar.src)
                           }
                           onLoadingStatusChange={(status) => {
                             if (status === "loaded") {
