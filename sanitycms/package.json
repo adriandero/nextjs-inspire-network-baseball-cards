@@ -15,12 +15,12 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/client": "^6.28.4",
-    "@sanity/vision": "^3.90.0",
+    "@sanity/client": "^7.12.1",
+    "@sanity/vision": "^4.15.0",
     "next-auth-sanity": "^1.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sanity": "^3.90.0",
+    "sanity": "^4.15.0",
     "styled-components": "^6.1.8",
     "uuid": "^11.1.0"
   },
