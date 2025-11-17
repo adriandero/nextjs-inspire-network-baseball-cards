@@ -12,7 +12,9 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [structureTool({structure}), visionTool()],
-
+  deployment: {
+    appId: 'glnajjwsnmh6162xwghk4ygi',
+  },
   schema: {
     types: schemaTypes,
   },
