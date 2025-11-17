@@ -1,4 +1,6 @@
-import React, { useCallback } from "react";
+"use client";
+
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { SanityDocument } from "next-sanity";
 import DropTable from "./drop-table";
@@ -14,6 +16,12 @@ import {
   Skeleton,
 } from "@/src/components/custom-ui/table-skeleton";
 import { useTableLoadingState } from "@/src/features/deck-builder/hooks/use-async-table-state.hook";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/src/components/shadcn-ui/accordion";
 
 interface ProfileTablesManagerProps {
   profileIdentifierTables: ProfileIdentifierTable[];
@@ -28,8 +36,8 @@ interface ProfileTablesManagerProps {
 }
 
 const TableHeaderSkeleton = () => (
-  <div className="flex h-12 items-center justify-end">
-    <div className="font-medium text-base min-w-0 justify-end flex">
+  <div className="flex h-12 items-center end">
+    <div className="font-medium text-base min-w-0  flex">
       <div className="hover:bg-gray-100 px-2 rounded overflow-x-auto overflow-y-hidden w-fit">
         <Skeleton className="h-4 w-32" />
       </div>
@@ -59,12 +67,40 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
 }) => {
   const { hasLoadedOnce } = useTableLoadingState(
     allProfiles,
-    isLoadingProfiles,
+    isLoadingProfiles
   );
+
+  const [openTables, setOpenTables] = useState<string[]>([]);
+  const seenTablesRef = useRef<Set<string>>(new Set());
+
+  const DropTableMemo = React.memo(DropTable);
+
+  useEffect(() => {
+    const currentTableIds = profileIdentifierTables.map((t) => t.id);
+    const newTableIds = currentTableIds.filter(
+      (id) => !seenTablesRef.current.has(id)
+    );
+
+    if (newTableIds.length > 0) {
+      newTableIds.forEach((id) => seenTablesRef.current.add(id));
+      setOpenTables((prev) => [...prev, ...newTableIds]);
+    }
+
+    const deletedTables = Array.from(seenTablesRef.current).filter(
+      (id) => !currentTableIds.includes(id)
+    );
+
+    if (deletedTables.length > 0) {
+      deletedTables.forEach((id) => seenTablesRef.current.delete(id));
+      setOpenTables((prev) =>
+        prev.filter((id) => currentTableIds.includes(id))
+      );
+    }
+  }, [profileIdentifierTables]);
 
   const { getProfilesForTable } = useProfileTableData(
     profileIdentifierTables,
-    allProfiles,
+    allProfiles
   );
 
   const {
@@ -84,7 +120,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
         onUpdateTableProfiles(tableId, profileIds);
       };
     },
-    [onUpdateTableProfiles],
+    [onUpdateTableProfiles]
   );
 
   const handleSaveEdit = useCallback(() => {
@@ -99,7 +135,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
         cancelEditing();
       }
     },
-    [handleSaveEdit, cancelEditing],
+    [handleSaveEdit, cancelEditing]
   );
 
   if (isLoadingProfiles || (!hasLoadedOnce && allProfiles.length === 0)) {
@@ -120,73 +156,88 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
 
   return (
     <div className="flex flex-col w-full">
-      {profileIdentifierTables.map((table) => (
-        <React.Fragment key={table.id}>
-          <div
+      <Accordion
+        type="multiple"
+        value={openTables}
+        onValueChange={setOpenTables}
+        className="w-full"
+      >
+        {profileIdentifierTables.map((table) => (
+          <AccordionItem
+            key={table.id}
+            value={table.id}
             className={cn(
-              "flex h-12 items-center",
-              isEditing(table.id) ? "justify-between" : "justify-end",
+              "w-full border-b",
+              selectedTableId === table.id ? "border-primary" : null,
+              openTables.includes(table.id) && "border-transparent"
             )}
           >
-            <div
-              className={cn(
-                "font-medium text-base min-w-0 justify-end flex",
-                isEditing(table.id) && "flex-1",
-              )}
-            >
-              {isEditing(table.id) ? (
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  value={editingName}
-                  onChange={(e) => setEditingName(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  onBlur={handleSaveEdit}
-                  className="h-8 w-full text-right focus-visible:ring-0 focus-visible:ring-offset-0 border-none shadow-none p-2 border-light3"
-                  aria-label="Edit table name"
-                />
-              ) : (
-                <div className="hover:bg-gray-100 px-2 rounded overflow-x-auto overflow-y-hidden w-fit no-scrollbar">
-                  <p
-                    onClick={() => startEditing(table.id, table.name)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        startEditing(table.id, table.name);
-                      }
+            <AccordionTrigger className="w-full">
+              <div className="flex h-12 items-center w-[calc(100%-3rem)]">
+                {profileIdentifierTables.length > 1 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="hover:text-inspireRed w-6 h-6 flex items-center justify-center p-0 flex-shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent accordion toggle
+                      onRemoveTable(table.id);
                     }}
-                    className="cursor-text whitespace-nowrap text-right"
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Edit table name: ${table.name}`}
+                    aria-label={`Remove table: ${table.name}`}
                   >
-                    {table.name}
-                  </p>
+                    <GoX size={32} strokeWidth="1" />
+                  </Button>
+                )}
+                <div
+                  className={cn("font-medium text-base min-w-0 flex flex-1")}
+                  onClick={(e) => e.stopPropagation()} // Prevent accordion toggle
+                >
+                  {isEditing(table.id) ? (
+                    <Input
+                      ref={inputRef}
+                      type="text"
+                      value={editingName}
+                      onChange={(e) => setEditingName(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      onBlur={handleSaveEdit}
+                      className="h-8 w-full text-left focus-visible:ring-0 focus-visible:ring-offset-0 border-none shadow-none p-2 border-light3"
+                      aria-label="Edit table name"
+                    />
+                  ) : (
+                    <div className="hover:bg-gray-100 px-2 max-w-full rounded overflow-x-auto overflow-y-hidden w-fit no-scrollbar">
+                      <p
+                        onClick={() => startEditing(table.id, table.name)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            startEditing(table.id, table.name);
+                          }
+                        }}
+                        className="cursor-text whitespace-nowrap text-left"
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Edit table name: ${table.name}`}
+                      >
+                        {table.name}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            {profileIdentifierTables.length > 1 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hover:text-inspireRed w-6 h-6 flex items-center justify-center p-0 flex-shrink-0"
-                onClick={() => onRemoveTable(table.id)}
-                aria-label={`Remove table: ${table.name}`}
-              >
-                <GoX size={32} strokeWidth="1" />
-              </Button>
-            )}
-          </div>
+              </div>
+            </AccordionTrigger>
 
-          <DropTable
-            selectedProfilesData={getProfilesForTable(table.id)}
-            droppableId={`table-${table.id}`}
-            onProfilesChange={handleProfilesChange(table.id)}
-            setSelectedTableId={setSelectedTableId}
-            table={table}
-            isSelectedTable={selectedTableId === table.id}
-          />
-        </React.Fragment>
-      ))}
+            <AccordionContent className="w-full ">
+              <DropTableMemo
+                selectedProfilesData={getProfilesForTable(table.id)}
+                droppableId={`table-${table.id}`}
+                onProfilesChange={handleProfilesChange(table.id)}
+                setSelectedTableId={setSelectedTableId}
+                table={table}
+                isSelectedTable={selectedTableId === table.id}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 };
