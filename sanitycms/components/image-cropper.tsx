@@ -1,3 +1,4 @@
+// image-cropper.tsx
 'use client'
 import {FC, useCallback, useState} from 'react'
 import Cropper, {Area} from 'react-easy-crop'
@@ -5,7 +6,7 @@ import {Button, Card, Flex} from '@sanity/ui'
 
 interface ImageCropperProps {
   image: string
-  onCropped: (base64: string) => void
+  onCropped: (blob: Blob) => void // Changed: now returns Blob instead of base64
   onCancel: () => void
 }
 
@@ -13,6 +14,7 @@ const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
   const [crop, setCrop] = useState<{x: number; y: number}>({x: 0, y: 0})
   const [zoom, setZoom] = useState<number>(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const onCropComplete = useCallback((_: Area, areaPixels: Area) => {
     setCroppedAreaPixels(areaPixels)
@@ -30,34 +32,46 @@ const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
   const getCroppedImg = useCallback(async () => {
     if (!croppedAreaPixels) return
 
-    const img = await createImage(image)
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
+    setIsProcessing(true)
+    try {
+      const img = await createImage(image)
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
 
-    if (!ctx) return
+      if (!ctx) return
 
-    canvas.width = croppedAreaPixels.width
-    canvas.height = croppedAreaPixels.height
+      canvas.width = croppedAreaPixels.width
+      canvas.height = croppedAreaPixels.height
 
-    ctx.drawImage(
-      img,
-      croppedAreaPixels.x,
-      croppedAreaPixels.y,
-      croppedAreaPixels.width,
-      croppedAreaPixels.height,
-      0,
-      0,
-      croppedAreaPixels.width,
-      croppedAreaPixels.height,
-    )
+      ctx.drawImage(
+        img,
+        croppedAreaPixels.x,
+        croppedAreaPixels.y,
+        croppedAreaPixels.width,
+        croppedAreaPixels.height,
+        0,
+        0,
+        croppedAreaPixels.width,
+        croppedAreaPixels.height,
+      )
 
-    const base64 = canvas.toDataURL('image/jpeg')
-    onCropped(base64)
+      // Convert canvas to Blob instead of base64
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            onCropped(blob)
+          }
+        },
+        'image/jpeg',
+        0.95, // Quality: 0.95 = 95% (good balance of quality/size)
+      )
+    } finally {
+      setIsProcessing(false)
+    }
   }, [image, croppedAreaPixels, onCropped])
 
   return (
     <Card>
-      {/* Cropper container */}
       <div style={{position: 'relative', width: '100%', height: 300}}>
         <Cropper
           image={image}
@@ -70,15 +84,14 @@ const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
         />
       </div>
 
-      {/* Controls below the cropper */}
       <Flex gap={2} justify="flex-end" padding={3}>
-        <Button mode="ghost" text="Cancel" onClick={onCancel} />
+        <Button mode="ghost" text="Cancel" onClick={onCancel} disabled={isProcessing} />
         <Button
           mode="default"
-          text="Crop Image"
+          text={isProcessing ? 'Processing...' : 'Crop Image'}
           tone="primary"
           onClick={getCroppedImg}
-          disabled={!croppedAreaPixels}
+          disabled={!croppedAreaPixels || isProcessing}
         />
       </Flex>
     </Card>

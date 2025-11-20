@@ -1,14 +1,22 @@
 import {useState, useRef, useCallback} from 'react'
-import {Stack, Card, Button, Flex, Text, Box} from '@sanity/ui'
+import {Stack, Card, Button, Flex, Text} from '@sanity/ui'
 import {UploadIcon, ImageIcon} from '@sanity/icons'
-import {set, unset, StringInputProps} from 'sanity'
+import {set, ObjectInputProps} from 'sanity'
+import {useClient} from 'sanity'
+import imageUrlBuilder from '@sanity/image-url'
 import ImageCropper from './image-cropper'
 
-export default function ImageCropField(props: StringInputProps) {
+// Remove the custom ImageValue type - just use what Sanity provides
+export default function ImageCropField(props: ObjectInputProps) {
+  // ← Simplified
   const {value, onChange} = props
   const [tempImage, setTempImage] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const client = useClient({apiVersion: '2024-01-01'})
+  const builder = imageUrlBuilder(client)
 
   const processImageFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -68,9 +76,32 @@ export default function ImageCropField(props: StringInputProps) {
     }
   }
 
-  const handleCropped = (base64: string) => {
-    onChange(set(base64))
-    setTempImage(null)
+  const handleCropped = async (blob: Blob) => {
+    setIsUploading(true)
+    try {
+      const asset = await client.assets.upload('image', blob, {
+        filename: 'avatar.jpg',
+      })
+
+      console.log('Asset uploaded:', asset)
+
+      onChange(
+        set({
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: asset._id,
+          },
+        }),
+      )
+
+      setTempImage(null)
+    } catch (error) {
+      console.error('Upload failed:', error)
+      alert('Failed to upload image. Please try again.')
+    } finally {
+      setIsUploading(false)
+    }
   }
 
   const handleCancel = () => {
@@ -81,11 +112,28 @@ export default function ImageCropField(props: StringInputProps) {
     fileInputRef.current?.click()
   }
 
+  // Type guard to check if value has the image structure we expect
+  const hasImageAsset = (val: unknown): val is {asset: {_ref: string}} => {
+    return (
+      typeof val === 'object' &&
+      val !== null &&
+      'asset' in val &&
+      typeof val.asset === 'object' &&
+      val.asset !== null &&
+      '_ref' in val.asset
+    )
+  }
+
+  // Safely get image URL
+  const imageUrl = hasImageAsset(value) ? builder.image(value).width(200).height(200).url() : null
+
+  console.log('Current value:', value)
+  console.log('Image URL:', imageUrl)
+
   return (
     <Stack space={4}>
-      {!tempImage && (
+      {!tempImage && !isUploading && (
         <>
-          {/* Hidden file input */}
           <input
             ref={fileInputRef}
             type="file"
@@ -94,7 +142,6 @@ export default function ImageCropField(props: StringInputProps) {
             style={{display: 'none'}}
           />
 
-          {/* Drop zone */}
           <Card
             padding={4}
             radius={2}
@@ -136,7 +183,7 @@ export default function ImageCropField(props: StringInputProps) {
             </Flex>
           </Card>
 
-          {value && (
+          {hasImageAsset(value) && imageUrl && (
             <Card padding={3} radius={2} shadow={1}>
               <Stack space={2}>
                 <Text size={1} weight="semibold" muted>
@@ -144,7 +191,7 @@ export default function ImageCropField(props: StringInputProps) {
                 </Text>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={value}
+                  src={imageUrl}
                   alt="Current avatar"
                   style={{maxWidth: 200, borderRadius: 8, display: 'block'}}
                 />
@@ -154,7 +201,13 @@ export default function ImageCropField(props: StringInputProps) {
         </>
       )}
 
-      {tempImage && (
+      {isUploading && (
+        <Card padding={4}>
+          <Text align="center">Uploading avatar...</Text>
+        </Card>
+      )}
+
+      {tempImage && !isUploading && (
         <ImageCropper image={tempImage} onCropped={handleCropped} onCancel={handleCancel} />
       )}
     </Stack>

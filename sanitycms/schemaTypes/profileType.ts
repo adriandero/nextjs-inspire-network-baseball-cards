@@ -136,7 +136,7 @@ export const profileType = defineType({
     defineField({
       name: 'avatar',
       title: 'Avatar',
-      type: 'string',
+      type: 'image', // ← Changed from 'string' to 'image'
       components: {
         input: ImageCropField,
       },
