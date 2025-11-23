@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
 import { Toaster } from "@/src/components/shadcn-ui/toaster";
 import { DynamicStatsigProvider } from "@/src/lib/utils/dynamic-statsig-provider";
 import { getUserSanity } from "@/src/lib/data/users";
@@ -8,13 +8,13 @@ import { statsigAdapter } from "@flags-sdk/statsig";
 import { auth0 } from "@/src/lib/auth0";
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
   display: "swap",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
   display: "swap",
