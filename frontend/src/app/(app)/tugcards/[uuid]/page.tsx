@@ -124,7 +124,7 @@ export default async function TugPage({
           />
 
           <div className="flex gap-4">
-            <Link href={`/tugcards/${uuid}/pdf/preview`}>
+            <Link href={`/tugcards/${uuid}/preview`}>
               <Button
                 variant="outline"
                 className="hover:border-primary rounded-lg border bg-light1"
