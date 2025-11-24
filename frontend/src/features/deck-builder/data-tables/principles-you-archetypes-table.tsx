@@ -45,7 +45,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                 <div className="relative w-10 h-10 rounded-full overflow-hidden">
                   <Image
                     src={
-                      profile.profileImage
+                      profile.avatar
                         ? optimizedImages
                           ? urlFor(profile.profileImage.asset.url)
                               .width(80)
@@ -54,7 +54,16 @@ const PrinciplesYouArchetypesTable: React.FC<
                               .quality(80)
                               .url()
                           : profile.profileImage.asset.url
-                        : defaultAvatar.src
+                        : profile.profileImage
+                          ? optimizedImages
+                            ? urlFor(profile.profileImage.asset.url)
+                                .width(80)
+                                .height(80)
+                                .auto("format")
+                                .quality(80)
+                                .url()
+                            : profile.profileImage.asset.url
+                          : defaultAvatar.src
                     }
                     alt={profile.name}
                     fill
@@ -98,7 +107,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                     className="h-auto w-auto max-h-16 object-contain"
                   />
                 </div>
-              ),
+              )
             )}
           </div>
         );
@@ -122,7 +131,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                     className="h-auto w-auto max-h-16 object-contain"
                   />
                 </div>
-              ),
+              )
             )}
           </div>
         );
@@ -161,7 +170,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}

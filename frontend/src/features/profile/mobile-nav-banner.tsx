@@ -1,5 +1,5 @@
 "use client";
-import { urlFor } from "@/src/lib/sanity/client";
+
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { GoArrowLeft } from "react-icons/go";
@@ -64,9 +64,9 @@ export default function MobileNavBanner({
             <Avatar>
               <AvatarImage
                 src={
-                  profile.profileImage
-                    ? urlFor(profile.profileImage).toString()
-                    : defaultAvatar.src
+                  profile.avatar?.asset?.url
+                    ? profile.avatar?.asset?.url
+                    : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
                 }
                 className="rounded-full w-36 h-36 object-cover"
               />

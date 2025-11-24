@@ -99,7 +99,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                 <div className="relative w-10 h-10 rounded-full overflow-hidden">
                   <Image
                     src={
-                      profile.profileImage
+                      profile.avatar
                         ? optimizedImages
                           ? urlFor(profile.profileImage.asset.url)
                               .width(80)
@@ -108,7 +108,16 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                               .quality(80)
                               .url()
                           : profile.profileImage.asset.url
-                        : defaultAvatar.src
+                        : profile.profileImage
+                          ? optimizedImages
+                            ? urlFor(profile.profileImage.asset.url)
+                                .width(80)
+                                .height(80)
+                                .auto("format")
+                                .quality(80)
+                                .url()
+                            : profile.profileImage.asset.url
+                          : defaultAvatar.src
                     }
                     alt={profile.name}
                     fill

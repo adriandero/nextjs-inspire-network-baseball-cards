@@ -75,7 +75,7 @@ const SideBySide: React.FC<SideBySideProps> = ({
       {profileGroups.map((group, groupIdx) => (
         <div
           key={groupIdx}
-          className={`${groupIdx !== 0 ? "break-inside-avoid" : ""} space-y-4 mb-12`}
+          className={`${groupIdx !== 0 ? "break-inside-avoid break" : ""} space-y-4 mb-12`}
         >
           <div className="flex flex-col sm:flex-row gap-4">
             {group.map((profile) => (

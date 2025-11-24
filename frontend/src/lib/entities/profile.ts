@@ -23,6 +23,7 @@ export interface Profile {
   slug: string;
   jobRole: string[];
   values?: string[];
+  avatar?: SanityAsset;
   profileImage?: SanityAsset;
   workingGenius?: {
     title?: keyof typeof workingGeniusJson;
