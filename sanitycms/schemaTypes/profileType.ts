@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {v4 as uuidv4} from 'uuid'
+import ImageCropField from '../components/image-crop-field'
 
 const toTitleCase = (str: string) => str.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase())
 
@@ -153,6 +154,14 @@ export const profileType = defineType({
     defineField({
       name: 'profileImage',
       type: 'image',
+    }),
+    defineField({
+      name: 'avatar',
+      title: 'Avatar',
+      type: 'image', // ← Changed from 'string' to 'image'
+      components: {
+        input: ImageCropField,
+      },
     }),
     defineField({
       name: 'team',

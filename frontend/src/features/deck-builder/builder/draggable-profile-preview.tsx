@@ -18,9 +18,9 @@ const DraggedProfilePreview: React.FC<DraggedProfilePreviewProps> = ({
         <div className="relative w-8 h-8 rounded-full overflow-hidden">
           <Image
             src={
-              profile.profileImage
-                ? profile.profileImage.asset.url
-                : defaultAvatar.src
+              profile.avatar?.asset?.url
+                ? profile.avatar?.asset?.url
+                : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
             }
             alt={profile.name}
             fill

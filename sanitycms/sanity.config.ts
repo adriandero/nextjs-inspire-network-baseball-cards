@@ -18,4 +18,5 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+  unstable_autoUpdate: false,
 })

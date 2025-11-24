@@ -11,7 +11,7 @@ export const createProfileColumns = (
   profileTables: ProfileIdentifierTable[],
   selectedTableId: string,
   handleProfileCheck: (profileId: string, tableId: string) => void,
-  onBulkSelect: (allProfileIds: string[], isSelected: boolean) => void,
+  onBulkSelect: (allProfileIds: string[], isSelected: boolean) => void
 ): ColumnDef<ProfileWithDetailedTeams>[] => [
   {
     id: "select",
@@ -22,7 +22,7 @@ export const createProfileColumns = (
           table.getFilteredRowModel().rows.every((row) => {
             const profileId = row.original.uuid;
             return profileTables.some((table) =>
-              table.profiles.includes(profileId),
+              table.profiles.includes(profileId)
             );
           })
         }
@@ -39,7 +39,7 @@ export const createProfileColumns = (
     cell: ({ row }) => (
       <Checkbox
         checked={profileTables.some((table) =>
-          table.profiles.includes(row.original.uuid),
+          table.profiles.includes(row.original.uuid)
         )}
         onCheckedChange={() =>
           handleProfileCheck(row.original.uuid, selectedTableId)
@@ -71,9 +71,9 @@ export const createProfileColumns = (
             <div className="relative w-8 h-8 rounded-full overflow-hidden">
               <Image
                 src={
-                  profile.profileImage
-                    ? profile.profileImage.asset.url
-                    : defaultAvatar.src
+                  profile.avatar?.asset?.url
+                    ? profile.avatar?.asset?.url
+                    : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
                 }
                 alt={profile.name}
                 fill
