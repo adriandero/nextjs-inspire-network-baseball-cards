@@ -23,14 +23,6 @@ export type KolbeStrength =
   | "9"
   | "10"
   | "inTransition"
-  | undefined;
-
-type KolbeStrengths = {
-  factFinder: KolbeStrength;
-  followThru: KolbeStrength;
-  quickStart: KolbeStrength;
-  implementer: KolbeStrength;
-};
 
 export interface Profile {
   _id: string;
@@ -52,7 +44,18 @@ export interface Profile {
   };
   principleYouArchetype?: string[];
   principleYouArchetypeLeast?: string[];
-  kolbeStrengths?: KolbeStrengths;
+  kolbeStrengths?: {
+    factFinder?: number;
+    followThru?: number;
+    quickStart?: number;
+    implementer?: number;
+  };
+  kolbeStrengths2?: {
+    factFinder?: KolbeStrength;
+    followThru?: KolbeStrength;
+    quickStart?: KolbeStrength;
+    implementer?: KolbeStrength;
+  };
 }
 
 export interface ProfileWithBasicTeams extends Profile {

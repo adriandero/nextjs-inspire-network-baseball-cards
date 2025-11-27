@@ -21,19 +21,21 @@ export interface MethodDescription {
   description: string;
 }
 
-export function getKolbeNumericValue(value: KolbeStrength): number | null {
+export function getKolbeNumericValue(
+  value?: KolbeStrength
+): number | undefined {
   if (!value || !isNumericKolbeValue(value)) {
-    return null;
+    return undefined;
   }
   return parseInt(value, 10);
 }
 
-export function getKolbeDisplayValue(value: KolbeStrength): string {
+export function getKolbeDisplayValue(value?: KolbeStrength): string {
   if (!value) {
     return "-";
   }
   if (value === "inTransition") {
-    return "~";
+    return "*";
   }
   return value;
 }
@@ -44,7 +46,7 @@ export function getKolbeMethod(
 ): MethodDescription | undefined {
   // Handle undefined (shouldn't happen with initialValue, but be defensive)
   if (!value) {
-    return { method: "Not Set", description: "" };
+    return undefined;
   }
 
   if (value === "inTransition") {

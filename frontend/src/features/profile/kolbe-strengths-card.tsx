@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/src/components/shadcn-ui/tooltip";
 
-import { GoLaw, GoSearch, GoRocket, GoTools } from "react-icons/go";
+import { GoLaw, GoSearch, GoRocket, GoTools, GoTab } from "react-icons/go";
 
 import React, { useState } from "react";
 import ComponentShell from "../../components/custom-ui/component-shell";
@@ -30,7 +30,7 @@ import { KolbeStrength, Profile } from "@/src/lib/entities/profile";
 
 interface KolbeStrengthRowProps {
   accordionValue: string;
-  strengthValue: KolbeStrength;
+  strengthValue?: KolbeStrength;
   field: KolbeStrengthField;
   icon: React.ReactNode;
   label: string;
@@ -67,7 +67,14 @@ export function KolbeStrengthRow({
       </AccordionTrigger>
       <AccordionContent className="ml-12">
         <p className="text-xs text-dark3">{label}</p>
-        <h3 className="text-lg font-bold">{method?.method}</h3>
+        {method?.method ? (
+          <h3 className="text-lg font-bold">{method?.method}</h3>
+        ) : (
+          <div className=" text-base flex w-full h-fit italic text-dark3 pt-1">
+            {" "}
+            <p>No Result.</p>
+          </div>
+        )}
         <p className="text-base">{method?.description}</p>
       </AccordionContent>
     </AccordionItem>
@@ -81,7 +88,7 @@ interface KolbeStrengthsCardProps {
 export default function KolbeStrengthsCard({
   profile,
 }: KolbeStrengthsCardProps): React.JSX.Element {
-  const kolbeObj = profile.kolbeStrengths;
+  const kolbeObj = profile.kolbeStrengths2;
 
   const [openItems, setOpenItems] = useState<string[]>([]);
   const allItems = ["item-1", "item-2", "item-3", "item-4"];
@@ -128,9 +135,9 @@ export default function KolbeStrengthsCard({
                 accordionValue="item-2"
                 strengthValue={kolbeObj?.followThru}
                 field="followThru"
-                icon={<GoSearch strokeWidth={0.5} size={20} />}
+                icon={<GoTab strokeWidth={0.5} size={20} />}
                 label="Follow Thru"
-                color="bg-inspireRed"
+                color="bg-inspireBlue"
               />
               <KolbeStrengthRow
                 accordionValue="item-3"

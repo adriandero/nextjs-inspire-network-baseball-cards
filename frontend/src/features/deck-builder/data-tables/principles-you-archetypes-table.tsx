@@ -47,14 +47,14 @@ const PrinciplesYouArchetypesTable: React.FC<
                     src={
                       profile.avatar
                         ? optimizedImages
-                          ? urlFor(profile.profileImage.asset.url)
+                          ? urlFor(profile.avatar.asset.url)
                               .width(80)
                               .height(80)
                               .auto("format")
                               .quality(80)
                               .url()
-                          : profile.profileImage.asset.url
-                        : profile.profileImage
+                          : profile.avatar.asset.url
+                        : profile.avatar
                           ? optimizedImages
                             ? urlFor(profile.profileImage.asset.url)
                                 .width(80)
