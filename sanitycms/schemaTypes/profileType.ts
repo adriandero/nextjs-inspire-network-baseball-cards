@@ -232,6 +232,14 @@ export const profileType = defineType({
       validation: (rule) => rule.unique(),
     }),
     defineField({
+      name: 'principlesYouAssessmentPdf',
+      title: 'PrinciplesYou Assessment PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
+    }),
+    defineField({
       name: 'kolbeStrengths',
       type: 'object',
       fields: [factFinder, followThru, quickStart, implementer],
@@ -245,6 +253,14 @@ export const profileType = defineType({
         createKolbeStrengthField2('quickStart'),
         createKolbeStrengthField2('implementer'),
       ],
+    }),
+    defineField({
+      name: 'kolbeAssessmentPdf',
+      title: 'Kolbe Assessment PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
     }),
   ],
 })
