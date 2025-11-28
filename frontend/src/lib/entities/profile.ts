@@ -11,6 +11,19 @@ export interface Widget {
   tenacity?: string;
 }
 
+export type KolbeStrength =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "inTransition"
+
 export interface Profile {
   _id: string;
   _type: "profile";
@@ -36,6 +49,12 @@ export interface Profile {
     followThru?: number;
     quickStart?: number;
     implementer?: number;
+  };
+  kolbeStrengths2?: {
+    factFinder?: KolbeStrength;
+    followThru?: KolbeStrength;
+    quickStart?: KolbeStrength;
+    implementer?: KolbeStrength;
   };
 }
 

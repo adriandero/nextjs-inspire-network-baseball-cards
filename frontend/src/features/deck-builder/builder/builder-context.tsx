@@ -267,6 +267,11 @@ const BuilderContext = () => {
   const isShowingProfiles = groupingMode === "profiles" || view === "profiles";
   const currentTable = isShowingProfiles ? profileTable : teamTable;
 
+  const hasEmptyProfiles = dropTables.some(
+    (table) => table.profiles.length === 0
+  );
+  const isDisabled = !selectedType || hasEmptyProfiles;
+
   const encodeProfileTablesToURL = useCallback((tables: typeof dropTables) => {
     return tables
       .map((group) => {
@@ -424,16 +429,18 @@ const BuilderContext = () => {
 
             <Button
               variant="outline"
-              disabled={
-                !selectedType ||
-                dropTables.some((table) => table.profiles.length === 0)
-              }
+              disabled={isDisabled}
               className="hover:border-primary"
               onClick={handleContinue}
             >
               Continue <GoArrowRight size={24} />
             </Button>
           </div>
+          {isDisabled ? (
+            <p className="text-sm text-inspireRed text-center py-4">
+              Add profiles to empty group or remove it to continue
+            </p>
+          ) : null}
         </div>
 
         <DragOverlay>

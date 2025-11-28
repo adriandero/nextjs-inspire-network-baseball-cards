@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { getKolbeMethod, KolbeStrength } from "@/src/lib/utils";
+import {
+  getKolbeMethod,
+  getKolbeNumericValue,
+  KolbeStrengthField,
+} from "@/src/lib/utils";
 import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
 import { Profile } from "@/src/lib/entities/profile";
 
@@ -56,7 +60,7 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
     "Initiative Action (7-10)",
   ];
 
-  const columnToProperty: Record<string, KolbeStrength> = {
+  const columnToProperty: Record<string, KolbeStrengthField> = {
     "Fact Finder": "factFinder",
     "Follow Thru": "followThru",
     "Quick Start": "quickStart",
@@ -93,16 +97,18 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
     profiles.forEach((profile) => {
       columnHeaders.forEach((header, colIndex) => {
         const propertyName = columnToProperty[header];
-        const value = profile.kolbeStrengths?.[propertyName];
+        const strengthObj = profile.kolbeStrengths2?.[propertyName];
 
-        if (!value) return;
+        const numericValue = getKolbeNumericValue(strengthObj);
+
+        if (!numericValue) return;
 
         let rowIndex;
-        if (value >= 7 && value <= 10) {
+        if (numericValue >= 7 && numericValue <= 10) {
           rowIndex = 2;
-        } else if (value >= 4 && value <= 6) {
+        } else if (numericValue >= 4 && numericValue <= 6) {
           rowIndex = 1;
-        } else if (value >= 1 && value <= 3) {
+        } else if (numericValue >= 1 && numericValue <= 3) {
           rowIndex = 0;
         } else {
           return;
@@ -110,8 +116,8 @@ const KolbeGraph: React.FC<KolbeGraphProps> = ({
 
         data[rowIndex][colIndex].people.push({
           name: profile.name,
-          value: value,
-          method: getKolbeMethod(value, propertyName)?.method || "",
+          value: numericValue,
+          method: getKolbeMethod(strengthObj, propertyName)?.method || "",
         });
       });
     });

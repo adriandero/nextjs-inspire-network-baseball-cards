@@ -20,9 +20,10 @@ import {
 import { urlFor } from "@/src/lib/sanity/client";
 import { Progress } from "@/src/components/shadcn-ui/progress";
 import defaultAvatar from "@/public/images/default-avatar.png";
+import { Profile } from "@/src/lib/entities/profile";
 
 export interface KolbeStrengthsTableProps {
-  profiles: SanityDocument[];
+  profiles: Profile[];
   optimizedImages?: boolean;
   tableName?: string;
   showJobRole?: boolean;
@@ -34,6 +35,10 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
   tableName,
   showJobRole,
 }) => {
+  console.log(
+    "Rendering KolbeStrengthsTable with profiles:",
+    JSON.stringify(profiles)
+  );
   const columns: ColumnDef<SanityDocument>[] = [
     {
       accessorKey: "name",
@@ -50,13 +55,13 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                     src={
                       profile.avatar
                         ? optimizedImages
-                          ? urlFor(profile.profileImage.asset.url)
+                          ? urlFor(profile.avatar.asset.url)
                               .width(80)
                               .height(80)
                               .auto("format")
                               .quality(80)
                               .url()
-                          : profile.profileImage.asset.url
+                          : profile.avatar.asset.url
                         : profile.profileImage
                           ? optimizedImages
                             ? urlFor(profile.profileImage.asset.url)

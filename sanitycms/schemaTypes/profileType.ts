@@ -83,6 +83,28 @@ function createKolbeStrengthField(name: string) {
   }
 }
 
+function createKolbeStrengthField2(name: string) {
+  return {
+    name,
+    type: 'string',
+    options: {
+      list: [
+        {title: '1', value: '1'},
+        {title: '2', value: '2'},
+        {title: '3', value: '3'},
+        {title: '4', value: '4'},
+        {title: '5', value: '5'},
+        {title: '6', value: '6'},
+        {title: '7', value: '7'},
+        {title: '8', value: '8'},
+        {title: '9', value: '9'},
+        {title: '10', value: '10'},
+        {title: 'In Transition', value: 'inTransition'},
+      ],
+    },
+  }
+}
+
 const factFinder = createKolbeStrengthField('factFinder')
 const followThru = createKolbeStrengthField('followThru')
 const quickStart = createKolbeStrengthField('quickStart')
@@ -213,6 +235,16 @@ export const profileType = defineType({
       name: 'kolbeStrengths',
       type: 'object',
       fields: [factFinder, followThru, quickStart, implementer],
+    }),
+    defineField({
+      name: 'kolbeStrengths2',
+      type: 'object',
+      fields: [
+        createKolbeStrengthField2('factFinder'),
+        createKolbeStrengthField2('followThru'),
+        createKolbeStrengthField2('quickStart'),
+        createKolbeStrengthField2('implementer'),
+      ],
     }),
   ],
 })

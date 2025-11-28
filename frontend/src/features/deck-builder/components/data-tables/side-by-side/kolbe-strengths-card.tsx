@@ -2,7 +2,12 @@ import { SanityDocument } from "next-sanity";
 
 import { GoLaw, GoRocket, GoSearch, GoTab, GoTools } from "react-icons/go";
 import React, { useState } from "react";
-import { getKolbeMethod } from "@/src/lib/utils";
+import {
+  getKolbeDisplayValue,
+  getKolbeMethod,
+  getKolbeNumericValue,
+  KolbeStrengthField,
+} from "@/src/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -19,7 +24,60 @@ import { Progress } from "@/src/components/shadcn-ui/progress";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { CollapseAll } from "@/src/shared/assets/icons/collapse-all";
 import { ExpandAll } from "@/src/shared/assets/icons/expand-all";
+import { KolbeStrength } from "@/src/lib/entities/profile";
 
+interface DeckBuilderKolbeStrengthRowProps {
+  accordionValue: string;
+  strengthValue?: KolbeStrength;
+  field: KolbeStrengthField;
+  icon: React.ReactNode;
+  label: string;
+  color: string;
+}
+
+export function DeckBuilderKolbeStrengthRow({
+  accordionValue,
+  strengthValue,
+  field,
+  icon,
+  label,
+  color,
+}: DeckBuilderKolbeStrengthRowProps) {
+  const method = getKolbeMethod(strengthValue, field);
+  const numericValue = getKolbeNumericValue(strengthValue);
+  const displayValue = getKolbeDisplayValue(strengthValue);
+
+  return (
+    <AccordionItem value={accordionValue}>
+      <AccordionTrigger>
+        <div className="w-full flex flex-row items-center gap-4">
+          <Tooltip>
+            <TooltipTrigger asChild>{icon}</TooltipTrigger>
+            <TooltipContent>{label}</TooltipContent>
+          </Tooltip>
+
+          <Progress
+            value={numericValue ? numericValue * 10 : 0}
+            color={color}
+          />
+          <div className="font-bold text-base">{displayValue}</div>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="ml-8">
+        <p className="text-xs text-dark3">{label}</p>
+        {method?.method ? (
+          <h3 className="text-base font-bold">{method?.method}</h3>
+        ) : (
+          <div className="flex text-base w-full h-fit italic text-dark3 pt-1">
+            {" "}
+            <p>No Result.</p>
+          </div>
+        )}
+        <p className="text-sm">{method?.description}</p>
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
 export default function KolbeStrengthsCard({
   profile,
 }: SanityDocument): React.JSX.Element {
@@ -32,14 +90,6 @@ export default function KolbeStrengthsCard({
   const handleToggle = () => {
     setOpenItems(allOpen ? [] : allItems);
   };
-
-  const factFinderMethod = getKolbeMethod(kolbeObj?.factFinder, "factFinder");
-  const followThruMethod = getKolbeMethod(kolbeObj?.followThru, "followThru");
-  const quickStartMethod = getKolbeMethod(kolbeObj?.quickStart, "quickStart");
-  const implementerMethod = getKolbeMethod(
-    kolbeObj?.implementer,
-    "implementer"
-  );
 
   return (
     <div className="w-full h-fit border border-light3 bg-background rounded-lg p-4 group">
@@ -67,122 +117,38 @@ export default function KolbeStrengthsCard({
               value={openItems}
               onValueChange={setOpenItems}
             >
-              <AccordionItem value="item-1">
-                <AccordionTrigger>
-                  <div className="w-full flex flex-row items-center gap-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <GoSearch strokeWidth={0.5} size={22} />
-                      </TooltipTrigger>
-                      <TooltipContent>Fact Finder</TooltipContent>
-                    </Tooltip>
-
-                    <Progress
-                      value={
-                        kolbeObj?.factFinder ? kolbeObj?.factFinder * 10 : 0
-                      }
-                      color="bg-inspireRed"
-                    />
-                    <div className="font-bold text-base">
-                      {kolbeObj?.factFinder ?? "*"}
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="ml-8">
-                  <p className="text-xs text-dark3">Fact Finder</p>
-                  <h3 className="text-base font-bold">
-                    {factFinderMethod?.method}
-                  </h3>
-                  <p className="text-sm">{factFinderMethod?.description}</p>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>
-                  <div className="w-full flex flex-row items-center gap-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <GoTab strokeWidth={0.5} size={22} />
-                      </TooltipTrigger>
-                      <TooltipContent>Follow Thru</TooltipContent>
-                    </Tooltip>
-
-                    <Progress
-                      value={
-                        kolbeObj?.followThru ? kolbeObj?.followThru * 10 : 0
-                      }
-                      color="bg-inspireBlue"
-                    />
-                    <div className="font-bold text-base">
-                      {kolbeObj?.followThru ?? "*"}
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="ml-8">
-                  <p className="text-xs text-dark3">Follow Thru</p>
-                  <h3 className="text-base font-bold">
-                    {followThruMethod?.method}
-                  </h3>
-                  <p className="text-sm">{followThruMethod?.description}</p>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger>
-                  <div className="w-full flex flex-row items-center gap-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <GoRocket strokeWidth={0.5} size={22} />
-                      </TooltipTrigger>
-                      <TooltipContent>Quick Start</TooltipContent>
-                    </Tooltip>
-
-                    <Progress
-                      value={
-                        kolbeObj?.quickStart ? kolbeObj?.quickStart * 10 : 0
-                      }
-                      color="bg-inspireGreen"
-                    />
-                    <div className="font-bold text-base">
-                      {kolbeObj?.quickStart ?? "*"}
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="ml-8">
-                  <p className="text-xs text-dark3">Quick Start</p>
-                  <h3 className="text-base font-bold">
-                    {quickStartMethod?.method}
-                  </h3>
-                  <p className="text-sm">{quickStartMethod?.description}</p>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-4">
-                <AccordionTrigger>
-                  <div className="w-full flex flex-row items-center gap-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <GoTools strokeWidth={0.5} size={22} />
-                      </TooltipTrigger>
-                      <TooltipContent>Implementer</TooltipContent>
-                    </Tooltip>
-
-                    <Progress
-                      value={
-                        kolbeObj?.implementer ? kolbeObj?.implementer * 10 : 0
-                      }
-                      color="bg-inspireYellow"
-                    />
-                    <div className="font-bold text-base">
-                      {kolbeObj?.implementer ?? "*"}
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="ml-8">
-                  <p className="text-xs text-dark3">Implementer</p>
-                  <h3 className="text-base font-bold">
-                    {implementerMethod?.method}
-                  </h3>
-                  <p className="text-sm">{implementerMethod?.description}</p>
-                </AccordionContent>
-              </AccordionItem>
+              <DeckBuilderKolbeStrengthRow
+                accordionValue="item-1"
+                strengthValue={kolbeObj?.factFinder}
+                field="factFinder"
+                icon={<GoSearch strokeWidth={0.5} size={22} />}
+                label="Fact Finder"
+                color="bg-inspireRed"
+              />
+              <DeckBuilderKolbeStrengthRow
+                accordionValue="item-2"
+                strengthValue={kolbeObj?.followThru}
+                field="followThru"
+                icon={<GoTab strokeWidth={0.5} size={22} />}
+                label="Follow Thru"
+                color="bg-inspireBlue"
+              />
+              <DeckBuilderKolbeStrengthRow
+                accordionValue="item-3"
+                strengthValue={kolbeObj?.quickStart}
+                field="quickStart"
+                icon={<GoRocket strokeWidth={0.5} size={22} />}
+                label="Quick Start"
+                color="bg-inspireGreen"
+              />
+              <DeckBuilderKolbeStrengthRow
+                accordionValue="item-4"
+                strengthValue={kolbeObj?.implementer}
+                field="implementer"
+                icon={<GoTools strokeWidth={0.5} size={22} />}
+                label="Implementer"
+                color="bg-inspireYellow"
+              />
             </Accordion>
           </TooltipProvider>
         </div>
