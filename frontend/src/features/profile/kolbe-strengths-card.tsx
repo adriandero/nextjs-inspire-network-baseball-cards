@@ -100,7 +100,7 @@ export default function KolbeStrengthsCard({
   return (
     <ComponentShell>
       <div className="flex flex-row">
-        <div className="flex flex-col w-full h-fit items-start md:pl-6">
+        <div className="flex flex-col w-full h-fit items-start">
           <div className="flex flex-row w-full">
             <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />
             <h2 className="text-xl font-bold ml-6">Kolbe Strengths</h2>

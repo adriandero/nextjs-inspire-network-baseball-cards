@@ -176,7 +176,7 @@ export function Toolbar({
       {/* Display Options Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">
+          <Button variant="outline" disabled={!availableFilters}>
             <GoMultiSelect />
             <span className="hidden sm:inline">Display</span>
           </Button>
