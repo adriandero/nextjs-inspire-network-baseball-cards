@@ -1,4 +1,11 @@
-import { GoDownload, GoKebabHorizontal, GoNorthStar } from "react-icons/go";
+"use client";
+
+import {
+  GoDownload,
+  GoKebabHorizontal,
+  GoNorthStar,
+  GoEye,
+} from "react-icons/go";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { Badge } from "@/src/components/shadcn-ui/badge";
 import { Profile } from "@/src/shared/entities/profile";
@@ -9,16 +16,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
+import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 interface ValuesCardProps {
   readonly profile: Profile;
 }
+
 export default function ValuesCard({
   profile,
 }: ValuesCardProps): React.JSX.Element {
+  const { handleDownload, handlePreview } = useAssessmentActions(
+    profile.valuesAssessmentPdf,
+  );
+
   return (
     <ComponentShell className="flex flex-col">
-      {" "}
       <div className="flex flex-col w-full h-fit xs:mb-4">
         <div className="flex flex-row w-full items-center">
           <GoNorthStar strokeWidth={0.5} size={24} />
@@ -35,7 +47,17 @@ export default function ValuesCard({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={!profile.valuesAssessmentPdf}
+                onSelect={handlePreview}
+              >
+                <GoEye className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                Preview
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={!profile.valuesAssessmentPdf}
+                onSelect={handleDownload}
+              >
                 <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
                 Download
               </DropdownMenuItem>
@@ -58,7 +80,6 @@ export default function ValuesCard({
           </div>
         ) : (
           <div className="flex w-full h-fit italic items-center text-dark3 pt-1">
-            {" "}
             <p>No Result.</p>
           </div>
         )}

@@ -216,7 +216,7 @@ export const profileType = defineType({
       options: {
         accept: 'application/pdf',
       },
-    }), 
+    }),
     defineField({
       name: 'principleYouArchetype',
       title: 'Most like PrinciplesYou Archetypes',
@@ -257,7 +257,10 @@ export const profileType = defineType({
     }),
     defineField({
       name: 'kolbeStrengths',
+      title: 'Kolbe Strengths (DEPRECATED - Use Kolbe Strengths 2)',
       type: 'object',
+      description: '⚠️ This field is deprecated. Please use "Kolbe Strengths 2" below instead.',
+      hidden: true, // Hides from default view but data is still accessible
       fields: [factFinder, followThru, quickStart, implementer],
     }),
     defineField({

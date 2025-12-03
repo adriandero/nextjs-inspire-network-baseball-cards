@@ -1,6 +1,11 @@
 "use client";
 
-import { GoDownload, GoKebabHorizontal, GoLightBulb } from "react-icons/go";
+import {
+  GoDownload,
+  GoKebabHorizontal,
+  GoLightBulb,
+  GoEye,
+} from "react-icons/go";
 
 import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 import workingGeniusJson from "@/public/json/working-genius.json";
@@ -14,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
 import { Profile } from "@/src/shared/entities/profile";
+import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 interface WorkingGeniusCardProps {
   readonly profile: Profile;
@@ -23,6 +29,9 @@ export default function WorkingGeniusCard({
   profile,
 }: WorkingGeniusCardProps): React.JSX.Element {
   const workingGenius = profile.workingGenius?.title;
+  const { handleDownload, handlePreview } = useAssessmentActions(
+    profile.workingGeniusAssessmentPdf,
+  );
 
   return (
     <ComponentShell>
@@ -51,10 +60,15 @@ export default function WorkingGeniusCard({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
-                    onSelect={() => {
-                      // TODO: Implement download functionality
-                      console.log("Download Kolbe Strengths");
-                    }}
+                    disabled={!profile.workingGeniusAssessmentPdf}
+                    onSelect={handlePreview}
+                  >
+                    <GoEye className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                    Preview
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={!profile.workingGeniusAssessmentPdf}
+                    onSelect={handleDownload}
                   >
                     <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
                     Download

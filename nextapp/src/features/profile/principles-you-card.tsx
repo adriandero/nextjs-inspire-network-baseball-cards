@@ -13,18 +13,28 @@ import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { GoDownload, GoKebabHorizontal } from "react-icons/go";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/src/components/shadcn-ui/dropdown-menu";
+import { GoDownload, GoKebabHorizontal, GoEye } from "react-icons/go";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/src/components/shadcn-ui/dropdown-menu";
 import { getArchetypeImage } from "@/src/lib/utils/principle-you-archetype-images-mapping.helper";
+import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 export default function PrinciplesYouCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   const [value, setValue] = React.useState<PrincipleKey>(
-    profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {}
+    profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {},
   );
 
   type PrincipleKey = keyof typeof principlesYouJson;
+
+  const { handleDownload, handlePreview } = useAssessmentActions(
+    profile.principlesYouAssessmentPdf,
+  );
 
   return (
     <ComponentShell>
@@ -51,10 +61,15 @@ export default function PrinciplesYouCard({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onSelect={() => {
-                  // TODO: Implement download functionality
-                  console.log("Download Kolbe Strengths");
-                }}
+                disabled={!profile.principlesYouAssessmentPdf}
+                onSelect={handlePreview}
+              >
+                <GoEye className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                Preview
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={!profile.principlesYouAssessmentPdf}
+                onSelect={handleDownload}
               >
                 <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
                 Download
@@ -81,7 +96,7 @@ export default function PrinciplesYouCard({
                       height={60}
                     />
                   </RadioGroupItem>
-                )
+                ),
               )}
             </RadioGroup>
           </div>

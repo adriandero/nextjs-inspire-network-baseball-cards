@@ -21,6 +21,7 @@ import {
   GoTab,
   GoDownload,
   GoKebabHorizontal,
+  GoEye,
 } from "react-icons/go";
 
 import React, { useState } from "react";
@@ -41,6 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
 import { KolbeStrength, Profile } from "@/src/shared/entities/profile";
+import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 interface KolbeStrengthRowProps {
   accordionValue: string;
@@ -111,6 +113,10 @@ export default function KolbeStrengthsCard({
     setOpenItems(allOpen ? [] : allItems);
   };
 
+  const { handleDownload, handlePreview } = useAssessmentActions(
+    profile.kolbeAssessmentPdf,
+  );
+
   return (
     <ComponentShell>
       <div className="flex flex-row">
@@ -144,10 +150,15 @@ export default function KolbeStrengthsCard({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  onSelect={() => {
-                    // TODO: Implement download functionality
-                    console.log("Download Kolbe Strengths");
-                  }}
+                  disabled={!profile.kolbeAssessmentPdf}
+                  onSelect={handlePreview}
+                >
+                  <GoEye className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                  Preview
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={!profile.kolbeAssessmentPdf}
+                  onSelect={handleDownload}
                 >
                   <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
                   Download
