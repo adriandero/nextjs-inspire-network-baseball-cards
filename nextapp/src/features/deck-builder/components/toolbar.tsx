@@ -278,7 +278,7 @@ export function Toolbar({
           <DropdownMenuItem onClick={onPDFDownload} disabled={pdfLoading}>
             <div className="flex flex-col gap-0.5 flex-1">
               <div className="flex items-center">
-                <GoDownload className="mr-2 h-4 w-4" />
+                <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
                 <span className="font-medium">Current View</span>
               </div>
               <span className="text-xs text-muted-foreground ml-6">
@@ -290,7 +290,7 @@ export function Toolbar({
           <DropdownMenuItem onClick={onPDFDownloadAll} disabled={pdfLoading}>
             <div className="flex flex-col gap-0.5 flex-1">
               <div className="flex items-center">
-                <GoDownload className="mr-2 h-4 w-4" />
+                <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
                 <span className="font-medium">All Comparisons</span>
               </div>
               <span className="text-xs text-muted-foreground ml-6">

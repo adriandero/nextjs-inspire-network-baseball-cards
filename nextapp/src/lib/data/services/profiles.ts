@@ -12,7 +12,7 @@ import { UserSanity } from "@/src/shared/entities/user";
 
 export async function getAuthorizedTeammateProfiles(
   excludeUuid: string,
-  requestingUser?: UserSanity
+  requestingUser?: UserSanity,
 ): Promise<ProfileWithBasicTeams[]> {
   try {
     const user = requestingUser || (await getAuthorizedUser());
@@ -40,7 +40,7 @@ export async function getAuthorizedTeammateProfiles(
     const teammates = await getTeammateProfiles(
       excludeUuid,
       allowedSlugs,
-      false
+      false,
     );
     return teammates;
   } catch (error) {

@@ -1,12 +1,25 @@
 "use client";
 
-import { GoLightBulb } from "react-icons/go";
+import {
+  GoDownload,
+  GoKebabHorizontal,
+  GoLightBulb,
+  GoEye,
+} from "react-icons/go";
 
 import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 import workingGeniusJson from "@/public/json/working-genius.json";
 
 import ComponentShell from "../../components/custom-ui/component-shell";
+import { Button } from "@/src/components/shadcn-ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/src/components/shadcn-ui/dropdown-menu";
 import { Profile } from "@/src/shared/entities/profile";
+import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 interface WorkingGeniusCardProps {
   readonly profile: Profile;
@@ -16,6 +29,9 @@ export default function WorkingGeniusCard({
   profile,
 }: WorkingGeniusCardProps): React.JSX.Element {
   const workingGenius = profile.workingGenius?.title;
+  const { handleDownload, handlePreview } = useAssessmentActions(
+    profile.workingGeniusAssessmentPdf,
+  );
 
   return (
     <ComponentShell>
@@ -29,7 +45,37 @@ export default function WorkingGeniusCard({
             />
           </div>
           <div className="flex flex-col w-fit h-fit items-start">
-            <h2 className="text-xl font-bold">Working Genius</h2>
+            <div className="flex w-full">
+              <h2 className="text-xl font-bold mr-auto">Working Genius</h2>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant={"ghost"}
+                    size={"xsIcon"}
+                    aria-label="Open menu"
+                    className="focus:outline-none"
+                  >
+                    <GoKebabHorizontal strokeWidth={0.5} size={24} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    disabled={!profile.workingGeniusAssessmentPdf}
+                    onSelect={handlePreview}
+                  >
+                    <GoEye className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                    Preview
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={!profile.workingGeniusAssessmentPdf}
+                    onSelect={handleDownload}
+                  >
+                    <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                    Download
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <h3 className="font-bold mt-2">
               {workingGeniusJson[workingGenius]?.title}
             </h3>

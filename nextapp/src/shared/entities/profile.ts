@@ -22,7 +22,17 @@ export type KolbeStrength =
   | "8"
   | "9"
   | "10"
-  | "inTransition"
+  | "inTransition";
+
+export interface AssessmentPdfFile {
+  asset: {
+    _id: string;
+    url: string;
+    originalFilename?: string;
+    size?: number;
+    extension?: string;
+  };
+}
 
 export interface Profile {
   _id: string;
@@ -42,6 +52,12 @@ export interface Profile {
     title?: keyof typeof workingGeniusJson;
     widget?: Widget;
   };
+
+  valuesAssessmentPdf?: AssessmentPdfFile;
+  workingGeniusAssessmentPdf?: AssessmentPdfFile;
+  principlesYouAssessmentPdf?: AssessmentPdfFile;
+  kolbeAssessmentPdf?: AssessmentPdfFile;
+
   principleYouArchetype?: string[];
   principleYouArchetypeLeast?: string[];
   kolbeStrengths?: {

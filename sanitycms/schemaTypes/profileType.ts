@@ -152,6 +152,14 @@ export const profileType = defineType({
       validation: (rule) => rule.unique(),
     }),
     defineField({
+      name: 'valuesAssessmentPdf',
+      title: 'Values PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
+    }),
+    defineField({
       name: 'profileImage',
       type: 'image',
     }),
@@ -202,6 +210,14 @@ export const profileType = defineType({
       ],
     }),
     defineField({
+      name: 'workingGeniusAssessmentPdf',
+      title: 'Working Genius PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
+    }),
+    defineField({
       name: 'principleYouArchetype',
       title: 'Most like PrinciplesYou Archetypes',
       type: 'array',
@@ -232,8 +248,19 @@ export const profileType = defineType({
       validation: (rule) => rule.unique(),
     }),
     defineField({
+      name: 'principlesYouAssessmentPdf',
+      title: 'PrinciplesYou Assessment PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
+    }),
+    defineField({
       name: 'kolbeStrengths',
+      title: 'Kolbe Strengths (DEPRECATED - Use Kolbe Strengths 2)',
       type: 'object',
+      description: '⚠️ This field is deprecated. Please use "Kolbe Strengths 2" below instead.',
+      hidden: true, // Hides from default view but data is still accessible
       fields: [factFinder, followThru, quickStart, implementer],
     }),
     defineField({
@@ -245,6 +272,14 @@ export const profileType = defineType({
         createKolbeStrengthField2('quickStart'),
         createKolbeStrengthField2('implementer'),
       ],
+    }),
+    defineField({
+      name: 'kolbeAssessmentPdf',
+      title: 'Kolbe Assessment PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
     }),
   ],
 })

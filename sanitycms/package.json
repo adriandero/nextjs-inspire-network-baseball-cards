@@ -16,14 +16,12 @@
   ],
   "dependencies": {
     "@sanity/client": "^7.12.1",
-    "@sanity/vision": "^4.15.0",
-    "next-auth-sanity": "^1.5.3",
+    "@sanity/vision": "^4.20.0",
     "react": "^19.1.0",
     "react-avatar-editor": "^13.0.2",
     "react-dom": "^19.1.0",
     "react-easy-crop": "^5.5.3",
     "react-is": "^19.2.0",
-    "sanity": "^4.15.0",
     "styled-components": "^6.1.8",
     "uuid": "^11.1.0"
   },
@@ -32,6 +30,7 @@
     "@types/react": "^18.0.25",
     "eslint": "^8.6.0",
     "prettier": "^3.0.2",
+    "sanity": "^4.20.0",
     "tsx": "^4.20.6",
     "typescript": "^5.1.6"
   },
