@@ -37,7 +37,7 @@ export default async function PreviewPage({ params }: { params: tParams }) {
   if (!hasAccess) {
     return (
       <div className=" flex items-center justify-center">
-        <div className="text-center p-8">
+        <div className="text-center py-8">
           <h1 className="text-2xl font-semibold mb-4 text-gray-900">
             Access Denied
           </h1>
@@ -59,7 +59,7 @@ export default async function PreviewPage({ params }: { params: tParams }) {
         backwardsNavigationUrl={`/tugcards/${uuid}`}
       />
 
-      <div className="flex items-center justify-center p-8 print:p-0 w-full">
+      <div className="flex items-center justify-center py-8 print:p-0 w-full">
         <div className="rounded-xl shadow-lg print:shadow-none print:rounded-none">
           <PDFProfileFullContent profile={profile} className="w-full" />
         </div>

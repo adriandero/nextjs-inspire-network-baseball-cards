@@ -21,6 +21,7 @@ import { urlFor } from "@/src/lib/sanity/client";
 import { Progress } from "@/src/components/shadcn-ui/progress";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { Profile } from "@/src/shared/entities/profile";
+import { getKolbeNumericValue, getKolbeDisplayValue } from "@/src/lib/utils";
 
 export interface KolbeStrengthsTableProps {
   profiles: Profile[];
@@ -43,7 +44,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
     {
       accessorKey: "name",
       header: "Name",
-      size: 300, // Set this to 1/3 of your expected table width
+      size: 300,
       cell: ({ row }) => {
         const profile = row.original;
         return (
@@ -100,58 +101,70 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
     {
       accessorKey: "kolbe",
       header: "Kolbe Strengths",
-      size: 600, // Set this to 1/3 of your expected table width
+      size: 600,
       cell: ({ row }) => {
-        const profileKolbeStrengths = row.original.kolbeStrengths;
+        const profileKolbeStrengths = row.original.kolbeStrengths2;
+
+        // Extract values using utility functions
+        const factFinderValue = getKolbeNumericValue(
+          profileKolbeStrengths?.factFinder
+        );
+        const followThruValue = getKolbeNumericValue(
+          profileKolbeStrengths?.followThru
+        );
+        const quickStartValue = getKolbeNumericValue(
+          profileKolbeStrengths?.quickStart
+        );
+        const implementerValue = getKolbeNumericValue(
+          profileKolbeStrengths?.implementer
+        );
+
+        const factFinderDisplay = getKolbeDisplayValue(
+          profileKolbeStrengths?.factFinder
+        );
+        const followThruDisplay = getKolbeDisplayValue(
+          profileKolbeStrengths?.followThru
+        );
+        const quickStartDisplay = getKolbeDisplayValue(
+          profileKolbeStrengths?.quickStart
+        );
+        const implementerDisplay = getKolbeDisplayValue(
+          profileKolbeStrengths?.implementer
+        );
+
         return (
           <div className="flex">
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths?.factFinder ?? "*"}
+              {factFinderDisplay}
             </div>
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths?.followThru ?? "*"}
+              {followThruDisplay}
             </div>
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths?.quickStart ?? "*"}
+              {quickStartDisplay}
             </div>
             <div className="w-6 h-6 text-base flex items-center justify-center font-bold">
-              {profileKolbeStrengths?.implementer ?? "*"}
+              {implementerDisplay}
             </div>
 
             <div className="w-6 h-6 items-center justify-between flex flex-col transform -rotate-90 ml-2">
               <Progress
-                value={
-                  profileKolbeStrengths?.factFinder
-                    ? profileKolbeStrengths.factFinder * 10
-                    : 0
-                }
+                value={factFinderValue ? factFinderValue * 10 : 0}
                 color="bg-inspireRed"
                 className="h-1 rounded-[1px]"
               />
               <Progress
-                value={
-                  profileKolbeStrengths?.followThru
-                    ? profileKolbeStrengths.followThru * 10
-                    : 0
-                }
+                value={followThruValue ? followThruValue * 10 : 0}
                 color="bg-inspireBlue"
                 className="h-1 rounded-[1px]"
-              />{" "}
+              />
               <Progress
-                value={
-                  profileKolbeStrengths?.quickStart
-                    ? profileKolbeStrengths.quickStart * 10
-                    : 0
-                }
+                value={quickStartValue ? quickStartValue * 10 : 0}
                 color="bg-inspireGreen"
                 className="h-1 rounded-[1px]"
-              />{" "}
+              />
               <Progress
-                value={
-                  profileKolbeStrengths?.implementer
-                    ? profileKolbeStrengths.implementer * 10
-                    : 0
-                }
+                value={implementerValue ? implementerValue * 10 : 0}
                 color="bg-inspireYellow"
                 className="h-1 rounded-[1px]"
               />
