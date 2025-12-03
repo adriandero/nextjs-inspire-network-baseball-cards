@@ -125,11 +125,18 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
     return props; // ← NEW OBJECT!
   };
 
+  const onTypeChange = (type: CompareTypes) => {
+    setSelectedType(type);
+
+    const newUrl = `/deckbuilder/${COMPARISON_ATTRIBUTES[type].slug}?groupedProfiles=${groupedProfiles}`;
+
+    window.history.pushState({}, "", newUrl);
+  };
+
   const componentProps = useMemo(() => {
     return getComponentProps(selectedType, filters);
   }, [selectedType, filters]);
 
-  // Loading state
   if (isLoading) {
     return <ComparisonLoadingSkeleton />;
   }
@@ -171,7 +178,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
       <div className="flex flex-col gap-4">
         <Toolbar
           selectedType={selectedType}
-          onTypeChange={setSelectedType}
+          onTypeChange={onTypeChange}
           groupedProfiles={groupedProfiles}
           pdfLoading={pdfLoading}
           onPDFDownload={handlePDFDownloadCall}
