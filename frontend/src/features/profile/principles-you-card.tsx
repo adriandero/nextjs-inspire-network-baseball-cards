@@ -1,7 +1,10 @@
 "use client";
 import Image from "next/image";
 
-import { RadioGroup, RadioGroupItem } from "@/src/components/shadcn-ui/radio-group";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/src/components/shadcn-ui/radio-group";
 
 import { PiDiamondsFour } from "react-icons/pi";
 import principlesYouJson from "@/public/json/principles-you-archetypes.json";
@@ -10,12 +13,15 @@ import React from "react";
 import { SanityDocument } from "next-sanity";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { getArchetypeImage } from "@/src/lib/asset-mapping/principle-you-archetype-images-mapping";
+import { Button } from "@/src/components/shadcn-ui/button";
+import { GoDownload, GoKebabHorizontal } from "react-icons/go";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/src/components/shadcn-ui/dropdown-menu";
 
 export default function PrinciplesYouCard({
   profile,
 }: SanityDocument): React.JSX.Element {
   const [value, setValue] = React.useState<PrincipleKey>(
-    profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {},
+    profile?.principleYouArchetype?.[0] ? profile.principleYouArchetype[0] : {}
   );
 
   type PrincipleKey = keyof typeof principlesYouJson;
@@ -23,15 +29,38 @@ export default function PrinciplesYouCard({
   return (
     <ComponentShell>
       <div className="flex flex-row w-full">
-        <div className="flex flex-row items-center w-fit h-fit">
+        <div className="flex flex-row items-center w-full h-fit">
           <PiDiamondsFour
             strokeWidth={0.5}
             size={24}
             className="flex self-start"
           />{" "}
-          <h1 className="text-xl font-bold flex-grow w-fit ml-6">
+          <h1 className="text-xl font-bold ml-6 mr-auto">
             PrinciplesYou Archetypes
           </h1>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={"ghost"}
+                size={"xsIcon"}
+                aria-label="Open menu"
+                className="focus:outline-none"
+              >
+                <GoKebabHorizontal strokeWidth={0.5} size={24} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onSelect={() => {
+                  // TODO: Implement download functionality
+                  console.log("Download Kolbe Strengths");
+                }}
+              >
+                <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                Download
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       {principlesYouJson[value] ? (
@@ -52,7 +81,7 @@ export default function PrinciplesYouCard({
                       height={60}
                     />
                   </RadioGroupItem>
-                ),
+                )
               )}
             </RadioGroup>
           </div>

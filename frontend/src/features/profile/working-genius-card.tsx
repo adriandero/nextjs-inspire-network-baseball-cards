@@ -1,12 +1,19 @@
 "use client";
 
-import { GoLightBulb } from "react-icons/go";
+import { GoDownload, GoKebabHorizontal, GoLightBulb } from "react-icons/go";
 
 import WidgetCogsSVG from "@/public/illustrations/widget-cogs-svg";
 import workingGeniusJson from "@/public/json/working-genius.json";
 
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { Profile } from "@/src/lib/entities/profile";
+import { Button } from "@/src/components/shadcn-ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/src/components/shadcn-ui/dropdown-menu";
 
 interface WorkingGeniusCardProps {
   readonly profile: Profile;
@@ -29,7 +36,32 @@ export default function WorkingGeniusCard({
             />
           </div>
           <div className="flex flex-col w-fit h-fit items-start">
-            <h2 className="text-xl font-bold">Working Genius</h2>
+            <div className="flex w-full">
+              <h2 className="text-xl font-bold mr-auto">Working Genius</h2>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant={"ghost"}
+                    size={"xsIcon"}
+                    aria-label="Open menu"
+                    className="focus:outline-none"
+                  >
+                    <GoKebabHorizontal strokeWidth={0.5} size={24} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      // TODO: Implement download functionality
+                      console.log("Download Kolbe Strengths");
+                    }}
+                  >
+                    <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                    Download
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <h3 className="font-bold mt-2">
               {workingGeniusJson[workingGenius]?.title}
             </h3>
@@ -44,6 +76,7 @@ export default function WorkingGeniusCard({
       )}
       <div className="h-px w-full bg-light3 my-6"></div>
       <div className="flex justify-center">
+        x
         <WidgetCogsSVG
           widget={profile.workingGenius?.widget}
           _id={""}

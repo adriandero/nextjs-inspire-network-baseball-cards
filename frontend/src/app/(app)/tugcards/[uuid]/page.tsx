@@ -129,7 +129,7 @@ export default async function TugPage({
                 variant="outline"
                 className="hover:border-primary rounded-lg border bg-light1"
               >
-                <GoEye size={30} /> Preview
+                <GoEye size={24} strokeWidth={0.5} /> Preview
               </Button>
             </Link>
 

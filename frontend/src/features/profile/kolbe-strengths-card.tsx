@@ -13,7 +13,15 @@ import {
   TooltipTrigger,
 } from "@/src/components/shadcn-ui/tooltip";
 
-import { GoLaw, GoSearch, GoRocket, GoTools, GoTab } from "react-icons/go";
+import {
+  GoLaw,
+  GoSearch,
+  GoRocket,
+  GoTools,
+  GoTab,
+  GoDownload,
+  GoKebabHorizontal,
+} from "react-icons/go";
 
 import React, { useState } from "react";
 import ComponentShell from "../../components/custom-ui/component-shell";
@@ -27,6 +35,12 @@ import { CollapseAll } from "@/src/shared/assets/icons/collapse-all";
 import { ExpandAll } from "@/src/shared/assets/icons/expand-all";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { KolbeStrength, Profile } from "@/src/lib/entities/profile";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/src/components/shadcn-ui/dropdown-menu";
 
 interface KolbeStrengthRowProps {
   accordionValue: string;
@@ -100,21 +114,46 @@ export default function KolbeStrengthsCard({
   return (
     <ComponentShell>
       <div className="flex flex-row">
-        <div className="flex flex-col w-full h-fit items-start md:pl-6">
-          <div className="flex flex-row w-full">
-            <GoLaw strokeWidth={0.5} size={24} className="flex self-start" />
-            <h2 className="text-xl font-bold ml-6">Kolbe Strengths</h2>
+        {" "}
+        {/* <-- group added here */}
+        <div className="flex flex-col w-full h-fit xs:mb-4">
+          <div className="flex flex-row w-full items-center">
+            <GoLaw strokeWidth={0.5} size={24} />
+            <h2 className="text-xl font-bold ml-6 mr-auto">Kolbe Strengths</h2>
             <Button
               variant="ghost"
               onClick={handleToggle}
               size="xsIcon"
-              className="ml-auto"
+              className="mr-2"
               aria-label={
                 allOpen ? "Collapse all sections" : "Expand all sections"
               }
             >
               {allOpen ? <CollapseAll size={16} /> : <ExpandAll size={16} />}
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant={"ghost"}
+                  size={"xsIcon"}
+                  aria-label="Open menu"
+                  className="focus:outline-none"
+                >
+                  <GoKebabHorizontal strokeWidth={0.5} size={24} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onSelect={() => {
+                    // TODO: Implement download functionality
+                    console.log("Download Kolbe Strengths");
+                  }}
+                >
+                  <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                  Download
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <TooltipProvider>
             <Accordion

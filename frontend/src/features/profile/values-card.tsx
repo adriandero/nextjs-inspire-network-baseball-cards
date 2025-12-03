@@ -1,7 +1,14 @@
-import { GoNorthStar } from "react-icons/go";
+import { GoDownload, GoKebabHorizontal, GoNorthStar } from "react-icons/go";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { Badge } from "@/src/components/shadcn-ui/badge";
 import { Profile } from "@/src/lib/entities/profile";
+import { Button } from "@/src/components/shadcn-ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/src/components/shadcn-ui/dropdown-menu";
 
 interface ValuesCardProps {
   readonly profile: Profile;
@@ -10,13 +17,37 @@ export default function ValuesCard({
   profile,
 }: ValuesCardProps): React.JSX.Element {
   return (
-    <ComponentShell className="flex flex-row">
-      <div className="flex w-fit h-fit xs:flex-nowrap flex-wrap">
-        {" "}
-        <div className="h-full mr-6 flex">
-          <GoNorthStar strokeWidth={0.5} size={24} className="flex" />
+    <ComponentShell className="flex flex-col">
+      {" "}
+      <div className="flex flex-col w-full h-fit xs:mb-4">
+        <div className="flex flex-row w-full items-center">
+          <GoNorthStar strokeWidth={0.5} size={24} />
+          <h1 className="text-xl font-bold ml-6 mr-auto">Values</h1>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button
+                variant={"ghost"}
+                size={"xsIcon"}
+                aria-label="Open menu"
+                className="focus:outline-none"
+              >
+                <GoKebabHorizontal strokeWidth={0.5} size={24} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onSelect={() => {
+                  console.log("Download Kolbe Strengths");
+                }}
+              >
+                <GoDownload className="mr-2 h-4 w-4" strokeWidth={0.5} />
+                Download
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <h1 className="text-xl font-bold flex-grow w-fit mr-6">Values</h1>
+      </div>
+      <div className="flex w-fit h-fit flex-wrap">
         {profile.values ? (
           <div className="flex flex-wrap gap-2 xs:mt-0 mt-4">
             {profile.values?.map((value: string, index: number) => (

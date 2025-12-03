@@ -19,7 +19,7 @@ export default function DownloadButton({
       setLoading(true);
 
       const pdfBlob = await fetch(`/api/tugcards/${uuid}/pdf`).then((res) =>
-        res.blob(),
+        res.blob()
       );
 
       const blobUrl = URL.createObjectURL(pdfBlob);
@@ -52,7 +52,7 @@ export default function DownloadButton({
         </>
       ) : (
         <>
-          <GoDownload size={24} /> <span>Download</span>
+          <GoDownload size={24} strokeWidth={0.5} /> <span>Download</span>
         </>
       )}
     </Button>

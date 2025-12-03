@@ -152,6 +152,14 @@ export const profileType = defineType({
       validation: (rule) => rule.unique(),
     }),
     defineField({
+      name: 'valuesAssessmentPdf',
+      title: 'Values PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
+    }),
+    defineField({
       name: 'profileImage',
       type: 'image',
     }),
@@ -201,6 +209,14 @@ export const profileType = defineType({
         },
       ],
     }),
+    defineField({
+      name: 'workingGeniusAssessmentPdf',
+      title: 'Working Genius PDF',
+      type: 'file',
+      options: {
+        accept: 'application/pdf',
+      },
+    }), 
     defineField({
       name: 'principleYouArchetype',
       title: 'Most like PrinciplesYou Archetypes',
