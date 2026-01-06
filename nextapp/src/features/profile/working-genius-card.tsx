@@ -18,7 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 interface WorkingGeniusCardProps {
@@ -30,7 +30,7 @@ export default function WorkingGeniusCard({
 }: WorkingGeniusCardProps): React.JSX.Element {
   const workingGenius = profile.workingGenius?.title;
   const { handleDownload, handlePreview } = useAssessmentActions(
-    profile.workingGeniusAssessmentPdf,
+    profile.workingGeniusAssessmentPdf
   );
 
   return (

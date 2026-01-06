@@ -5,7 +5,7 @@ import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 
 export const createProfileColumns = (
   profileTables: ProfileIdentifierTable[],

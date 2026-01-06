@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { SanityDocument } from "next-sanity";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 
 type ViewMode = "teams" | "profiles";
 

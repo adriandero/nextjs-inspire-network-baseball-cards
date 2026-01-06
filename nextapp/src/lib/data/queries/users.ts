@@ -1,6 +1,6 @@
 import { client } from "@/src/lib/sanity/client";
 import { User } from "@auth0/nextjs-auth0/types";
-import { UserSanity } from "@/src/shared/entities/user";
+import { UserSanity } from "@/src/shared/entities/user.types";
 
 export async function getUserSanity(
   authUser: User

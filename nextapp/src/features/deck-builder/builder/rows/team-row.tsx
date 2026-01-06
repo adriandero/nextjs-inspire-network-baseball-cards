@@ -1,7 +1,7 @@
 import React from "react";
 import { TableCell, TableRow } from "@/src/components/shadcn-ui/table";
 import { flexRender, Row } from "@tanstack/react-table";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 
 interface TeamRowProps {
   row: Row<TeamWithPopulatedCompany>;

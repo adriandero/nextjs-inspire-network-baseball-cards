@@ -7,7 +7,7 @@ import MobileNavMenu from "./mobile-nav-menu";
 
 import { NAV_ITEMS } from "@/src/constants/navigation";
 import AccountDropdown from "@/src/components/custom-ui/account-dropdown";
-import { UserSanity } from "@/src/shared/entities/user";
+import { UserSanity } from "@/src/shared/entities/user.types";
 
 interface NavBarProps {
   userProfileData?: UserSanity;

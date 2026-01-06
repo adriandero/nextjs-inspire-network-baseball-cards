@@ -13,7 +13,7 @@ import { Button } from "@/src/components/shadcn-ui/button";
 import { GoX } from "react-icons/go";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 
 interface ProfileDropTableProps {
   selectedProfilesData: ProfileWithDetailedTeams[];

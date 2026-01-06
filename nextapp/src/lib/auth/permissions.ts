@@ -1,6 +1,6 @@
-import { UserSanity } from "@/src/shared/entities/user";
-import { ProfileWithFullTeams } from "@/src/shared/entities/profile";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { UserSanity } from "@/src/shared/entities/user.types";
+import { ProfileWithFullTeams } from "@/src/shared/entities/profile.types";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 import { getUserSanity } from "@/src/lib/data/queries/users";
 import { getUserTeams } from "@/src/lib/data/queries/teams";
 import { auth0 } from "@/src/lib/auth0";

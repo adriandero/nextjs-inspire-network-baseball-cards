@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 
 type TableData = TeamWithPopulatedCompany | ProfileWithDetailedTeams;
 

@@ -9,7 +9,7 @@ import { Input } from "@/src/components/shadcn-ui/input";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { useProfileTableData } from "@/src/features/deck-builder/hooks/use-profile-table-data.hook";
 import { useTableNameEditor } from "@/src/features/deck-builder/hooks/use-table-name-editor.hook";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 import { cn } from "@/src/lib/utils";
 import {
   CompareProfileTableSkeleton,

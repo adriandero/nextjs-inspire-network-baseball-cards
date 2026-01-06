@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 
 export const teamColumns: ColumnDef<TeamWithPopulatedCompany>[] = [
   {

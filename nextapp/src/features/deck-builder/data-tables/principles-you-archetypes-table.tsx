@@ -20,7 +20,7 @@ import {
 import { urlFor } from "@/src/lib/sanity/client";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import { getArchetypeImage } from "@/src/lib/utils/principle-you-archetype-images-mapping.helper";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 
 export interface PrinciplesYouArchetypesTableProps {
   profiles: Profile[];

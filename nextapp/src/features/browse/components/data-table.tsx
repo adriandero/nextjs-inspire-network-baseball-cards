@@ -17,8 +17,8 @@ import { useDataTableView } from "@/src/features/browse/hooks/use-data-table-vie
 import { Toolbar } from "@/src/features/browse/components/toolbar";
 import { Breadcrumbs } from "@/src/features/browse/components/breadcrumbs";
 import { Content } from "@/src/features/browse/components/content";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 
 type TableData = TeamWithPopulatedCompany | ProfileWithDetailedTeams;
 

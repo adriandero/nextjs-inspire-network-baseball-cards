@@ -25,7 +25,7 @@ import {
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { LinkButton } from "@/src/components/custom-ui/link-button";
 import { PROFILE_ROUTES, ERROR_MESSAGES } from "@/src/constants/navigation";
-import { UserSanity } from "@/src/shared/entities/user";
+import { UserSanity } from "@/src/shared/entities/user.types";
 
 interface AccountDropdownProps {
   userProfileData?: UserSanity;

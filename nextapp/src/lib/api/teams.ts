@@ -2,7 +2,7 @@ import {
   TeamWithDetails,
   TeamWithPopulatedCompany,
   UserTeamsResponse,
-} from "@/src/shared/entities/team";
+} from "@/src/shared/entities/team.types";
 
 export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
   const response = await fetch("/api/cms/teams/for-user", {

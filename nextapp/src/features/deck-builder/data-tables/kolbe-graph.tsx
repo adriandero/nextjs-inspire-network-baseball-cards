@@ -7,7 +7,7 @@ import {
   KolbeStrengthField,
 } from "@/src/lib/utils";
 import { GoTools, GoTab, GoSearch, GoRocket } from "react-icons/go";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 
 export interface KolbeGraphProps {
   readonly profiles: Profile[];

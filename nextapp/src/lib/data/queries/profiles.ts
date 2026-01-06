@@ -8,10 +8,10 @@ import {
   ProfilesByTeam,
   GroupedProfilesResponse,
   TeamWithProfiles,
-} from "@/src/shared/entities/profile";
+} from "@/src/shared/entities/profile.types";
 
 export async function getProfileByUuid(
-  uuid: string,
+  uuid: string
 ): Promise<ProfileWithFullTeams | undefined> {
   if (!uuid) return undefined;
 
@@ -135,7 +135,7 @@ export async function getProfileByUuid(
     const profile = await client.fetch<ProfileWithFullTeams>(
       query,
       { uuid },
-      options,
+      options
     );
     return profile || null;
   } catch (error) {
@@ -145,7 +145,7 @@ export async function getProfileByUuid(
 }
 
 export async function getProfilesByUuids(
-  uuids: string[],
+  uuids: string[]
 ): Promise<ProfileWithFullTeams[]> {
   if (!uuids.length) return [];
 
@@ -205,7 +205,7 @@ export async function getProfilesByUuids(
     const profiles = await client.fetch<ProfileWithFullTeams[]>(
       query,
       { uuids },
-      options,
+      options
     );
     return profiles || [];
   } catch (error) {
@@ -215,7 +215,7 @@ export async function getProfilesByUuids(
 }
 
 export async function getProfileIdByEmail(
-  email: string,
+  email: string
 ): Promise<string | null> {
   if (!email) return null;
 
@@ -234,7 +234,7 @@ export async function getProfileIdByEmail(
 }
 
 export async function getProfilesByTeamId(
-  teamId: string,
+  teamId: string
 ): Promise<ProfileWithBasicTeams[]> {
   if (!teamId) return [];
 
@@ -272,7 +272,7 @@ export async function getProfilesByTeamId(
     const profiles = await client.fetch<ProfileWithBasicTeams[]>(
       query,
       { teamId },
-      options,
+      options
     );
     return profiles || [];
   } catch (error) {
@@ -321,7 +321,7 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
     const result = await client.fetch<GroupedProfilesResponse>(
       query,
       {},
-      options,
+      options
     );
 
     if (!result?.teams) {
@@ -333,7 +333,7 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
         acc[team.slug] = team.profiles;
         return acc;
       },
-      {},
+      {}
     );
 
     return { teams: profilesByTeam };
@@ -346,7 +346,7 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
 export async function getTeammateProfiles(
   excludeUuid: string,
   allowedSlugs: string[],
-  isAdmin: boolean = false,
+  isAdmin: boolean = false
 ): Promise<ProfileWithBasicTeams[]> {
   if (!excludeUuid) return [];
 
@@ -398,7 +398,7 @@ export async function getTeammateProfiles(
     const profiles = await client.fetch<ProfileWithBasicTeams[]>(
       query,
       params,
-      options,
+      options
     );
     return profiles || [];
   } catch (error) {
@@ -409,7 +409,7 @@ export async function getTeammateProfiles(
 
 export async function getProfilesFromUserTeams(
   userEmail: string,
-  userTeamSlugs: string[],
+  userTeamSlugs: string[]
 ): Promise<ProfilesFromUserTeams | null> {
   if (!userEmail || !userTeamSlugs.length) return null;
 
@@ -456,7 +456,7 @@ export async function getProfilesFromUserTeams(
     const profiles = await client.fetch<ProfilesFromUserTeams>(
       query,
       { userEmail, userTeamSlugs },
-      options,
+      options
     );
     return profiles || null;
   } catch (error) {
@@ -508,7 +508,7 @@ export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
     const profiles = await client.fetch<ProfileWithDetailedTeams[]>(
       query,
       {},
-      options,
+      options
     );
     return profiles || [];
   } catch (error) {

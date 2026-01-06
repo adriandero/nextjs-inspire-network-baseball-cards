@@ -4,8 +4,8 @@ import {
   type Table as ReactTable,
   Row,
 } from "@tanstack/react-table";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 import { DragTableToolbar } from "@/src/features/deck-builder/components/drag-table-toolbar";
 import { GenericTableBody } from "@/src/features/deck-builder/components/drag-table-body";
 import { TeamRow } from "@/src/features/deck-builder/builder/rows/team-row";

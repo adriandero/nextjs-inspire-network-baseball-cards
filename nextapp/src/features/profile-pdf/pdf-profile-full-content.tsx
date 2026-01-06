@@ -4,7 +4,7 @@ import PdfBanner from "@/src/features/profile-pdf/pdf-banner";
 import PdfKolbeStrengthsCard from "@/src/features/profile-pdf/pdf-kolbe-strengths-card";
 import PdfPrinciplesYouCard from "@/src/features/profile-pdf/pdf-principles-you-card";
 import PdfValuesCard from "@/src/features/profile-pdf/pdf-values-card";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import PdfWorkingGeniusCard from "@/src/features/profile-pdf/pdf-working-genius-card";
 import { cn } from "@/src/lib/utils";
 import React from "react";

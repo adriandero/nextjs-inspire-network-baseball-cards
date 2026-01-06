@@ -24,7 +24,7 @@ import { Progress } from "@/src/components/shadcn-ui/progress";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { CollapseAll } from "@/src/shared/assets/icons/collapse-all";
 import { ExpandAll } from "@/src/shared/assets/icons/expand-all";
-import { KolbeStrength } from "@/src/shared/entities/profile";
+import { KolbeStrength } from "@/src/shared/entities/profile.types";
 
 interface DeckBuilderKolbeStrengthRowProps {
   accordionValue: string;

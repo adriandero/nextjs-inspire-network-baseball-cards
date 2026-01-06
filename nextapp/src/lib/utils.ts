@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import kolbeStrengthJson from "@/public/json/kolbe-strengths.json";
-import { KolbeStrength } from "../shared/entities/profile";
+import { KolbeStrength } from "../shared/entities/profile.types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

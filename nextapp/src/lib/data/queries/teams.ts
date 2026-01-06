@@ -2,8 +2,8 @@ import {
   TeamWithDetails,
   TeamWithPopulatedCompany,
   UserTeamsResponse,
-} from "@/src/shared/entities/team";
-import { UserSanity } from "@/src/shared/entities/user";
+} from "@/src/shared/entities/team.types";
+import { UserSanity } from "@/src/shared/entities/user.types";
 import { client } from "@/src/lib/sanity/client";
 
 export async function getTeamsForUser(

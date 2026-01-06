@@ -1,5 +1,5 @@
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { ProfileTable } from "@/src/features/deck-builder/entities/profile-table.model";
 import { getProfilesByUuids } from "@/src/lib/data/queries/profiles";
 
