@@ -46,7 +46,6 @@
     "next-sanity": "^11.6.10",
     "pdf-lib": "^1.17.1",
     "playwright": "^1.49.1",
-    "puppeteer": "^24.31.0",
     "puppeteer-core": "^24.31.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

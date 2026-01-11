@@ -3,10 +3,11 @@ import type { Browser, Page } from "puppeteer-core";
 import { initPuppeteer, waitForImages } from "@/src/lib/utils/puppeteer-helper";
 
 export const maxDuration = 60;
+export const runtime = "nodejs";
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ uuid: string }> },
+  context: { params: Promise<{ uuid: string }> }
 ) {
   const uuid = (await context.params).uuid;
 
