@@ -1,18 +1,17 @@
 import type { Browser, Page, LaunchOptions, HTTPRequest } from "puppeteer-core";
 
 type PuppeteerModule = {
-  launch: (options: LaunchOptions) => Promise<Browser>;
+  launch: (options?: LaunchOptions) => Promise<Browser>;
 };
 
 export async function initPuppeteer() {
   const isProd = process.env.NODE_ENV === "production";
 
-  let puppeteer: PuppeteerModule;
+  const puppeteer = await import("puppeteer-core");
   let launchOptions: LaunchOptions;
 
   if (isProd) {
     const chromium = (await import("@sparticuz/chromium")).default;
-    puppeteer = await import("puppeteer-core");
 
     launchOptions = {
       args: [
@@ -30,13 +29,19 @@ export async function initPuppeteer() {
       headless: true,
     };
   } else {
-    puppeteer = await import("puppeteer");
+    // Use system Chrome in dev:
+    // macOS examples:
+    // "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    // "/Applications/Chromium.app/Contents/MacOS/Chromium"
     launchOptions = {
       headless: true,
+      executablePath:
+        process.env.CHROME_EXECUTABLE_PATH ||
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     };
   }
 
-  return { puppeteer, launchOptions };
+  return { puppeteer: puppeteer as unknown as PuppeteerModule, launchOptions };
 }
 
 export async function waitForImages(page: Page) {
@@ -49,7 +54,7 @@ export async function waitForImages(page: Page) {
           img.onerror = () =>
             reject(new Error(`Failed to load image: ${img.src}`));
         });
-      }),
+      })
     );
   });
 }
