@@ -26,12 +26,7 @@ export async function getProfileByUuid(
     "slug": slug.current,
     jobRole,
     values,
-    profileImage {
-      asset->{
-        _id,
-        url
-      }
-    },
+
     avatar {
       asset->{
         _id,
@@ -157,12 +152,6 @@ export async function getProfilesByUuids(
     uuid,
     "slug": slug.current,
     jobRole,
-    profileImage {
-      asset->{
-        _id,
-        url
-      }
-    },
     avatar {
       asset->{
         _id,
@@ -246,12 +235,7 @@ export async function getProfilesByTeamId(
       uuid,
       "slug": slug.current,
       jobRole,
-      profileImage {
-        asset->{
-          _id,
-          url
-        }
-      },
+
       avatar {
         asset->{
           _id,
@@ -298,12 +282,6 @@ export async function getAllProfilesGroupedByTeam(): Promise<ProfilesByTeam> {
           uuid,
           "slug": slug.current,
           jobRole,
-          profileImage {
-            asset->{
-              _id,
-              url
-            }
-          },
           avatar {
             asset->{
               _id,
@@ -370,12 +348,7 @@ export async function getTeammateProfiles(
         uuid,
         "slug": slug.current,
         jobRole,
-        profileImage {
-          asset->{
-            _id,
-            url
-          }
-        },
+   
         avatar {
           asset->{
             _id,
@@ -422,12 +395,6 @@ export async function getProfilesFromUserTeams(
         uuid,
         "slug": slug.current,
         jobRole,
-        profileImage {
-          asset->{
-            _id,
-            url
-          }
-        },
         avatar {
           asset->{
             _id,
@@ -476,12 +443,6 @@ export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
     uuid,
     "slug": slug.current,
     jobRole,
-    profileImage {
-      asset->{
-        _id,
-        url
-      }
-    },
     avatar {
       asset->{
         _id,

@@ -17,11 +17,7 @@ const DraggedProfilePreview: React.FC<DraggedProfilePreviewProps> = ({
       <div className="grid grid-cols-[auto_1fr] items-center gap-3 justify-self-start">
         <div className="relative w-8 h-8 rounded-full overflow-hidden">
           <Image
-            src={
-              profile.avatar?.asset?.url
-                ? profile.avatar?.asset?.url
-                : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
-            }
+            src={profile.avatar?.asset?.url ?? defaultAvatar.src}
             alt={profile.name}
             fill
             style={{ objectFit: "cover" }}

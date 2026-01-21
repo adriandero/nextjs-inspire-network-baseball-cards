@@ -23,10 +23,7 @@ const ProfileNameCell = ({ row }: { row: Row<ProfileWithDetailedTeams> }) => {
   const profileName = row.original.name;
   const profileUuid = row.original.uuid;
   const profileJobRole = row.original.jobRole;
-  const profileImageSrc =
-    row.original.avatar?.asset.url ??
-    row.original.profileImage?.asset.url ??
-    defaultAvatar.src;
+  const profileImageSrc = row.original.avatar?.asset.url ?? defaultAvatar.src;
 
   const handleClick = () => {
     router.push(`/tugcards/${profileUuid}`);
@@ -124,7 +121,7 @@ export const profileColumns: ColumnDef<ProfileWithDetailedTeams>[] = [
                   {team.name}
                   {index < profileTeams.length - 1 && ", "}
                 </span>
-              )
+              ),
             )
           ) : (
             <p className="text-gray-500 italic">no team</p>

@@ -108,16 +108,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                               .quality(80)
                               .url()
                           : profile.avatar.asset.url
-                        : profile.avatar
-                          ? optimizedImages
-                            ? urlFor(profile.profileImage.asset.url)
-                                .width(80)
-                                .height(80)
-                                .auto("format")
-                                .quality(80)
-                                .url()
-                            : profile.profileImage.asset.url
-                          : defaultAvatar.src
+                        : defaultAvatar.src
                     }
                     alt={profile.name}
                     fill
@@ -158,7 +149,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
         ),
       },
     ],
-    [optimizedImages, showJobRole]
+    [optimizedImages, showJobRole],
   );
 
   const summaryData = useMemo(() => {
@@ -212,7 +203,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -256,7 +247,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -38,7 +38,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
 }) => {
   console.log(
     "Rendering KolbeStrengthsTable with profiles:",
-    JSON.stringify(profiles)
+    JSON.stringify(profiles),
   );
   const columns: ColumnDef<SanityDocument>[] = [
     {
@@ -63,16 +63,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                               .quality(80)
                               .url()
                           : profile.avatar.asset.url
-                        : profile.profileImage
-                          ? optimizedImages
-                            ? urlFor(profile.profileImage.asset.url)
-                                .width(80)
-                                .height(80)
-                                .auto("format")
-                                .quality(80)
-                                .url()
-                            : profile.profileImage.asset.url
-                          : defaultAvatar.src
+                        : defaultAvatar.src
                     }
                     alt={profile.name}
                     fill
@@ -107,29 +98,29 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
 
         // Extract values using utility functions
         const factFinderValue = getKolbeNumericValue(
-          profileKolbeStrengths?.factFinder
+          profileKolbeStrengths?.factFinder,
         );
         const followThruValue = getKolbeNumericValue(
-          profileKolbeStrengths?.followThru
+          profileKolbeStrengths?.followThru,
         );
         const quickStartValue = getKolbeNumericValue(
-          profileKolbeStrengths?.quickStart
+          profileKolbeStrengths?.quickStart,
         );
         const implementerValue = getKolbeNumericValue(
-          profileKolbeStrengths?.implementer
+          profileKolbeStrengths?.implementer,
         );
 
         const factFinderDisplay = getKolbeDisplayValue(
-          profileKolbeStrengths?.factFinder
+          profileKolbeStrengths?.factFinder,
         );
         const followThruDisplay = getKolbeDisplayValue(
-          profileKolbeStrengths?.followThru
+          profileKolbeStrengths?.followThru,
         );
         const quickStartDisplay = getKolbeDisplayValue(
-          profileKolbeStrengths?.quickStart
+          profileKolbeStrengths?.quickStart,
         );
         const implementerDisplay = getKolbeDisplayValue(
-          profileKolbeStrengths?.implementer
+          profileKolbeStrengths?.implementer,
         );
 
         return (
@@ -213,7 +204,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}

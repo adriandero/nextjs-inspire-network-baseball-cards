@@ -61,12 +61,7 @@ export default function MoreProfilesCard({
                         className={`w-12 h-12 rounded-full ${!isLoaded ? "opacity-0" : "opacity-100"} transition-opacity`}
                       >
                         <AvatarImage
-                          src={
-                            profile.avatar?.asset?.url
-                              ? profile.avatar?.asset?.url
-                              : (profile.profileImage?.asset?.url ??
-                                defaultAvatar.src)
-                          }
+                          src={profile.avatar?.asset?.url ?? defaultAvatar.src}
                           onLoadingStatusChange={(status) => {
                             if (status === "loaded") {
                               handleAvatarLoad(profile.uuid);
