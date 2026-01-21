@@ -161,12 +161,14 @@ export const profileType = defineType({
     }),
     defineField({
       name: 'profileImage',
+      title: 'Profile Image (DEPRECATED - Use ImagecropField)',
+      hidden: true,
       type: 'image',
     }),
     defineField({
       name: 'avatar',
       title: 'Avatar',
-      type: 'image', // ← Changed from 'string' to 'image'
+      type: 'image',
       components: {
         input: ImageCropField,
       },
@@ -256,7 +258,7 @@ export const profileType = defineType({
       },
     }),
     defineField({
-      name: 'kolbeStrengths',
+      name: 'kolbeStrengthsv1',
       title: 'Kolbe Strengths (DEPRECATED - Use Kolbe Strengths 2)',
       type: 'object',
       description: '⚠️ This field is deprecated. Please use "Kolbe Strengths 2" below instead.',
@@ -264,7 +266,7 @@ export const profileType = defineType({
       fields: [factFinder, followThru, quickStart, implementer],
     }),
     defineField({
-      name: 'kolbeStrengths2',
+      name: 'kolbeStrengths',
       type: 'object',
       fields: [
         createKolbeStrengthField2('factFinder'),

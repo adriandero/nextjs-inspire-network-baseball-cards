@@ -47,7 +47,6 @@ export interface Profile {
   jobRole: string[];
   values?: string[];
   avatar?: SanityAsset;
-  profileImage?: SanityAsset;
   workingGenius?: {
     title?: keyof typeof workingGeniusJson;
     widget?: Widget;

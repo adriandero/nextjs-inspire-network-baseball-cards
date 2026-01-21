@@ -42,7 +42,7 @@ export default function PdfBanner({
     if (h1Ref.current) {
       const lineHeight = parseInt(
         getComputedStyle(h1Ref.current).lineHeight,
-        10
+        10,
       );
       setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
     }
@@ -50,9 +50,7 @@ export default function PdfBanner({
 
   const optimizedProfileImageUrl = profile.avatar
     ? urlFor(profile.avatar).auto("format").quality(80).url()
-    : profile.profileImage
-      ? urlFor(profile.profileImage).auto("format").quality(80).url()
-      : defaultAvatar.src;
+    : defaultAvatar.src;
 
   const teamLogoUrl = profile?.team?.[0]?.teamLogo
     ? urlFor(profile?.team[0]?.teamLogo?.asset.url)

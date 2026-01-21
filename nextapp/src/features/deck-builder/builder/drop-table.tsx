@@ -39,7 +39,7 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
   const handleRemoveProfile = (profileId: string) => {
     if (onProfilesChange) {
       const updatedProfiles = selectedProfilesData.filter(
-        (profile) => profile.uuid !== profileId
+        (profile) => profile.uuid !== profileId,
       );
       onProfilesChange(updatedProfiles);
     }
@@ -86,10 +86,7 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
                         <div className="relative w-8 h-8 rounded-full overflow-hidden">
                           <Image
                             src={
-                              profile.avatar?.asset?.url
-                                ? profile.avatar?.asset?.url
-                                : (profile.profileImage?.asset?.url ??
-                                  defaultAvatar.src)
+                              profile.avatar?.asset?.url ?? defaultAvatar.src
                             }
                             alt={profile.name}
                             fill

@@ -17,11 +17,7 @@ export default function Banner({
       <div className="w-16 h-16 min-w-16 min-h-16 rounded-full flex justify-center overflow-hidden ">
         <Avatar className="">
           <AvatarImage
-            src={
-              profile.avatar?.asset?.url
-                ? profile.avatar?.asset?.url
-                : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
-            }
+            src={profile.avatar?.asset?.url ?? defaultAvatar.src}
             onLoadingStatusChange={(status) => {
               if (status === "loaded") {
                 setIsAvatarLoaded(true);
