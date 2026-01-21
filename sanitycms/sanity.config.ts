@@ -3,7 +3,10 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {structure} from './deskStructure'
-import {AutoPopulateAction} from './components/auto-population-action'
+import {
+  AutoPopulateAllAction,
+  AutoPopulateSpecificAction,
+} from './components/auto-population-action'
 
 export default defineConfig({
   name: 'default',
@@ -24,7 +27,11 @@ export default defineConfig({
   document: {
     actions: (prev, context) => {
       if (context.schemaType === 'profile') {
-        return [...prev, AutoPopulateAction]
+        return [
+          ...prev, // Publish stays first
+          AutoPopulateAllAction,
+          AutoPopulateSpecificAction,
+        ]
       }
       return prev
     },

@@ -15,6 +15,7 @@ import {
 } from "@/src/shared/entities/extraction.types";
 import { ContentBlockParam } from "@anthropic-ai/sdk/resources/messages";
 import { writeClient } from "@/src/lib/sanity/client";
+import { mapExtractedFieldsToSanity } from "@/src/lib/sanity/ai/field-mapper";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -33,18 +34,21 @@ function corsHeaders() {
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders() });
 }
-// app/api/cms/auto-populate/route.ts
-// app/api/cms/auto-populate/route.ts
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as {
       documentId: string;
       documentType: string;
+      pdfField?: string; // ← NEW: optional specific PDF field
     };
-    let { documentId, documentType } = body;
+    let { documentId, documentType, pdfField } = body;
 
-    console.log("🚀 Auto-populate called for:", documentId, documentType);
+    console.log("🚀 Auto-populate called for:", {
+      documentId,
+      documentType,
+      pdfField: pdfField || "ALL",
+    });
 
     // Try to fetch the document - first as published, then as draft
     let document: SanityDocument | undefined = undefined;
@@ -121,15 +125,21 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // Rest of the code stays the same...
-    const pdfFields = extractPdfFields(document);
+    // Extract all PDF fields from document
+    const allPdfFields = extractPdfFields(document);
+
+    // Filter to specific PDF if requested
+    const pdfFields = pdfField
+      ? allPdfFields.filter((f) => f.fieldName === pdfField)
+      : allPdfFields;
 
     if (pdfFields.length === 0) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            'No PDFs found in document. Make sure you uploaded a PDF to a field ending with "Pdf".',
+          error: pdfField
+            ? `PDF field '${pdfField}' not found or has no uploaded file. Available PDFs: ${allPdfFields.map((f) => f.fieldName).join(", ")}`
+            : 'No PDFs found in document. Make sure you uploaded a PDF to a field ending with "Pdf".',
         },
         {
           status: 400,
@@ -139,41 +149,109 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(
-      "📎 Found PDFs:",
+      "📎 Processing PDFs:",
       pdfFields.map((f) => f.fieldName)
     );
 
-    const pdfContents = await Promise.all(
-      pdfFields.map((field) => fetchPdfAsBase64(field.asset._ref))
-    );
+    // Process each PDF separately for better error handling and field mapping
+    const allExtractedData: Record<string, unknown> = {};
+    const allMetadata: Array<{
+      field: string;
+      confidence: Record<string, string>;
+      notes: string;
+    }> = [];
 
-    console.log("📥 PDFs downloaded:", pdfContents.length);
+    for (const pdfFieldItem of pdfFields) {
+      try {
+        console.log(`\n🔄 Processing: ${pdfFieldItem.fieldName}`);
 
-    const extractedData = await extractDataWithClaude(
-      pdfContents,
-      documentType
-    );
+        // Fetch the PDF
+        const pdfContent = await fetchPdfAsBase64(pdfFieldItem.asset._ref);
+        console.log(`📥 PDF downloaded: ${pdfFieldItem.fieldName}`);
 
-    console.log("🤖 Claude extracted data:", Object.keys(extractedData));
+        // Build schema key: "documentType:pdfFieldName"
+        const schemaKey = `${documentType}:${pdfFieldItem.fieldName}`;
+        console.log(`🔍 Looking up schema: ${schemaKey}`);
 
-    await writeClient.patch(documentId).set(extractedData).commit();
+        // Extract data with Claude
+        const extractedData = await extractDataWithClaude(
+          [pdfContent],
+          schemaKey
+        );
 
-    console.log("✅ Document updated successfully");
+        console.log(
+          `🤖 Claude extracted fields:`,
+          Object.keys(extractedData).filter((k) => k !== "_aiMetadata")
+        );
 
-    // Add this: Verify what was written
-    const verifyDoc = await writeClient.fetch(
-      `*[_id == "${documentId}"][0]{_id, principleYouArchetype, principleYouArchetypeLeast}`
-    );
-    console.log("🔍 Verification - Document after update:", verifyDoc);
-    
+        // Transform flat extracted data to Sanity's nested structure
+        const mappedData = mapExtractedFieldsToSanity(
+          extractedData,
+          pdfFieldItem.fieldName
+        );
+
+        console.log(`🗺️  Mapped to Sanity fields:`, Object.keys(mappedData));
+
+        // Merge into accumulated results
+        Object.assign(allExtractedData, mappedData);
+
+        // Store metadata
+        if (extractedData._aiMetadata) {
+          allMetadata.push({
+            field: pdfFieldItem.fieldName,
+            confidence: extractedData._aiMetadata.confidence,
+            notes: extractedData._aiMetadata.notes,
+          });
+        }
+
+        console.log(`✅ ${pdfFieldItem.fieldName} processed successfully`);
+      } catch (error) {
+        console.error(`❌ Error processing ${pdfFieldItem.fieldName}:`, error);
+
+        // Store error in metadata but continue with other PDFs
+        allMetadata.push({
+          field: pdfFieldItem.fieldName,
+          confidence: {},
+          notes: `Extraction failed: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
+        });
+      }
+    }
+
+    // Update document with all extracted data
+    if (Object.keys(allExtractedData).length > 0) {
+      console.log(
+        "\n💾 Updating Sanity document with:",
+        Object.keys(allExtractedData)
+      );
+
+      await writeClient.patch(documentId).set(allExtractedData).commit();
+
+      console.log("✅ Document updated successfully");
+
+      // Verify what was written
+      const verifyDoc = await writeClient.fetch(
+        `*[_id == "${documentId}"][0]{
+          _id, 
+          principleYouArchetype, 
+          principleYouArchetypeLeast,
+          workingGenius,
+          kolbeStrengths2,
+          values
+        }`
+      );
+      console.log("🔍 Verification - Document after update:", verifyDoc);
+    } else {
+      console.warn("⚠️ No data extracted from any PDFs");
+    }
+
     return NextResponse.json(
       {
         success: true,
-        populatedFields: Object.keys(extractedData).filter(
-          (key) => key !== "_aiMetadata"
-        ),
+        populatedFields: Object.keys(allExtractedData),
         message: "Review the populated fields and publish when ready",
-        metadata: extractedData._aiMetadata,
+        metadata: allMetadata,
       },
       {
         headers: corsHeaders(),
@@ -279,77 +357,88 @@ async function fetchPdfAsBase64(assetRef: string): Promise<PdfData> {
 
 async function extractDataWithClaude(
   pdfs: PdfData[],
-  documentType: string
+  documentType: string,
+  retries = 3
 ): Promise<ValidatedExtraction> {
-  console.log("🔍 Looking for schema for document type:", documentType);
-  console.log(
-    "📋 Available schemas:",
-    Object.keys(DOCUMENT_EXTRACTION_SCHEMAS)
-  );
-
-  const schema = DOCUMENT_EXTRACTION_SCHEMAS[documentType];
-
-  if (!schema) {
-    throw new Error(
-      `No extraction schema defined for document type: ${documentType}`
+  try {
+    console.log("🔍 Looking for schema for document type:", documentType);
+    console.log(
+      "📋 Available schemas:",
+      Object.keys(DOCUMENT_EXTRACTION_SCHEMAS)
     );
-  }
 
-  const prompt = buildExtractionPrompt(schema);
+    const schema = DOCUMENT_EXTRACTION_SCHEMAS[documentType];
 
-  // Use Anthropic's ContentBlockParam type directly
-  const content: ContentBlockParam[] = [
-    {
-      type: "text",
-      text: prompt,
-    },
-  ];
+    if (!schema) {
+      throw new Error(
+        `No extraction schema defined for document type: ${documentType}`
+      );
+    }
 
-  // Add each PDF to the content array
-  pdfs.forEach((pdf) => {
-    content.push({
-      type: "document",
-      source: {
-        type: "base64",
-        media_type: "application/pdf", // Literal type
-        data: pdf.base64,
-      },
-    });
-  });
+    const prompt = buildExtractionPrompt(schema);
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 4000,
-    messages: [
+    // Use Anthropic's ContentBlockParam type directly
+    const content: ContentBlockParam[] = [
       {
-        role: "user",
-        content,
+        type: "text",
+        text: prompt,
       },
-    ],
-  });
+    ];
 
-  // Extract text content from Claude's response
-  const textContent = response.content.find(
-    (block): block is Anthropic.TextBlock => block.type === "text"
-  );
+    // Add each PDF to the content array
+    pdfs.forEach((pdf) => {
+      content.push({
+        type: "document",
+        source: {
+          type: "base64",
+          media_type: "application/pdf", // Literal type
+          data: pdf.base64,
+        },
+      });
+    });
 
-  if (!textContent) {
-    throw new Error("No text response from Claude");
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 4000,
+      messages: [
+        {
+          role: "user",
+          content,
+        },
+      ],
+    });
+
+    // Extract text content from Claude's response
+    const textContent = response.content.find(
+      (block): block is Anthropic.TextBlock => block.type === "text"
+    );
+
+    if (!textContent) {
+      throw new Error("No text response from Claude");
+    }
+
+    // Parse JSON from response (handles ```json wrapper)
+    const jsonMatch =
+      textContent.text.match(/```json\n?([\s\S]*?)\n?```/) ||
+      textContent.text.match(/({[\s\S]*})/);
+
+    if (!jsonMatch) {
+      throw new Error("Could not extract JSON from Claude response");
+    }
+
+    const extractedData = JSON.parse(jsonMatch[1]) as ClaudeExtractionResponse;
+
+    // Validate and clean the extraction
+    return validateAndCleanExtraction(extractedData, schema);
+  } catch (error) {
+    if (error.status === 429 && retries > 0) {
+      const waitTime = Math.pow(2, 4 - retries) * 1000; // 2s, 4s, 8s
+      console.log(`⏳ Rate limited. Waiting ${waitTime}ms before retry...`);
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
+      return extractDataWithClaude(pdfs, documentType, retries - 1);
+    }
+    throw error;
   }
-
-  // Parse JSON from response (handles ```json wrapper)
-  const jsonMatch =
-    textContent.text.match(/```json\n?([\s\S]*?)\n?```/) ||
-    textContent.text.match(/({[\s\S]*})/);
-
-  if (!jsonMatch) {
-    throw new Error("Could not extract JSON from Claude response");
-  }
-
-  const extractedData = JSON.parse(jsonMatch[1]) as ClaudeExtractionResponse;
-
-  // Validate and clean the extraction
-  return validateAndCleanExtraction(extractedData, schema);
 }
 
 // Helper: Validate extracted data against schema
