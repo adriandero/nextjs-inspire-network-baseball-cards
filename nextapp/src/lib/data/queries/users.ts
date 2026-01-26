@@ -3,7 +3,7 @@ import { User } from "@auth0/nextjs-auth0/types";
 import { UserSanity } from "@/src/shared/entities/user.types";
 
 export async function getUserSanity(
-  authUser: User
+  authUser: User,
 ): Promise<UserSanity | undefined> {
   if (!authUser?.email) {
     console.warn("getUserProfile called without valid email");
@@ -20,9 +20,6 @@ export async function getUserSanity(
         uuid,
         "slug": slug.current,
         jobRole,
-        profileImage {
-          asset->{url}
-        }
       },
       team[]->{
         name,

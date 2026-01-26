@@ -7,11 +7,6 @@ export interface UserSanity {
     uuid: string;
     slug: string;
     jobRole: string;
-    profileImage?: {
-      asset: {
-        url: string;
-      };
-    };
   };
   team?: Array<{
     name: string;

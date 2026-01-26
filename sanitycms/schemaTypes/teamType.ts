@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {CreateCompanyField} from '../components/create-company-field'
+import ImageCropField from '../components/image-crop-field'
 
 export const teamType = defineType({
   name: 'team',
@@ -20,6 +21,13 @@ export const teamType = defineType({
     defineField({
       name: 'teamLogo',
       type: 'image',
+    }),
+    defineField({
+      name: 'teamLogo2',
+      type: 'image',
+      components: {
+        input: ImageCropField,
+      },
     }),
     defineField({
       name: 'company',

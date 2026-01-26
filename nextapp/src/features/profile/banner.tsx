@@ -19,7 +19,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
     if (h1Ref.current) {
       const lineHeight = parseInt(
         getComputedStyle(h1Ref.current).lineHeight,
-        10
+        10,
       );
       setIsMultiLine(h1Ref.current.scrollHeight > lineHeight);
     }
@@ -29,11 +29,7 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
       <div className="w-24 h-24 min-w-24 min-h-24 rounded-full flex justify-center overflow-hidden">
         <Avatar className="">
           <AvatarImage
-            src={
-              profile.avatar?.asset?.url
-                ? profile.avatar?.asset?.url
-                : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
-            }
+            src={profile.avatar?.asset?.url ?? defaultAvatar.src}
             onLoadingStatusChange={(status) => {
               if (status === "loaded") {
                 setIsAvatarLoaded(true);

@@ -63,11 +63,7 @@ export default function MobileNavBanner({
           <div className="w-36 h-36 rounded-full bg-secondary border-6 border-secondary mt-4 xs:mt-0 z-10 overflow-hidden">
             <Avatar>
               <AvatarImage
-                src={
-                  profile.avatar?.asset?.url
-                    ? profile.avatar?.asset?.url
-                    : (profile.profileImage?.asset?.url ?? defaultAvatar.src)
-                }
+                src={profile.avatar?.asset?.url ?? defaultAvatar.src}
                 className="rounded-full w-36 h-36 object-cover"
               />
               <AvatarFallback></AvatarFallback>
