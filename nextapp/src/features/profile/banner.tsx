@@ -2,13 +2,19 @@
 
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Image from "next/image";
-import { SanityDocument } from "next-sanity";
 import { Skeleton } from "@/src/components/shadcn-ui/skeleton";
 import { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import ameripriseCompass from "@/public/images/ameriprise-compass.png";
+import { ProfileWithFullTeams } from "@/src/shared/entities/profile";
 
-export default function Banner({ profile }: SanityDocument): React.JSX.Element {
+interface BannerInterface {
+  profile: ProfileWithFullTeams;
+}
+
+export default function Banner({
+  profile,
+}: BannerInterface): React.JSX.Element {
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
@@ -74,9 +80,9 @@ export default function Banner({ profile }: SanityDocument): React.JSX.Element {
             {profile?.team && profile?.team[0]?.name}
           </h1>
         </div>
-      ) : profile?.team && profile?.team[0]?.teamLogo?.asset.url ? (
+      ) : profile?.team && profile?.team[0]?.teamLogo2?.asset.url ? (
         <Image
-          src={profile?.team[0]?.teamLogo?.asset.url}
+          src={profile?.team[0]?.teamLogo?.asset.url ?? ""}
           width={180}
           height={180}
           alt="Company Logo"

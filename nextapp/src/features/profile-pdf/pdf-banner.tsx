@@ -1,15 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { urlFor } from "@/src/lib/sanity/client";
-import { SanityDocument } from "next-sanity";
 import React, { useEffect, useRef, useState } from "react";
 import defaultAvatar from "@/public/images/default-avatar.png";
 import ameripriseCompass from "@/public/images/ameriprise-compass.png";
+import { ProfileWithFullTeams } from "@/src/shared/entities/profile";
+
+interface PdfBannerInterface {
+  profile: ProfileWithFullTeams;
+  className: string;
+}
 
 export default function PdfBanner({
   profile,
   className,
-}: SanityDocument): React.JSX.Element {
+}: PdfBannerInterface): React.JSX.Element {
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
   const profilesTeamName = profile?.team?.[0]?.name;
@@ -52,8 +57,8 @@ export default function PdfBanner({
     ? urlFor(profile.avatar).auto("format").quality(80).url()
     : defaultAvatar.src;
 
-  const teamLogoUrl = profile?.team?.[0]?.teamLogo
-    ? urlFor(profile?.team[0]?.teamLogo?.asset.url)
+  const teamLogoUrl = profile?.team?.[0]?.teamLogo2
+    ? urlFor(profile?.team[0]?.teamLogo2?.asset.url)
         .auto("format")
         .quality(90)
         .url()

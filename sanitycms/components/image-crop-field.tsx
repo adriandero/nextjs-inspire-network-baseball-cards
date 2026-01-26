@@ -1,15 +1,21 @@
 import {useState, useRef, useCallback} from 'react'
 import {Stack, Card, Button, Flex, Text} from '@sanity/ui'
 import {UploadIcon, ImageIcon} from '@sanity/icons'
-import {set, ObjectInputProps} from 'sanity'
+import {set, ObjectInputProps, ImageOptions} from 'sanity'
 import {useClient} from 'sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import ImageCropper from './image-cropper'
 
-// Remove the custom ImageValue type - just use what Sanity provides
+type ImageCropOptions = {
+  aspectRatio?: number
+  freeForm?: boolean
+}
+
 export default function ImageCropField(props: ObjectInputProps) {
-  // ← Simplified
-  const {value, onChange} = props
+  const {value, onChange, schemaType} = props
+  const options = (schemaType.options || {}) as ImageOptions & ImageCropOptions
+  const {aspectRatio = 1, freeForm = false} = options
+
   const [tempImage, setTempImage] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -208,7 +214,12 @@ export default function ImageCropField(props: ObjectInputProps) {
       )}
 
       {tempImage && !isUploading && (
-        <ImageCropper image={tempImage} onCropped={handleCropped} onCancel={handleCancel} />
+        <ImageCropper
+          image={tempImage}
+          onCropped={handleCropped}
+          onCancel={handleCancel}
+          aspectRatio={freeForm ? undefined : aspectRatio}
+        />
       )}
     </Stack>
   )

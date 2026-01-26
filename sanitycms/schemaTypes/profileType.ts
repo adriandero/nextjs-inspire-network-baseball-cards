@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType, ImageOptions} from 'sanity'
 import {v4 as uuidv4} from 'uuid'
 import ImageCropField from '../components/image-crop-field'
 
@@ -172,6 +172,7 @@ export const profileType = defineType({
       components: {
         input: ImageCropField,
       },
+      options: {aspectRatio: 1} as ImageOptions,
     }),
     defineField({
       name: 'team',
@@ -258,7 +259,7 @@ export const profileType = defineType({
       },
     }),
     defineField({
-      name: 'kolbeStrengthsv1',
+      name: 'kolbeStrengths',
       title: 'Kolbe Strengths (DEPRECATED - Use Kolbe Strengths 2)',
       type: 'object',
       description: '⚠️ This field is deprecated. Please use "Kolbe Strengths 2" below instead.',
@@ -266,7 +267,8 @@ export const profileType = defineType({
       fields: [factFinder, followThru, quickStart, implementer],
     }),
     defineField({
-      name: 'kolbeStrengths',
+      name: 'kolbeStrengths2',
+      title: 'Kolbe Strengths',
       type: 'object',
       fields: [
         createKolbeStrengthField2('factFinder'),
