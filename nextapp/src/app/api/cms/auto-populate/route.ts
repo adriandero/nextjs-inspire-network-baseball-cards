@@ -16,6 +16,7 @@ import {
 import { ContentBlockParam } from "@anthropic-ai/sdk/resources/messages";
 import { writeClient } from "@/src/lib/sanity/client";
 import { mapExtractedFieldsToSanity } from "@/src/lib/sanity/ai/field-mapper";
+import { APIError } from "@anthropic-ai/sdk";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -59,7 +60,7 @@ export async function POST(req: NextRequest) {
       console.log(
         "📄 Fetched document:",
         fetchedDoc ? "exists" : "undefined",
-        fetchedDoc?._id
+        fetchedDoc?._id,
       );
 
       if (fetchedDoc && fetchedDoc._id) {
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
         console.log(
           "📄 Fetched draft document:",
           fetchedDoc ? "exists" : "undefined",
-          fetchedDoc?._id
+          fetchedDoc?._id,
         );
 
         if (fetchedDoc && fetchedDoc._id) {
@@ -110,7 +111,7 @@ export async function POST(req: NextRequest) {
         {
           status: 404,
           headers: corsHeaders(),
-        }
+        },
       );
     }
 
@@ -121,8 +122,8 @@ export async function POST(req: NextRequest) {
           .filter(([key]) => key.endsWith("Pdf"))
           .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}),
         null,
-        2
-      )
+        2,
+      ),
     );
 
     // Extract all PDF fields from document
@@ -144,13 +145,13 @@ export async function POST(req: NextRequest) {
         {
           status: 400,
           headers: corsHeaders(),
-        }
+        },
       );
     }
 
     console.log(
       "📎 Processing PDFs:",
-      pdfFields.map((f) => f.fieldName)
+      pdfFields.map((f) => f.fieldName),
     );
 
     // Process each PDF separately for better error handling and field mapping
@@ -176,18 +177,18 @@ export async function POST(req: NextRequest) {
         // Extract data with Claude
         const extractedData = await extractDataWithClaude(
           [pdfContent],
-          schemaKey
+          schemaKey,
         );
 
         console.log(
           `🤖 Claude extracted fields:`,
-          Object.keys(extractedData).filter((k) => k !== "_aiMetadata")
+          Object.keys(extractedData).filter((k) => k !== "_aiMetadata"),
         );
 
         // Transform flat extracted data to Sanity's nested structure
         const mappedData = mapExtractedFieldsToSanity(
           extractedData,
-          pdfFieldItem.fieldName
+          pdfFieldItem.fieldName,
         );
 
         console.log(`🗺️  Mapped to Sanity fields:`, Object.keys(mappedData));
@@ -223,7 +224,7 @@ export async function POST(req: NextRequest) {
     if (Object.keys(allExtractedData).length > 0) {
       console.log(
         "\n💾 Updating Sanity document with:",
-        Object.keys(allExtractedData)
+        Object.keys(allExtractedData),
       );
 
       await writeClient.patch(documentId).set(allExtractedData).commit();
@@ -239,7 +240,7 @@ export async function POST(req: NextRequest) {
           workingGenius,
           kolbeStrengths2,
           values
-        }`
+        }`,
       );
       console.log("🔍 Verification - Document after update:", verifyDoc);
     } else {
@@ -255,7 +256,7 @@ export async function POST(req: NextRequest) {
       },
       {
         headers: corsHeaders(),
-      }
+      },
     );
   } catch (error) {
     console.error("❌ Auto-populate error:", error);
@@ -272,7 +273,7 @@ export async function POST(req: NextRequest) {
       {
         status: 500,
         headers: corsHeaders(),
-      }
+      },
     );
   }
 }
@@ -336,13 +337,13 @@ async function fetchPdfAsBase64(assetRef: string): Promise<PdfData> {
       assetRef,
     });
     throw new Error(
-      `Failed to fetch PDF: ${response.statusText} (${response.status}). Check if the file exists in Sanity.`
+      `Failed to fetch PDF: ${response.statusText} (${response.status}). Check if the file exists in Sanity.`,
     );
   }
 
   console.log(
     "✅ PDF fetched successfully, size:",
-    response.headers.get("content-length")
+    response.headers.get("content-length"),
   );
 
   const arrayBuffer = await response.arrayBuffer();
@@ -358,20 +359,20 @@ async function fetchPdfAsBase64(assetRef: string): Promise<PdfData> {
 async function extractDataWithClaude(
   pdfs: PdfData[],
   documentType: string,
-  retries = 3
+  retries = 3,
 ): Promise<ValidatedExtraction> {
   try {
     console.log("🔍 Looking for schema for document type:", documentType);
     console.log(
       "📋 Available schemas:",
-      Object.keys(DOCUMENT_EXTRACTION_SCHEMAS)
+      Object.keys(DOCUMENT_EXTRACTION_SCHEMAS),
     );
 
     const schema = DOCUMENT_EXTRACTION_SCHEMAS[documentType];
 
     if (!schema) {
       throw new Error(
-        `No extraction schema defined for document type: ${documentType}`
+        `No extraction schema defined for document type: ${documentType}`,
       );
     }
 
@@ -410,7 +411,7 @@ async function extractDataWithClaude(
 
     // Extract text content from Claude's response
     const textContent = response.content.find(
-      (block): block is Anthropic.TextBlock => block.type === "text"
+      (block): block is Anthropic.TextBlock => block.type === "text",
     );
 
     if (!textContent) {
@@ -431,7 +432,7 @@ async function extractDataWithClaude(
     // Validate and clean the extraction
     return validateAndCleanExtraction(extractedData, schema);
   } catch (error) {
-    if (error.status === 429 && retries > 0) {
+    if (error instanceof APIError && error.status === 429 && retries > 0) {
       const waitTime = Math.pow(2, 4 - retries) * 1000; // 2s, 4s, 8s
       console.log(`⏳ Rate limited. Waiting ${waitTime}ms before retry...`);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -444,7 +445,7 @@ async function extractDataWithClaude(
 // Helper: Validate extracted data against schema
 function validateAndCleanExtraction(
   data: ClaudeExtractionResponse,
-  schema: ExtractionSchema
+  schema: ExtractionSchema,
 ): ValidatedExtraction {
   const cleaned: Record<string, ExtractedFieldValue> = {};
   const confidence = data.confidence || {};
@@ -461,7 +462,7 @@ function validateAndCleanExtraction(
     // Validate arrays against allowed values
     if (definition.allowedValues && Array.isArray(value)) {
       const validValues = value.filter(
-        (v) => typeof v === "string" && definition.allowedValues!.includes(v)
+        (v) => typeof v === "string" && definition.allowedValues!.includes(v),
       );
 
       if (validValues.length > 0) {
