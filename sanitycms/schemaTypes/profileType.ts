@@ -267,6 +267,7 @@ export const profileType = defineType({
     }),
     defineField({
       name: 'kolbeStrengths2',
+      title: 'Kolbe Strengths',
       type: 'object',
       fields: [
         createKolbeStrengthField2('factFinder'),
