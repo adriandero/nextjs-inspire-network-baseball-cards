@@ -1,59 +1,77 @@
-import {FC, useCallback, useState} from 'react'
-import Cropper, {Area} from 'react-easy-crop'
+import {FC, useCallback, useState, useRef} from 'react'
+import ReactCrop, {Crop, PixelCrop, centerCrop, makeAspectCrop} from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
 import {Button, Card, Flex} from '@sanity/ui'
 
 interface ImageCropperProps {
   image: string
-  onCropped: (blob: Blob) => void // Changed: now returns Blob instead of base64
+  onCropped: (blob: Blob) => void
   onCancel: () => void
 }
 
 const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
-  const [crop, setCrop] = useState<{x: number; y: number}>({x: 0, y: 0})
-  const [zoom, setZoom] = useState<number>(1)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const [crop, setCrop] = useState<Crop>()
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [isProcessing, setIsProcessing] = useState(false)
 
-  const onCropComplete = useCallback((_: Area, areaPixels: Area) => {
-    setCroppedAreaPixels(areaPixels)
-  }, [])
+  // Initialize crop when image loads
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const {width, height} = e.currentTarget
 
-  const createImage = (url: string): Promise<HTMLImageElement> =>
-    new Promise((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => resolve(img)
-      img.onerror = (err) => reject(err)
-      img.crossOrigin = 'anonymous'
-      img.src = url
-    })
+    // Create a centered square crop (aspect ratio 1:1)
+    const crop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: '%',
+          width: 90, // Use 90% of image width
+        },
+        1, // aspect ratio 1:1 for square
+        width,
+        height,
+      ),
+      width,
+      height,
+    )
+
+    setCrop(crop)
+  }
 
   const getCroppedImg = useCallback(async () => {
-    if (!croppedAreaPixels) return
+    if (!completedCrop || !imgRef.current) return
 
     setIsProcessing(true)
     try {
-      const img = await createImage(image)
+      const image = imgRef.current
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
 
-      if (!ctx) return
+      if (!ctx) {
+        throw new Error('No 2d context')
+      }
 
-      canvas.width = croppedAreaPixels.width
-      canvas.height = croppedAreaPixels.height
+      // Calculate the scale between natural and displayed image
+      const scaleX = image.naturalWidth / image.width
+      const scaleY = image.naturalHeight / image.height
 
+      // Set canvas size to match crop dimensions (using natural scale)
+      canvas.width = completedCrop.width * scaleX
+      canvas.height = completedCrop.height * scaleY
+
+      // Draw the cropped portion using natural image coordinates
       ctx.drawImage(
-        img,
-        croppedAreaPixels.x,
-        croppedAreaPixels.y,
-        croppedAreaPixels.width,
-        croppedAreaPixels.height,
+        image,
+        completedCrop.x * scaleX, // Scale X position
+        completedCrop.y * scaleY, // Scale Y position
+        completedCrop.width * scaleX, // Scale width
+        completedCrop.height * scaleY, // Scale height
         0,
         0,
-        croppedAreaPixels.width,
-        croppedAreaPixels.height,
+        canvas.width,
+        canvas.height,
       )
 
-      // Convert canvas to Blob instead of base64
+      // Convert to Blob
       canvas.toBlob(
         (blob) => {
           if (blob) {
@@ -61,25 +79,32 @@ const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
           }
         },
         'image/jpeg',
-        0.95, // Quality: 0.95 = 95% (good balance of quality/size)
+        0.95,
       )
+    } catch (error) {
+      console.error('Crop failed:', error)
     } finally {
       setIsProcessing(false)
     }
-  }, [image, croppedAreaPixels, onCropped])
+  }, [completedCrop, onCropped])
 
   return (
     <Card>
-      <div style={{position: 'relative', width: '100%', height: 300}}>
-        <Cropper
-          image={image}
+      <div style={{padding: '16px'}}>
+        <ReactCrop
           crop={crop}
-          zoom={zoom}
-          aspect={1}
-          onCropChange={setCrop}
-          onZoomChange={setZoom}
-          onCropComplete={onCropComplete}
-        />
+          onChange={(c) => setCrop(c)}
+          onComplete={(c) => setCompletedCrop(c)}
+          aspect={1} // Square crop
+        >
+          <img
+            ref={imgRef}
+            src={image}
+            alt="Crop preview"
+            onLoad={onImageLoad}
+            style={{maxWidth: '100%', maxHeight: '400px'}}
+          />
+        </ReactCrop>
       </div>
 
       <Flex gap={2} justify="flex-end" padding={3}>
@@ -89,7 +114,7 @@ const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
           text={isProcessing ? 'Processing...' : 'Crop Image'}
           tone="primary"
           onClick={getCroppedImg}
-          disabled={!croppedAreaPixels || isProcessing}
+          disabled={!completedCrop || isProcessing}
         />
       </Flex>
     </Card>
