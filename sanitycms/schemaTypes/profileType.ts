@@ -258,7 +258,7 @@ export const profileType = defineType({
       },
     }),
     defineField({
-      name: 'kolbeStrengthsv1',
+      name: 'kolbeStrengths',
       title: 'Kolbe Strengths (DEPRECATED - Use Kolbe Strengths 2)',
       type: 'object',
       description: '⚠️ This field is deprecated. Please use "Kolbe Strengths 2" below instead.',
@@ -266,7 +266,8 @@ export const profileType = defineType({
       fields: [factFinder, followThru, quickStart, implementer],
     }),
     defineField({
-      name: 'kolbeStrengths',
+      name: 'kolbeStrengths2',
+      title: 'Kolbe Strengths',
       type: 'object',
       fields: [
         createKolbeStrengthField2('factFinder'),

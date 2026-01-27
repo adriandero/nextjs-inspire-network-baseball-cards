@@ -1,5 +1,3 @@
-// image-cropper.tsx
-'use client'
 import {FC, useCallback, useState} from 'react'
 import Cropper, {Area} from 'react-easy-crop'
 import {Button, Card, Flex} from '@sanity/ui'
