@@ -108,6 +108,17 @@ export interface ProfileWithFullTeams extends Profile {
         };
       };
     };
+    teamLogo2?: {
+      asset: {
+        url: string;
+        metadata?: {
+          dimensions?: {
+            width: number;
+            height: number;
+          };
+        };
+      };
+    };
   }>;
 }
 

@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType, ImageOptions} from 'sanity'
 import {v4 as uuidv4} from 'uuid'
 import ImageCropField from '../components/image-crop-field'
 
@@ -172,6 +172,7 @@ export const profileType = defineType({
       components: {
         input: ImageCropField,
       },
+      options: {aspectRatio: 1} as ImageOptions,
     }),
     defineField({
       name: 'team',

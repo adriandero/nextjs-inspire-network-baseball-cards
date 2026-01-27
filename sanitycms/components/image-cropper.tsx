@@ -8,9 +8,10 @@ interface ImageCropperProps {
   image: string
   onCropped: (blob: Blob) => void // Changed: now returns Blob instead of base64
   onCancel: () => void
+  aspectRatio?: number
 }
 
-const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
+const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel, aspectRatio}) => {
   const [crop, setCrop] = useState<{x: number; y: number}>({x: 0, y: 0})
   const [zoom, setZoom] = useState<number>(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
@@ -77,7 +78,7 @@ const ImageCropper: FC<ImageCropperProps> = ({image, onCropped, onCancel}) => {
           image={image}
           crop={crop}
           zoom={zoom}
-          aspect={1}
+          aspect={aspectRatio}
           onCropChange={setCrop}
           onZoomChange={setZoom}
           onCropComplete={onCropComplete}
