@@ -4,7 +4,7 @@ import {
   ProfileWithFullTeams,
   ProfilesFromUserTeams,
   ProfilesByTeam,
-} from "@/src/shared/entities/profile";
+} from "@/src/shared/entities/profile.types";
 
 export async function getProfileByUuid(
   uuid: string

@@ -50,8 +50,8 @@ import { teamColumns } from "@/src/features/deck-builder/builder/columns/team-co
 import DragTable from "@/src/features/deck-builder/builder/drag-table";
 import DraggedProfilePreview from "@/src/features/deck-builder/builder/draggable-profile-preview";
 import ProfileTablesManager from "@/src/features/deck-builder/builder/drop-table-manager";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
 import { useDragTableView } from "@/src/features/deck-builder/hooks/use-drag-table-view.hook";
 import { useGateValue } from "@statsig/react-bindings";

@@ -1,4 +1,4 @@
-import { ProfileWithBasicTeams } from "@/src/shared/entities/profile";
+import { ProfileWithBasicTeams } from "@/src/shared/entities/profile.types";
 import {
   canAccessProfile,
   getAuthorizedUser,
@@ -8,11 +8,11 @@ import {
   getTeammateProfiles,
 } from "@/src/lib/data/queries/profiles";
 import { getUserTeams } from "../queries/teams";
-import { UserSanity } from "@/src/shared/entities/user";
+import { UserSanity } from "@/src/shared/entities/user.types";
 
 export async function getAuthorizedTeammateProfiles(
   excludeUuid: string,
-  requestingUser?: UserSanity,
+  requestingUser?: UserSanity
 ): Promise<ProfileWithBasicTeams[]> {
   try {
     const user = requestingUser || (await getAuthorizedUser());
@@ -40,7 +40,7 @@ export async function getAuthorizedTeammateProfiles(
     const teammates = await getTeammateProfiles(
       excludeUuid,
       allowedSlugs,
-      false,
+      false
     );
     return teammates;
   } catch (error) {

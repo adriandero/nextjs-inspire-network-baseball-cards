@@ -18,7 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogFooter,
 } from "@/src/components/shadcn-ui/alert-dialog";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 
 export default function MoreProfilesCard({
   moreProfiles,

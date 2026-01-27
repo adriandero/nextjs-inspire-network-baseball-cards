@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import Image from "next/image";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 
 import { SanityDocument } from "next-sanity";
 import {

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { PRINCIPLES_YOU_ARCHETYPES } from "@/src/features/deck-builder/constants/principles-you-archetypes";
 import { Badge } from "@/src/components/shadcn-ui/badge";
 import { shortNamesOfProfiles } from "@/src/lib/utils/profile-table-utils";

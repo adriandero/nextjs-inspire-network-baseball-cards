@@ -1,5 +1,5 @@
-import { SanityAsset } from "./common";
-import { TeamWithPopulatedCompany } from "./team";
+import { SanityAsset } from "./common.types";
+import { TeamWithPopulatedCompany } from "./team.types";
 import workingGeniusJson from "@/public/json/working-genius.json";
 
 export interface Widget {

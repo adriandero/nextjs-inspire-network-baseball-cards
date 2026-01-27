@@ -1,4 +1,4 @@
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 
 export interface ProfileTable {
   readonly id: string;

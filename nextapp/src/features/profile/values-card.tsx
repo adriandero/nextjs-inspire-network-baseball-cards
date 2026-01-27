@@ -8,7 +8,7 @@ import {
 } from "react-icons/go";
 import ComponentShell from "../../components/custom-ui/component-shell";
 import { Badge } from "@/src/components/shadcn-ui/badge";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
   DropdownMenu,
@@ -26,7 +26,7 @@ export default function ValuesCard({
   profile,
 }: ValuesCardProps): React.JSX.Element {
   const { handleDownload, handlePreview } = useAssessmentActions(
-    profile.valuesAssessmentPdf,
+    profile.valuesAssessmentPdf
   );
 
   return (

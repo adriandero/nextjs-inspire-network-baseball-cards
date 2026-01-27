@@ -25,7 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/src/components/shadcn-ui/alert-dialog";
 import { LinkButton } from "@/src/components/custom-ui/link-button";
-import { UserSanity } from "@/src/shared/entities/user";
+import { UserSanity } from "@/src/shared/entities/user.types";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home", external: false },

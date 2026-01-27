@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ProfileIdentifierTable } from "@/src/features/deck-builder/entities/profile-identifier-table.model";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 
 export function useProfileTableData(
   profileTables: ProfileIdentifierTable[],

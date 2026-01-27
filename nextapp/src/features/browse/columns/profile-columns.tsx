@@ -15,8 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
 
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 
 const ProfileNameCell = ({ row }: { row: Row<ProfileWithDetailedTeams> }) => {
   const router = useRouter();

@@ -1,5 +1,5 @@
-import { SanityAsset } from "./common";
-import { Company, CompanyWithDetails } from "./company";
+import { SanityAsset } from "./common.types";
+import { Company, CompanyWithDetails } from "./company.types";
 
 export interface Team {
   _id: string;

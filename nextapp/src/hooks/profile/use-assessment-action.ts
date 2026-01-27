@@ -1,7 +1,7 @@
-import { AssessmentPdfFile } from "@/src/shared/entities/profile";
+import { AssessmentPdfFile } from "@/src/shared/entities/profile.types";
 
 export function useAssessmentActions(
-  assessment: AssessmentPdfFile | null | undefined,
+  assessment: AssessmentPdfFile | null | undefined
 ) {
   const handleDownload = async () => {
     if (!assessment?.asset?.url) return;

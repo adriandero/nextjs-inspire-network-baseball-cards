@@ -1,4 +1,4 @@
-import { SanityAsset } from "./common";
+import { SanityAsset } from "./common.types";
 
 export interface Company {
   _id: string;

@@ -41,7 +41,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/shadcn-ui/dropdown-menu";
-import { KolbeStrength, Profile } from "@/src/shared/entities/profile";
+import { KolbeStrength, Profile } from "@/src/shared/entities/profile.types";
 import { useAssessmentActions } from "@/src/hooks/profile/use-assessment-action";
 
 interface KolbeStrengthRowProps {
@@ -114,7 +114,7 @@ export default function KolbeStrengthsCard({
   };
 
   const { handleDownload, handlePreview } = useAssessmentActions(
-    profile.kolbeAssessmentPdf,
+    profile.kolbeAssessmentPdf
   );
 
   return (

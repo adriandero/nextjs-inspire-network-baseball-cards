@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { TeamWithPopulatedCompany } from "@/src/shared/entities/team";
+import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 import {
   ProfileWithDetailedTeams,
   ProfilesByTeam,
-} from "@/src/shared/entities/profile";
+} from "@/src/shared/entities/profile.types";
 
 import {
   getAllProfiles,

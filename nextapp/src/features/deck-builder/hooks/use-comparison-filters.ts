@@ -3,7 +3,7 @@ import {
   CompareTypes,
   COMPARISON_ATTRIBUTES,
 } from "@/src/features/deck-builder/entities/compare-types";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { filterProfilesByArchetype } from "@/src/features/deck-builder/utils/profile-filters";
 

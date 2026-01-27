@@ -1,7 +1,7 @@
 import { getAllProfilesGroupedByTeam } from "@/src/lib/data/queries/profiles";
 import { NextResponse } from "next/server";
 import { getAuthorizedUser } from "@/src/lib/auth/permissions";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { getUserTeams } from "@/src/lib/data/queries/teams";
 
 export async function GET() {

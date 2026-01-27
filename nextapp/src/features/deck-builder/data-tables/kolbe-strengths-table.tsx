@@ -20,7 +20,7 @@ import {
 import { urlFor } from "@/src/lib/sanity/client";
 import { Progress } from "@/src/components/shadcn-ui/progress";
 import defaultAvatar from "@/public/images/default-avatar.png";
-import { Profile } from "@/src/shared/entities/profile";
+import { Profile } from "@/src/shared/entities/profile.types";
 import { getKolbeNumericValue, getKolbeDisplayValue } from "@/src/lib/utils";
 
 export interface KolbeStrengthsTableProps {

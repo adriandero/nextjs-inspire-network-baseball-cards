@@ -11,7 +11,7 @@ import {
   getKolbeDisplayValue,
   KolbeStrengthField,
 } from "@/src/lib/utils";
-import { KolbeStrength } from "@/src/shared/entities/profile";
+import { KolbeStrength } from "@/src/shared/entities/profile.types";
 
 interface PdfKolbeStrengthRowProps {
   strengthValue?: KolbeStrength;

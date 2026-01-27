@@ -2,7 +2,7 @@ import React from "react";
 import { TableCell, TableRow } from "@/src/components/shadcn-ui/table";
 import { flexRender, Row } from "@tanstack/react-table";
 import { useDraggable } from "@dnd-kit/core";
-import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile";
+import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 
 interface DraggableProfileRowProps {
   row: Row<ProfileWithDetailedTeams>;
