@@ -3,7 +3,7 @@ import {useClient, useFormValue} from 'sanity'
 import {Button, Card, Flex, Text} from '@sanity/ui'
 
 export const CreateCompanyField = (props: any) => {
-  const client = useClient({apiVersion: '2023-03-15'})
+  const client = useClient({apiVersion: '2024-01-01'})
 
   const [isCreating, setIsCreating] = useState(false)
   const [error, setError] = useState<string | null>(null)

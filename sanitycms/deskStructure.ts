@@ -14,6 +14,7 @@ export const structure = (S: any) =>
           S.documentList()
             .title('Teams')
             .filter('_type == "team"')
+            .apiVersion('2024-01-01')
             .child((teamId: any) =>
               S.list()
                 .title('Team Details')
@@ -28,6 +29,7 @@ export const structure = (S: any) =>
                       S.documentList()
                         .title('Team Members')
                         .filter('_type == "profile" && $teamId in team[]._ref')
+                        .apiVersion('2024-01-01')
                         .params({teamId}),
                     ),
                 ]),
@@ -39,6 +41,7 @@ export const structure = (S: any) =>
         .child(
           S.documentList()
             .title('Teamless Profiles')
-            .filter('_type == "profile" && !defined(team)'),
+            .filter('_type == "profile" && !defined(team)')
+            .apiVersion('2024-01-01'),
         ),
     ])

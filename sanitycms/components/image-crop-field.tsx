@@ -3,8 +3,8 @@ import {Stack, Card, Button, Flex, Text} from '@sanity/ui'
 import {UploadIcon, ImageIcon} from '@sanity/icons'
 import {set, ObjectInputProps} from 'sanity'
 import {useClient} from 'sanity'
-import imageUrlBuilder from '@sanity/image-url'
 import ImageCropper from './image-cropper'
+import {createImageUrlBuilder} from '@sanity/image-url'
 
 // Remove the custom ImageValue type - just use what Sanity provides
 export default function ImageCropField(props: ObjectInputProps) {
@@ -16,7 +16,7 @@ export default function ImageCropField(props: ObjectInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const client = useClient({apiVersion: '2024-01-01'})
-  const builder = imageUrlBuilder(client)
+  const builder = createImageUrlBuilder(client)
 
   const processImageFile = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -126,9 +126,6 @@ export default function ImageCropField(props: ObjectInputProps) {
 
   // Safely get image URL
   const imageUrl = hasImageAsset(value) ? builder.image(value).width(200).height(200).url() : null
-
-  console.log('Current value:', value)
-  console.log('Image URL:', imageUrl)
 
   return (
     <Stack space={4}>
