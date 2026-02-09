@@ -7,7 +7,7 @@ import { UserSanity } from "@/src/shared/entities/user.types";
 import { client } from "@/src/lib/sanity/client";
 
 export async function getTeamsForUser(
-  userProfileData: UserSanity
+  userProfileData: UserSanity,
 ): Promise<TeamWithPopulatedCompany[]> {
   if (userProfileData.permission === "Admin") {
     return getAllTeams();
@@ -52,7 +52,7 @@ export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
     const teams = await client.fetch<TeamWithPopulatedCompany[]>(
       query,
       {},
-      options
+      options,
     );
     return teams || [];
   } catch (error) {
@@ -62,7 +62,7 @@ export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
 }
 
 export async function getTeamBySlug(
-  slug: string
+  slug: string,
 ): Promise<TeamWithDetails | null> {
   if (!slug) return null;
 
@@ -115,7 +115,7 @@ export async function getTeamBySlug(
 
 // TODO: move this to data/users.ts
 export async function getUserTeams(
-  userEmail: string
+  userEmail: string,
 ): Promise<UserTeamsResponse | null> {
   if (!userEmail) return null;
 
@@ -172,11 +172,11 @@ export async function getUserTeams(
     if (!data) return null;
 
     // Add some debugging to see what's happening
-    console.log("Query result:", {
-      directTeams: data.directTeams?.length || 0,
-      profileTeams: data.profileTeams?.length || 0,
-      defaultTeam: data.defaultTeam ? "found" : "not found",
-    });
+    // console.log("Query result:", {
+    //   directTeams: data.directTeams?.length || 0,
+    //   profileTeams: data.profileTeams?.length || 0,
+    //   defaultTeam: data.defaultTeam ? "found" : "not found",
+    // });
 
     // Fast deduplication using Map for O(n) performance
     const teamMap = new Map<string, TeamWithPopulatedCompany>();
@@ -194,10 +194,8 @@ export async function getUserTeams(
 
     // Convert back to sorted array
     const teams = Array.from(teamMap.values()).sort((a, b) =>
-      a.name.localeCompare(b.name)
+      a.name.localeCompare(b.name),
     );
-
-    console.log("Final teams count:", teams.length);
 
     return { teams };
   } catch (error) {

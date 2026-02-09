@@ -4,6 +4,7 @@ import "../globals.css";
 import { Toaster } from "@/src/components/shadcn-ui/toaster";
 import { DynamicStatsigProvider } from "@/src/lib/utils/dynamic-statsig-provider";
 import { getUserSanity } from "@/src/lib/data/queries/users";
+import { getTeamsForUser } from "@/src/lib/data/queries/teams"; // Use existing method!
 import { statsigAdapter } from "@flags-sdk/statsig";
 import { auth0 } from "@/src/lib/auth0";
 import { PostHogProvider } from "@/src/shared/components/posthog-provider";
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
     icon: "images/favicon.ico",
   },
 };
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -46,10 +48,22 @@ export default async function RootLayout({
   };
 
   let sanityUserId: string | undefined;
+  let userTeams: Array<{ _id: string; name: string }> = [];
 
   if (session) {
     const userProfileData = await getUserSanity(session.user);
-    sanityUserId = userProfileData?._id; // Get Sanity document ID
+    sanityUserId = userProfileData?._id;
+
+    // Use your existing method to get teams
+    if (userProfileData) {
+      const teams = await getTeamsForUser(userProfileData);
+      // Map to the minimal data PostHog needs
+      userTeams = teams.map((team) => ({
+        _id: team._id,
+        name: team.name,
+      }));
+    }
+
     userData = {
       userID: session.user.sub,
       statsigEnvironment: {
@@ -72,7 +86,11 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} bg-mainbackground text-dark1`}
     >
       <body className="font-sans bg-mainbackground antialiased text-dark1 flex justify-center">
-        <PostHogProvider user={session?.user} sanityUserId={sanityUserId}>
+        <PostHogProvider
+          user={session?.user}
+          sanityUserId={sanityUserId}
+          teams={userTeams}
+        >
           <DynamicStatsigProvider datafile={datafile}>
             <main className="w-full max-w-screen-lg">{children}</main>
             <Toaster />
