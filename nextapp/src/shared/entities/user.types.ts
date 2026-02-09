@@ -1,4 +1,5 @@
 export interface UserSanity {
+  _id: string;
   email: string;
   image?: string;
   permission: "Admin" | "User" | "Guest";

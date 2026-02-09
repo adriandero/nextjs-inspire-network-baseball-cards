@@ -12,6 +12,7 @@ export async function getUserSanity(
 
   const query = `
     *[_type == "user" && email == $userEmail && !(_id in path('drafts.**'))][0] {
+      _id,
       email,
       image,
       permission,

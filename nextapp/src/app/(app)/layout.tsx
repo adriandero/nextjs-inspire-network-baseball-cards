@@ -6,6 +6,7 @@ import { DynamicStatsigProvider } from "@/src/lib/utils/dynamic-statsig-provider
 import { getUserSanity } from "@/src/lib/data/queries/users";
 import { statsigAdapter } from "@flags-sdk/statsig";
 import { auth0 } from "@/src/lib/auth0";
+import { PostHogProvider } from "@/src/shared/components/posthog-provider";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -44,8 +45,11 @@ export default async function RootLayout({
     },
   };
 
+  let sanityUserId: string | undefined;
+
   if (session) {
     const userProfileData = await getUserSanity(session.user);
+    sanityUserId = userProfileData?._id; // Get Sanity document ID
     userData = {
       userID: session.user.sub,
       statsigEnvironment: {
@@ -65,13 +69,15 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}  bg-mainbackground text-dark1`}
+      className={`${geistSans.variable} ${geistMono.variable} bg-mainbackground text-dark1`}
     >
       <body className="font-sans bg-mainbackground antialiased text-dark1 flex justify-center">
-        <DynamicStatsigProvider datafile={datafile}>
-          <main className="w-full max-w-screen-lg">{children}</main>
-          <Toaster />
-        </DynamicStatsigProvider>
+        <PostHogProvider user={session?.user} sanityUserId={sanityUserId}>
+          <DynamicStatsigProvider datafile={datafile}>
+            <main className="w-full max-w-screen-lg">{children}</main>
+            <Toaster />
+          </DynamicStatsigProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
