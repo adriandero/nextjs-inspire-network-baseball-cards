@@ -1,8 +1,11 @@
 import { writeClient } from "@/src/lib/sanity/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getProfileIdByEmail } from "@/src/lib/data/queries/profiles";
+import { getPostHogClient } from "@/src/lib/posthog/server";
 
 export async function POST(request: NextRequest) {
+  const posthog = getPostHogClient();
+
   try {
     // 1. Validate request is from Auth0
     const authHeader = request.headers.get("authorization");
@@ -20,7 +23,7 @@ export async function POST(request: NextRequest) {
     // 3. Check if user already exists (prevent duplicates)
     const existingUser = await writeClient.fetch(
       `*[_type == "user" && lower(email) == lower($email)][0]`,
-      { email: auth0User.email }
+      { email: auth0User.email },
     );
 
     if (existingUser) {
@@ -42,16 +45,36 @@ export async function POST(request: NextRequest) {
       ...(profileId && { profile: { _type: "reference", _ref: profileId } }),
     });
 
+    // 6. Track signup event in PostHog
+    posthog.capture({
+      distinctId: auth0User.sub || auth0User.user_id, // Auth0 user ID
+      event: "user_signed_up",
+      properties: {
+        email: auth0User.email,
+        sanityUserId: sanityUser._id,
+        profileLinked: !!profileId,
+        environment: process.env.NEXT_PUBLIC_ENVIRONMENT || "production",
+        signupDate: new Date().toISOString(),
+      },
+    });
+
+    // Important: Flush events before response
+    await posthog.shutdown();
+
     return NextResponse.json({
       success: true,
       userId: sanityUser._id,
-      profileLinked: !!profileId, // Let the client know if profile was linked
+      profileLinked: !!profileId,
     });
   } catch (error) {
     console.error("Sanity user sync failed:", error);
+
+    // Still flush PostHog events on error
+    await posthog.shutdown();
+
     return NextResponse.json(
       { error: "Failed to create user" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
