@@ -1,16 +1,14 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
-import { SanityDocument } from "next-sanity";
-
 import Banner from "@/src/features/deck-builder/components/data-tables/side-by-side/banner";
 import ValuesCard from "@/src/features/deck-builder/components/data-tables/side-by-side/values-card";
 import WorkingGeniusCard from "@/src/features/deck-builder/components/data-tables/side-by-side/working-genius-card";
 import PrinciplesYouCard from "@/src/features/deck-builder/components/data-tables/side-by-side/principles-you-card";
 import KolbeStrengthsCard from "@/src/features/deck-builder/components/data-tables/side-by-side/kolbe-strengths-card";
+import { Profile } from "@/src/shared/entities/profile.types";
 
 export interface SideBySideProps {
-  readonly profiles: SanityDocument[];
+  readonly profiles: Profile[];
   readonly tableName?: string;
   readonly showJobRole?: boolean;
   readonly columnCount?: number;
@@ -35,11 +33,8 @@ const useColumnCount = () => {
   return columns;
 };
 
-const chunkProfiles = (
-  profiles: SanityDocument[],
-  size: number
-): SanityDocument[][] => {
-  const chunks: SanityDocument[][] = [];
+const chunkProfiles = (profiles: Profile[], size: number): Profile[][] => {
+  const chunks: Profile[][] = [];
   for (let i = 0; i < profiles.length; i += size) {
     chunks.push(profiles.slice(i, i + size));
   }
@@ -153,14 +148,7 @@ const SideBySide: React.FC<SideBySideProps> = ({
           <div className="flex flex-col sm:flex-row gap-4 break-inside-avoid">
             {group.map((profile) => (
               <div key={profile._id} className="flex-1">
-                <KolbeStrengthsCard
-                  profile={profile}
-                  _id={""}
-                  _rev={""}
-                  _type={""}
-                  _createdAt={""}
-                  _updatedAt={""}
-                />
+                <KolbeStrengthsCard profile={profile} />
               </div>
             ))}{" "}
             {Array.from({ length: columns - group.length }).map((_, i) => (

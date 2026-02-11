@@ -1,5 +1,3 @@
-import { SanityDocument } from "next-sanity";
-
 import { GoLaw, GoRocket, GoSearch, GoTab, GoTools } from "react-icons/go";
 import React, { useState } from "react";
 import {
