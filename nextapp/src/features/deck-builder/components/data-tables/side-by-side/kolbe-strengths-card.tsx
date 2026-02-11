@@ -24,7 +24,7 @@ import { Progress } from "@/src/components/shadcn-ui/progress";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { CollapseAll } from "@/src/shared/assets/icons/collapse-all";
 import { ExpandAll } from "@/src/shared/assets/icons/expand-all";
-import { KolbeStrength } from "@/src/shared/entities/profile.types";
+import { KolbeStrength, Profile } from "@/src/shared/entities/profile.types";
 
 interface DeckBuilderKolbeStrengthRowProps {
   accordionValue: string;
@@ -80,8 +80,10 @@ export function DeckBuilderKolbeStrengthRow({
 }
 export default function KolbeStrengthsCard({
   profile,
-}: SanityDocument): React.JSX.Element {
-  const kolbeObj = profile.kolbeStrengths;
+}: {
+  profile: Profile;
+}): React.JSX.Element {
+  const kolbeObj = profile.kolbeStrengths2;
 
   const [openItems, setOpenItems] = useState<string[]>([]);
   const allItems = ["item-1", "item-2", "item-3", "item-4"];

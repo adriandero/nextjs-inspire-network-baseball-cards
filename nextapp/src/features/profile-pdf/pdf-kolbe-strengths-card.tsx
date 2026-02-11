@@ -54,7 +54,7 @@ export default function PdfKolbeStrengthsCard({
   profile,
   className,
 }: SanityDocument): React.JSX.Element {
-  const kolbeObj = profile.kolbeStrengths;
+  const kolbeObj = profile.kolbeStrengths2;
 
   return (
     <div className={`${className} flex`}>
