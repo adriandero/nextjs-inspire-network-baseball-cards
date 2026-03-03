@@ -1,7 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
 import posthog from "posthog-js";
+
+type Team = { _id: string; name: string };
+
+const TeamsContext = createContext<Team[]>([]);
 
 interface PostHogProviderProps {
   children: React.ReactNode;
@@ -11,7 +15,7 @@ interface PostHogProviderProps {
     name?: string;
   } | null;
   sanityUserId?: string;
-  teams?: Array<{ _id: string; name: string }>;
+  teams?: Team[];
 }
 
 export function PostHogProvider({
@@ -22,7 +26,6 @@ export function PostHogProvider({
 }: PostHogProviderProps) {
   useEffect(() => {
     if (user) {
-      // 1. Identify the user
       posthog.identify(user.sub, {
         email: user.email,
         name: user.name,
@@ -32,11 +35,9 @@ export function PostHogProvider({
         teamNames: teams.map((t) => t.name),
       });
 
-      // 2. Associate user with their teams using Groups
+      // Register each team as a group so PostHog knows the group metadata
       teams.forEach((team) => {
-        posthog.group("team", team._id, {
-          name: team.name,
-        });
+        posthog.group("team", team._id, { name: team.name });
       });
 
       console.log(
@@ -44,10 +45,33 @@ export function PostHogProvider({
         teams.map((t) => t.name),
       );
     } else {
-      // User logged out
       posthog.reset();
     }
   }, [user, sanityUserId, teams]);
 
-  return <>{children}</>;
+  return (
+    <TeamsContext.Provider value={teams}>{children}</TeamsContext.Provider>
+  );
+}
+
+/**
+ * Returns a capture function that broadcasts an event to all of the current
+ * user's teams by firing one posthog.capture() per team with $groups set.
+ * This lets PostHog attribute the event to each team independently.
+ *
+ * Usage:
+ *   const capture = useCaptureForTeams();
+ *   capture("page_viewed", { page: "dashboard" });
+ */
+export function useCaptureForTeams() {
+  const teams = useContext(TeamsContext);
+
+  return (eventName: string, properties?: Record<string, unknown>) => {
+    teams.forEach((team) => {
+      posthog.capture(eventName, {
+        ...properties,
+        $groups: { team: team._id },
+      });
+    });
+  };
 }
