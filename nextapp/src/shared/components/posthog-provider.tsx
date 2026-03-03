@@ -35,9 +35,10 @@ export function PostHogProvider({
         teamNames: teams.map((t) => t.name),
       });
 
-      // Register each team as a group so PostHog knows the group metadata
+      // Register each team as a group so PostHog knows the group metadata.
+      // Use team.name as the group key so PostHog displays names in breakdowns.
       teams.forEach((team) => {
-        posthog.group("team", team._id, { name: team.name });
+        posthog.group("team", team.name, { name: team.name, id: team._id });
       });
 
       console.log(
@@ -70,7 +71,7 @@ export function useCaptureForTeams() {
     teams.forEach((team) => {
       posthog.capture(eventName, {
         ...properties,
-        $groups: { team: team._id },
+        $groups: { team: team.name },
       });
     });
   };
