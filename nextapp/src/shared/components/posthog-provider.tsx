@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
 
 type Team = { _id: string; name: string };
@@ -16,6 +17,17 @@ interface PostHogProviderProps {
   } | null;
   sanityUserId?: string;
   teams?: Team[];
+}
+
+function PageviewTracker() {
+  const pathname = usePathname();
+  const capture = useCaptureForTeams();
+
+  useEffect(() => {
+    capture("$pageview", { $current_url: window.location.href, pathname });
+  }, [pathname]);
+
+  return null;
 }
 
 export function PostHogProvider({
@@ -51,7 +63,10 @@ export function PostHogProvider({
   }, [user, sanityUserId, teams]);
 
   return (
-    <TeamsContext.Provider value={teams}>{children}</TeamsContext.Provider>
+    <TeamsContext.Provider value={teams}>
+      <PageviewTracker />
+      {children}
+    </TeamsContext.Provider>
   );
 }
 
@@ -68,6 +83,7 @@ export function useCaptureForTeams() {
   const teams = useContext(TeamsContext);
 
   return (eventName: string, properties?: Record<string, unknown>) => {
+    console.log(`📊 PostHog capture "${eventName}" broadcasting to teams:`, teams.map((t) => t.name));
     teams.forEach((team) => {
       posthog.capture(eventName, {
         ...properties,
