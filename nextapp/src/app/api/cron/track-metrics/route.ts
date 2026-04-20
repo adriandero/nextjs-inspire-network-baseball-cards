@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/src/lib/sanity/client";
-import { getPostHogClient } from "@/src/lib/posthog/server";
+import { getPostHogClient, resetPostHogClient } from "@/src/lib/posthog/server";
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,9 +9,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const teamCount = await client.fetch<number>(`count(*[_type == "team"])`);
+    const teamCount = await client.fetch<number>(
+      `count(*[_type == "team" && !(_id in path('drafts.**'))])`,
+    );
 
-    const userCount = await client.fetch<number>(`count(*[_type == "user"])`);
+    const userCount = await client.fetch<number>(
+      `count(*[_type == "user" && !(_id in path('drafts.**'))])`,
+    );
 
     const posthog = getPostHogClient();
 
@@ -30,6 +34,7 @@ export async function GET(request: NextRequest) {
 
     console.log("⏳ Flushing PostHog events...");
     await posthog.shutdown();
+    resetPostHogClient();
     console.log("✅ PostHog events flushed");
 
     return NextResponse.json({
