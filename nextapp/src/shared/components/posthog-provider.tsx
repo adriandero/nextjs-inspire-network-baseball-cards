@@ -48,9 +48,16 @@ export function PostHogProvider({
       });
 
       // Register each team as a group so PostHog knows the group metadata.
-      // Use team.name as the group key so PostHog displays names in breakdowns.
       teams.forEach((team) => {
-        posthog.group("team", team.name, { name: team.name, id: team._id });
+        posthog.group("team", team._id, { name: team.name });
+      });
+
+      // Fire a usage event for EACH team so all teams get credit on the leaderboard.
+      teams.forEach((team) => {
+        posthog.capture("team_app_usage", {
+          team_id: team._id,
+          team_name: team.name,
+        });
       });
 
       console.log(
