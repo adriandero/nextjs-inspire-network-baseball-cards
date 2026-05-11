@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const teamCount = await client.fetch<number>(`count(*[_type == "team"])`);
+    const teamCount = await client.fetch<number>(`count(*[_type == "team" && groups == "client"])`);
 
     const userCount = await client.fetch<number>(`count(*[_type == "user"])`);
 
