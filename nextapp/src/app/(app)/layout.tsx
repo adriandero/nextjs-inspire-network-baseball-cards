@@ -4,7 +4,7 @@ import "../globals.css";
 import { Toaster } from "@/src/components/shadcn-ui/toaster";
 import { DynamicStatsigProvider } from "@/src/lib/utils/dynamic-statsig-provider";
 import { getUserSanity } from "@/src/lib/data/queries/users";
-import { getTeamsForUser } from "@/src/lib/data/queries/teams"; // Use existing method!
+import {  getUserTeams } from "@/src/lib/data/queries/teams"; // Use existing method!
 import { statsigAdapter } from "@flags-sdk/statsig";
 import { auth0 } from "@/src/lib/auth0";
 import { PostHogProvider } from "@/src/shared/components/posthog-provider";
@@ -54,11 +54,9 @@ export default async function RootLayout({
     const userProfileData = await getUserSanity(session.user);
     sanityUserId = userProfileData?._id;
 
-    // Use your existing method to get teams
     if (userProfileData) {
-      const teams = await getTeamsForUser(userProfileData);
-      // Map to the minimal data PostHog needs
-      userTeams = teams.map((team) => ({
+      const teamsResponse = await getUserTeams(userProfileData.email);
+      userTeams = (teamsResponse?.teams ?? []).map((team) => ({
         _id: team._id,
         name: team.name,
       }));

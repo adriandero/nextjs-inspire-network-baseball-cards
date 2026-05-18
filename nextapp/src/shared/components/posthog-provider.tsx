@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
+
+type Team = { _id: string; name: string };
+
+const TeamsContext = createContext<Team[]>([]);
 
 interface PostHogProviderProps {
   children: React.ReactNode;
@@ -11,7 +16,18 @@ interface PostHogProviderProps {
     name?: string;
   } | null;
   sanityUserId?: string;
-  teams?: Array<{ _id: string; name: string }>;
+  teams?: Team[];
+}
+
+function PageviewTracker() {
+  const pathname = usePathname();
+  const capture = useCaptureForTeams();
+
+  useEffect(() => {
+    capture("$pageview", { $current_url: window.location.href, pathname });
+  }, [pathname]);
+
+  return null;
 }
 
 export function PostHogProvider({
@@ -22,7 +38,6 @@ export function PostHogProvider({
 }: PostHogProviderProps) {
   useEffect(() => {
     if (user) {
-      // 1. Identify the user
       posthog.identify(user.sub, {
         email: user.email,
         name: user.name,
@@ -32,10 +47,16 @@ export function PostHogProvider({
         teamNames: teams.map((t) => t.name),
       });
 
-      // 2. Associate user with their teams using Groups
+      // Register each team as a group so PostHog knows the group metadata.
       teams.forEach((team) => {
-        posthog.group("team", team._id, {
-          name: team.name,
+        posthog.group("team", team._id, { name: team.name });
+      });
+
+      // Fire a usage event for EACH team so all teams get credit on the leaderboard.
+      teams.forEach((team) => {
+        posthog.capture("team_app_usage", {
+          team_id: team._id,
+          team_name: team.name,
         });
       });
 
@@ -44,10 +65,37 @@ export function PostHogProvider({
         teams.map((t) => t.name),
       );
     } else {
-      // User logged out
       posthog.reset();
     }
   }, [user, sanityUserId, teams]);
 
-  return <>{children}</>;
+  return (
+    <TeamsContext.Provider value={teams}>
+      <PageviewTracker />
+      {children}
+    </TeamsContext.Provider>
+  );
+}
+
+/**
+ * Returns a capture function that broadcasts an event to all of the current
+ * user's teams by firing one posthog.capture() per team with $groups set.
+ * This lets PostHog attribute the event to each team independently.
+ *
+ * Usage:
+ *   const capture = useCaptureForTeams();
+ *   capture("page_viewed", { page: "dashboard" });
+ */
+export function useCaptureForTeams() {
+  const teams = useContext(TeamsContext);
+
+  return (eventName: string, properties?: Record<string, unknown>) => {
+    console.log(`📊 PostHog capture "${eventName}" broadcasting to teams:`, teams.map((t) => t.name));
+    teams.forEach((team) => {
+      posthog.capture(eventName, {
+        ...properties,
+        $groups: { team: team.name },
+      });
+    });
+  };
 }

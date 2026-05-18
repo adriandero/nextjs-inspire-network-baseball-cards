@@ -1,1 +1,1 @@
-export const NEXTJS_URL = 'http://localhost:3000'
+export const NEXTJS_URL = import.meta.env.SANITY_STUDIO_NEXTJS_URL ?? 'http://localhost:3000'
