@@ -4,6 +4,7 @@ import {DocumentActionComponent} from 'sanity'
 import {SparklesIcon} from '@sanity/icons'
 import {useState, useCallback} from 'react'
 import {Button, Card, Stack, Text} from '@sanity/ui'
+import {NEXTJS_URL} from '../values'
 
 // Keep your AutoPopulateAllAction
 export const AutoPopulateAllAction: DocumentActionComponent = (props) => {
@@ -19,8 +20,7 @@ export const AutoPopulateAllAction: DocumentActionComponent = (props) => {
       setIsLoading(true)
 
       try {
-        const apiUrl = 'http://localhost:3000'
-        const response = await fetch(`${apiUrl}/api/cms/auto-populate`, {
+        const response = await fetch(`${NEXTJS_URL}/api/cms/auto-populate`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -77,8 +77,7 @@ export const AutoPopulateSpecificAction: DocumentActionComponent = (props) => {
       setLoadingField(pdfField)
 
       try {
-        const apiUrl = 'http://localhost:3000'
-        const response = await fetch(`${apiUrl}/api/cms/auto-populate`, {
+        const response = await fetch(`${NEXTJS_URL}/api/cms/auto-populate`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({

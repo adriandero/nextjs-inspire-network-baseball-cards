@@ -53,60 +53,46 @@ export async function POST(req: NextRequest) {
 
     // Try to fetch the document - first as published, then as draft
     let document: SanityDocument | undefined = undefined;
+    let publishedFetchError: string | null = null;
+    let draftFetchError: string | null = null;
 
     try {
       const fetchedDoc =
         await writeClient.getDocument<SanityDocument>(documentId);
-      console.log(
-        "📄 Fetched document:",
-        fetchedDoc ? "exists" : "undefined",
-        fetchedDoc?._id,
-      );
-
       if (fetchedDoc && fetchedDoc._id) {
         document = fetchedDoc;
-        console.log("✅ Document fetched (published):", document._id);
       }
     } catch (error) {
-      console.log("⚠️ Error fetching published document:", error);
+      publishedFetchError = error instanceof Error ? error.message : String(error);
     }
 
     // If not found, try draft version
     if (!document) {
-      console.log("⚠️ Document not found as published, trying draft...");
       const draftId = `drafts.${documentId}`;
-
       try {
         const fetchedDoc =
           await writeClient.getDocument<SanityDocument>(draftId);
-        console.log(
-          "📄 Fetched draft document:",
-          fetchedDoc ? "exists" : "undefined",
-          fetchedDoc?._id,
-        );
-
         if (fetchedDoc && fetchedDoc._id) {
           document = fetchedDoc;
-          documentId = draftId; // Update for patching later
-          console.log("✅ Document fetched (draft):", document._id);
+          documentId = draftId;
         }
       } catch (draftError) {
-        console.log("⚠️ Error fetching draft document:", draftError);
+        draftFetchError = draftError instanceof Error ? draftError.message : String(draftError);
       }
     }
 
     if (!document || !document._id) {
-      console.error("❌ Document not found with ID:", documentId);
-      console.error("Sanity client config:", {
-        projectId: process.env.NEXT_SANITY_PROJECT_ID,
-        dataset: process.env.NEXT_SANITY_DATASET,
-        hasToken: !!process.env.SANITY_API_TOKEN,
-      });
-
       return NextResponse.json(
         {
           success: false,
-          error: `Document not found with ID: ${documentId}. Make sure the document exists, is saved, and your Sanity token has read permissions.`,
+          error: `Document not found with ID: ${documentId}.`,
+          debug: {
+            projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+            dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+            hasWriteToken: !!process.env.SANITY_API_WRITE_TOKEN,
+            publishedFetchError,
+            draftFetchError,
+          },
         },
         {
           status: 404,
