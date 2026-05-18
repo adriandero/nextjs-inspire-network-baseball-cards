@@ -309,7 +309,7 @@ async function fetchPdfAsBase64(assetRef: string): Promise<PdfData> {
   console.log("🔑 Extracted asset ID:", assetId);
 
   // Construct Sanity CDN URL
-  const url = `https://cdn.sanity.io/files/${process.env.NEXT_SANITY_PROJECT_ID}/${process.env.NEXT_SANITY_DATASET}/${assetId}.pdf`;
+  const url = `https://cdn.sanity.io/files/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${assetId}.pdf`;
   console.log("🌐 Fetching from URL:", url);
 
   const response = await fetch(url);
