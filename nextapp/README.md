@@ -152,7 +152,7 @@ Auth is checked at the layout level via `auth0.getSession()`. API routes use `ge
   npx shadcn@latest add <component>
   ```
 - **Radix UI** primitives are used directly where shadcn doesn't cover the use case.
-- **Lucide React** is the icon library.
+- **`react-icons/go`** (GitHub Octicons) is the primary icon library used throughout the app. **`react-icons/pi`** (Phosphor Icons) is used in a few places. Lucide React is present but only as an internal dependency of shadcn/ui components — don't use it directly for new app icons.
 - Fonts are loaded via `next/font` (Geist). Do not add font files manually unless absolutely necessary.
 
 ---
