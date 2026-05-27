@@ -41,6 +41,7 @@ Dependencies are managed at the workspace level. Always run `npm install` from t
 |---|---|
 | Framework | Next.js 16 (App Router), React 19, TypeScript 5 |
 | Styling | Tailwind CSS 3.4, Radix UI, shadcn/ui |
+| Icons | `react-icons/go` (GitHub Octicons) — primary icon library; `react-icons/pi` (Phosphor) — used in a few places; Lucide React — bundled internally by shadcn/ui, not used directly in app code |
 | CMS | Sanity.io v5 |
 | Auth | Auth0 (`@auth0/nextjs-auth0` v4) |
 | AI | Anthropic Claude (`@anthropic-ai/sdk`) |
