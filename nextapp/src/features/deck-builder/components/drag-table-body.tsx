@@ -55,20 +55,32 @@ export function GenericTableBody<T>({
   const rowHeight = 56;
   const overscan = 8;
   const viewportHeight = 646;
-  const firstVisibleIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);
-  const lastVisibleIndex = Math.min(rows.length, Math.ceil((scrollTop + viewportHeight) / rowHeight) + overscan);
+  const firstVisibleIndex = Math.max(
+    0,
+    Math.floor(scrollTop / rowHeight) - overscan,
+  );
+  const lastVisibleIndex = Math.min(
+    rows.length,
+    Math.ceil((scrollTop + viewportHeight) / rowHeight) + overscan,
+  );
   const visibleRows = rows.slice(firstVisibleIndex, lastVisibleIndex);
   const handleScroll = useCallback(() => {
     const element = scrollRef.current;
     if (!element) return;
     setScrollTop(element.scrollTop);
-    if (hasMore && !isLoadingMore && element.scrollTop + element.clientHeight >= element.scrollHeight - rowHeight * 5) {
+    if (
+      hasMore &&
+      !isLoadingMore &&
+      element.scrollTop + element.clientHeight >=
+        element.scrollHeight - rowHeight * 5
+    ) {
       onLoadMore();
     }
   }, [hasMore, isLoadingMore, onLoadMore]);
 
   const shouldShowSkeleton =
-    useSkeletonLoading && (isLoading && !hasData || (!hasData && !hasLoadedOnce));
+    useSkeletonLoading &&
+    ((isLoading && !hasData) || (!hasData && !hasLoadedOnce));
 
   if (shouldShowSkeleton) {
     return (
@@ -84,7 +96,11 @@ export function GenericTableBody<T>({
 
   return (
     <>
-      <div ref={scrollRef} onScroll={handleScroll} className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto"
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -105,9 +121,25 @@ export function GenericTableBody<T>({
           <TableBody>
             {hasData ? (
               <>
-                <TableRow aria-hidden="true"><TableCell colSpan={columns.length} style={{ height: firstVisibleIndex * rowHeight, padding: 0 }} /></TableRow>
+                <TableRow aria-hidden="true">
+                  <TableCell
+                    colSpan={columns.length}
+                    style={{
+                      height: firstVisibleIndex * rowHeight,
+                      padding: 0,
+                    }}
+                  />
+                </TableRow>
                 {visibleRows.map((row) => renderRow(row))}
-                <TableRow aria-hidden="true"><TableCell colSpan={columns.length} style={{ height: (rows.length - lastVisibleIndex) * rowHeight, padding: 0 }} /></TableRow>
+                <TableRow aria-hidden="true">
+                  <TableCell
+                    colSpan={columns.length}
+                    style={{
+                      height: (rows.length - lastVisibleIndex) * rowHeight,
+                      padding: 0,
+                    }}
+                  />
+                </TableRow>
               </>
             ) : (
               <TableRow>
@@ -126,8 +158,8 @@ export function GenericTableBody<T>({
         <div className="flex-1 text-sm text-muted-foreground">
           {isLoading ? null : (
             <>
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} TUG Cards selected.
+              {table.getFilteredSelectedRowModel().rows.length} TUG Cards
+              selected.
             </>
           )}
         </div>
