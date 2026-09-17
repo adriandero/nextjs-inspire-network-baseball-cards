@@ -9,6 +9,8 @@ import {
   GroupedProfilesResponse,
   TeamWithProfiles,
 } from "@/src/shared/entities/profile.types";
+import { CursorPage } from "@/src/shared/entities/pagination.types";
+import { toCursorPage } from "@/src/lib/data/pagination";
 
 export async function getProfileByUuid(
   uuid: string
@@ -432,8 +434,16 @@ export async function getProfilesFromUserTeams(
   }
 }
 
-export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
-  const query = `*[ _type == "profile" && !(_id in path('drafts.**'))] {
+export async function getProfilesPage(
+  limit: number,
+  cursor: string | null,
+  userEmail?: string,
+  userTeamSlugs?: string[],
+): Promise<CursorPage<ProfileWithDetailedTeams>> {
+  const filter = userEmail
+    ? `&& count((team[]->slug.current)[@ in $userTeamSlugs]) > 0`
+    : "";
+  const query = `*[ _type == "profile" && !(_id in path('drafts.**')) ${filter} ${cursor ? "&& _id > $cursor" : ""}] | order(_id asc) [0...$pageSize] {
     _id,
     _type,   
     _rev,               
@@ -468,14 +478,27 @@ export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
   try {
     const profiles = await client.fetch<ProfileWithDetailedTeams[]>(
       query,
-      {},
+      { pageSize: limit + 1, ...(cursor ? { cursor } : {}), ...(userEmail ? { userEmail, userTeamSlugs } : {}) },
       options
     );
-    return profiles || [];
+    const page = profiles || [];
+    return toCursorPage(page, limit);
   } catch (error) {
     console.error("Failed to fetch all profiles:", error);
     throw new Error("Unable to fetch profiles");
   }
+}
+
+export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
+  const profiles: ProfileWithDetailedTeams[] = [];
+  let cursor: string | null = null;
+  do {
+    const page = await getProfilesPage(100, cursor);
+    profiles.push(...page.data);
+    cursor = page.nextCursor;
+    if (!page.hasMore) break;
+  } while (cursor);
+  return profiles;
 }
 //
 // export async function getProfilesAssessmentPdf(

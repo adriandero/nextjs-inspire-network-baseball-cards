@@ -5,6 +5,8 @@ import {
 } from "@/src/shared/entities/team.types";
 import { UserSanity } from "@/src/shared/entities/user.types";
 import { client } from "@/src/lib/sanity/client";
+import { CursorPage } from "@/src/shared/entities/pagination.types";
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, toCursorPage } from "@/src/lib/data/pagination";
 
 export async function getTeamsForUser(
   userProfileData: UserSanity,
@@ -18,6 +20,24 @@ export async function getTeamsForUser(
 }
 
 export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
+  const teams: TeamWithPopulatedCompany[] = [];
+  let cursor: string | null = null;
+  do {
+    const page = await getTeamsPage(100, cursor);
+    teams.push(...page.data);
+    cursor = page.nextCursor;
+    if (!page.hasMore) break;
+  } while (cursor);
+  return teams;
+}
+
+export async function getTeamsPage(
+  limit: number,
+  cursor: string | null,
+): Promise<CursorPage<TeamWithPopulatedCompany>> {
+  if (!Number.isInteger(limit) || limit < 1 || limit > MAX_PAGE_SIZE) {
+    throw new Error(`limit must be an integer between 1 and ${MAX_PAGE_SIZE}`);
+  }
   const query = `*[ _type == "team" && !(_id in path('drafts.**'))] {
     _id,
     name,    
@@ -46,15 +66,20 @@ export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
     groups
   }`;
 
+  const paginatedQuery = query.replace(
+    `*[ _type == "team" && !(_id in path('drafts.**'))]`,
+    `*[ _type == "team" && !(_id in path('drafts.**')) ${cursor ? "&& _id > $cursor" : ""}] | order(_id asc) [0...$pageSize]`,
+  );
   const options = { next: { revalidate: 30 } };
 
   try {
     const teams = await client.fetch<TeamWithPopulatedCompany[]>(
-      query,
-      {},
+      paginatedQuery,
+      { pageSize: limit + 1, ...(cursor ? { cursor } : {}) },
       options,
     );
-    return teams || [];
+    const page = teams || [];
+    return toCursorPage(page, limit);
   } catch (error) {
     console.error("Failed to fetch all teams:", error);
     throw new Error("Unable to fetch teams");

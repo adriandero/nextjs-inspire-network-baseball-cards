@@ -62,6 +62,46 @@ function projectProfile(profile: TestProfile) {
 
 const fakeClient = {
   async fetch<T>(query: string, params: Record<string, unknown> = {}): Promise<T> {
+    if (
+      query.includes('"teams": *[_type == "team"') &&
+      query.includes("references(^._id)")
+    ) {
+      return {
+        teams: data.teams.map((team) => ({
+          slug: team.slug,
+          name: team.name,
+          profiles: data.profiles
+            .filter((profile) => profile.team.some((profileTeam) => profileTeam.slug === team.slug))
+            .map((profile) => ({
+              _id: profile._id,
+              _type: profile._type,
+              name: profile.name,
+              uuid: profile.uuid,
+              slug: profile.slug,
+              jobRole: profile.jobRole,
+            })),
+        })),
+      } as T;
+    }
+
+    if (query.includes('"pageSize"') || params.pageSize) {
+      const pageSize = Number(params.pageSize);
+      const cursor = params.cursor as string | undefined;
+      const after = cursor ? data.profiles.findIndex((profile) => profile._id === cursor) + 1 : 0;
+      if (query.includes('_type == "profile"')) {
+        const allowedSlugs = new Set((params.userTeamSlugs as string[] | undefined) ?? []);
+        const profiles = data.profiles
+          .filter((profile) => !params.userTeamSlugs || profile.team.some((team) => allowedSlugs.has(team.slug)))
+          .sort((a, b) => a._id.localeCompare(b._id))
+          .slice(after, after + pageSize)
+          .map(projectProfile);
+        return profiles as T;
+      }
+      const sortedTeams = data.teams.slice().sort((a, b) => a._id.localeCompare(b._id));
+      const teamAfter = cursor ? sortedTeams.findIndex((team) => team._id === cursor) + 1 : 0;
+      return sortedTeams.slice(teamAfter, teamAfter + pageSize) as T;
+    }
+
     if (query.includes('slug.current == $slug')) {
       return (data.teams.find((team) => team.slug === params.slug) ?? null) as T;
     }

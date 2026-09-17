@@ -28,22 +28,23 @@ export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
 }
 
 export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {
-  const response = await fetch("/api/teams/all");
-
-  if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error("Unauthorized - please log in");
+  const teams: TeamWithPopulatedCompany[] = [];
+  let cursor: string | null = null;
+  do {
+    const searchParams = new URLSearchParams({ limit: "100" });
+    if (cursor) searchParams.set("cursor", cursor);
+    const response = await fetch(`/api/cms/teams/all?${searchParams}`);
+    if (!response.ok) {
+      if (response.status === 401) throw new Error("Unauthorized - please log in");
+      if (response.status === 403) throw new Error("Forbidden - admin access required");
+      throw new Error(`Failed to fetch all teams: ${response.status} ${response.statusText}`);
     }
-    if (response.status === 403) {
-      throw new Error("Forbidden - admin access required");
-    }
-    throw new Error(
-      `Failed to fetch all teams: ${response.status} ${response.statusText}`
-    );
-  }
-
-  const teams = await response.json();
-  return teams || [];
+    const page = await response.json();
+    teams.push(...(page.data ?? []));
+    cursor = page.nextCursor;
+    if (!page.hasMore) break;
+  } while (cursor);
+  return teams;
 }
 
 export async function getTeamBySlug(

@@ -129,16 +129,19 @@ export async function getProfilesFromUserTeams(
 }
 
 export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
-  const response = await fetch("/api/cms/profiles");
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch profiles: ${response.status} ${response.statusText}`
-    );
-  }
-
-  const profiles = await response.json();
-  return profiles || [];
+  const profiles: ProfileWithDetailedTeams[] = [];
+  let cursor: string | null = null;
+  do {
+    const searchParams = new URLSearchParams({ limit: "100" });
+    if (cursor) searchParams.set("cursor", cursor);
+    const response = await fetch(`/api/cms/profiles?${searchParams}`);
+    if (!response.ok) throw new Error(`Failed to fetch profiles: ${response.status} ${response.statusText}`);
+    const page = await response.json();
+    profiles.push(...(page.data ?? []));
+    cursor = page.nextCursor;
+    if (!page.hasMore) break;
+  } while (cursor);
+  return profiles;
 }
 
 export async function getTeamProfiles(
