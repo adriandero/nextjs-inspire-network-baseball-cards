@@ -2,11 +2,13 @@
   "name": "nextapp",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:integration": "node --import tsx --test --experimental-test-module-mocks \"src/tests/integration/**/*.integration.test.ts\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
@@ -67,6 +69,7 @@
     "eslint-config-next": "15.2.3",
     "postcss": "^8",
     "prettier": "^3.4.2",
+    "tsx": "^4.23.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
