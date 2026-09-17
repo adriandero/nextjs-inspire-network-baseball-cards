@@ -4,8 +4,7 @@ import {createClient} from '@sanity/client'
 const client = createClient({
   projectId: '8hl62j77',
   dataset: 'production',
-  token:
-    'sk40AfSmQJ1qDDTcL7KEE4rlnYqhvLsjVC1iLNALtoO6pLcBaJ6CuAHAI3UK6fjST6X3WQrE06THCkQE315zbir3b83Qxbpy5GG7beznQJWUtAcbIRRpKb63aSHS1xVHFVhTCRa7yQYFVLstoAX2hFXySgYiMWvoasBfkoepw9g87TvALS39', // Need write token for mutations
+  token: '', // Need write token for mutations
   apiVersion: '2024-01-01',
   useCdn: false,
 })

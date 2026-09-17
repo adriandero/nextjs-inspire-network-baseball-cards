@@ -1,23 +1,102 @@
 # IN – TUG Cards
 
-A web application for viewing and building team profile cards based on workplace assessments (Working Genius, Kolbe, Principle You, and Values). Built as a monorepo containing a Next.js web app and a Sanity.io content studio.
+> A team-intelligence product concept for helping people understand how they communicate, contribute, and work together.
+
+TUG Cards is a working product prototype that turns workplace-assessment data into accessible individual and team profiles. It brings together signals from Working Genius, Kolbe, Principle You, and Values to create a shared language for coaching, collaboration, and team development.
+
+## Project status
+
+This repository is an intentional snapshot of a working prototype and a product exploration. The core experience is functional; taking it further would depend on validating how coaches and team leaders use the cards in real conversations and team sessions.
+
+This is an independent prototype inspired by the ideas behind *The Inspire Code* and assessment-based team development. It is not presented as an official Inspire Network product.
+
+## Why I built this
+
+I read [*The Inspire Code*](https://www.theinspirecodebook.com/) by Saša Mirković, a practical framework for building self-leading teams through trust, ownership, and shared purpose. The idea that stayed with me was that teams often do not need more management—they need better visibility into how people communicate, contribute, make decisions, and support one another.
+
+That led me to explore a practical question:
+
+> How could team insight become something people could actually use in coaching, team development, and everyday collaboration?
+
+I built TUG Cards as an answer to that question. The goal is not to reduce people to scores or labels, but to give teams a useful starting point for discussing strengths, working styles, communication patterns, and potential sources of friction.
+
+## What this project demonstrates
+
+- Translating an abstract leadership and coaching concept into a concrete product experience
+- Modeling several assessment frameworks in one coherent application
+- Building individual profiles, team views, permissions, and shareable PDF outputs
+- Designing a content and data workflow that can be managed through a CMS
+- Integrating authentication, analytics, feature flags, and AI-assisted data entry
+- Making a complex internal data model understandable to the end user
+
+## Current MVP Scope
+
+I designed and built the product architecture and user experience, modeled the team and assessment data, implemented the Next.js application and Sanity content studio, and integrated Auth0, PDF generation, analytics, feature flags, and Claude-assisted profile extraction.
+
+## What I learned
+
+The difficult part was not displaying assessment data. It was combining different frameworks into one experience without overwhelming the user or making the profiles feel overly deterministic.
+
+The project also made the product challenge clear: the value of the cards is not the data itself, but the conversations and decisions the data enables. If I continued the project, I would focus first on observing coaches and team leaders using the cards, then use those observations to shape the next product iteration.
+
+## Current scope and next validation questions
+
+The current version supports authentication, team and profile management, multiple assessment frameworks, PDF-based profile creation, team views, permissions, analytics, and AI-assisted data extraction.
+
+The next questions I would investigate are:
+
+- Which parts of the cards lead to the most useful coaching conversations?
+- Do coaches need a guided team-session workflow?
+- Which assessment data is genuinely actionable in day-to-day work?
+- How should teams revisit and update their profiles over time?
+
+## Technical overview
+
+The repository is a monorepo containing a Next.js web application, a Sanity.io content studio, and an Auth0 post-registration action.
 
 ---
 
 ## Table of Contents
 
-- [Monorepo Structure](#monorepo-structure)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Architecture Overview](#architecture-overview)
-- [Key Integrations](#key-integrations)
-- [API Routes](#api-routes)
-- [Auth0 Setup](#auth0-setup)
-- [Scripts](#scripts)
-- [Deployment](#deployment)
-- [Code Conventions](#code-conventions)
+- [IN – TUG Cards](#in--tug-cards)
+  - [Project status](#project-status)
+  - [Why I built this](#why-i-built-this)
+  - [What this project demonstrates](#what-this-project-demonstrates)
+  - [Current MVP Scope](#current-mvp-scope)
+  - [What I learned](#what-i-learned)
+  - [Current scope and next validation questions](#current-scope-and-next-validation-questions)
+  - [Technical overview](#technical-overview)
+  - [Table of Contents](#table-of-contents)
+  - [Monorepo Structure](#monorepo-structure)
+  - [Tech Stack](#tech-stack)
+  - [Prerequisites](#prerequisites)
+  - [Getting Started](#getting-started)
+    - [1. Clone and install](#1-clone-and-install)
+    - [2. Set up environment variables](#2-set-up-environment-variables)
+    - [3. Run the development servers](#3-run-the-development-servers)
+    - [4. Build before pushing](#4-build-before-pushing)
+  - [Environment Variables](#environment-variables)
+    - [Auth0](#auth0)
+    - [Sanity](#sanity)
+    - [PostHog](#posthog)
+    - [Statsig](#statsig)
+    - [Anthropic](#anthropic)
+    - [App](#app)
+  - [Architecture Overview](#architecture-overview)
+    - [Permission Model](#permission-model)
+  - [Key Integrations](#key-integrations)
+    - [Sanity CMS](#sanity-cms)
+    - [PostHog Analytics](#posthog-analytics)
+    - [Statsig Feature Flags](#statsig-feature-flags)
+    - [Claude AI (Auto-Populate)](#claude-ai-auto-populate)
+    - [PDF Generation](#pdf-generation)
+  - [API Routes](#api-routes)
+  - [Auth0 Setup](#auth0-setup)
+  - [Scripts](#scripts)
+  - [Deployment](#deployment)
+    - [Cron Job](#cron-job)
+    - [Environment Variables in Vercel](#environment-variables-in-vercel)
+  - [Code Conventions](#code-conventions)
 
 ---
 
