@@ -19,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from "@/src/components/shadcn-ui/alert-dialog";
 import { ProfileTableSkeleton } from "@/src/components/custom-ui/table-skeleton";
+import { useCallback, useRef, useState } from "react";
 
 interface ContentProps<TData> {
   table: Table<TData>;
@@ -43,6 +44,33 @@ export function Content<TData>({
   hasMore,
   onLoadMore,
 }: ContentProps<TData>) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+
+  const rows = table.getRowModel().rows;
+  const rowHeight = 56;
+  const overscan = 8;
+  const viewportHeight = 646;
+  const firstVisibleIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);
+  const lastVisibleIndex = Math.min(
+    rows.length,
+    Math.ceil((scrollTop + viewportHeight) / rowHeight) + overscan,
+  );
+  const visibleRows = rows.slice(firstVisibleIndex, lastVisibleIndex);
+
+  const handleScroll = useCallback(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    setScrollTop(element.scrollTop);
+    if (
+      hasMore &&
+      !loadingProfiles &&
+      element.scrollTop + element.clientHeight >= element.scrollHeight - rowHeight * 5
+    ) {
+      onLoadMore();
+    }
+  }, [hasMore, loadingProfiles, onLoadMore]);
+
   if (error) {
     return (
       <div className="rounded-md border bg-light1 p-8 text-center">
@@ -58,15 +86,18 @@ export function Content<TData>({
     );
   }
 
-  if (loadingProfiles) {
+  if (loadingProfiles && !hasData) {
     return <ProfileTableSkeleton rowCount={8} />;
   }
 
   const columns = table.getAllColumns();
 
   return (
-    <>
-      <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
+    <div
+      ref={scrollRef}
+      onScroll={handleScroll}
+      className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto"
+    >
         <TableComponent>
         <TableHeader className="sticky top-0 bg-light1 z-10">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -87,8 +118,12 @@ export function Content<TData>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          {rows.length ? (
+            <>
+              <TableRow aria-hidden="true">
+                <TableCell colSpan={columns.length} style={{ height: firstVisibleIndex * rowHeight, padding: 0 }} />
+              </TableRow>
+              {visibleRows.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
@@ -107,7 +142,11 @@ export function Content<TData>({
                   </TableCell>
                 ))}
               </TableRow>
-            ))
+              ))}
+              <TableRow aria-hidden="true">
+                <TableCell colSpan={columns.length} style={{ height: (rows.length - lastVisibleIndex) * rowHeight, padding: 0 }} />
+              </TableRow>
+            </>
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24">
@@ -141,18 +180,6 @@ export function Content<TData>({
           )}
         </TableBody>
         </TableComponent>
-      </div>
-      {hasMore ? (
-        <div className="flex justify-center py-4">
-          <button
-            type="button"
-            onClick={onLoadMore}
-            className="rounded-md border px-4 py-2 text-sm hover:bg-gray-50"
-          >
-            Load more
-          </button>
-        </div>
-      ) : null}
-    </>
+    </div>
   );
 }
