@@ -3,6 +3,7 @@ import {
   TeamWithPopulatedCompany,
   UserTeamsResponse,
 } from "@/src/shared/entities/team.types";
+import { CursorPage } from "@/src/shared/entities/pagination.types";
 
 export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
   const response = await fetch("/api/cms/teams/for-user", {
@@ -25,6 +26,21 @@ export async function getTeamsForUser(): Promise<TeamWithPopulatedCompany[]> {
 
   const teams = await response.json();
   return teams || [];
+}
+
+export async function getTeamsForUserPage(
+  cursor: string | null = null,
+  limit = 50,
+): Promise<CursorPage<TeamWithPopulatedCompany>> {
+  const response = await fetch("/api/cms/teams/for-user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cursor, limit }),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch teams for user: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
 }
 
 export async function getAllTeams(): Promise<TeamWithPopulatedCompany[]> {

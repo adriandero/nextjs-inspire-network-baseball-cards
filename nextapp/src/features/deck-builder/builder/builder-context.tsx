@@ -169,7 +169,10 @@ const BuilderContext = () => {
     restoreViewState,
   } = useDragTableView();
 
-  const { teams, profilesByTeam, allProfilesData, isLoadingProfiles, error } =
+  const {
+    teams, profilesByTeam, allProfilesData, isLoadingProfiles, isLoading, error,
+    loadMoreTeams, hasMoreTeams, loadMoreProfiles, hasMoreProfiles,
+  } =
     useDragTableData(view, groupingMode, selectedTeam);
 
   const {
@@ -337,6 +340,9 @@ const BuilderContext = () => {
             }}
             columns={currentTable.columns}
             isLoadingProfiles={isLoadingProfiles}
+            isLoading={groupingMode === "profiles" ? isLoadingProfiles : isLoading}
+            hasMore={groupingMode === "profiles" ? hasMoreProfiles : hasMoreTeams}
+            onLoadMore={groupingMode === "profiles" ? loadMoreProfiles : loadMoreTeams}
             handleOneWayProfileCheck={handleOneWayProfileCheck}
             handleProfileCheck={handleProfileCheck}
           />

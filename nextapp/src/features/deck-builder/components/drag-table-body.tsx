@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -29,6 +29,9 @@ interface TableBodyProps<T> {
   skeletonRowCount?: number;
   useSkeletonLoading?: boolean;
   hasLoadedOnce?: boolean;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+  isLoadingMore?: boolean;
 }
 
 export function GenericTableBody<T>({
@@ -41,12 +44,31 @@ export function GenericTableBody<T>({
   skeletonRowCount = 5,
   useSkeletonLoading = true,
   hasLoadedOnce = false, // Default to false for initial loading
+  hasMore = false,
+  onLoadMore = () => {},
+  isLoadingMore = false,
 }: TableBodyProps<T>) {
   const rows = table.getRowModel().rows;
   const hasData = rows && rows.length > 0;
+  const [scrollTop, setScrollTop] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const rowHeight = 56;
+  const overscan = 8;
+  const viewportHeight = 646;
+  const firstVisibleIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);
+  const lastVisibleIndex = Math.min(rows.length, Math.ceil((scrollTop + viewportHeight) / rowHeight) + overscan);
+  const visibleRows = rows.slice(firstVisibleIndex, lastVisibleIndex);
+  const handleScroll = useCallback(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    setScrollTop(element.scrollTop);
+    if (hasMore && !isLoadingMore && element.scrollTop + element.clientHeight >= element.scrollHeight - rowHeight * 5) {
+      onLoadMore();
+    }
+  }, [hasMore, isLoadingMore, onLoadMore]);
 
   const shouldShowSkeleton =
-    useSkeletonLoading && (isLoading || (!hasData && !hasLoadedOnce));
+    useSkeletonLoading && (isLoading && !hasData || (!hasData && !hasLoadedOnce));
 
   if (shouldShowSkeleton) {
     return (
@@ -62,7 +84,7 @@ export function GenericTableBody<T>({
 
   return (
     <>
-      <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
+      <div ref={scrollRef} onScroll={handleScroll} className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -82,7 +104,11 @@ export function GenericTableBody<T>({
           </TableHeader>
           <TableBody>
             {hasData ? (
-              rows.map((row) => renderRow(row))
+              <>
+                <TableRow aria-hidden="true"><TableCell colSpan={columns.length} style={{ height: firstVisibleIndex * rowHeight, padding: 0 }} /></TableRow>
+                {visibleRows.map((row) => renderRow(row))}
+                <TableRow aria-hidden="true"><TableCell colSpan={columns.length} style={{ height: (rows.length - lastVisibleIndex) * rowHeight, padding: 0 }} /></TableRow>
+              </>
             ) : (
               <TableRow>
                 <TableCell

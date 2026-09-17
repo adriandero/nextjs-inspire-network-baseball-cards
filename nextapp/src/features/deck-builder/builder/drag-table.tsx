@@ -28,6 +28,9 @@ interface DragTableProps {
     | ColumnDef<ProfileWithDetailedTeams>[]
     | ColumnDef<TeamWithPopulatedCompany>[];
   isLoadingProfiles?: boolean;
+  isLoading?: boolean;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
 }
 
 const DragTable: React.FC<DragTableProps> = ({
@@ -42,6 +45,9 @@ const DragTable: React.FC<DragTableProps> = ({
   handleOneWayProfileCheck,
   columns,
   isLoadingProfiles = true,
+  isLoading = false,
+  hasMore = false,
+  onLoadMore = () => {},
 }) => {
   const isShowingProfiles = groupingMode === "profiles" || view === "profiles";
 
@@ -100,6 +106,9 @@ const DragTable: React.FC<DragTableProps> = ({
           table={table as ReactTable<ProfileWithDetailedTeams>}
           columns={columns as ColumnDef<ProfileWithDetailedTeams>[]}
           isLoading={isLoadingProfiles}
+          hasMore={hasMore}
+          onLoadMore={onLoadMore}
+          isLoadingMore={isLoading}
           emptyMessage="No TUG Cards found."
           renderRow={renderProfileRow}
         />
@@ -108,6 +117,9 @@ const DragTable: React.FC<DragTableProps> = ({
           table={table as ReactTable<TeamWithPopulatedCompany>}
           columns={columns as ColumnDef<TeamWithPopulatedCompany>[]}
           isLoading={isLoadingProfiles}
+          hasMore={hasMore}
+          onLoadMore={onLoadMore}
+          isLoadingMore={isLoading}
           emptyMessage="No teams found."
           renderRow={renderTeamRow}
         />
