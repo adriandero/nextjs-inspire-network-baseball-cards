@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { SanityDocument } from "next-sanity";
 import DropTable from "./drop-table";
@@ -34,6 +34,8 @@ interface ProfileTablesManagerProps {
   isLoadingProfiles: boolean;
   allProfiles: ProfileWithDetailedTeams[];
 }
+
+const DropTableMemo = React.memo(DropTable);
 
 const TableHeaderSkeleton = () => (
   <div className="flex h-12 items-center end">
@@ -73,8 +75,6 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
   const [openTables, setOpenTables] = useState<string[]>([]);
   const seenTablesRef = useRef<Set<string>>(new Set());
 
-  const DropTableMemo = React.memo(DropTable);
-
   useEffect(() => {
     const currentTableIds = profileIdentifierTables.map((t) => t.id);
     const newTableIds = currentTableIds.filter(
@@ -113,14 +113,19 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
     isEditing,
   } = useTableNameEditor();
 
-  const handleProfilesChange = useCallback(
-    (tableId: string) => {
-      return (profiles: SanityDocument[]) => {
-        const profileIds = profiles.map((p) => p.uuid);
-        onUpdateTableProfiles(tableId, profileIds);
-      };
-    },
-    [onUpdateTableProfiles]
+  const profileChangeHandlers = useMemo(
+    () =>
+      new Map(
+        profileIdentifierTables.map((table) => [
+          table.id,
+          (profiles: SanityDocument[]) =>
+            onUpdateTableProfiles(
+              table.id,
+              profiles.map((profile) => profile.uuid),
+            ),
+        ]),
+      ),
+    [profileIdentifierTables, onUpdateTableProfiles],
   );
 
   const handleSaveEdit = useCallback(() => {
@@ -138,7 +143,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
     [handleSaveEdit, cancelEditing]
   );
 
-  if (isLoadingProfiles || (!hasLoadedOnce && allProfiles.length === 0)) {
+  if ((isLoadingProfiles && allProfiles.length === 0) || (!hasLoadedOnce && allProfiles.length === 0)) {
     return (
       <div className="flex flex-col w-full">
         <TableSkeleton />
@@ -229,7 +234,7 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
               <DropTableMemo
                 selectedProfilesData={getProfilesForTable(table.id)}
                 droppableId={`table-${table.id}`}
-                onProfilesChange={handleProfilesChange(table.id)}
+                onProfilesChange={profileChangeHandlers.get(table.id)}
                 setSelectedTableId={setSelectedTableId}
                 table={table}
                 isSelectedTable={selectedTableId === table.id}
