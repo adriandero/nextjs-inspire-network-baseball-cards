@@ -154,9 +154,6 @@ const BuilderContext = () => {
   const [open, setOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const { teams, profilesByTeam, allProfilesData, isLoadingProfiles, error } =
-    useDragTableData();
-
   const principlesYouGraphEnabled = useGateValue("archetypes_grid");
 
   const {
@@ -171,6 +168,9 @@ const BuilderContext = () => {
     handleBackToTeams,
     restoreViewState,
   } = useDragTableView();
+
+  const { teams, profilesByTeam, allProfilesData, isLoadingProfiles, error } =
+    useDragTableData(view, groupingMode, selectedTeam);
 
   const {
     dropTables,

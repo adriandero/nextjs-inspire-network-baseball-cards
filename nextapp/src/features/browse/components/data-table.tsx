@@ -34,6 +34,7 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
     allProfilesData,
     loadingTeams,
     loadingProfiles,
+    error,
     fetchTeamsData,
     fetchTeamProfiles,
     fetchAllProfiles,
@@ -182,6 +183,16 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
         loadingProfiles={loadingTeams || loadingProfiles}
         onRowClick={allowRowClick ? handleRowClick : undefined}
         hasData={data.length > 0}
+        error={error}
+        onRetry={() => {
+          if (groupingMode === "profiles") {
+            fetchAllProfiles();
+          } else if (currentView === "teams") {
+            fetchTeamsData();
+          } else if (selectedTeam) {
+            fetchTeamProfiles(selectedTeam as TeamWithPopulatedCompany);
+          }
+        }}
       />
     </div>
   );

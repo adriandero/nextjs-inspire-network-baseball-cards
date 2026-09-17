@@ -15,17 +15,20 @@ export function useDataTableData() {
   >([]);
   const [loadingTeams, setLoadingTeams] = useState(false);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchTeamsData = useCallback(async () => {
     if (teamsData.length > 0) return teamsData;
 
     try {
       setLoadingTeams(true);
+      setError(null);
       const teams = await getTeamsForUser();
       setTeamsData(teams || []);
       return teams || [];
     } catch (error) {
       console.error("Error fetching teams:", error);
+      setError("Unable to load teams. Please try again.");
       return [];
     } finally {
       setLoadingTeams(false);
@@ -36,11 +39,13 @@ export function useDataTableData() {
     async (team: TeamWithPopulatedCompany) => {
       try {
         setLoadingProfiles(true);
+        setError(null);
         const profiles = await getTeamProfiles(team.slug);
         setProfilesData(profiles?.teamProfiles ?? []);
         return profiles?.teamProfiles ?? [];
       } catch (error) {
         console.error("Error fetching team profiles:", error);
+        setError("Unable to load team profiles. Please try again.");
         return [];
       } finally {
         setLoadingProfiles(false);
@@ -54,11 +59,13 @@ export function useDataTableData() {
 
     try {
       setLoadingProfiles(true);
+      setError(null);
       const profiles = await getAllProfiles();
       setAllProfilesData(profiles);
       return profiles;
     } catch (error) {
       console.error("Error fetching all profiles:", error);
+      setError("Unable to load profiles. Please try again.");
       return [];
     } finally {
       setLoadingProfiles(false);
@@ -71,6 +78,7 @@ export function useDataTableData() {
     allProfilesData,
     loadingTeams,
     loadingProfiles,
+    error,
     fetchTeamsData,
     fetchTeamProfiles,
     fetchAllProfiles,
