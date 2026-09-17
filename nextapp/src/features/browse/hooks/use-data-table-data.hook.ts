@@ -3,7 +3,7 @@ import { ProfileWithDetailedTeams } from "@/src/shared/entities/profile.types";
 import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 
 import { getTeamsForUser } from "@/src/lib/api/teams";
-import { getAllProfiles, getTeamProfiles } from "@/src/lib/api/profiles";
+import { getProfilesPage, getTeamProfiles } from "@/src/lib/api/profiles";
 
 export function useDataTableData() {
   const [teamsData, setTeamsData] = useState<TeamWithPopulatedCompany[]>([]);
@@ -13,6 +13,8 @@ export function useDataTableData() {
   const [allProfilesData, setAllProfilesData] = useState<
     ProfileWithDetailedTeams[]
   >([]);
+  const [profilesCursor, setProfilesCursor] = useState<string | null>(null);
+  const [hasMoreProfiles, setHasMoreProfiles] = useState(false);
   const [loadingTeams, setLoadingTeams] = useState(false);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,9 +62,11 @@ export function useDataTableData() {
     try {
       setLoadingProfiles(true);
       setError(null);
-      const profiles = await getAllProfiles();
-      setAllProfilesData(profiles);
-      return profiles;
+      const page = await getProfilesPage();
+      setAllProfilesData(page.data);
+      setProfilesCursor(page.nextCursor);
+      setHasMoreProfiles(page.hasMore);
+      return page.data;
     } catch (error) {
       console.error("Error fetching all profiles:", error);
       setError("Unable to load profiles. Please try again.");
@@ -71,6 +75,24 @@ export function useDataTableData() {
       setLoadingProfiles(false);
     }
   }, [allProfilesData]);
+
+  const loadMoreProfiles = useCallback(async () => {
+    if (!hasMoreProfiles || !profilesCursor || loadingProfiles) return;
+
+    try {
+      setLoadingProfiles(true);
+      setError(null);
+      const page = await getProfilesPage(profilesCursor);
+      setAllProfilesData((current) => [...current, ...page.data]);
+      setProfilesCursor(page.nextCursor);
+      setHasMoreProfiles(page.hasMore);
+    } catch (error) {
+      console.error("Error loading more profiles:", error);
+      setError("Unable to load more profiles. Please try again.");
+    } finally {
+      setLoadingProfiles(false);
+    }
+  }, [hasMoreProfiles, profilesCursor, loadingProfiles]);
 
   return {
     teamsData,
@@ -82,5 +104,7 @@ export function useDataTableData() {
     fetchTeamsData,
     fetchTeamProfiles,
     fetchAllProfiles,
+    loadMoreProfiles,
+    hasMoreProfiles,
   };
 }

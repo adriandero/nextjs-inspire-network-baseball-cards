@@ -38,6 +38,8 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
     fetchTeamsData,
     fetchTeamProfiles,
     fetchAllProfiles,
+    loadMoreProfiles,
+    hasMoreProfiles,
   } = useDataTableData();
 
   React.useEffect(() => {
@@ -193,6 +195,8 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
             fetchTeamProfiles(selectedTeam as TeamWithPopulatedCompany);
           }
         }}
+        hasMore={groupingMode === "profiles" && currentView === "profiles" && hasMoreProfiles}
+        onLoadMore={loadMoreProfiles}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import {
   ProfilesFromUserTeams,
   ProfilesByTeam,
 } from "@/src/shared/entities/profile.types";
+import { CursorPage } from "@/src/shared/entities/pagination.types";
 
 export async function getProfileByUuid(
   uuid: string
@@ -142,6 +143,19 @@ export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
     if (!page.hasMore) break;
   } while (cursor);
   return profiles;
+}
+
+export async function getProfilesPage(
+  cursor: string | null = null,
+  limit = 50,
+): Promise<CursorPage<ProfileWithDetailedTeams>> {
+  const searchParams = new URLSearchParams({ limit: String(limit) });
+  if (cursor) searchParams.set("cursor", cursor);
+  const response = await fetch(`/api/cms/profiles?${searchParams}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch profiles: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
 }
 
 export async function getTeamProfiles(

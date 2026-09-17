@@ -28,6 +28,8 @@ interface ContentProps<TData> {
   hasData: boolean;
   error: string | null;
   onRetry: () => void;
+  hasMore: boolean;
+  onLoadMore: () => void;
 }
 
 export function Content<TData>({
@@ -38,6 +40,8 @@ export function Content<TData>({
   hasData,
   error,
   onRetry,
+  hasMore,
+  onLoadMore,
 }: ContentProps<TData>) {
   if (error) {
     return (
@@ -61,8 +65,9 @@ export function Content<TData>({
   const columns = table.getAllColumns();
 
   return (
-    <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
-      <TableComponent>
+    <>
+      <div className="rounded-md border bg-light1 max-h-[646px] overflow-y-auto">
+        <TableComponent>
         <TableHeader className="sticky top-0 bg-light1 z-10">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -135,7 +140,19 @@ export function Content<TData>({
             </TableRow>
           )}
         </TableBody>
-      </TableComponent>
-    </div>
+        </TableComponent>
+      </div>
+      {hasMore ? (
+        <div className="flex justify-center py-4">
+          <button
+            type="button"
+            onClick={onLoadMore}
+            className="rounded-md border px-4 py-2 text-sm hover:bg-gray-50"
+          >
+            Load more
+          </button>
+        </div>
+      ) : null}
+    </>
   );
 }
