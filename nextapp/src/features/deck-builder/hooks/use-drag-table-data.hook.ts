@@ -12,7 +12,11 @@ import {
 
 import { getTeamsForUser } from "@/src/lib/api/teams";
 
-export function useDragTableData() {
+export function useDragTableData(
+  view: "teams" | "profiles",
+  groupingMode: "teams" | "profiles",
+  selectedTeam: string | null,
+) {
   const [teams, setTeams] = useState<TeamWithPopulatedCompany[]>([]);
   const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam | null>(
     null
@@ -25,6 +29,7 @@ export function useDragTableData() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchTeams = useCallback(async () => {
+    if (teams.length > 0) return;
     try {
       setIsLoading(true);
       setError(null);
@@ -37,9 +42,10 @@ export function useDragTableData() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [teams.length]);
 
   const fetchAllProfiles = useCallback(async () => {
+    if (allProfilesData.length > 0) return;
     try {
       setIsLoadingProfiles(true);
       setError(null);
@@ -52,9 +58,10 @@ export function useDragTableData() {
     } finally {
       setIsLoadingProfiles(false);
     }
-  }, []);
+  }, [allProfilesData.length]);
 
   const fetchGroupedProfiles = useCallback(async () => {
+    if (profilesByTeam) return;
     try {
       setIsLoadingProfiles(true);
       setError(null);
@@ -69,19 +76,17 @@ export function useDragTableData() {
     } finally {
       setIsLoadingProfiles(false);
     }
-  }, []);
+  }, [profilesByTeam]);
 
   useEffect(() => {
-    const initializeData = async () => {
-      await Promise.all([
-        fetchTeams(),
-        fetchAllProfiles(),
-        fetchGroupedProfiles(),
-      ]);
-    };
-
-    initializeData();
-  }, [fetchAllProfiles, fetchGroupedProfiles, fetchTeams]);
+    if (groupingMode === "profiles") {
+      fetchAllProfiles();
+    } else if (view === "teams") {
+      fetchTeams();
+    } else if (selectedTeam) {
+      fetchGroupedProfiles();
+    }
+  }, [groupingMode, view, selectedTeam, fetchAllProfiles, fetchGroupedProfiles, fetchTeams]);
 
   return {
     teams,

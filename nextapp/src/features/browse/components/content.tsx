@@ -26,6 +26,8 @@ interface ContentProps<TData> {
   loadingProfiles: boolean;
   onRowClick?: (data: TData) => void;
   hasData: boolean;
+  error: string | null;
+  onRetry: () => void;
 }
 
 export function Content<TData>({
@@ -34,7 +36,24 @@ export function Content<TData>({
   loadingProfiles,
   onRowClick,
   hasData,
+  error,
+  onRetry,
 }: ContentProps<TData>) {
+  if (error) {
+    return (
+      <div className="rounded-md border bg-light1 p-8 text-center">
+        <p className="text-red-500">{error}</p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-4 rounded-md border px-4 py-2 text-sm hover:bg-gray-50"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   if (loadingProfiles) {
     return <ProfileTableSkeleton rowCount={8} />;
   }
