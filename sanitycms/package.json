@@ -15,14 +15,14 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/client": "^7.14.1",
+    "@sanity/client": "^7.27.0",
     "@sanity/image-url": "^2.0.3",
-    "@sanity/vision": "^5.9.0",
+    "@sanity/vision": "^6.15.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-image-crop": "^11.0.10",
     "react-is": "^19.2.4",
-    "styled-components": "6.3.8",
+    "styled-components": "^6.5.3",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "@types/react": "^18.0.25",
     "eslint": "^8.6.0",
     "prettier": "^3.0.2",
-    "sanity": "^5.9.0",
+    "sanity": "^6.15.0",
     "tsx": "^4.20.6",
     "typescript": "^5.1.6"
   },
