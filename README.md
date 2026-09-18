@@ -4,6 +4,10 @@
 
 TUG Cards is a working product prototype that turns workplace-assessment data into accessible individual and team profiles. It brings together signals from Working Genius, Kolbe, Principle You, and Values to create a shared language for coaching, collaboration, and team development.
 
+## Demo
+
+[▶️ Watch the 2-minute product walkthrough](https://www.loom.com/share/658189f8f9654761a3f6d0d00f561714)
+
 ## Project status
 
 This repository is an intentional snapshot of a working prototype and a product exploration. The core experience is functional; taking it further would depend on validating how coaches and team leaders use the cards in real conversations and team sessions.
