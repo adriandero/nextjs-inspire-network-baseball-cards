@@ -1,19 +1,23 @@
+import { fetchProfileTables } from "@/src/lib/deck-builder/selections";
 import { Suspense } from "react";
 import SideBySide from "@/src/features/deck-builder/data-tables/side-by-side";
 import {
-  fetchProfileTables,
   shortNamesOfProfiles,
 } from "@/src/lib/utils/profile-table-utils";
 import { PDFLayout } from "@/src/components/layout/pdf-layout";
 
 async function ProfileComparisonContent({
   groupedProfiles,
+  selection,
+  showJobRole,
 }: {
   groupedProfiles: string | null;
+  selection?: string;
+  showJobRole: boolean;
 }) {
   // 🎉 One line instead of 20!
   const { completeProfileTables, error } =
-    await fetchProfileTables(groupedProfiles);
+    await fetchProfileTables(groupedProfiles, selection);
 
   return (
     <PDFLayout
@@ -27,7 +31,7 @@ async function ProfileComparisonContent({
           <SideBySide
             profiles={shortNamesOfProfiles(table.profiles)}
             tableName={table.name}
-            showJobRole={false}
+            showJobRole={showJobRole}
             columnCount={3}
           />
         </div>
@@ -39,7 +43,7 @@ async function ProfileComparisonContent({
 export default async function SideBySidePDFPage({
   searchParams,
 }: {
-  searchParams: Promise<{ groupedProfiles?: string }>;
+  searchParams: Promise<{ showJobRole?: string; selection?: string; groupedProfiles?: string }>;
 }) {
   const params = await searchParams;
   const groupedProfiles = params.groupedProfiles ?? null;
@@ -47,7 +51,7 @@ export default async function SideBySidePDFPage({
   return (
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
       <Suspense fallback={<div>Loading Side by Side...</div>}>
-        <ProfileComparisonContent groupedProfiles={groupedProfiles} />
+        <ProfileComparisonContent showJobRole={params.showJobRole === "true"} selection={params.selection} groupedProfiles={groupedProfiles} />
       </Suspense>
     </div>
   );

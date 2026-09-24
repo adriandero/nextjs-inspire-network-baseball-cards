@@ -39,6 +39,7 @@ const ProfileNameCell = ({ row }: { row: Row<ProfileWithDetailedTeams> }) => {
           src={profileImageSrc}
           alt={profileName}
           fill
+          sizes="40px"
           style={{ objectFit: "cover" }}
         />
       </div>

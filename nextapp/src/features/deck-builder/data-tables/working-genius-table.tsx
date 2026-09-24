@@ -112,6 +112,7 @@ const WorkingGeniusTable: React.FC<WorkingGeniusTableProps> = ({
                     }
                     alt={profile.name}
                     fill
+                    sizes="40px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>

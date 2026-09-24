@@ -209,6 +209,7 @@ const ValuesTable: React.FC<ValuesTableProps> = ({
                   }
                   alt={profile.name}
                   fill
+                  sizes="40px"
                   style={{ objectFit: "cover" }}
                 />
               </div>

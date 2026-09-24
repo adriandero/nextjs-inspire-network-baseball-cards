@@ -2,7 +2,7 @@ import BackNavBar from "@/src/components/layout/back-nav-bar";
 import { CompareTypes } from "@/src/features/deck-builder/entities/compare-types";
 import { ProfileComparison } from "@/src/features/deck-builder/profile-comparison";
 import { auth0 } from "@/src/lib/auth0";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getUserSanity } from "@/src/lib/data/queries/users";
 
@@ -14,6 +14,7 @@ export default async function ComparisonPage({
   params: tParams;
 }): Promise<JSX.Element> {
   const { type } = await params;
+  if (!Object.values(CompareTypes).includes(type)) notFound();
   const session = await auth0.getSession();
 
   if (!session) {

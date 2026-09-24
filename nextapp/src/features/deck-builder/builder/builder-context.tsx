@@ -1,6 +1,6 @@
 "use client";
 
-import posthog from "posthog-js";
+import { createSelection } from "@/src/features/deck-builder/api/selections";
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
@@ -152,6 +152,8 @@ const useTeamTable = (teams: TeamWithPopulatedCompany[]) => {
 const BuilderContext = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [isContinuing, setIsContinuing] = useState(false);
+  const [continueError, setContinueError] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const principlesYouGraphEnabled = useGateValue("archetypes_grid");
@@ -276,21 +278,20 @@ const BuilderContext = () => {
   );
   const isDisabled = !selectedType || hasEmptyProfiles;
 
-  const encodeProfileTablesToURL = useCallback((tables: typeof dropTables) => {
-    return tables
-      .map((group) => {
-        const profileUuids = group.profiles.join(",");
-        return `${encodeURIComponent(group.name)}:${group.id}:${profileUuids}`;
-      })
-      .join(";");
-  }, []);
-
-  const handleContinue = useCallback(() => {
-    const urlParam = encodeProfileTablesToURL(dropTables);
-    const comparisonSlug = COMPARISON_ATTRIBUTES[selectedType].slug;
-    posthog.capture("test", { amount: 99 });
-    router.push(`/deckbuilder/${comparisonSlug}/?groupedProfiles=${urlParam}`);
-  }, [dropTables, selectedType, router, encodeProfileTablesToURL]);
+  const handleContinue = useCallback(async () => {
+    if (isContinuing || isDisabled) return;
+    setIsContinuing(true);
+    setContinueError(null);
+    try {
+      const selection = await createSelection(dropTables);
+      const comparisonSlug = COMPARISON_ATTRIBUTES[selectedType].slug;
+      router.push(`/deckbuilder/${comparisonSlug}?selection=${selection}`);
+    } catch (error) {
+      setContinueError(error instanceof Error ? error.message : "Unable to open the comparison");
+    } finally {
+      setIsContinuing(false);
+    }
+  }, [dropTables, selectedType, router, isContinuing, isDisabled]);
 
   const handleCompareTypeSelect = useCallback(
     (type: CompareTypes) => {
@@ -437,13 +438,14 @@ const BuilderContext = () => {
 
             <Button
               variant="outline"
-              disabled={isDisabled}
+              disabled={isDisabled || isContinuing}
               className="hover:border-primary"
               onClick={handleContinue}
             >
-              Continue <GoArrowRight size={24} />
+              {isContinuing ? "Saving…" : "Continue"} <GoArrowRight size={24} />
             </Button>
           </div>
+          {continueError && <p role="alert" className="text-sm text-inspireRed pt-4">{continueError}</p>}
           {isDisabled ? (
             <p className="text-sm text-inspireRed text-center py-4">
               Add profiles to empty group or remove it to continue

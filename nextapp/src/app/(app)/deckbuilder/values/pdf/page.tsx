@@ -2,17 +2,19 @@ import { Suspense } from "react";
 
 import ValuesTable from "@/src/features/deck-builder/data-tables/values-table";
 import { PDFLayout } from "@/src/components/layout/pdf-layout";
-import { fetchProfileTables } from "@/src/lib/utils/profile-table-utils";
+import { fetchProfileTables } from "@/src/lib/deck-builder/selections";
 
 async function ProfileComparisonContent({
   groupedProfiles,
+  selection,
   showJobRole,
 }: {
   groupedProfiles: string | null;
+  selection?: string;
   showJobRole: boolean;
 }) {
   const { completeProfileTables, error } =
-    await fetchProfileTables(groupedProfiles);
+    await fetchProfileTables(groupedProfiles, selection);
 
   return (
     <PDFLayout
@@ -41,7 +43,7 @@ async function ProfileComparisonContent({
 export default async function ValuesPDFPage({
   searchParams,
 }: {
-  searchParams: Promise<{ groupedProfiles?: string; showJobRole?: string }>;
+  searchParams: Promise<{ selection?: string; groupedProfiles?: string; showJobRole?: string }>;
 }) {
   const params = await searchParams;
   const groupedProfiles = params.groupedProfiles ?? null;
@@ -51,6 +53,7 @@ export default async function ValuesPDFPage({
     <div className="w-full max-w-screen-lg mx-auto flex justify-center">
       <Suspense fallback={<div>Loading TUG Cards...</div>}>
         <ProfileComparisonContent
+          selection={params.selection}
           groupedProfiles={groupedProfiles}
           showJobRole={showJobRole}
         />

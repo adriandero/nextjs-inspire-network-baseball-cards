@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { createSelection } from "./api/selections";
+import { parseProfileTablesFromURL } from "@/src/lib/utils/profile-table-utils";
 import { Button } from "@/src/components/shadcn-ui/button";
 import WorkingGeniusTable from "@/src/features/deck-builder/data-tables/working-genius-table";
 import KolbeStrengthsTable from "@/src/features/deck-builder/data-tables/kolbe-strengths-table";
@@ -52,38 +54,60 @@ const ComparisonLoadingSkeleton = () => (
 );
 
 export function ProfileComparison({ initialType }: ProfileComparisonProps) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const groupedProfiles = searchParams.get("groupedProfiles");
+  const selection = searchParams.get("selection");
+  const [pdfError, setPDFError] = useState<string | null>(null);
 
   const { completeProfileTables, isLoading, error } =
-    useProfileComparison(groupedProfiles);
+    useProfileComparison(groupedProfiles, selection);
   const {
     downloadPDF,
     downloadAllPDFs,
     loading: pdfLoading,
   } = usePDFDownload();
 
-  const [selectedType, setSelectedType] = useState(initialType);
+  const selectedType = Object.values(CompareTypes).find(
+    (type) => COMPARISON_ATTRIBUTES[type].slug === pathname.split("/")[2],
+  ) ?? initialType;
 
   const { filters, setters, applyFilters, availableFilters } =
     useComparisonFilters(selectedType);
 
-  const handlePDFDownloadCall = async () => {
-    try {
-      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?groupedProfiles=${groupedProfiles}&showJobRole=${filters.showJobRole}`;
-      const filename = `Compare - ${COMPARISON_ATTRIBUTES[selectedType].title} - TUG Cards.pdf`;
+  // Upgrade legacy links before exporting so neither API nor Chromium URLs carry UUID lists.
+  const selectionForExport = async () => {
+    if (selection) return selection;
+    if (!groupedProfiles) throw new Error("Please select TUG Cards to compare");
+    const id = await createSelection(parseProfileTablesFromURL(groupedProfiles));
+    const url = new URL(window.location.href);
+    url.searchParams.delete("groupedProfiles");
+    url.searchParams.set("selection", id);
+    window.history.replaceState(null, "", url);
+    return id;
+  };
 
-      await downloadPDF(fetchURL, filename);
+  const handlePDFDownloadCall = async () => {
+    setPDFError(null);
+    try {
+      const id = await selectionForExport();
+      const fetchURL = `/api/deckbuilder/${COMPARISON_ATTRIBUTES[selectedType].slug}/pdf?${new URLSearchParams({
+        selection: id,
+        showJobRole: String(filters.showJobRole),
+        showPrimaryOnly: String(filters.showPrimaryOnly),
+      })}`;
+      await downloadPDF(fetchURL, `Compare - ${COMPARISON_ATTRIBUTES[selectedType].title} - TUG Cards.pdf`);
     } catch (error) {
-      console.error("Failed to download PDF:", error);
+      setPDFError(error instanceof Error ? error.message : "Failed to download PDF");
     }
   };
 
   const handlePDFDownloadAllCall = async () => {
+    setPDFError(null);
     try {
-      await downloadAllPDFs(groupedProfiles, filters.showJobRole);
+      await downloadAllPDFs(await selectionForExport(), filters.showJobRole, filters.showPrimaryOnly);
     } catch (error) {
-      console.error("Failed to download all PDFs:", error);
+      setPDFError(error instanceof Error ? error.message : "Failed to download PDFs");
     }
   };
 
@@ -126,9 +150,7 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
   };
 
   const onTypeChange = (type: CompareTypes) => {
-    setSelectedType(type);
-
-    const newUrl = `/deckbuilder/${COMPARISON_ATTRIBUTES[type].slug}?groupedProfiles=${groupedProfiles}`;
+    const newUrl = `/deckbuilder/${COMPARISON_ATTRIBUTES[type].slug}?${searchParams.toString()}`;
 
     window.history.pushState({}, "", newUrl);
   };
@@ -187,6 +209,8 @@ export function ProfileComparison({ initialType }: ProfileComparisonProps) {
           filters={filters}
           setters={setters}
         />
+
+        {pdfError && <p role="alert" className="text-red-500">{pdfError}</p>}
 
         {filteredTables.map((table) => (
           <div key={table.id} className="flex flex-col">

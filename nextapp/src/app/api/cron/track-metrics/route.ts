@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const teamCount = await client.fetch<number>(`count(*[_type == "team" && groups == "client"])`);
+    const teamCount = await client.fetch<number>(
+      `count(*[_type == "team" && groups == "client"])`,
+    );
 
     const userCount = await client.fetch<number>(`count(*[_type == "user"])`);
 
     const posthog = getPostHogClient();
-
-    console.log("📊 Capturing metrics:", { teamCount, userCount });
 
     posthog.capture({
       distinctId: "system",
@@ -28,9 +28,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log("⏳ Flushing PostHog events...");
     await posthog.shutdown();
-    console.log("✅ PostHog events flushed");
 
     return NextResponse.json({
       success: true,

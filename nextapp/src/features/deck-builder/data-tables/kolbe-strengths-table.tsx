@@ -67,6 +67,7 @@ const KolbeStrengthsTable: React.FC<KolbeStrengthsTableProps> = ({
                     }
                     alt={profile.name}
                     fill
+                    sizes="40px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>

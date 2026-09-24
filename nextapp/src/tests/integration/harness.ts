@@ -33,6 +33,7 @@ export type TestData = {
   users: TestUser[];
   teams: TestTeam[];
   profiles: TestProfile[];
+  documents?: Array<Record<string, unknown> & { _id: string; _type: string }>;
 };
 
 const sessionState: { value: TestSession | null } = { value: null };
@@ -60,8 +61,27 @@ function projectProfile(profile: TestProfile) {
   };
 }
 
+let datastoreError: Error | null = null;
+export function setTestDatastoreError(error: Error | null) { datastoreError = error; }
+
 const fakeClient = {
+  async create(document: Record<string, unknown> & { _id: string; _type: string }) {
+    if (datastoreError) throw datastoreError;
+    data.documents ??= [];
+    data.documents.push(structuredClone(document));
+    return structuredClone(document);
+  },
   async fetch<T>(query: string, params: Record<string, unknown> = {}): Promise<T> {
+    if (datastoreError) throw datastoreError;
+    if (query.includes('_type == "deckSelection"')) {
+      return (data.documents?.find((document) => document._id === params.id) ?? null) as T;
+    }
+    if (query.includes("uuid in $uuids")) {
+      const ids = new Set(params.uuids as string[]);
+      return data.profiles.filter((profile) => ids.has(profile.uuid)).map((profile) => ({
+        ...profile, team: profile.team.map(projectTeam),
+      })) as T;
+    }
     if (
       query.includes('"teams": *[_type == "team"') &&
       query.includes("references(^._id)")
@@ -156,6 +176,7 @@ export function readTestData(): TestData {
 export function resetTestBoundaries(): void {
   data = { users: [], teams: [], profiles: [] };
   sessionState.value = null;
+  datastoreError = null;
 }
 
 export function installExternalBoundaryFakes(): void {

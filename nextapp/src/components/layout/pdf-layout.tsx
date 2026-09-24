@@ -33,7 +33,7 @@ export const PDFLayout = forwardRef<HTMLDivElement, PDFLayoutProps>(
 
     if (error) {
       return (
-        <div ref={ref} className={containerClasses}>
+        <div ref={ref} className={containerClasses} data-pdf-error={error}>
           <div className="text-red-500">Error: {error}</div>
         </div>
       );
@@ -59,7 +59,7 @@ export const PDFLayout = forwardRef<HTMLDivElement, PDFLayoutProps>(
       completeProfileTables.some((table) => table.profiles.length > 0);
 
     return (
-      <div ref={ref} className={containerClasses}>
+      <div ref={ref} className={containerClasses} data-pdf-ready="true">
         <div className="flex items-center text-center gap-4">
           <h1 className="text-2xl font-bold">{title}</h1>
           <span className="text-base ml-auto text-accent-foreground font-bold">

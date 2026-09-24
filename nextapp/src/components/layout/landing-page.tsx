@@ -121,14 +121,14 @@ export default function LandingPage({
           </div>
         </div>
       </div>
-      <div className="text-center">
+      {/* <div className="text-center">
         <a
           href={"https://www.inspirenetworkllc.com/"}
           className="inline-block bg-purple-500/10 border mb-8 border-purple-500/30 text-purple-300 px-6 py-3 rounded-2xl font-semibold"
         >
           ⚓ Powered by Inspire Network
         </a>
-      </div>
+      </div> */}
     </div>
   );
 }

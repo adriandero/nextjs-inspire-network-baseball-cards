@@ -20,6 +20,7 @@ const DraggedProfilePreview: React.FC<DraggedProfilePreviewProps> = ({
             src={profile.avatar?.asset?.url ?? defaultAvatar.src}
             alt={profile.name}
             fill
+            sizes="32px"
             style={{ objectFit: "cover" }}
           />
         </div>

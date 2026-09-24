@@ -190,7 +190,7 @@ export async function getProfilesByUuids(
     }
   }`;
 
-  const options = { next: { revalidate: 30 } };
+  const options = { method: "POST" as const, next: { revalidate: 30 } };
 
   try {
     const profiles = await client.fetch<ProfileWithFullTeams[]>(

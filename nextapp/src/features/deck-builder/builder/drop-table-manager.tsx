@@ -177,58 +177,43 @@ const ProfileTablesManager: React.FC<ProfileTablesManagerProps> = ({
               openTables.includes(table.id) && "border-transparent"
             )}
           >
-            <AccordionTrigger className="w-full">
-              <div className="flex h-12 items-center w-[calc(100%-3rem)]">
-                {profileIdentifierTables.length > 1 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="hover:text-inspireRed w-6 h-6 flex items-center justify-center p-0 flex-shrink-0"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent accordion toggle
-                      onRemoveTable(table.id);
-                    }}
-                    aria-label={`Remove table: ${table.name}`}
-                  >
-                    <GoX size={32} strokeWidth="1" />
-                  </Button>
-                )}
-                <div
-                  className={cn("font-medium text-base min-w-0 flex flex-1")}
-                  onClick={(e) => e.stopPropagation()} // Prevent accordion toggle
+            <div className="flex h-16 items-center gap-2">
+              {profileIdentifierTables.length > 1 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:text-inspireRed w-6 h-6 p-0 flex-shrink-0"
+                  onClick={() => onRemoveTable(table.id)}
+                  aria-label={`Remove table: ${table.name}`}
                 >
-                  {isEditing(table.id) ? (
-                    <Input
-                      ref={inputRef}
-                      type="text"
-                      value={editingName}
-                      onChange={(e) => setEditingName(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      onBlur={handleSaveEdit}
-                      className="h-8 w-full text-left focus-visible:ring-0 focus-visible:ring-offset-0 border-none shadow-none p-2 border-light3"
-                      aria-label="Edit table name"
-                    />
-                  ) : (
-                    <div className="hover:bg-gray-100 px-2 max-w-full rounded overflow-x-auto overflow-y-hidden w-fit no-scrollbar">
-                      <p
-                        onClick={() => startEditing(table.id, table.name)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            startEditing(table.id, table.name);
-                          }
-                        }}
-                        className="cursor-text whitespace-nowrap text-left"
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Edit table name: ${table.name}`}
-                      >
-                        {table.name}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                  <GoX size={32} strokeWidth="1" />
+                </Button>
+              )}
+              <div className="min-w-0 flex-1">
+                {isEditing(table.id) ? (
+                  <Input
+                    ref={inputRef}
+                    type="text"
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    onBlur={handleSaveEdit}
+                    className="h-8 w-full text-left p-2"
+                    aria-label="Edit table name"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => startEditing(table.id, table.name)}
+                    className="hover:bg-gray-100 px-2 rounded max-w-full truncate text-left font-medium text-base cursor-text"
+                    aria-label={`Edit table name: ${table.name}`}
+                  >
+                    {table.name}
+                  </button>
+                )}
               </div>
-            </AccordionTrigger>
+              <AccordionTrigger aria-label={`Toggle table: ${table.name}`} />
+            </div>
 
             <AccordionContent className="w-full ">
               <DropTableMemo

@@ -90,6 +90,7 @@ const DropTable: React.FC<ProfileDropTableProps> = ({
                             }
                             alt={profile.name}
                             fill
+                            sizes="32px"
                             style={{ objectFit: "cover" }}
                           />
                         </div>

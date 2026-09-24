@@ -35,7 +35,7 @@ export const ResponsivePDFLayout = forwardRef<HTMLDivElement, ResponsivePDFLayou
 
     if (error) {
       return (
-        <div ref={ref} className={containerClasses}>
+        <div ref={ref} className={containerClasses} data-pdf-error={error}>
           <div className="text-red-500">Error: {error}</div>
         </div>
       );
@@ -60,7 +60,7 @@ export const ResponsivePDFLayout = forwardRef<HTMLDivElement, ResponsivePDFLayou
       completeProfileTables.some((table) => table.profiles.length > 0);
 
     return (
-      <div ref={ref} className={containerClasses}>
+      <div ref={ref} className={containerClasses} data-pdf-ready="true">
         <div className="flex items-center text-center gap-4">
           <h1 className={`${headingFontSize} font-bold`}>{title}</h1>
           <span className={`${baseFontSize} ml-auto text-accent-foreground font-bold`}>

@@ -58,6 +58,7 @@ const PrinciplesYouArchetypesTable: React.FC<
                     }
                     alt={profile.name}
                     fill
+                    sizes="40px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>
