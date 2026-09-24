@@ -1,7 +1,14 @@
+import {
+  getProfileByUuid,
+  getTeammateProfiles,
+} from "@/src/lib/data/queries/profiles";
 import { auth0 } from "@/src/lib/auth0";
 import { getUserSanity } from "@/src/lib/data/queries/users";
 import { getUserTeams } from "@/src/lib/data/queries/teams";
-import { ProfileWithFullTeams } from "@/src/shared/entities/profile.types";
+import {
+  ProfileWithBasicTeams,
+  ProfileWithFullTeams,
+} from "@/src/shared/entities/profile.types";
 import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
 import { UserSanity } from "@/src/shared/entities/user.types";
 import { AuthError, AuthenticationResult, PERMISSIONS } from "./types";
@@ -67,11 +74,15 @@ export async function createAuthorizationContext(
 
 type AuthorizationSubject = UserSanity | AuthorizationContext;
 
-function isContext(subject: AuthorizationSubject): subject is AuthorizationContext {
+function isContext(
+  subject: AuthorizationSubject,
+): subject is AuthorizationContext {
   return "teamSlugs" in subject && "teamIds" in subject;
 }
 
-async function contextFor(subject: AuthorizationSubject): Promise<AuthorizationContext> {
+async function contextFor(
+  subject: AuthorizationSubject,
+): Promise<AuthorizationContext> {
   return isContext(subject) ? subject : createAuthorizationContext(subject);
 }
 
@@ -109,11 +120,15 @@ export async function canAccessProfile(
   if (canAccessAdmin(context.user)) return true;
 
   return (
-    profile.team?.some((team) => context.teamSlugs.has(team.slug)) ?? false
-  ) || context.user.profile?.slug === profile.slug;
+    (profile.team?.some((team) => context.teamSlugs.has(team.slug)) ?? false) ||
+    context.user.profile?.slug === profile.slug
+  );
 }
 
-export function canAccessUserData(user: UserSanity, targetEmail: string): boolean {
+export function canAccessUserData(
+  user: UserSanity,
+  targetEmail: string,
+): boolean {
   return canAccessAdmin(user) || user.email === targetEmail;
 }
 
@@ -130,4 +145,43 @@ export async function getAllTeamsWithPermissions(
   requireAdmin(user);
   const { getAllTeams } = await import("@/src/lib/data/queries/teams");
   return getAllTeams();
+}
+
+export async function getAuthorizedTeammateProfiles(
+  excludeUuid: string,
+  requestingUser?: UserSanity,
+): Promise<ProfileWithBasicTeams[]> {
+  try {
+    const user = requestingUser || (await getAuthorizedUser());
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const excludeProfile = await getProfileByUuid(excludeUuid);
+    if (!excludeProfile) {
+      throw new Error("Profile not found");
+    }
+
+    const canAccess = await canAccessProfile(user, excludeProfile);
+    if (!canAccess) {
+      throw new Error("Forbidden - you do not have access to this profile");
+    }
+
+    if (user.permission === "Admin") {
+      return await getTeammateProfiles(excludeUuid, [], true);
+    }
+
+    const userTeams = await getUserTeams(user.email);
+    const allowedSlugs = userTeams?.teams?.map((t) => t.slug) || [];
+
+    const teammates = await getTeammateProfiles(
+      excludeUuid,
+      allowedSlugs,
+      false,
+    );
+    return teammates;
+  } catch (error) {
+    console.error("Failed to get authorized teammate profiles:", error);
+    throw error;
+  }
 }

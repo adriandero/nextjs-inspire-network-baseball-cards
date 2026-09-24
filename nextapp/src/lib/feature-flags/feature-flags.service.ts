@@ -3,7 +3,7 @@ import { statsigAdapter, type StatsigUser } from "@flags-sdk/statsig";
 import { dedupe, flag } from "flags/next";
 import type { Identify } from "flags";
 import { auth0 } from "@/src/lib/auth0";
-import { getUserSanity } from "../queries/users";
+import { getUserSanity } from "../data/queries/users";
 
 export const identify = dedupe((async () => {
   const session = await auth0.getSession();

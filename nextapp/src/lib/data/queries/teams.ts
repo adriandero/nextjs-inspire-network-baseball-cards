@@ -6,7 +6,7 @@ import {
 import { UserSanity } from "@/src/shared/entities/user.types";
 import { client } from "@/src/lib/sanity/client";
 import { CursorPage } from "@/src/shared/entities/pagination.types";
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, toCursorPage } from "@/src/lib/data/pagination";
+import { MAX_PAGE_SIZE, toCursorPage } from "@/src/lib/data/pagination";
 
 export async function getTeamsForUser(
   userProfileData: UserSanity,
@@ -196,28 +196,16 @@ export async function getUserTeams(
 
     if (!data) return null;
 
-    // Add some debugging to see what's happening
-    // console.log("Query result:", {
-    //   directTeams: data.directTeams?.length || 0,
-    //   profileTeams: data.profileTeams?.length || 0,
-    //   defaultTeam: data.defaultTeam ? "found" : "not found",
-    // });
-
-    // Fast deduplication using Map for O(n) performance
     const teamMap = new Map<string, TeamWithPopulatedCompany>();
 
-    // Add default team first (if it exists)
     if (data.defaultTeam) {
       teamMap.set(data.defaultTeam._id, data.defaultTeam);
     }
 
-    // Add direct teams
     data.directTeams?.forEach((team) => teamMap.set(team._id, team));
 
-    // Add profile teams
     data.profileTeams?.forEach((team) => teamMap.set(team._id, team));
 
-    // Convert back to sorted array
     const teams = Array.from(teamMap.values()).sort((a, b) =>
       a.name.localeCompare(b.name),
     );

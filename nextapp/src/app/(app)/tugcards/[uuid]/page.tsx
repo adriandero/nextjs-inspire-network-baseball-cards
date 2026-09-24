@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import {
   getAuthorizedUser,
   canAccessProfile,
+  getAuthorizedTeammateProfiles,
 } from "@/src/lib/auth/permissions";
 import { getProfileByUuid } from "@/src/lib/data/queries/profiles";
 import Link from "next/link";
@@ -18,7 +19,6 @@ import { Button } from "@/src/components/shadcn-ui/button";
 import { GoEye } from "react-icons/go";
 
 import React from "react";
-import { getAuthorizedTeammateProfiles } from "@/src/lib/data/services/profiles";
 
 type tParams = Promise<{ uuid: string }>;
 
@@ -71,7 +71,7 @@ export default async function TugPage({
 
   const moreProfiles = await getAuthorizedTeammateProfiles(
     uuid,
-    userProfileData
+    userProfileData,
   );
 
   return (
