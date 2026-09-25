@@ -29,24 +29,6 @@ interface DataTableProps {
 
 export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
   const {
-    teamsData,
-    profilesData,
-    allProfilesData,
-    loadingTeams,
-    loadingProfiles,
-    error,
-    fetchTeamsData,
-    fetchTeamProfiles,
-    fetchAllProfiles,
-    loadMoreProfiles,
-    hasMoreProfiles,
-  } = useDataTableData();
-
-  React.useEffect(() => {
-    fetchAllProfiles();
-  }, [fetchAllProfiles]);
-
-  const {
     groupingMode,
     currentView,
     selectedTeam,
@@ -60,13 +42,38 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
   ]);
 
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
       groups: false,
     });
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const profileOptions = {
+    search: String(
+      columnFilters.find((filter) => filter.id === "name")?.value ?? "",
+    ),
+    group: String(
+      columnFilters.find((filter) => filter.id === "groups")?.value ?? "",
+    ),
+    sort: sorting[0]?.desc ? ("name-desc" as const) : ("name-asc" as const),
+  };
+  const {
+    teamsData,
+    profilesData,
+    allProfilesData,
+    loadingTeams,
+    loadingProfiles,
+    error,
+    fetchTeamsData,
+    fetchTeamProfiles,
+    fetchAllProfiles,
+    loadMoreProfiles,
+    hasMoreProfiles,
+    isSearching,
+    profileQueryKey,
+  } = useDataTableData(profileOptions, groupingMode === "profiles");
 
   const { columns, data, showSearch, allowRowClick, showGroupsFilter } =
     useDataTableConfig({
@@ -84,6 +91,8 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    manualFiltering: groupingMode === "profiles",
+    manualSorting: groupingMode === "profiles",
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
@@ -110,7 +119,7 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
       switchToProfilesView(team);
       resetTableState();
     },
-    [fetchTeamProfiles, switchToProfilesView, resetTableState]
+    [fetchTeamProfiles, switchToProfilesView, resetTableState],
   );
 
   const handleGroupingChange = React.useCallback(
@@ -131,7 +140,7 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
       teamsData.length,
       fetchAllProfiles,
       fetchTeamsData,
-    ]
+    ],
   );
 
   const handleReturnToTeams = React.useCallback(async () => {
@@ -157,7 +166,7 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
         handleTeamSelect(row);
       }
     },
-    [allowRowClick, handleTeamSelect]
+    [allowRowClick, handleTeamSelect],
   );
 
   return (
@@ -179,7 +188,15 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
         />
       </div>
 
+      {isSearching && (
+        <p role="status" className="text-sm text-muted-foreground pb-2">
+          Searching…
+        </p>
+      )}
       <Content
+        resetKey={`${groupingMode}:${currentView}:${profileQueryKey}`}
+        isSearching={isSearching}
+        hasActiveFilters={columnFilters.some((filter) => Boolean(filter.value))}
         table={table}
         allowRowClick={allowRowClick}
         loadingProfiles={loadingTeams || loadingProfiles}
@@ -195,7 +212,11 @@ export function DataTable({ teamColumns, profileColumns }: DataTableProps) {
             fetchTeamProfiles(selectedTeam as TeamWithPopulatedCompany);
           }
         }}
-        hasMore={groupingMode === "profiles" && currentView === "profiles" && hasMoreProfiles}
+        hasMore={
+          groupingMode === "profiles" &&
+          currentView === "profiles" &&
+          hasMoreProfiles
+        }
         onLoadMore={loadMoreProfiles}
       />
     </div>

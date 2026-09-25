@@ -1,3 +1,9 @@
+import { ProfileNameCursor } from "@/src/lib/data/profile-list";
+import {
+  normalizeProfileSearch,
+  profileListKey,
+  ProfileListOptions,
+} from "@/src/shared/entities/profile-list.types";
 import { client } from "@/src/lib/sanity/client";
 import {
   Profile,
@@ -436,14 +442,28 @@ export async function getProfilesFromUserTeams(
 
 export async function getProfilesPage(
   limit: number,
-  cursor: string | null,
+  cursor: string | ProfileNameCursor | null,
   userEmail?: string,
   userTeamSlugs?: string[],
+  options: ProfileListOptions = {},
 ): Promise<CursorPage<ProfileWithDetailedTeams>> {
   const filter = userEmail
     ? `&& count((team[]->slug.current)[@ in $userTeamSlugs]) > 0`
     : "";
-  const query = `*[ _type == "profile" && !(_id in path('drafts.**')) ${filter} ${cursor ? "&& _id > $cursor" : ""}] | order(_id asc) [0...$pageSize] {
+  const search = normalizeProfileSearch(options.search);
+  const byName = options.sort === "name-asc" || options.sort === "name-desc";
+  const direction = options.sort === "name-desc" ? "desc" : "asc";
+  const name = 'lower(coalesce(name, ""))';
+  const after = !cursor
+    ? ""
+    : typeof cursor === "string"
+      ? "&& _id > $cursor"
+      : `&& (${name} ${direction === "asc" ? ">" : "<"} $cursorName || (${name} == $cursorName && _id > $cursor))`;
+  // Literal substring matching preserves the browser's contains behavior, including punctuation.
+  const query = `*[ _type == "profile" && !(_id in path('drafts.**')) ${filter}
+    ${search ? `&& count(string::split(${name}, $search)) > 1` : ""}
+    ${options.group ? "&& $group in team[]->groups" : ""}
+    ${after}] | order(${byName ? `${name} ${direction}, ` : ""}_id asc) [0...$pageSize] {
     _id,
     _type,   
     _rev,               
@@ -473,16 +493,38 @@ export async function getProfilesPage(
     }
   }`;
 
-  const options = { next: { revalidate: 30 } };
+  const fetchOptions = { next: { revalidate: 30 } };
 
   try {
     const profiles = await client.fetch<ProfileWithDetailedTeams[]>(
       query,
-      { pageSize: limit + 1, ...(cursor ? { cursor } : {}), ...(userEmail ? { userEmail, userTeamSlugs } : {}) },
-      options
+      {
+        pageSize: limit + 1,
+        ...(typeof cursor === "string"
+          ? { cursor }
+          : cursor
+            ? { cursor: cursor.id, cursorName: cursor.name }
+            : {}),
+        ...(userEmail ? { userEmail, userTeamSlugs } : {}),
+        ...(search ? { search } : {}),
+        ...(options.group ? { group: options.group } : {}),
+      },
+      fetchOptions,
     );
     const page = profiles || [];
-    return toCursorPage(page, limit);
+    const result = toCursorPage(page, limit);
+    if (byName && result.hasMore) {
+      const last = result.data[result.data.length - 1];
+      result.nextCursor = Buffer.from(
+        JSON.stringify({
+          id: last._id,
+          name: (last.name || "").toLowerCase(),
+          key: profileListKey(options),
+        }),
+        "utf8",
+      ).toString("base64url");
+    }
+    return result;
   } catch (error) {
     console.error("Failed to fetch all profiles:", error);
     throw new Error("Unable to fetch profiles");

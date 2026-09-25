@@ -66,11 +66,16 @@ const useProfileTable = (
     allProfileIds: string[],
     isSelected: boolean,
   ) => void,
+  controls: {
+    sorting: SortingState;
+    setSorting: React.Dispatch<React.SetStateAction<SortingState>>;
+    columnFilters: ColumnFiltersState;
+    setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
+    serverSearch: boolean;
+  },
 ) => {
-  const [sorting, setSorting] = useState<SortingState>([
-    { desc: false, id: "name" },
-  ]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const { sorting, setSorting, columnFilters, setColumnFilters, serverSearch } =
+    controls;
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const columns = React.useMemo(
@@ -89,6 +94,8 @@ const useProfileTable = (
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    manualFiltering: serverSearch,
+    manualSorting: serverSearch,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
@@ -111,7 +118,7 @@ const useProfileTable = (
     setSorting([{ desc: false, id: "name" }]);
     setColumnFilters([]);
     setColumnVisibility({});
-  }, []);
+  }, [setSorting, setColumnFilters]);
 
   return { table, columns, resetState };
 };
@@ -171,11 +178,36 @@ const BuilderContext = () => {
     restoreViewState,
   } = useDragTableView();
 
+  const [profileSorting, setProfileSorting] = useState<SortingState>([
+    { id: "name", desc: false },
+  ]);
+  const [profileFilters, setProfileFilters] = useState<ColumnFiltersState>([]);
+  const profileOptions = {
+    search: String(
+      profileFilters.find((filter) => filter.id === "name")?.value ?? "",
+    ),
+    sort: profileSorting[0]?.desc
+      ? ("name-desc" as const)
+      : ("name-asc" as const),
+  };
+
   const {
-    teams, profilesByTeam, allProfilesData, isLoadingProfiles, isLoading, error,
-    loadMoreTeams, hasMoreTeams, loadMoreProfiles, hasMoreProfiles,
-  } =
-    useDragTableData(view, groupingMode, selectedTeam);
+    teams,
+    profilesByTeam,
+    allProfilesData,
+    isLoadingProfiles,
+    isLoading,
+    error,
+    loadMoreTeams,
+    hasMoreTeams,
+    loadMoreProfiles,
+    hasMoreProfiles,
+    knownProfiles,
+    isSearching,
+    profileQueryKey,
+    profileError,
+    refetchProfiles,
+  } = useDragTableData(view, groupingMode, selectedTeam, profileOptions);
 
   const {
     dropTables,
@@ -266,6 +298,13 @@ const BuilderContext = () => {
       handleProfileCheck(profileId);
     },
     handleBulkProfileSelect,
+    {
+      sorting: profileSorting,
+      setSorting: setProfileSorting,
+      columnFilters: profileFilters,
+      setColumnFilters: setProfileFilters,
+      serverSearch: groupingMode === "profiles",
+    },
   );
 
   const teamTable = useTeamTable(getCurrentTeams());
@@ -287,7 +326,11 @@ const BuilderContext = () => {
       const comparisonSlug = COMPARISON_ATTRIBUTES[selectedType].slug;
       router.push(`/deckbuilder/${comparisonSlug}?selection=${selection}`);
     } catch (error) {
-      setContinueError(error instanceof Error ? error.message : "Unable to open the comparison");
+      setContinueError(
+        error instanceof Error
+          ? error.message
+          : "Unable to open the comparison",
+      );
     } finally {
       setIsContinuing(false);
     }
@@ -324,7 +367,17 @@ const BuilderContext = () => {
         collisionDetection={pointerWithin}
       >
         <div className="rounded-lg md:w-3/5 w-full">
+          {profileError && (
+            <div role="alert" className="text-sm text-red-500">
+              {profileError}{" "}
+              <button type="button" onClick={refetchProfiles}>
+                Retry
+              </button>
+            </div>
+          )}
           <DragTable
+            isSearching={isSearching}
+            resetKey={`${groupingMode}:${view}:${selectedTeam}:${profileQueryKey}`}
             view={view}
             groupingMode={groupingMode}
             selectedTeamName={selectedTeamName}
@@ -341,9 +394,17 @@ const BuilderContext = () => {
             }}
             columns={currentTable.columns}
             isLoadingProfiles={isLoadingProfiles}
-            isLoading={groupingMode === "profiles" ? isLoadingProfiles : isLoading}
-            hasMore={groupingMode === "profiles" ? hasMoreProfiles : hasMoreTeams}
-            onLoadMore={groupingMode === "profiles" ? loadMoreProfiles : loadMoreTeams}
+            isLoading={
+              groupingMode === "profiles" ? isLoadingProfiles : isLoading
+            }
+            hasMore={
+              groupingMode === "profiles"
+                ? hasMoreProfiles
+                : view === "teams" && hasMoreTeams
+            }
+            onLoadMore={
+              groupingMode === "profiles" ? loadMoreProfiles : loadMoreTeams
+            }
             handleOneWayProfileCheck={handleOneWayProfileCheck}
             handleProfileCheck={handleProfileCheck}
           />
@@ -422,7 +483,7 @@ const BuilderContext = () => {
             setSelectedTableId={setSelectedTableId}
             selectedTableId={selectedTableId}
             isLoadingProfiles={isLoadingProfiles}
-            allProfiles={allProfilesData}
+            allProfiles={knownProfiles}
             onCreateTableWithProfile={handleCreateTableWithProfile}
           />
 
@@ -445,7 +506,11 @@ const BuilderContext = () => {
               {isContinuing ? "Saving…" : "Continue"} <GoArrowRight size={24} />
             </Button>
           </div>
-          {continueError && <p role="alert" className="text-sm text-inspireRed pt-4">{continueError}</p>}
+          {continueError && (
+            <p role="alert" className="text-sm text-inspireRed pt-4">
+              {continueError}
+            </p>
+          )}
           {isDisabled ? (
             <p className="text-sm text-inspireRed text-center py-4">
               Add profiles to empty group or remove it to continue

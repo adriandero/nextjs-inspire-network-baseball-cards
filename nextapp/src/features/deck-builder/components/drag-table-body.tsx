@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -21,6 +21,7 @@ import {
 
 interface TableBodyProps<T> {
   table: ReactTable<T>;
+  resetKey?: string;
   columns: ColumnDef<T>[];
   isLoading?: boolean;
   emptyMessage?: string;
@@ -36,6 +37,7 @@ interface TableBodyProps<T> {
 
 export function GenericTableBody<T>({
   table,
+  resetKey,
   columns,
   isLoading = false,
   emptyMessage = "No results found.",
@@ -52,6 +54,10 @@ export function GenericTableBody<T>({
   const hasData = rows && rows.length > 0;
   const [scrollTop, setScrollTop] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setScrollTop(0);
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, [resetKey]);
   const rowHeight = 56;
   const overscan = 8;
   const viewportHeight = 646;
@@ -153,6 +159,16 @@ export function GenericTableBody<T>({
             )}
           </TableBody>
         </Table>
+        {hasMore && (
+          <button
+            type="button"
+            disabled={isLoadingMore}
+            onClick={onLoadMore}
+            className="w-full p-3 text-sm"
+          >
+            {isLoadingMore ? "Loading…" : "Load more"}
+          </button>
+        )}
       </div>
       <div className="flex items-center justify-end space-x-2 p-4 w-full h-full">
         <div className="flex-1 text-sm text-muted-foreground">

@@ -16,8 +16,7 @@ interface DragTableProps {
   groupingMode: "teams" | "profiles";
   selectedTeamName: string;
   table:
-    | ReactTable<ProfileWithDetailedTeams>
-    | ReactTable<TeamWithPopulatedCompany>;
+    ReactTable<ProfileWithDetailedTeams> | ReactTable<TeamWithPopulatedCompany>;
   searchInputRef: RefObject<HTMLInputElement>;
   handleBackToTeams: () => void;
   handleTeamClick: (teamSlug: string, teamName: string) => void;
@@ -27,6 +26,8 @@ interface DragTableProps {
   columns:
     | ColumnDef<ProfileWithDetailedTeams>[]
     | ColumnDef<TeamWithPopulatedCompany>[];
+  isSearching?: boolean;
+  resetKey?: string;
   isLoadingProfiles?: boolean;
   isLoading?: boolean;
   hasMore?: boolean;
@@ -44,6 +45,8 @@ const DragTable: React.FC<DragTableProps> = ({
   handleGroupingChange,
   handleOneWayProfileCheck,
   columns,
+  isSearching = false,
+  resetKey,
   isLoadingProfiles = true,
   isLoading = false,
   hasMore = false,
@@ -59,7 +62,7 @@ const DragTable: React.FC<DragTableProps> = ({
         onProfileCheck={handleOneWayProfileCheck}
       />
     ),
-    [handleOneWayProfileCheck]
+    [handleOneWayProfileCheck],
   );
 
   const renderTeamRow = useCallback(
@@ -74,7 +77,7 @@ const DragTable: React.FC<DragTableProps> = ({
         />
       );
     },
-    [groupingMode, view, handleTeamClick]
+    [groupingMode, view, handleTeamClick],
   );
 
   return (
@@ -101,22 +104,32 @@ const DragTable: React.FC<DragTableProps> = ({
         />
       )}
 
+      {isSearching && (
+        <p role="status" className="text-sm text-muted-foreground pb-2">
+          Searching…
+        </p>
+      )}
       {isShowingProfiles ? (
         <GenericTableBody<ProfileWithDetailedTeams>
           table={table as ReactTable<ProfileWithDetailedTeams>}
           columns={columns as ColumnDef<ProfileWithDetailedTeams>[]}
+          resetKey={`${resetKey}:${isSearching}`}
+          useSkeletonLoading={!isSearching}
+          hasLoadedOnce={!isLoadingProfiles}
           isLoading={isLoadingProfiles}
           hasMore={hasMore}
           onLoadMore={onLoadMore}
           isLoadingMore={isLoading}
-          emptyMessage="No TUG Cards found."
+          emptyMessage={isSearching ? "Searching…" : "No TUG Cards found."}
           renderRow={renderProfileRow}
         />
       ) : (
         <GenericTableBody<TeamWithPopulatedCompany>
           table={table as ReactTable<TeamWithPopulatedCompany>}
           columns={columns as ColumnDef<TeamWithPopulatedCompany>[]}
-          isLoading={isLoadingProfiles}
+          resetKey={resetKey}
+          hasLoadedOnce={!isLoading}
+          isLoading={isLoading}
           hasMore={hasMore}
           onLoadMore={onLoadMore}
           isLoadingMore={isLoading}

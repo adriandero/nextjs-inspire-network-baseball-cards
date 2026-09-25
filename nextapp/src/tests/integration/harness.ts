@@ -1,4 +1,5 @@
 import { mock } from "node:test";
+import { evaluate, parse } from "groq-js";
 
 export type TestSession = {
   user: { email: string; name?: string };
@@ -8,7 +9,7 @@ export type TestTeam = {
   _id: string;
   name: string;
   slug: string;
-  groups?: string[];
+  groups?: "client" | "egf" | "prospect";
 };
 
 export type TestProfile = {
@@ -62,25 +63,36 @@ function projectProfile(profile: TestProfile) {
 }
 
 let datastoreError: Error | null = null;
-export function setTestDatastoreError(error: Error | null) { datastoreError = error; }
+export function setTestDatastoreError(error: Error | null) {
+  datastoreError = error;
+}
 
 const fakeClient = {
-  async create(document: Record<string, unknown> & { _id: string; _type: string }) {
+  async create(
+    document: Record<string, unknown> & { _id: string; _type: string },
+  ) {
     if (datastoreError) throw datastoreError;
     data.documents ??= [];
     data.documents.push(structuredClone(document));
     return structuredClone(document);
   },
-  async fetch<T>(query: string, params: Record<string, unknown> = {}): Promise<T> {
+  async fetch<T>(
+    query: string,
+    params: Record<string, unknown> = {},
+  ): Promise<T> {
     if (datastoreError) throw datastoreError;
     if (query.includes('_type == "deckSelection"')) {
-      return (data.documents?.find((document) => document._id === params.id) ?? null) as T;
+      return (data.documents?.find((document) => document._id === params.id) ??
+        null) as T;
     }
     if (query.includes("uuid in $uuids")) {
       const ids = new Set(params.uuids as string[]);
-      return data.profiles.filter((profile) => ids.has(profile.uuid)).map((profile) => ({
-        ...profile, team: profile.team.map(projectTeam),
-      })) as T;
+      return data.profiles
+        .filter((profile) => ids.has(profile.uuid))
+        .map((profile) => ({
+          ...profile,
+          team: profile.team.map(projectTeam),
+        })) as T;
     }
     if (
       query.includes('"teams": *[_type == "team"') &&
@@ -91,7 +103,11 @@ const fakeClient = {
           slug: team.slug,
           name: team.name,
           profiles: data.profiles
-            .filter((profile) => profile.team.some((profileTeam) => profileTeam.slug === team.slug))
+            .filter((profile) =>
+              profile.team.some(
+                (profileTeam) => profileTeam.slug === team.slug,
+              ),
+            )
             .map((profile) => ({
               _id: profile._id,
               _type: profile._type,
@@ -107,31 +123,52 @@ const fakeClient = {
     if (query.includes('"pageSize"') || params.pageSize) {
       const pageSize = Number(params.pageSize);
       const cursor = params.cursor as string | undefined;
-      const after = cursor ? data.profiles.findIndex((profile) => profile._id === cursor) + 1 : 0;
       if (query.includes('_type == "profile"')) {
-        const allowedSlugs = new Set((params.userTeamSlugs as string[] | undefined) ?? []);
-        const profiles = data.profiles
-          .filter((profile) => !params.userTeamSlugs || profile.team.some((team) => allowedSlugs.has(team.slug)))
-          .sort((a, b) => a._id.localeCompare(b._id))
-          .slice(after, after + pageSize)
-          .map(projectProfile);
-        return profiles as T;
+        // Execute the production query against Sanity-shaped local documents.
+        // This catches filtering/order/slicing mistakes instead of reproducing them in a fake.
+        const dataset = [
+          ...data.teams.map((team) => ({
+            ...team,
+            _type: "team",
+            slug: { current: team.slug },
+          })),
+          ...data.profiles.map((profile) => ({
+            ...profile,
+            slug: { current: profile.slug },
+            team: profile.team.map((team) => ({
+              _type: "reference",
+              _ref: team._id,
+            })),
+          })),
+        ];
+        return (await (
+          await evaluate(parse(query, { params }), { dataset, params })
+        ).get()) as T;
       }
-      const sortedTeams = data.teams.slice().sort((a, b) => a._id.localeCompare(b._id));
-      const teamAfter = cursor ? sortedTeams.findIndex((team) => team._id === cursor) + 1 : 0;
+      const sortedTeams = data.teams
+        .slice()
+        .sort((a, b) => a._id.localeCompare(b._id));
+      const teamAfter = cursor
+        ? sortedTeams.findIndex((team) => team._id === cursor) + 1
+        : 0;
       return sortedTeams.slice(teamAfter, teamAfter + pageSize) as T;
     }
 
-    if (query.includes('slug.current == $slug')) {
-      return (data.teams.find((team) => team.slug === params.slug) ?? null) as T;
+    if (query.includes("slug.current == $slug")) {
+      return (data.teams.find((team) => team.slug === params.slug) ??
+        null) as T;
     }
 
     if (query.includes("$userEmail") && query.includes("defaultTeam")) {
-      const user = data.users.find((candidate) => candidate.email === params.userEmail);
+      const user = data.users.find(
+        (candidate) => candidate.email === params.userEmail,
+      );
       const profileTeams = user?.profile
-        ? data.profiles.find((profile) => profile.uuid === user.profile?.uuid)?.team ?? []
+        ? (data.profiles.find((profile) => profile.uuid === user.profile?.uuid)
+            ?.team ?? [])
         : [];
-      const defaultTeam = data.teams.find((team) => team.slug === "inspire-network") ?? null;
+      const defaultTeam =
+        data.teams.find((team) => team.slug === "inspire-network") ?? null;
       return {
         directTeams: user?.team ?? [],
         profileTeams,
@@ -139,18 +176,23 @@ const fakeClient = {
       } as T;
     }
 
-    if (query.includes('$userEmail') && query.includes('"teams"')) {
-      const requestedSlugs = (params.userTeamSlugs as string[] | undefined) ?? [];
+    if (query.includes("$userEmail") && query.includes('"teams"')) {
+      const requestedSlugs =
+        (params.userTeamSlugs as string[] | undefined) ?? [];
       const allowedSlugs = new Set(requestedSlugs);
       return {
         profiles: data.profiles
-          .filter((profile) => profile.team.some((team) => allowedSlugs.has(team.slug)))
+          .filter((profile) =>
+            profile.team.some((team) => allowedSlugs.has(team.slug)),
+          )
           .map(projectProfile),
       } as T;
     }
 
     if (query.includes('_type == "user"') && query.includes("$userEmail")) {
-      const user = data.users.find((candidate) => candidate.email === params.userEmail);
+      const user = data.users.find(
+        (candidate) => candidate.email === params.userEmail,
+      );
       return (user ? { ...user } : null) as T;
     }
 

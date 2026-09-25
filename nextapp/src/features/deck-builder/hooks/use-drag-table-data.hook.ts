@@ -1,35 +1,29 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { TeamWithPopulatedCompany } from "@/src/shared/entities/team.types";
-import {
-  ProfileWithDetailedTeams,
-  ProfilesByTeam,
-} from "@/src/shared/entities/profile.types";
+import { ProfilesByTeam } from "@/src/shared/entities/profile.types";
 
-import {
-  getProfilesPage,
-  getAllProfilesGroupedByTeam,
-} from "@/src/lib/api/profiles";
+import { getAllProfilesGroupedByTeam } from "@/src/lib/api/profiles";
 
 import { getTeamsForUserPage } from "@/src/lib/api/teams";
+
+import { useProfileList } from "@/src/hooks/use-profile-list";
+import { ProfileListOptions } from "@/src/shared/entities/profile-list.types";
 
 export function useDragTableData(
   view: "teams" | "profiles",
   groupingMode: "teams" | "profiles",
   selectedTeam: string | null,
+  options: ProfileListOptions,
 ) {
+  const list = useProfileList(options, groupingMode === "profiles");
   const [teams, setTeams] = useState<TeamWithPopulatedCompany[]>([]);
   const [profilesByTeam, setProfilesByTeam] = useState<ProfilesByTeam | null>(
-    null
+    null,
   );
-  const [allProfilesData, setAllProfilesData] = useState<
-    ProfileWithDetailedTeams[]
-  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingProfiles, setIsLoadingProfiles] = useState(false);
   const [teamsCursor, setTeamsCursor] = useState<string | null>(null);
   const [hasMoreTeams, setHasMoreTeams] = useState(false);
-  const [profilesCursor, setProfilesCursor] = useState<string | null>(null);
-  const [hasMoreProfiles, setHasMoreProfiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchTeams = useCallback(async () => {
@@ -50,24 +44,6 @@ export function useDragTableData(
     }
   }, [teams.length]);
 
-  const fetchAllProfiles = useCallback(async () => {
-    if (allProfilesData.length > 0) return;
-    try {
-      setIsLoadingProfiles(true);
-      setError(null);
-
-      const page = await getProfilesPage();
-      setAllProfilesData(page.data);
-      setProfilesCursor(page.nextCursor);
-      setHasMoreProfiles(page.hasMore);
-    } catch (err) {
-      console.error("Error fetching all profiles:", err);
-      setError(err instanceof Error ? err.message : "Failed to fetch profiles");
-    } finally {
-      setIsLoadingProfiles(false);
-    }
-  }, [allProfilesData.length]);
-
   const loadMoreTeams = useCallback(async () => {
     if (!hasMoreTeams || !teamsCursor || isLoading) return;
     try {
@@ -81,19 +57,6 @@ export function useDragTableData(
     }
   }, [hasMoreTeams, teamsCursor, isLoading]);
 
-  const loadMoreProfiles = useCallback(async () => {
-    if (!hasMoreProfiles || !profilesCursor || isLoadingProfiles) return;
-    try {
-      setIsLoadingProfiles(true);
-      const page = await getProfilesPage(profilesCursor);
-      setAllProfilesData((current) => [...current, ...page.data]);
-      setProfilesCursor(page.nextCursor);
-      setHasMoreProfiles(page.hasMore);
-    } finally {
-      setIsLoadingProfiles(false);
-    }
-  }, [hasMoreProfiles, profilesCursor, isLoadingProfiles]);
-
   const fetchGroupedProfiles = useCallback(async () => {
     if (profilesByTeam) return;
     try {
@@ -105,7 +68,7 @@ export function useDragTableData(
     } catch (err) {
       console.error("Error fetching grouped profiles:", err);
       setError(
-        err instanceof Error ? err.message : "Failed to fetch grouped profiles"
+        err instanceof Error ? err.message : "Failed to fetch grouped profiles",
       );
     } finally {
       setIsLoadingProfiles(false);
@@ -113,29 +76,43 @@ export function useDragTableData(
   }, [profilesByTeam]);
 
   useEffect(() => {
-    if (groupingMode === "profiles") {
-      fetchAllProfiles();
-    } else if (view === "teams") {
+    if (groupingMode === "profiles") return;
+    if (view === "teams") {
       fetchTeams();
     } else if (selectedTeam) {
       fetchGroupedProfiles();
     }
-  }, [groupingMode, view, selectedTeam, fetchAllProfiles, fetchGroupedProfiles, fetchTeams]);
+  }, [groupingMode, view, selectedTeam, fetchGroupedProfiles, fetchTeams]);
+
+  const knownProfiles = useMemo(() => {
+    const profiles = new Map(
+      list.knownProfiles.map((profile) => [profile.uuid, profile]),
+    );
+    Object.values(profilesByTeam?.teams ?? {})
+      .flat()
+      .forEach((profile) => profiles.set(profile.uuid, profile));
+    return [...profiles.values()];
+  }, [list.knownProfiles, profilesByTeam]);
 
   return {
     teams,
     profilesByTeam,
-    allProfilesData,
+    allProfilesData: list.profiles,
+    knownProfiles,
+    isSearching: list.isSearching,
+    profileQueryKey: list.queryKey,
+    profileError: list.error,
     isLoading,
-    isLoadingProfiles,
+    isLoadingProfiles:
+      isLoadingProfiles || list.isSearching || list.isLoadingMore,
     error,
 
     refetchTeams: fetchTeams,
-    refetchProfiles: fetchAllProfiles,
+    refetchProfiles: list.retry,
     refetchGroupedProfiles: fetchGroupedProfiles,
     loadMoreTeams,
     hasMoreTeams,
-    loadMoreProfiles,
-    hasMoreProfiles,
+    loadMoreProfiles: list.loadMore,
+    hasMoreProfiles: list.hasMore,
   };
 }

@@ -1,3 +1,4 @@
+import { ProfileListOptions } from "@/src/shared/entities/profile-list.types";
 import {
   ProfileWithBasicTeams,
   ProfileWithDetailedTeams,
@@ -148,12 +149,19 @@ export async function getAllProfiles(): Promise<ProfileWithDetailedTeams[]> {
 export async function getProfilesPage(
   cursor: string | null = null,
   limit = 50,
+  options: ProfileListOptions = {},
+  signal?: AbortSignal,
 ): Promise<CursorPage<ProfileWithDetailedTeams>> {
   const searchParams = new URLSearchParams({ limit: String(limit) });
   if (cursor) searchParams.set("cursor", cursor);
-  const response = await fetch(`/api/cms/profiles?${searchParams}`);
+  if (options.search) searchParams.set("search", options.search);
+  if (options.group) searchParams.set("group", options.group);
+  if (options.sort) searchParams.set("sort", options.sort);
+  const response = await fetch(`/api/cms/profiles?${searchParams}`, { signal });
   if (!response.ok) {
-    throw new Error(`Failed to fetch profiles: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch profiles: ${response.status} ${response.statusText}`,
+    );
   }
   return response.json();
 }
