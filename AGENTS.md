@@ -62,6 +62,7 @@ Do not run `deploy:sanitycms`, Sanity GraphQL deploys, or anything that touches 
 2. The relevant integration test file passes, then the full integration suite once.
 3. New or changed API routes have integration tests per `TESTING.md`.
 4. Your report lists the commands you ran and their results.
+5. Before opening a PR, run the `pre-mr-review` skill (`.agents/skills/pre-mr-review/SKILL.md`, symlinked into `.claude/skills/`).
 
 ## Git workflow
 
