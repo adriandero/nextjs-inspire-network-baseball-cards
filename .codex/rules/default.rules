@@ -1,0 +1,33 @@
+# Mirrors the allow/deny lists in .claude/settings.json.
+
+prefix_rule(
+    pattern = ["npm", "run", ["lint:nextapp", "build:nextapp", "test:integration"]],
+    decision = "allow",
+    justification = "Local lint, build, and integration checks",
+    match = ["npm run lint:nextapp", "npm run test:integration --workspace=nextapp"],
+)
+
+prefix_rule(
+    pattern = ["git", ["status", "diff", "log", "show", "branch"]],
+    decision = "allow",
+    justification = "Read-only git inspection",
+)
+
+prefix_rule(
+    pattern = ["npm", "run", "deploy:sanitycms"],
+    decision = "forbidden",
+    justification = "Deploys production Sanity studio; only on explicit request",
+)
+
+prefix_rule(
+    pattern = ["npx", "sanity", ["deploy", "graphql"]],
+    decision = "forbidden",
+    justification = "Deploys to production Sanity; only on explicit request",
+    match = ["npx sanity deploy", "npx sanity graphql deploy"],
+)
+
+prefix_rule(
+    pattern = ["vercel", "--prod"],
+    decision = "forbidden",
+    justification = "Production Vercel deploy; only on explicit request",
+)

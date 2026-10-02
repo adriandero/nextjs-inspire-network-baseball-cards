@@ -52,6 +52,8 @@ Known gaps:
 - `sanitycms` has no `lint` script, so root `npm run lint` fails. Use `lint:nextapp`.
 - There is no typecheck script. `tsc --noEmit` fails without the generated `next-env.d.ts`, so use `npm run build:nextapp` to check types.
 
+Do not read, print, or commit `.env` files or other secrets; use `.env.example` and `README.md` for variable names.
+
 Do not run `deploy:sanitycms`, Sanity GraphQL deploys, or anything that touches production Sanity, Auth0, or Vercel unless explicitly asked.
 
 ## Definition of done

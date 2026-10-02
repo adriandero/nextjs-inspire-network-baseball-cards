@@ -1,0 +1,13 @@
+# Project-level Codex config. Loaded only after the project is trusted in Codex.
+# Mirrors .claude/settings.json: workspace sandbox, no access to local env files.
+approval_policy = "on-request"
+default_permissions = "project"
+
+[permissions.project]
+description = "Workspace edits without access to local env files."
+extends = ":workspace"
+
+[permissions.project.filesystem.":workspace_roots"]
+"**/.env" = "deny"
+"**/.env.local" = "deny"
+"**/.env.*.local" = "deny"
