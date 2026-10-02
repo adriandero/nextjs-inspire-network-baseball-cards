@@ -38,3 +38,6 @@ build/
 next-env.d.ts
 .vercel
 .env*.local
+
+# Stray literal-tilde dirs written by tools
+/~/
